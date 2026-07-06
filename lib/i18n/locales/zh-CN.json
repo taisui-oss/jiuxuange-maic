@@ -986,12 +986,10 @@
     "selectedAgents": "选中的智能体",
     "required": "必选",
     "agentNames": {
-      "default-1": "AI教师",
-      "default-2": "AI助教",
-      "default-3": "显眼包",
-      "default-4": "好奇宝宝",
-      "default-5": "笔记员",
-      "default-6": "思考者"
+      "default-1": "教授",
+      "default-2": "学长",
+      "default-3": "神秘角色",
+      "default-4": "成长反馈官"
     },
     "agentRoles": {
       "teacher": "教师",
@@ -999,12 +997,10 @@
       "student": "学生"
     },
     "agentDescriptions": {
-      "default-1": "主讲教师，清晰有条理地讲解知识",
-      "default-2": "辅助讲解，帮助同学理解重点",
-      "default-3": "活跃气氛，用幽默让课堂更有趣",
-      "default-4": "充满好奇心，总爱追问为什么",
-      "default-5": "认真记录，整理课堂重点笔记",
-      "default-6": "深入思考，喜欢探讨问题本质"
+      "default-1": "讲清概念，校准商业模式框架",
+      "default-2": "陪你推进任务，把概念带回项目",
+      "default-3": "进入情境，提出挑战和反方视角",
+      "default-4": "沉淀学习反馈，看见成长证据"
     },
     "close": "关闭",
     "save": "保存",

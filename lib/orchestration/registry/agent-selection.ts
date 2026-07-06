@@ -51,7 +51,8 @@ export function restoreAgentSelection(params: {
   return {
     selection: {
       mode: 'preset',
-      selectedAgentIds: cleanIds.length > 0 ? cleanIds : ['default-1', 'default-2', 'default-3'],
+      selectedAgentIds:
+        cleanIds.length > 0 ? cleanIds : ['default-1', 'default-2', 'default-3', 'default-4'],
     },
     isUserSet: false,
   };

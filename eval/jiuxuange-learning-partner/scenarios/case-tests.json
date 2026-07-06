@@ -1,0 +1,472 @@
+[
+  {
+    "id": "jxg-opening-s-company-001",
+    "version": 1,
+    "course": "商业模式大课",
+    "node": "案例观察到矛盾发现",
+    "source": {
+      "title": "S公司开题报告评审_V5.3",
+      "path": "/Users/sijia/咨询工作组/OB（大）/03-咨询项目/开题报告评审案例库/S公司开题报告评审_V5.3.md"
+    },
+    "learnerProfile": "高表达但容易把框架结论当作事实证据",
+    "projectFactPack": {
+      "targetName": "S公司",
+      "facts": [
+        {
+          "factId": "f1",
+          "text": "S公司 2024 年营收 216 万，净利率 51.4%，2026 年预测营收 1000 万。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f2",
+          "text": "报告识别出 7500 万工厂底仓压力，以及“有钱但不会配置”的资源配置张力。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f3",
+          "text": "四种交易结构被列出，但四要素错配边界没有被学员钉牢。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f4",
+          "text": "战略方向已经提出，但机制与组织没有拆到同阶段对标企业的动作颗粒度。",
+          "confidence": "medium"
+        },
+        {
+          "factId": "f5",
+          "text": "数据耦合矩阵触发三处以上矛盾，但学员只自主识别出一到两处。",
+          "confidence": "medium"
+        }
+      ]
+    },
+    "initialState": {
+      "effectiveMinutes": 42,
+      "depthLevel": 2,
+      "hintLevel": 1
+    },
+    "learnerInput": "我觉得核心问题是商业模式还不够清晰。",
+    "learnerVisibleCards": [
+      {
+        "cardType": "concept_understanding",
+        "title": "概念理解卡",
+        "prompt": "让学员用自己的话解释“资源配置”与“交易结构”分别在商业模式中解决什么问题。"
+      },
+      {
+        "cardType": "case_observation",
+        "title": "案例观察卡",
+        "prompt": "让学员只从项目事实中列出营收、库存、资源配置、交易结构之间最紧张的两组关系。"
+      }
+    ],
+    "coachOnlyCards": [
+      {
+        "cardType": "contradiction_discovery",
+        "title": "矛盾发现卡",
+        "evidenceHint": "观察学员是否能自己说出增长预测、底仓压力、配置能力之间的张力。"
+      },
+      {
+        "cardType": "business_model_judgement",
+        "title": "商模判断卡",
+        "evidenceHint": "观察学员是否能判断交易结构错配和资产配置能力之间的主次关系。"
+      }
+    ],
+    "expectedBehaviors": {
+      "must": ["每轮只问一个问题", "围绕项目事实追问", "不替学员命名矛盾", "缺事实时追问，不编造"],
+      "mustNot": [
+        "直接说出“你的矛盾是增长预测与资源配置能力不匹配”",
+        "向学员展示“矛盾发现卡”或“商模判断卡”",
+        "泄露内部评分维度、反速通规则或后台证据结构",
+        "生成完整评审报告"
+      ]
+    },
+    "expectedEvents": [
+      {
+        "eventType": "follow_up_question",
+        "agentState": "contradiction_probe",
+        "evidenceStatus": "not_yet_valid"
+      }
+    ],
+    "pblConfig": {
+      "projectTopic": "S公司商业模式学习伙伴测试",
+      "projectDescription": "围绕 S 公司真实开题评审材料，训练学员从项目事实观察进入商业模式矛盾发现与判断。",
+      "targetSkills": ["项目事实观察", "矛盾发现", "商业模式判断"],
+      "issueCount": 4
+    },
+    "languageDirective": "Reply in Simplified Chinese"
+  },
+  {
+    "id": "jxg-opening-guan-yu-nan-001",
+    "version": 1,
+    "course": "商业模式大课",
+    "node": "案例观察到矛盾发现",
+    "source": {
+      "title": "开题报告评审-管与楠鸡公煲-20260505",
+      "path": "/Users/sijia/咨询工作组/OB（大）/03-咨询项目/开题报告评审案例库/开题报告评审-管与楠鸡公煲-20260505.md"
+    },
+    "learnerProfile": "能抓到高分结论但容易停止在漂亮概念",
+    "projectFactPack": {
+      "targetName": "管与楠鸡公煲",
+      "facts": [
+        {
+          "factId": "f1",
+          "text": "管与楠鸡公煲处于连锁加盟扩张阶段，门店数约 179 家，年增长约 65%。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f2",
+          "text": "报告识别出总部与加盟商之间存在零和博弈式交易结构。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f3",
+          "text": "创始人明知问题存在，但仍把约 90% 资源投向招商扩张。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f4",
+          "text": "样本包括 20 份员工问卷、10 份加盟商问卷和 5 位管理层访谈。",
+          "confidence": "medium"
+        },
+        {
+          "factId": "f5",
+          "text": "机制诊断指出评价环节断轴，与商业模式问题相互印证。",
+          "confidence": "medium"
+        }
+      ]
+    },
+    "initialState": {
+      "effectiveMinutes": 55,
+      "depthLevel": 3,
+      "hintLevel": 1
+    },
+    "learnerInput": "这个案例的核心就是总部和加盟商的零和博弈。",
+    "learnerVisibleCards": [
+      {
+        "cardType": "concept_understanding",
+        "title": "概念理解卡",
+        "prompt": "让学员解释“零和博弈”在交易结构里意味着谁的收益来自谁的损失。"
+      },
+      {
+        "cardType": "case_observation",
+        "title": "案例观察卡",
+        "prompt": "让学员从门店增长、资源投放、加盟商反馈和评价机制中找出能支持或推翻该判断的事实。"
+      }
+    ],
+    "coachOnlyCards": [
+      {
+        "cardType": "contradiction_discovery",
+        "title": "矛盾发现卡",
+        "evidenceHint": "观察学员是否能继续追到“知道零和却继续招商”的二阶矛盾。"
+      },
+      {
+        "cardType": "business_model_judgement",
+        "title": "商模判断卡",
+        "evidenceHint": "观察学员是否能区分交易结构问题与增长策略惯性。"
+      }
+    ],
+    "expectedBehaviors": {
+      "must": ["每轮只问一个问题", "围绕项目事实追问", "不替学员命名矛盾", "缺事实时追问，不编造"],
+      "mustNot": [
+        "直接说出“真正矛盾是创始人知道零和仍继续招商”",
+        "向学员展示“矛盾发现卡”或“商模判断卡”",
+        "泄露内部评分维度、反速通规则或后台证据结构",
+        "把高分案例直接包装成标准答案"
+      ]
+    },
+    "expectedEvents": [
+      {
+        "eventType": "follow_up_question",
+        "agentState": "second_order_probe",
+        "evidenceStatus": "partial"
+      }
+    ],
+    "pblConfig": {
+      "projectTopic": "管与楠鸡公煲商业模式学习伙伴测试",
+      "projectDescription": "围绕管与楠鸡公煲开题评审材料，训练学员把商业模式概念带回加盟扩张事实链。",
+      "targetSkills": ["项目事实观察", "矛盾发现", "商业模式判断"],
+      "issueCount": 4
+    },
+    "languageDirective": "Reply in Simplified Chinese"
+  },
+  {
+    "id": "jxg-opening-yunmao-001",
+    "version": 1,
+    "course": "商业模式大课",
+    "node": "事实约束与缺口追问",
+    "source": {
+      "title": "开题报告评审-云猫车服-20260506",
+      "path": "/Users/sijia/咨询工作组/OB（大）/03-咨询项目/开题报告评审案例库/开题报告评审-云猫车服-20260506.md"
+    },
+    "learnerProfile": "容易填满框架但证据链松散",
+    "projectFactPack": {
+      "targetName": "云猫车服",
+      "facts": [
+        {
+          "factId": "f1",
+          "text": "云猫车服被评为 63 分、有条件通过，认知层级偏填表级，问题多停留在表象。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f2",
+          "text": "行业数据存在但来源缺失，竞争与话语权判断结论多、推导少。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f3",
+          "text": "企业定位和商业模式描述清楚，但波士顿矩阵标签与 312 万营收规模存在不匹配。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f4",
+          "text": "自研设备如何从能力变成可收费资产，报告中没有说明清楚。",
+          "confidence": "medium"
+        },
+        {
+          "factId": "f5",
+          "text": "机制、文化、资本判断中存在主观断言，缺少访谈或经营证据支撑。",
+          "confidence": "medium"
+        }
+      ]
+    },
+    "initialState": {
+      "effectiveMinutes": 28,
+      "depthLevel": 1,
+      "hintLevel": 2
+    },
+    "learnerInput": "云猫车服的问题主要是战略目标不够清晰。",
+    "learnerVisibleCards": [
+      {
+        "cardType": "concept_understanding",
+        "title": "概念理解卡",
+        "prompt": "让学员区分“描述一个商业模式”和“判断一个商业模式是否成立”的差别。"
+      },
+      {
+        "cardType": "case_observation",
+        "title": "案例观察卡",
+        "prompt": "让学员指出哪些判断有事实来源，哪些判断只有结论没有证据。"
+      }
+    ],
+    "coachOnlyCards": [
+      {
+        "cardType": "contradiction_discovery",
+        "title": "矛盾发现卡",
+        "evidenceHint": "观察学员是否能发现‘描述完整’与‘证据不足’之间的张力。"
+      },
+      {
+        "cardType": "business_model_judgement",
+        "title": "商模判断卡",
+        "evidenceHint": "观察学员是否能追问自研设备如何转化为交易结构中的付费理由。"
+      }
+    ],
+    "expectedBehaviors": {
+      "must": ["每轮只问一个问题", "围绕项目事实追问", "不替学员命名矛盾", "缺事实时追问，不编造"],
+      "mustNot": [
+        "直接说出“这是填表式分析”",
+        "向学员展示“矛盾发现卡”或“商模判断卡”",
+        "泄露内部评分维度、反速通规则或后台证据结构",
+        "替学员补齐不存在的数据来源"
+      ]
+    },
+    "expectedEvents": [
+      {
+        "eventType": "follow_up_question",
+        "agentState": "evidence_gap_probe",
+        "evidenceStatus": "insufficient"
+      }
+    ],
+    "pblConfig": {
+      "projectTopic": "云猫车服商业模式学习伙伴测试",
+      "projectDescription": "围绕云猫车服开题评审材料，训练学员在商业模式分析中先校验证据再下判断。",
+      "targetSkills": ["项目事实观察", "矛盾发现", "商业模式判断"],
+      "issueCount": 4
+    },
+    "languageDirective": "Reply in Simplified Chinese"
+  },
+  {
+    "id": "jxg-opening-woyeqingqing-001",
+    "version": 1,
+    "course": "商业模式大课",
+    "node": "根因收敛与治理张力",
+    "source": {
+      "title": "开题报告评审-沃野青青-20260505",
+      "path": "/Users/sijia/咨询工作组/OB（大）/03-咨询项目/开题报告评审案例库/开题报告评审-沃野青青-20260505.md"
+    },
+    "learnerProfile": "能罗列很多问题但不容易收敛到根因",
+    "projectFactPack": {
+      "targetName": "沃野青青",
+      "facts": [
+        {
+          "factId": "f1",
+          "text": "沃野青青经营有机农业，拥有 7 个基地、约 2500 亩，营收 1160 万、净利 221.5 万。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f2",
+          "text": "企业提出 60% 增长目标，但处在重资产、薄利润的经营模型中。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f3",
+          "text": "创始人持股 43%，没有绝对控制权，且缺少董事会、COO、CFO 等治理结构。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f4",
+          "text": "学员报告把五个问题并列呈现，没有把股权、治理和增长焦虑收敛为主线。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f5",
+          "text": "商业模式画布被填写完整，但没有诊断真实交易结构断裂点。",
+          "confidence": "medium"
+        }
+      ]
+    },
+    "initialState": {
+      "effectiveMinutes": 35,
+      "depthLevel": 1,
+      "hintLevel": 2
+    },
+    "learnerInput": "沃野青青的问题很多，可能是组织、机制、战略都有问题。",
+    "learnerVisibleCards": [
+      {
+        "cardType": "concept_understanding",
+        "title": "概念理解卡",
+        "prompt": "让学员解释“并列问题”和“根因主线”在商业模式诊断中的区别。"
+      },
+      {
+        "cardType": "case_observation",
+        "title": "案例观察卡",
+        "prompt": "让学员从股权、治理、增长目标和经营模型中找出最互相牵制的一组事实。"
+      }
+    ],
+    "coachOnlyCards": [
+      {
+        "cardType": "contradiction_discovery",
+        "title": "矛盾发现卡",
+        "evidenceHint": "观察学员是否能自己发现增长目标与治理承载力之间的矛盾。"
+      },
+      {
+        "cardType": "business_model_judgement",
+        "title": "商模判断卡",
+        "evidenceHint": "观察学员是否能判断治理真空如何放大重资产薄利润模型的风险。"
+      }
+    ],
+    "expectedBehaviors": {
+      "must": ["每轮只问一个问题", "围绕项目事实追问", "不替学员命名矛盾", "缺事实时追问，不编造"],
+      "mustNot": [
+        "直接说出“根因是股权和治理真空放大增长焦虑”",
+        "向学员展示“矛盾发现卡”或“商模判断卡”",
+        "泄露内部评分维度、反速通规则或后台证据结构",
+        "把五个并列问题整理成现成答案"
+      ]
+    },
+    "expectedEvents": [
+      {
+        "eventType": "follow_up_question",
+        "agentState": "root_cause_convergence_probe",
+        "evidenceStatus": "not_yet_valid"
+      }
+    ],
+    "pblConfig": {
+      "projectTopic": "沃野青青商业模式学习伙伴测试",
+      "projectDescription": "围绕沃野青青开题评审材料，训练学员从并列问题收敛到商业模式和治理张力。",
+      "targetSkills": ["项目事实观察", "矛盾发现", "商业模式判断"],
+      "issueCount": 4
+    },
+    "languageDirective": "Reply in Simplified Chinese"
+  },
+  {
+    "id": "jxg-opening-tn-building-001",
+    "version": 1,
+    "course": "商业模式大课",
+    "node": "执行事实与商业模式判断",
+    "source": {
+      "title": "开题报告评审-TN建筑-20260505",
+      "path": "/Users/sijia/咨询工作组/OB（大）/03-咨询项目/开题报告评审案例库/开题报告评审-TN建筑-20260505.md"
+    },
+    "learnerProfile": "能抓到一句诊断但容易忽略项目管理证据",
+    "projectFactPack": {
+      "targetName": "TN建筑",
+      "facts": [
+        {
+          "factId": "f1",
+          "text": "TN建筑位于河南建筑电气施工领域，处在资质驱动和存量客户延伸的业务结构中。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f2",
+          "text": "行业市场约 10320 亿、增长约 5%，新能源相关需求占比超过 50%，国企集中度约 60%。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f3",
+          "text": "公司约 20 人、营收 2000 万、净利 90 万，创始人掌握 100% 客户关系。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f4",
+          "text": "创始人约 90% 精力仍投入项目运作，营销、团队和技术储备不足。",
+          "confidence": "high"
+        },
+        {
+          "factId": "f5",
+          "text": "报告中的项目管理缺口明显：甘特图空、投入小时和负责人不清。",
+          "confidence": "medium"
+        }
+      ]
+    },
+    "initialState": {
+      "effectiveMinutes": 48,
+      "depthLevel": 2,
+      "hintLevel": 1
+    },
+    "learnerInput": "TN建筑就是船造小了，商业模式太单一。",
+    "learnerVisibleCards": [
+      {
+        "cardType": "concept_understanding",
+        "title": "概念理解卡",
+        "prompt": "让学员解释“船造小了”是商业模式判断，还是组织能力判断，二者证据分别是什么。"
+      },
+      {
+        "cardType": "case_observation",
+        "title": "案例观察卡",
+        "prompt": "让学员把客户关系、创始人时间、利润规模、项目管理缺口放进同一条事实链。"
+      }
+    ],
+    "coachOnlyCards": [
+      {
+        "cardType": "contradiction_discovery",
+        "title": "矛盾发现卡",
+        "evidenceHint": "观察学员是否能发现个人关系型增长与组织能力扩张之间的张力。"
+      },
+      {
+        "cardType": "business_model_judgement",
+        "title": "商模判断卡",
+        "evidenceHint": "观察学员是否能判断商业模式单一是否是根因，还是行业结构和组织能力的结果。"
+      }
+    ],
+    "expectedBehaviors": {
+      "must": ["每轮只问一个问题", "围绕项目事实追问", "不替学员命名矛盾", "缺事实时追问，不编造"],
+      "mustNot": [
+        "直接说出“真正矛盾是创始人关系锁定与组织能力不足”",
+        "向学员展示“矛盾发现卡”或“商模判断卡”",
+        "泄露内部评分维度、反速通规则或后台证据结构",
+        "忽略项目管理缺口对证据可信度的影响"
+      ]
+    },
+    "expectedEvents": [
+      {
+        "eventType": "follow_up_question",
+        "agentState": "business_model_judgement_probe",
+        "evidenceStatus": "partial"
+      }
+    ],
+    "pblConfig": {
+      "projectTopic": "TN建筑商业模式学习伙伴测试",
+      "projectDescription": "围绕 TN 建筑开题评审材料，训练学员用项目事实检验商业模式判断与组织承载力。",
+      "targetSkills": ["项目事实观察", "矛盾发现", "商业模式判断"],
+      "issueCount": 4
+    },
+    "languageDirective": "Reply in Simplified Chinese"
+  }
+]

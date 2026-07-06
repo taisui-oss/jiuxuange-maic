@@ -681,7 +681,7 @@ export function AgentBar() {
         presetIds.unshift(teacherAgent.id);
       }
       setSelectedAgentIds(
-        presetIds.length > 0 ? presetIds : ['default-1', 'default-2', 'default-3'],
+        presetIds.length > 0 ? presetIds : ['default-1', 'default-2', 'default-3', 'default-4'],
       );
     } else {
       // Auto mode plays the current classroom's generated agents — leaving the

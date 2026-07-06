@@ -53,6 +53,9 @@ describe('#353: generatedAgentConfigs conditional on agentMode', () => {
     const agents = getDefaultAgents();
     const fields = buildStageAgentFields('default', agents);
 
+    expect(agents.map((a) => a.name)).toEqual(['教授', '学长', '神秘角色', '成长反馈官']);
+    expect(agents.map((a) => a.role)).toEqual(['teacher', 'assistant', 'student', 'student']);
+
     // Should have agentIds
     expect(fields).toHaveProperty('agentIds');
     expect((fields as DefaultModeFields).agentIds).toEqual([
@@ -60,8 +63,6 @@ describe('#353: generatedAgentConfigs conditional on agentMode', () => {
       'default-2',
       'default-3',
       'default-4',
-      'default-5',
-      'default-6',
     ]);
 
     // Should NOT have generatedAgentConfigs
@@ -108,8 +109,6 @@ describe('#353: generatedAgentConfigs conditional on agentMode', () => {
       'default-2',
       'default-3',
       'default-4',
-      'default-5',
-      'default-6',
     ]);
   });
 });

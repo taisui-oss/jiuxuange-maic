@@ -811,7 +811,7 @@ const migrateFromOldStorage = () => {
   let ttsModel = 'openai-tts';
   if (oldTtsModel) ttsModel = oldTtsModel;
 
-  let selectedAgentIds = ['default-1', 'default-2', 'default-3'];
+  let selectedAgentIds = ['default-1', 'default-2', 'default-3', 'default-4'];
   if (oldSelectedAgents) {
     try {
       const parsed = JSON.parse(oldSelectedAgents);
@@ -856,7 +856,12 @@ export const useSettingsStore = create<SettingsState>()(
         ),
         providersConfig: initialProvidersConfig,
         ttsModel: migratedData?.ttsModel || 'openai-tts',
-        selectedAgentIds: migratedData?.selectedAgentIds || ['default-1', 'default-2', 'default-3'],
+        selectedAgentIds: migratedData?.selectedAgentIds || [
+          'default-1',
+          'default-2',
+          'default-3',
+          'default-4',
+        ],
         agentMode: 'auto' as const,
         autoAgentCount: 3,
         agentVoiceOverrides: {},

@@ -118,7 +118,7 @@ async function generateAgentProfiles(
   aiCall: AICallFn,
 ): Promise<AgentInfo[]> {
   const systemPrompt =
-    'You are an expert instructional designer. Generate agent profiles for a multi-agent classroom simulation. Return ONLY valid JSON, no markdown or explanation.';
+    'You are an expert instructional designer for 九轩阁商业模式学习. Generate agent profiles for a multi-agent learning companion experience, preserving the OpenMAIC classroom role schema while making the learner-facing roles feel like 九轩阁 companions. Return ONLY valid JSON, no markdown or explanation.';
 
   const userPrompt = `Generate agent profiles for a course with this requirement:
 ${requirement}
@@ -127,6 +127,12 @@ Requirements:
 - Decide the appropriate number of agents based on the course content (typically 3-5)
 - Exactly 1 agent must have role "teacher", the rest can be "assistant" or "student"
 - Each agent needs: name, role, persona (2-3 sentences describing personality and teaching/learning style)
+- Jiuxuange role direction: keep generated names and personas close to 教授, 学长, 神秘角色, 成长反馈官.
+  - 教授: role "teacher", explains concepts and calibrates the commercial-mode framework.
+  - 学长: role "assistant", accompanies the learner, resumes from breakpoints, and brings concepts back to the learner's project.
+  - 神秘角色: role "student", challenges assumptions, enters scenario roles, and supports red-blue-team tension.
+  - 成长反馈官: role "student", gives learner-facing growth feedback and evidence reminders; formal scoring remains outside the chat persona.
+  - 不要生成“显眼包、好奇宝宝、笔记员、思考者”这类通用课堂模拟学生名称或人格。
 - Language directive for this course: ${languageDirective}
   Agent names and personas must follow this language directive.
 

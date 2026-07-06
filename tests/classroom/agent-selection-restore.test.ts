@@ -44,7 +44,7 @@ describe('restoreAgentSelection', () => {
   });
 
   it('ignores a stage-derived persisted selection and applies this stage defaults', () => {
-    // A previous classroom load wrote {preset, trio} as its fallback; that is
+    // A previous classroom load wrote {preset, quartet} as its fallback; that is
     // not a user choice, so an auto stage must still get its generated agents.
     expect(
       restoreAgentSelection({
@@ -99,7 +99,7 @@ describe('restoreAgentSelection', () => {
     });
   });
 
-  it('falls back to the default preset trio when nothing else is valid', () => {
+  it('falls back to the default preset quartet when nothing else is valid', () => {
     expect(
       restoreAgentSelection({
         persisted: { mode: 'preset', selectedAgentIds: [] },
@@ -108,7 +108,10 @@ describe('restoreAgentSelection', () => {
         isPresetAgent,
       }),
     ).toEqual({
-      selection: { mode: 'preset', selectedAgentIds: ['default-1', 'default-2', 'default-3'] },
+      selection: {
+        mode: 'preset',
+        selectedAgentIds: ['default-1', 'default-2', 'default-3', 'default-4'],
+      },
       isUserSet: false,
     });
   });
