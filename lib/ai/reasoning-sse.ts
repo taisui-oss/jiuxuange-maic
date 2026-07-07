@@ -23,6 +23,10 @@ interface ChatChunkLike {
   choices?: { delta?: Record<string, unknown>; finish_reason?: string | null }[];
 }
 
+interface ChatCompletionLike {
+  choices?: { message?: Record<string, unknown> }[];
+}
+
 /**
  * Create a stateful rewriter for one streamed response. Call it on each parsed
  * `chat.completion.chunk`; it mutates and returns the same object with
@@ -115,5 +119,52 @@ export function wrapResponseWithReasoning(response: Response): Response {
     status: response.status,
     statusText: response.statusText,
     headers: response.headers,
+  });
+}
+
+/**
+ * Rewrite non-streaming OpenAI-compatible chat responses that include
+ * `message.reasoning_content`. The OpenAI SDK schema rejects that extra field
+ * while processing an otherwise successful JSON response. Folding it into an
+ * inline `<think>` block keeps the wire schema compatible; the language model is
+ * wrapped with `extractReasoningMiddleware`, so callers still receive reasoning
+ * separately from answer text.
+ */
+export async function wrapJsonResponseWithReasoning(response: Response): Promise<Response> {
+  if (!response.body || !response.ok) return response;
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.toLowerCase().includes('application/json')) return response;
+
+  let payload: ChatCompletionLike;
+  try {
+    payload = JSON.parse(await response.clone().text()) as ChatCompletionLike;
+  } catch {
+    return response;
+  }
+
+  let changed = false;
+  for (const choice of payload.choices ?? []) {
+    const message = choice.message;
+    if (!message || !('reasoning_content' in message)) continue;
+
+    const reasoning = message.reasoning_content;
+    if (typeof reasoning === 'string' && reasoning.length > 0) {
+      const content = typeof message.content === 'string' ? message.content : '';
+      message.content = `<think>${reasoning}</think>${content}`;
+    }
+    delete message.reasoning_content;
+    changed = true;
+  }
+
+  if (!changed) return response;
+
+  const headers = new Headers(response.headers);
+  headers.delete('content-length');
+  headers.set('content-type', 'application/json');
+
+  return new Response(JSON.stringify(payload), {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
   });
 }

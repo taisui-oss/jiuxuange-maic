@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { createReasoningContentRewriter, wrapResponseWithReasoning } from '@/lib/ai/reasoning-sse';
+import {
+  createReasoningContentRewriter,
+  wrapJsonResponseWithReasoning,
+  wrapResponseWithReasoning,
+} from '@/lib/ai/reasoning-sse';
 
 // Build a streaming Response from SSE text, optionally split into arbitrary
 // byte-fragments to exercise the line buffer crossing chunk boundaries.
@@ -144,5 +148,42 @@ describe('wrapResponseWithReasoning', () => {
   it('returns the response unchanged when it has no body', () => {
     const res = new Response(null, { status: 204 });
     expect(wrapResponseWithReasoning(res)).toBe(res);
+  });
+});
+
+describe('wrapJsonResponseWithReasoning', () => {
+  it('rewrites non-streaming reasoning_content into message.content', async () => {
+    const res = await wrapJsonResponseWithReasoning(
+      new Response(
+        JSON.stringify({
+          choices: [
+            {
+              message: {
+                role: 'assistant',
+                content: '{"ok":true}',
+                reasoning_content: 'Need JSON.',
+              },
+            },
+          ],
+        }),
+        { headers: { 'content-type': 'application/json', 'content-length': '999' } },
+      ),
+    );
+
+    const text = await res.text();
+    const payload = JSON.parse(text);
+    const message = payload.choices[0].message;
+    expect(message.content).toBe('<think>Need JSON.</think>{"ok":true}');
+    expect(message).not.toHaveProperty('reasoning_content');
+    expect(res.headers.has('content-length')).toBe(false);
+  });
+
+  it('returns plain JSON responses unchanged when no reasoning field exists', async () => {
+    const original = new Response(JSON.stringify({ choices: [{ message: { content: 'ok' } }] }), {
+      headers: { 'content-type': 'application/json' },
+    });
+
+    const wrapped = await wrapJsonResponseWithReasoning(original);
+    expect(wrapped).toBe(original);
   });
 });

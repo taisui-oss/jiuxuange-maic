@@ -450,19 +450,34 @@ export async function generateClassroom(
       });
     };
 
-    const content = await withGenerationRetry(
-      () =>
-        generateSceneContent(safeOutline, sceneAiCall, {
-          agents,
-          languageDirective,
-          allowProceduralSkill: vocationalActive,
-        }),
-      {
-        label: `scene ${index + 1}/${outlines.length} content`,
-        shouldRetryResult: (result) => result === null,
-        onRetry: (event) => reportSceneRetry('content', event),
-      },
-    );
+    let content: Awaited<ReturnType<typeof generateSceneContent>>;
+    try {
+      content = await withGenerationRetry(
+        () =>
+          generateSceneContent(safeOutline, sceneAiCall, {
+            agents,
+            languageDirective,
+            languageModel: safeOutline.type === 'pbl' ? languageModel : undefined,
+            thinkingConfig: classroomThinking,
+            userRequirements: requirements,
+            allowProceduralSkill: vocationalActive,
+          }),
+        {
+          label: `scene ${index + 1}/${outlines.length} content`,
+          shouldRetryResult: (result) => result === null,
+          onRetry: (event) => reportSceneRetry('content', event),
+        },
+      );
+    } catch (err) {
+      if (safeOutline.type === 'interactive') {
+        log.warn(
+          `Skipping interactive scene "${safeOutline.title}" — content generation failed`,
+          err,
+        );
+        continue;
+      }
+      throw err;
+    }
     if (!content) {
       log.warn(`Skipping scene "${safeOutline.title}" — content generation failed`);
       continue;

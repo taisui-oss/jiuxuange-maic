@@ -29,7 +29,7 @@ import { createOpenAI } from '@ai-sdk/openai';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { wrapLanguageModel, extractReasoningMiddleware } from 'ai';
-import { wrapResponseWithReasoning } from './reasoning-sse';
+import { wrapJsonResponseWithReasoning, wrapResponseWithReasoning } from './reasoning-sse';
 import type { LanguageModel } from 'ai';
 import type {
   ProviderId,
@@ -1504,45 +1504,35 @@ export function getModel(config: ModelConfig): ModelWithInfo {
               }
             }
           }
+          let isStreamingRequest = false;
+          if (init?.body && typeof init.body === 'string') {
+            try {
+              isStreamingRequest = JSON.parse(init.body)?.stream === true;
+            } catch {
+              /* ignore request-body inspection failure */
+            }
+          }
+
           const response = await globalThis.fetch(url, init);
 
           // Recover reasoning that @ai-sdk/openai's chat schema drops: rewrite
           // streamed `reasoning_content` deltas into an inline <think> block
           // (the model below is wrapped with extractReasoningMiddleware to split
           // it back into first-class reasoning parts). No-op when absent.
-          const streamingReasoned = (() => {
-            let streaming = false;
-            if (init?.body && typeof init.body === 'string') {
-              try {
-                streaming = JSON.parse(init.body)?.stream === true;
-              } catch {
-                /* ignore request-body inspection failure */
-              }
-            }
-            return streaming ? wrapResponseWithReasoning(response) : response;
-          })();
+          if (isStreamingRequest) {
+            return wrapResponseWithReasoning(response);
+          }
+
+          const reasonedResponse = await wrapJsonResponseWithReasoning(response);
 
           if (providerId !== 'lemonade') {
-            return streamingReasoned;
+            return reasonedResponse;
           }
 
           const contentType = response.headers.get('content-type') || '';
-          let isStreamingRequest = false;
-          if (init?.body && typeof init.body === 'string') {
-            try {
-              const requestBody = JSON.parse(init.body);
-              isStreamingRequest = requestBody?.stream === true;
-            } catch {
-              /* ignore request-body inspection failure */
-            }
-          }
-
-          if (isStreamingRequest) {
-            return response;
-          }
 
           try {
-            const cloned = response.clone();
+            const cloned = reasonedResponse.clone();
             const text = await cloned.text();
 
             try {
@@ -1557,7 +1547,7 @@ export function getModel(config: ModelConfig): ModelWithInfo {
             log.warn('[Lemonade] Failed to inspect JSON response body:', error);
           }
 
-          return response;
+          return reasonedResponse;
         };
         openaiOptions.fetch = compatFetch as typeof globalThis.fetch;
       }

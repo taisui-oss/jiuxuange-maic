@@ -57,6 +57,32 @@ const outline = {
   order: 1,
 } as const;
 
+const pblOutline = {
+  id: 'outline-pbl-1',
+  type: 'pbl',
+  title: 'PBL Project',
+  description: 'Run a project.',
+  keyPoints: ['Diagnose the case'],
+  order: 1,
+  pblConfig: {
+    projectTopic: 'Business model diagnosis',
+    projectDescription: 'Diagnose the project using course concepts.',
+    targetSkills: ['Evidence-based reasoning'],
+    issueCount: 3,
+  },
+} as const;
+
+const interactiveOutline = {
+  id: 'outline-interactive-1',
+  type: 'interactive',
+  title: 'Optional Simulation',
+  description: 'Explore a simulation.',
+  keyPoints: ['Try the controls'],
+  order: 1,
+  widgetType: 'simulation',
+  widgetOutline: { concept: 'Optional Simulation' },
+} as const;
+
 const slideContent = {
   elements: [],
   remark: 'Retry transient failures',
@@ -163,6 +189,40 @@ describe('classroom scene generation retries', () => {
     );
   });
 
+  it('forwards the language model and project context for PBL scene generation', async () => {
+    const thinkingConfig = { enabled: false, mode: 'disabled' };
+    const languageModel = { id: 'language-model' };
+    mocks.resolveModel.mockResolvedValue({
+      model: languageModel,
+      modelInfo: {},
+      modelString: 'test:model',
+      providerId: 'test',
+      apiKey: '',
+      thinkingConfig,
+    });
+    mocks.generateSceneOutlinesFromRequirements.mockResolvedValue({
+      success: true,
+      data: {
+        languageDirective: 'Use Chinese.',
+        outlines: [pblOutline],
+      },
+    });
+    mocks.generateSceneContent.mockResolvedValue(slideContent);
+
+    await expect(generateWithProgress()).rejects.toThrow('No scenes were generated');
+
+    expect(mocks.generateSceneContent).toHaveBeenCalledWith(
+      pblOutline,
+      expect.any(Function),
+      expect.objectContaining({
+        languageModel,
+        languageDirective: 'Use Chinese.',
+        thinkingConfig,
+        userRequirements: { requirement: 'Teach retry basics' },
+      }),
+    );
+  });
+
   it('retries retryable action generation errors', async () => {
     mocks.generateSceneContent.mockResolvedValue(slideContent);
     mocks.generateSceneActions
@@ -176,6 +236,25 @@ describe('classroom scene generation retries', () => {
     expect(progress.some((event) => event.message.includes('Retrying scene 1/1 actions'))).toBe(
       true,
     );
+  });
+
+  it('skips failed interactive scenes without aborting the classroom', async () => {
+    mocks.generateSceneOutlinesFromRequirements.mockResolvedValue({
+      success: true,
+      data: {
+        languageDirective: 'Use English.',
+        outlines: [interactiveOutline, outline],
+      },
+    });
+    mocks.generateSceneContent
+      .mockRejectedValueOnce(new Error('Failed to process successful response'))
+      .mockResolvedValueOnce(slideContent);
+
+    const { result } = await generateWithProgress();
+
+    expect(result.scenesCount).toBe(1);
+    expect(mocks.generateSceneContent).toHaveBeenCalledTimes(2);
+    expect(mocks.createSceneWithActions).toHaveBeenCalledTimes(1);
   });
 
   it('does not retry non-retryable action generation errors', async () => {
