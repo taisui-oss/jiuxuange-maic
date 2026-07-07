@@ -6,7 +6,7 @@
     "loading": "Loading..."
   },
   "home": {
-    "slogan": "Generative Learning in Multi-Agent Interactive Classroom",
+    "slogan": "Jiuxuange MAIC · Intelligent Learning Companion for the Six Core Courses",
     "greetingWithName": "Hi, {{name}}"
   },
   "toolbar": {
@@ -817,7 +817,7 @@
     "pdfSizeLimit": "Supports PDF files up to 50MB",
     "courseMaterialSizeLimit": "Supports PDF, DOCX, PPTX, TXT, and Markdown files up to 50MB",
     "generateFailed": "Failed to generate classroom, please try again",
-    "requirementPlaceholder": "Tell me anything you want to learn, e.g.\n\"Teach me Python from scratch in 30 minutes\"\n\"Explain Fourier Transform on the whiteboard\"\n\"How to play the board game Avalon\"",
+    "requirementPlaceholder": "Tell me what you want to study, practise, or discuss across the six core courses, e.g.\n\"Use the Business Model course to analyze a real project\"\n\"Run a case inquiry across Strategy, Organization, and Mechanism\"\n\"Discuss one client problem through Culture and Capital together\"",
     "requirementRequired": "Please enter course requirements",
     "fileTooLarge": "File too large. Please select a file smaller than 50MB",
     "unsupportedCourseMaterial": "Unsupported course material type. Please upload PDF, DOCX, PPTX, TXT, or Markdown."

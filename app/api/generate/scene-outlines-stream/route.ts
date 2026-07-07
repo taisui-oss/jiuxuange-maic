@@ -281,6 +281,36 @@ function ensureUniqueOutlineId(outline: SceneOutline, usedIds: Set<string>): Sce
   return { ...outline, id };
 }
 
+function formatUpstreamGenerationError(error: unknown, modelString?: string): string {
+  const raw = error instanceof Error ? error.message : String(error);
+  const detail =
+    error && typeof error === 'object' && 'responseBody' in error
+      ? String((error as { responseBody?: unknown }).responseBody || '')
+      : '';
+  const combined = `${raw}\n${detail}`;
+  const authFailed = /authentication|unauthorized|invalid api key|api key.*invalid|401/i.test(
+    combined,
+  );
+
+  if (authFailed) {
+    const modelHint = modelString ? `（当前模型：${modelString}）` : '';
+    return `模型认证失败${modelHint}：请检查服务端 API Key 是否有效，或在设置中切换到可用模型。`;
+  }
+
+  return raw || 'Failed to generate outlines';
+}
+
+function isNonRetryableUpstreamError(error: unknown): boolean {
+  const raw = error instanceof Error ? error.message : String(error);
+  const detail =
+    error && typeof error === 'object' && 'responseBody' in error
+      ? String((error as { responseBody?: unknown }).responseBody || '')
+      : '';
+  return /authentication|unauthorized|invalid api key|api key.*invalid|401/i.test(
+    `${raw}\n${detail}`,
+  );
+}
+
 export async function POST(req: NextRequest) {
   let requirementSnippet: string | undefined;
   let resolvedModelString: string | undefined;
@@ -570,10 +600,17 @@ export async function POST(req: NextRequest) {
                 stopHeartbeat();
                 return;
               }
-              lastError = error instanceof Error ? error.message : String(error);
+              lastError = formatUpstreamGenerationError(error, modelString);
               log.warn(
                 `Outlines stream error detail (attempt ${attempt}/${MAX_STREAM_RETRIES + 1}): ${lastError}`,
               );
+
+              if (isNonRetryableUpstreamError(error)) {
+                log.warn(
+                  `Non-retryable upstream model error for outlines [model=${modelString}], stopping retries.`,
+                );
+                break;
+              }
 
               if (attempt <= MAX_STREAM_RETRIES) {
                 log.warn(

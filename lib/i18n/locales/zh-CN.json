@@ -6,7 +6,7 @@
     "loading": "加载中..."
   },
   "home": {
-    "slogan": "Generative Learning in Multi-Agent Interactive Classroom",
+    "slogan": "Jiuxuange MAIC · Intelligent Learning Companion for the Six Core Courses",
     "greetingWithName": "嗨，{{name}}"
   },
   "toolbar": {
@@ -817,7 +817,7 @@
     "pdfSizeLimit": "支持最大50MB的PDF文件",
     "courseMaterialSizeLimit": "支持最大 50MB 的 PDF、DOCX、PPTX、TXT 和 Markdown 文件",
     "generateFailed": "生成课堂失败，请重试",
-    "requirementPlaceholder": "输入你想学的任何内容，例如：\n「从零学 Python，30 分钟写出第一个程序」\n「用白板给我讲解傅里叶变换」\n「阿瓦隆桌游怎么玩」",
+    "requirementPlaceholder": "输入你想围绕六门大课学习、练习或讨论的内容，例如：\n「用商业模式课帮我分析一个真实项目」\n「围绕战略、组织、机制做一轮案例追问」\n「把文化与资本两门课放进同一个案主问题里讨论」",
     "requirementRequired": "请输入课程需求",
     "fileTooLarge": "文件过大，请选择小于 50MB 的文件",
     "unsupportedCourseMaterial": "不支持的课程材料类型，请上传 PDF、DOCX、PPTX、TXT 或 Markdown 文件"

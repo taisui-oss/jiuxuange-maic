@@ -507,9 +507,8 @@ function HomePage() {
         )}
       >
         {/* ── Logo ── */}
-        <motion.img
-          src="/logo-horizontal.png"
-          alt="OpenMAIC"
+        <motion.div
+          aria-label="九轩阁 MAIC"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
@@ -518,8 +517,22 @@ function HomePage() {
             stiffness: 200,
             damping: 20,
           }}
-          className="h-12 md:h-16 mb-2 -ml-2 md:-ml-3"
-        />
+          className="mb-2 flex items-center justify-center gap-3 md:gap-4"
+        >
+          <img
+            src="/jiuxuange-maic-mark.png"
+            alt=""
+            className="h-12 w-12 md:h-16 md:w-16 object-contain rounded-[14px] mix-blend-screen drop-shadow-[0_0_20px_rgba(92,209,255,0.45)]"
+          />
+          <div className="flex items-baseline gap-3 text-[40px] md:text-[58px] font-semibold leading-none drop-shadow-[0_0_18px_rgba(126,154,255,0.35)]">
+            <span className="bg-gradient-to-r from-[#7edbff] via-[#8eb7ff] to-[#b794ff] bg-clip-text text-transparent">
+              九轩阁
+            </span>
+            <span className="bg-gradient-to-r from-[#8fb8ff] via-[#9f91ff] to-[#d07cff] bg-clip-text text-transparent">
+              MAIC
+            </span>
+          </div>
+        </motion.div>
 
         {/* ── Slogan ── */}
         <motion.p
@@ -907,7 +920,7 @@ function HomePage() {
 
       {/* Footer — flows with content, at the very end */}
       <div className="mt-auto pt-12 pb-4 text-center text-xs text-muted-foreground/40">
-        OpenMAIC Open Source Project
+        Jiuxuange MAIC Learning Companion
       </div>
     </div>
   );
