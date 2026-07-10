@@ -154,7 +154,7 @@ export function createJiuxuangeProject(
           phase: question.phase,
           questionTemplateId,
           questionPrompt: question.prompt,
-          evidenceRuleIds: module.evidenceRuleIds,
+          evidenceRuleIds: question.evidenceRuleIds,
           preferredRole: roleForPhase(question.phase),
         },
       };

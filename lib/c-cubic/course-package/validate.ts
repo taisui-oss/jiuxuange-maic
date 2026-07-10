@@ -72,6 +72,11 @@ export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
     if (!question.singleQuestion) {
       errors.push(`question ${questionId} must enforce singleQuestion`);
     }
+    for (const ruleId of question.evidenceRuleIds) {
+      if (!pkg.evidenceRules[ruleId]) {
+        errors.push(`question ${questionId} references unknown evidence rule ${ruleId}`);
+      }
+    }
   }
 
   return errors;

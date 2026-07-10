@@ -41,6 +41,13 @@ describe('Jiuxuange PBL project factory', () => {
     expect(project.threads).toHaveLength(1);
     expect(project.threads[0].agentId).toBe('jiuxuange-professor');
     expect(project.evaluations).toEqual([]);
+    expect(project.milestones[0].microtasks.map((task) => task.jiuxuange?.evidenceRuleIds)).toEqual([
+      ['fact_grounding'],
+      ['concept_to_case'],
+      ['fact_grounding'],
+      ['fact_grounding'],
+      ['case_to_handover'],
+    ]);
   });
 
   it('packages only learner-visible facts into the PBL reference document', () => {

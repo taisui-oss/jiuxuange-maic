@@ -69,6 +69,7 @@ export interface JiuxuangeQuestionTemplate {
   conceptIds: string[];
   prompt: string;
   singleQuestion: boolean;
+  evidenceRuleIds: string[];
 }
 
 export interface JiuxuangeEvidenceRule {

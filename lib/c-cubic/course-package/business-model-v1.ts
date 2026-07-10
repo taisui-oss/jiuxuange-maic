@@ -140,6 +140,7 @@ export const BUSINESS_MODEL_PILOT_PACKAGE: JiuxuangeCoursePackage = {
       conceptIds: ['business-model-six-elements'],
       prompt: '你刚才的判断对应事实包里的哪条观察？',
       singleQuestion: true,
+      evidenceRuleIds: ['fact_grounding'],
     },
     explain_concept: {
       id: 'explain_concept',
@@ -147,6 +148,7 @@ export const BUSINESS_MODEL_PILOT_PACKAGE: JiuxuangeCoursePackage = {
       conceptIds: ['business-model-six-elements'],
       prompt: '用你自己的话说，商业模式和收入模式最大的不同是什么？',
       singleQuestion: true,
+      evidenceRuleIds: ['concept_to_case'],
     },
     apply_six_elements: {
       id: 'apply_six_elements',
@@ -154,6 +156,7 @@ export const BUSINESS_MODEL_PILOT_PACKAGE: JiuxuangeCoursePackage = {
       conceptIds: ['business-model-six-elements'],
       prompt: '这条事实首先改变了六要素中的哪一项？',
       singleQuestion: true,
+      evidenceRuleIds: ['fact_grounding'],
     },
     probe_tension: {
       id: 'probe_tension',
@@ -161,6 +164,7 @@ export const BUSINESS_MODEL_PILOT_PACKAGE: JiuxuangeCoursePackage = {
       conceptIds: ['business-model-six-elements'],
       prompt: '把门店增长和续约下降放在一起，你看到了什么不一致？',
       singleQuestion: true,
+      evidenceRuleIds: ['fact_grounding'],
     },
     judge_with_counterevidence: {
       id: 'judge_with_counterevidence',
@@ -168,9 +172,16 @@ export const BUSINESS_MODEL_PILOT_PACKAGE: JiuxuangeCoursePackage = {
       conceptIds: ['business-model-six-elements'],
       prompt: '什么新事实出现时，你会推翻刚才的判断？',
       singleQuestion: true,
+      evidenceRuleIds: ['case_to_handover'],
     },
   },
   evidenceRules: {
+    fact_grounding: {
+      id: 'fact_grounding',
+      description: '引用一条项目事实，并说明它如何支撑当前判断。',
+      requiredSignals: ['fact_ref', 'causal_link'],
+      provenanceRequired: true,
+    },
     concept_to_case: {
       id: 'concept_to_case',
       description: '能用自己的话解释概念并区分常见误区。',
