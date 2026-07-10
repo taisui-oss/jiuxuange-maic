@@ -218,11 +218,18 @@ export interface AutoVoiceCacheRecord {
  * LearningPath table - Productized course path metadata and resume state.
  */
 export interface LearningPathRecord {
-  id: string; // Primary key, usually courseId
+  id: string; // Primary key; legacy paths may still use courseId directly.
   courseId: string;
   title: string;
   activeModuleId?: string;
   activeStep?: string;
+  /** Optional course-instance locator. It locates a stage only; all runtime
+   * progress remains authoritative in scene.content.projectV2. */
+  learnerId?: string;
+  projectId?: string;
+  packageVersion?: string;
+  stageId?: string;
+  sceneId?: string;
   createdAt: number;
   updatedAt: number;
 }
