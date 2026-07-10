@@ -1,0 +1,75 @@
+import { describe, expect, it } from 'vitest';
+import { BUSINESS_MODEL_PILOT_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v1';
+import {
+  assessCoursePackageReadiness,
+  validateCoursePackage,
+} from '@/lib/c-cubic/course-package/validate';
+
+describe('business model pilot course package', () => {
+  it('ships only the B module and keeps formal scoring disabled', () => {
+    expect(BUSINESS_MODEL_PILOT_PACKAGE.modules.map((module) => module.code)).toEqual(['B']);
+    expect(BUSINESS_MODEL_PILOT_PACKAGE.releaseStatus).toBe('pilot_b_only');
+    expect(BUSINESS_MODEL_PILOT_PACKAGE.formalScoringEnabled).toBe(false);
+    expect(validateCoursePackage(BUSINESS_MODEL_PILOT_PACKAGE)).toEqual([]);
+  });
+
+  it('can run a synthetic demo without claiming real-pilot readiness', () => {
+    const readiness = assessCoursePackageReadiness(BUSINESS_MODEL_PILOT_PACKAGE);
+
+    expect(readiness.canRunDemo).toBe(true);
+    expect(readiness.canRunRealPilot).toBe(false);
+    expect(readiness.canPublishScores).toBe(false);
+    expect(readiness.blockers).toContain(
+      'case guan-yu-nan requires verified primary project facts before real-pilot activation',
+    );
+  });
+
+  it('keeps coach review conclusions out of learner-visible facts', () => {
+    const reviewFacts = BUSINESS_MODEL_PILOT_PACKAGE.cases['guan-yu-nan'].facts.filter(
+      (fact) => fact.sourceKind === 'coach_review',
+    );
+
+    expect(reviewFacts.length).toBeGreaterThan(0);
+    expect(reviewFacts.every((fact) => fact.visibility === 'coach_only')).toBe(true);
+  });
+
+  it('rejects a learner-visible coach conclusion', () => {
+    const broken = structuredClone(BUSINESS_MODEL_PILOT_PACKAGE);
+    const reviewFact = broken.cases['guan-yu-nan'].facts.find(
+      (fact) => fact.sourceKind === 'coach_review',
+    );
+    expect(reviewFact).toBeDefined();
+    reviewFact!.visibility = 'learner';
+
+    expect(validateCoursePackage(broken)).toContain(
+      'case guan-yu-nan fact coach-judgement-1 cannot expose coach_review to learners',
+    );
+  });
+
+  it('rejects unverified learner-visible facts in a real project', () => {
+    const broken = structuredClone(BUSINESS_MODEL_PILOT_PACKAGE);
+    const fact = broken.cases['guan-yu-nan'].facts.find(
+      (candidate) => candidate.sourceKind === 'primary_project',
+    );
+    expect(fact).toBeDefined();
+    fact!.visibility = 'learner';
+    fact!.verificationStatus = 'draft';
+
+    expect(validateCoursePackage(broken)).toContain(
+      'case guan-yu-nan fact project-fact-1 must be verified before learner exposure',
+    );
+  });
+
+  it('requires traceable source locators and single-question templates', () => {
+    const broken = structuredClone(BUSINESS_MODEL_PILOT_PACKAGE);
+    broken.cases.demo_chain_franchise.facts[0].sourceRef.locator = '';
+    broken.questionTemplates.ground_fact.singleQuestion = false;
+
+    expect(validateCoursePackage(broken)).toEqual(
+      expect.arrayContaining([
+        'case demo_chain_franchise fact demo-f1 requires a source locator',
+        'question ground_fact must enforce singleQuestion',
+      ]),
+    );
+  });
+});
