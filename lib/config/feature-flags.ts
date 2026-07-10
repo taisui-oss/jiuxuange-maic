@@ -43,3 +43,12 @@ export function resolveVocationalActive(
 export function shouldShowVocationalTestUi(): boolean {
   return readBoolean(process.env.NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI);
 }
+
+/**
+ * Gates the Jiuxuange course-first experience. Unlike general feature flags,
+ * this boundary deliberately accepts only the literal `true` value so a
+ * rollback cannot be enabled by a loosely interpreted environment value.
+ */
+export function shouldUseCubicUnifiedLearning(): boolean {
+  return process.env.NEXT_PUBLIC_C_CUBIC_UNIFIED_LEARNING === 'true';
+}
