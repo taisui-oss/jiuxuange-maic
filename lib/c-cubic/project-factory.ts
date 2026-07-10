@@ -4,7 +4,6 @@ import { projectV2ToLegacyProjectConfig } from '@/lib/pbl/v2/compat';
 import type {
   JiuxuangeMicrotaskMetadata,
   PBLProjectV2,
-  PBLRole,
 } from '@/lib/pbl/v2/types';
 import type {
   JiuxuangeCase,
@@ -13,6 +12,7 @@ import type {
 } from './course-package/types';
 import { validateCoursePackage } from './course-package/validate';
 import type { StageStoreData } from '@/lib/utils/stage-storage';
+import { getJiuxuangeRoleProfiles } from './agent-prompts';
 
 export interface CreateJiuxuangeProjectOptions {
   now: string;
@@ -24,37 +24,6 @@ export interface CreateJiuxuangeStageOptions extends CreateJiuxuangeProjectOptio
   stageId?: string;
   sceneId?: string;
 }
-
-const ROLE_DEFINITIONS: PBLRole[] = [
-  {
-    id: 'jiuxuange-professor',
-    type: 'instructor',
-    name: '教授',
-    description: '帮你校准概念，把问题追到根上。',
-    systemPrompt: '围绕课程概念进行单问追问，不替学员给出结论。',
-  },
-  {
-    id: 'jiuxuange-senior',
-    type: 'mentor',
-    name: '学长',
-    description: '陪你把概念放回自己的项目。',
-    systemPrompt: '使用项目事实伴学，每轮只推进一件事。',
-  },
-  {
-    id: 'jiuxuange-mystery',
-    type: 'collaborator',
-    name: '神秘角色',
-    description: '从另一个位置挑战你当前的判断。',
-    systemPrompt: '通过反问、反例和情境压力测试判断，不泄露预设答案。',
-  },
-  {
-    id: 'jiuxuange-growth-feedback',
-    type: 'evaluator',
-    name: '成长反馈官',
-    description: '帮你回看证据和这一段思考的变化。',
-    systemPrompt: '只给自然语言的学习反馈，不展示内部评分、维度或防刷规则。',
-  },
-];
 
 function stableJson(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(stableJson).join(',')}]`;
@@ -183,7 +152,7 @@ export function createJiuxuangeProject(
     languageDirective: '使用简体中文；课程专有名词保持课程包定义。',
     tags: ['jiuxuange', 'business-model', 'pilot-b'],
     status: 'active',
-    roles: structuredClone(ROLE_DEFINITIONS),
+    roles: getJiuxuangeRoleProfiles(),
     milestones,
     submissions: [],
     evaluations: [],
