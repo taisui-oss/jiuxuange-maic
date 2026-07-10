@@ -60,6 +60,7 @@ import { SpeechButton } from '@/components/audio/speech-button';
 import { useImportClassroom } from '@/lib/import/use-import-classroom';
 import { shouldShowVocationalTestUi } from '@/lib/config/feature-flags';
 import { useImportPptx } from '@/lib/import/use-import-pptx';
+import { BusinessModelLearningPath } from '@/components/c-cubic/business-model-learning-path';
 
 const log = createLogger('Home');
 
@@ -734,6 +735,8 @@ function HomePage() {
           </div>
         )}
       </motion.div>
+
+      <BusinessModelLearningPath />
 
       {/* ═══ Recent classrooms — collapsible ═══ */}
       {classrooms.length > 0 && (

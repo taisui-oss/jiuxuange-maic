@@ -214,6 +214,50 @@ export interface AutoVoiceCacheRecord {
   updatedAt: number;
 }
 
+/**
+ * LearningPath table - Productized course path metadata and resume state.
+ */
+export interface LearningPathRecord {
+  id: string; // Primary key, usually courseId
+  courseId: string;
+  title: string;
+  activeModuleId?: string;
+  activeStep?: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+/**
+ * CourseProgress table - Local learner progress across a fixed course path.
+ */
+export interface CourseProgressRecord {
+  id: string; // `${courseId}:${moduleId}`
+  courseId: string;
+  moduleId: string;
+  startedSteps: string[];
+  completedSteps: string[];
+  lastClassroomId?: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+/**
+ * LearningEvaluation table - Evidence-backed local feedback records.
+ */
+export interface LearningEvaluationRecord {
+  id: string;
+  courseId: string;
+  moduleId: string;
+  classroomId?: string;
+  sceneId?: string;
+  dimension: string;
+  level?: string;
+  feedback: string;
+  evidenceMessageIds?: string[];
+  evidenceSceneIds?: string[];
+  createdAt: number;
+}
+
 /** Build the compound primary key for mediaFiles: `${stageId}:${elementId}` */
 export function mediaFileKey(stageId: string, elementId: string): string {
   return `${stageId}:${elementId}`;
@@ -222,7 +266,7 @@ export function mediaFileKey(stageId: string, elementId: string): string {
 // ==================== Database Definition ====================
 
 const DATABASE_NAME = 'MAIC-Database';
-const _DATABASE_VERSION = 12;
+const _DATABASE_VERSION = 13;
 
 /**
  * MAIC Database Instance
@@ -242,6 +286,9 @@ class MAICDatabase extends Dexie {
   voiceProfiles!: EntityTable<VoiceProfileRecord, 'id'>;
   autoVoiceCache!: EntityTable<AutoVoiceCacheRecord, 'voiceId'>;
   agentEditSessions!: EntityTable<AgentEditSessionRecord, 'id'>;
+  learningPaths!: EntityTable<LearningPathRecord, 'id'>;
+  courseProgress!: EntityTable<CourseProgressRecord, 'id'>;
+  learningEvaluations!: EntityTable<LearningEvaluationRecord, 'id'>;
 
   constructor() {
     super(DATABASE_NAME);
@@ -442,6 +489,27 @@ class MAICDatabase extends Dexie {
       autoVoiceCache: 'voiceId, updatedAt',
       agentEditSessions: 'id, stageId, [stageId+updatedAt]',
     });
+
+    // Version 13: Add C Cubic / Jiuxuange local learning path records.
+    this.version(13).stores({
+      stages: 'id, updatedAt',
+      scenes: 'id, stageId, order, [stageId+order]',
+      audioFiles: 'id, createdAt',
+      imageFiles: 'id, createdAt',
+      snapshots: '++id',
+      chatSessions: 'id, stageId, [stageId+createdAt]',
+      playbackState: 'stageId',
+      stageOutlines: 'stageId',
+      mediaFiles: 'id, stageId, [stageId+type]',
+      generatedAgents: 'id, stageId',
+      voiceProfiles: 'id, providerId, kind, updatedAt',
+      autoVoiceCache: 'voiceId, updatedAt',
+      agentEditSessions: 'id, stageId, [stageId+updatedAt]',
+      learningPaths: 'id, courseId, updatedAt',
+      courseProgress: 'id, courseId, moduleId, updatedAt, lastClassroomId, [courseId+moduleId]',
+      learningEvaluations:
+        'id, courseId, moduleId, classroomId, sceneId, createdAt, [courseId+moduleId]',
+    });
   }
 }
 
@@ -484,12 +552,18 @@ export async function exportDatabase(): Promise<{
   scenes: SceneRecord[];
   chatSessions: ChatSessionRecord[];
   playbackState: PlaybackStateRecord[];
+  learningPaths: LearningPathRecord[];
+  courseProgress: CourseProgressRecord[];
+  learningEvaluations: LearningEvaluationRecord[];
 }> {
   return {
     stages: await db.stages.toArray(),
     scenes: await db.scenes.toArray(),
     chatSessions: await db.chatSessions.toArray(),
     playbackState: await db.playbackState.toArray(),
+    learningPaths: await db.learningPaths.toArray(),
+    courseProgress: await db.courseProgress.toArray(),
+    learningEvaluations: await db.learningEvaluations.toArray(),
   };
 }
 
@@ -501,15 +575,29 @@ export async function importDatabase(data: {
   scenes?: SceneRecord[];
   chatSessions?: ChatSessionRecord[];
   playbackState?: PlaybackStateRecord[];
+  learningPaths?: LearningPathRecord[];
+  courseProgress?: CourseProgressRecord[];
+  learningEvaluations?: LearningEvaluationRecord[];
 }): Promise<void> {
   await db.transaction(
     'rw',
-    [db.stages, db.scenes, db.chatSessions, db.playbackState],
+    [
+      db.stages,
+      db.scenes,
+      db.chatSessions,
+      db.playbackState,
+      db.learningPaths,
+      db.courseProgress,
+      db.learningEvaluations,
+    ],
     async () => {
       if (data.stages) await db.stages.bulkPut(data.stages);
       if (data.scenes) await db.scenes.bulkPut(data.scenes);
       if (data.chatSessions) await db.chatSessions.bulkPut(data.chatSessions);
       if (data.playbackState) await db.playbackState.bulkPut(data.playbackState);
+      if (data.learningPaths) await db.learningPaths.bulkPut(data.learningPaths);
+      if (data.courseProgress) await db.courseProgress.bulkPut(data.courseProgress);
+      if (data.learningEvaluations) await db.learningEvaluations.bulkPut(data.learningEvaluations);
     },
   );
   log.info('Database imported successfully');
@@ -539,6 +627,7 @@ export async function deleteStageWithRelatedData(stageId: string): Promise<void>
       db.mediaFiles,
       db.generatedAgents,
       db.agentEditSessions,
+      db.learningEvaluations,
     ],
     async () => {
       await db.stages.delete(stageId);
@@ -549,6 +638,7 @@ export async function deleteStageWithRelatedData(stageId: string): Promise<void>
       await db.mediaFiles.where('stageId').equals(stageId).delete();
       await db.generatedAgents.where('stageId').equals(stageId).delete();
       await db.agentEditSessions.where('stageId').equals(stageId).delete();
+      await db.learningEvaluations.where('classroomId').equals(stageId).delete();
     },
   );
 }
@@ -577,5 +667,11 @@ export async function getDatabaseStats() {
     stageOutlines: await db.stageOutlines.count(),
     mediaFiles: await db.mediaFiles.count(),
     generatedAgents: await db.generatedAgents.count(),
+    voiceProfiles: await db.voiceProfiles.count(),
+    autoVoiceCache: await db.autoVoiceCache.count(),
+    agentEditSessions: await db.agentEditSessions.count(),
+    learningPaths: await db.learningPaths.count(),
+    courseProgress: await db.courseProgress.count(),
+    learningEvaluations: await db.learningEvaluations.count(),
   };
 }

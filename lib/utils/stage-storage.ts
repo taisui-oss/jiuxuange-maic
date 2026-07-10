@@ -138,6 +138,7 @@ export async function deleteStageData(stageId: string): Promise<void> {
     // Delete chat sessions and playback state
     await deleteChatSessions(stageId);
     await clearPlaybackState(stageId);
+    await db.learningEvaluations.where('classroomId').equals(stageId).delete();
 
     // Sweep quiz persistence keys for each deleted scene.
     for (const sceneId of sceneIds) {
