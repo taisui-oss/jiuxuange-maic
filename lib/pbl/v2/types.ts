@@ -177,6 +177,17 @@ export interface PBLMicrotask {
    *  `description` which is the character's established-fact source. When
    *  absent, the panel falls back to `description`. */
   learnerBrief?: string;
+  /** Jiuxuange-only teaching-director metadata. Internal and optional so
+   * ordinary and previously persisted PBL v2 projects remain unchanged. */
+  jiuxuange?: JiuxuangeMicrotaskMetadata;
+}
+
+export interface JiuxuangeMicrotaskMetadata {
+  phase: 'ground' | 'apply' | 'compare' | 'tension' | 'judge' | 'test' | 'reflect';
+  questionTemplateId: string;
+  questionPrompt: string;
+  evidenceRuleIds: string[];
+  preferredRole: 'professor' | 'senior' | 'mystery' | 'growth-feedback';
 }
 
 /** A learning document or reference material attached to a milestone. */
@@ -789,6 +800,11 @@ export interface PBLProjectV2 {
    *  future migrations once the project package format is frozen. */
   schemaVersion?: number;
 
+  /** Optional Jiuxuange course provenance. This describes the immutable
+   * package compiled into the project; runtime progress still lives only in
+   * the ordinary PBL fields below. */
+  jiuxuange?: JiuxuangeProjectMetadata;
+
   // --- Lifecycle ---------------------------------------------------------
 
   status: PBLProjectStatus;
@@ -847,6 +863,18 @@ export interface PBLProjectV2 {
   /** ISO timestamps. */
   createdAt: string;
   updatedAt: string;
+}
+
+export interface JiuxuangeProjectMetadata {
+  courseId: string;
+  courseVersion: string;
+  moduleId: string;
+  curriculumOrder: number;
+  releaseStatus: 'pilot_b_only' | 'full';
+  factPackHash: string;
+  caseId: string;
+  runtimeMode: 'demo' | 'real_pilot';
+  formalScoringEnabled: boolean;
 }
 
 // ---------------------------------------------------------------------------
