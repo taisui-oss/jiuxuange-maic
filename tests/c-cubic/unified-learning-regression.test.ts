@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { shouldUseCubicUnifiedLearning } from '@/lib/config/feature-flags';
 
 describe('C Cubic unified learning flag', () => {
@@ -19,5 +20,13 @@ describe('C Cubic unified learning flag', () => {
 
     process.env.NEXT_PUBLIC_C_CUBIC_UNIFIED_LEARNING = 'true';
     expect(shouldUseCubicUnifiedLearning()).toBe(true);
+  });
+
+  it('renders one course entry instead of the seven-module map behind the flag', () => {
+    const source = readFileSync('app/page.tsx', 'utf8');
+    expect(source).toContain('shouldUseCubicUnifiedLearning');
+    expect(source).toContain('<BusinessModelCourseEntry />');
+    expect(source).toContain('unifiedLearning ?');
+    expect(source).toContain(': <BusinessModelLearningPath />');
   });
 });

@@ -58,9 +58,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useDraftCache } from '@/lib/hooks/use-draft-cache';
 import { SpeechButton } from '@/components/audio/speech-button';
 import { useImportClassroom } from '@/lib/import/use-import-classroom';
-import { shouldShowVocationalTestUi } from '@/lib/config/feature-flags';
+import {
+  shouldShowVocationalTestUi,
+  shouldUseCubicUnifiedLearning,
+} from '@/lib/config/feature-flags';
 import { useImportPptx } from '@/lib/import/use-import-pptx';
 import { BusinessModelLearningPath } from '@/components/c-cubic/business-model-learning-path';
+import { BusinessModelCourseEntry } from '@/components/c-cubic/business-model-course-entry';
 
 const log = createLogger('Home');
 
@@ -95,6 +99,7 @@ function HomePage() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const showVocationalTestUi = shouldShowVocationalTestUi();
+  const unifiedLearning = shouldUseCubicUnifiedLearning();
   const [form, setForm] = useState<FormState>(initialFormState);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsSection, setSettingsSection] = useState<
@@ -736,7 +741,7 @@ function HomePage() {
         )}
       </motion.div>
 
-      <BusinessModelLearningPath />
+      {unifiedLearning ? <BusinessModelCourseEntry /> : <BusinessModelLearningPath />}
 
       {/* ═══ Recent classrooms — collapsible ═══ */}
       {classrooms.length > 0 && (
