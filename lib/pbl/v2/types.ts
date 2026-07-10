@@ -188,6 +188,7 @@ export interface JiuxuangeMicrotaskMetadata {
   questionPrompt: string;
   evidenceRuleIds: string[];
   preferredRole: 'professor' | 'senior' | 'mystery' | 'growth-feedback';
+  hintLevel?: 0 | 1 | 2 | 3;
 }
 
 /** A learning document or reference material attached to a milestone. */

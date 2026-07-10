@@ -242,10 +242,12 @@ function messageReferencesFact(
   if (message.includes(fact.id) || message.includes(`[${fact.id}]`)) return true;
   if (!fact.text) return false;
   const messageGrams = characterBigrams(message);
+  const factGrams = characterBigrams(fact.text);
+  const requiredOverlap = Math.min(5, Math.max(3, Math.ceil(factGrams.size * 0.25)));
   let overlap = 0;
-  for (const gram of characterBigrams(fact.text)) {
+  for (const gram of factGrams) {
     if (messageGrams.has(gram)) overlap += 1;
-    if (overlap >= 3) return true;
+    if (overlap >= requiredOverlap) return true;
   }
   return false;
 }

@@ -232,4 +232,21 @@ describe('Jiuxuange deterministic evidence evaluation', () => {
     expect(decision.satisfied).toBe(true);
     expect(decision.factIds).toEqual(['demo-f1']);
   });
+
+  it('does not attribute a fact from a generic phrase with only local character overlap', () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_PILOT_PACKAGE, {
+      now: '2026-07-11T00:00:00.000Z',
+      caseId: 'demo_chain_franchise',
+    });
+    const decision = evaluateJiuxuangeLearnerMessage({
+      project,
+      messageId: 'learner-message-false-overlap',
+      message: '加盟商的问题很重要，因为这个模式需要重新判断。',
+      hintLevel: 0,
+      modelVersion: MODEL_VERSION,
+    });
+
+    expect(decision.satisfied).toBe(false);
+    expect(decision.factIds).toEqual([]);
+  });
 });

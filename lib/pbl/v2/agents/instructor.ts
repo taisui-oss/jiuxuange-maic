@@ -591,7 +591,7 @@ export function buildFirstTaskWorkspaceOrientationBlock(args: {
   // enter the scene). The ordinary "left sidebar / center / submit on the right"
   // workspace orientation does NOT apply to them and must never leak into the
   // scenario prep opener, or it overwrites that bespoke briefing.
-  if (args.project.scenario) return '';
+  if (args.project.scenario || args.project.jiuxuange) return '';
   if (!isFirstProjectMicrotask(args.project, args.milestone, args.microtask)) return '';
   return [
     '## First-task workspace orientation — open-task only',
@@ -899,6 +899,7 @@ function buildSystemPrompt(args: {
 
 export function buildHistoryMessagesForInstructor(
   thread: { messages: PBLChatMessage[]; earlierSummary?: string } | undefined,
+  includeDirectedTeachingRoles = false,
 ): Array<{ role: 'system' | 'user' | 'assistant'; content: string }> {
   const out: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [];
   if (!thread) return out;
@@ -914,9 +915,8 @@ export function buildHistoryMessagesForInstructor(
       out.push({ role: 'user', content: m.content });
     } else if (
       m.roleType === 'instructor' ||
-      m.roleType === 'mentor' ||
-      m.roleType === 'collaborator' ||
-      m.roleType === 'evaluator'
+      (includeDirectedTeachingRoles &&
+        (m.roleType === 'mentor' || m.roleType === 'collaborator' || m.roleType === 'evaluator'))
     ) {
       out.push({ role: 'assistant', content: m.content });
     }
@@ -946,8 +946,9 @@ export function ensureNonEmptyInstructorMessages(
  */
 function buildSetupHistoryMessages(
   thread: { messages: PBLChatMessage[]; earlierSummary?: string } | undefined,
+  includeDirectedTeachingRoles = false,
 ): Array<{ role: 'system' | 'user' | 'assistant'; content: string }> {
-  const base = buildHistoryMessagesForInstructor(thread);
+  const base = buildHistoryMessagesForInstructor(thread, includeDirectedTeachingRoles);
   while (base.length > 0 && base[base.length - 1]?.role === 'user') {
     base.pop();
   }
@@ -1402,6 +1403,7 @@ export async function* runInstructorTurn(
       },
     };
     if (project.jiuxuange && learnerSourceMessageId) {
+      const hintLevel = microtask.jiuxuange?.hintLevel ?? 0;
       const evidenceEvent: PBLRuntimeEvent = {
         id: 'runtime_evidence_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
         kind: 'jiuxuange_evidence_evaluated',
@@ -1410,12 +1412,12 @@ export async function* runInstructorTurn(
         microtaskId: microtask.id,
         milestoneId: milestone.id,
         sourceMessageId: learnerSourceMessageId,
-        hintLevel: 0,
+        hintLevel,
         decision: evaluateJiuxuangeLearnerMessage({
           project,
           messageId: learnerSourceMessageId,
           message: userMessage,
-          hintLevel: 0,
+          hintLevel,
           modelVersion: resolvedLanguageModelId(languageModel),
         }),
       };
@@ -1453,7 +1455,7 @@ export async function* runInstructorTurn(
     return r?.type === 'instructor';
   });
 
-  const historyMessages = buildHistoryMessagesForInstructor(instructorThread);
+  const historyMessages = buildHistoryMessagesForInstructor(instructorThread, !!project.jiuxuange);
 
   // The synthetic learner message for greeting / setup — gives the
   // LLM a turn-anchor so it speaks first. Localised to the project
@@ -1842,7 +1844,7 @@ async function* runSetupFollowup(args: SetupFollowupArgs): AsyncGenerator<PBLSSE
     const r = project.roles.find((r) => r.id === t.agentId);
     return r?.type === 'instructor';
   });
-  const historyMessages = buildSetupHistoryMessages(instructorThread);
+  const historyMessages = buildSetupHistoryMessages(instructorThread, !!project.jiuxuange);
 
   try {
     const result = withThinkingDisabled(() =>

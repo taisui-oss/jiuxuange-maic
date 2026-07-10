@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { shouldShowAgentTabs } from '@/components/scene-renderers/pbl/v2/agent-tabs';
+import {
+  learnerFacingAgent,
+  shouldShowAgentTabs,
+} from '@/components/scene-renderers/pbl/v2/agent-tabs';
 import {
   roleForMessage,
   shouldShowJiuxuangeContinuation,
@@ -162,6 +165,20 @@ describe('Jiuxuange learner presentation', () => {
 
     expect(roleForMessage(p, savedMessage)?.name).toBe('Senior');
     expect(p.threads).toHaveLength(1);
+  });
+
+  it('uses the phase-selected role for the live Jiuxuange turn label', () => {
+    const p = jiuxuangeProject(false);
+    p.roles.push({ id: 'jiuxuange-mystery', type: 'collaborator', name: '神秘角色' });
+    p.milestones[0].microtasks[0].jiuxuange = {
+      phase: 'tension',
+      questionTemplateId: 'probe_tension',
+      questionPrompt: '你看到了什么不一致？',
+      evidenceRuleIds: ['fact_grounding'],
+      preferredRole: 'mystery',
+    };
+
+    expect(learnerFacingAgent(p)?.name).toBe('神秘角色');
   });
 
   it('keeps natural-language feedback but hides structured scoring details before calibration', () => {

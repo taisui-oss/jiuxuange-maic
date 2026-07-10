@@ -1,10 +1,7 @@
 import type { Stage } from '@/lib/types/stage';
 import { makeScene } from '@/lib/types/stage';
 import { projectV2ToLegacyProjectConfig } from '@/lib/pbl/v2/compat';
-import type {
-  JiuxuangeMicrotaskMetadata,
-  PBLProjectV2,
-} from '@/lib/pbl/v2/types';
+import type { JiuxuangeMicrotaskMetadata, PBLProjectV2 } from '@/lib/pbl/v2/types';
 import type {
   JiuxuangeCase,
   JiuxuangeCoursePackage,
@@ -45,9 +42,7 @@ export function stableCoursePackageHash(pkg: JiuxuangeCoursePackage): string {
   return (hash >>> 0).toString(16).padStart(8, '0');
 }
 
-function roleForPhase(
-  phase: JiuxuangeQuestionPhase,
-): JiuxuangeMicrotaskMetadata['preferredRole'] {
+function roleForPhase(phase: JiuxuangeQuestionPhase): JiuxuangeMicrotaskMetadata['preferredRole'] {
   if (phase === 'ground') return 'professor';
   if (phase === 'apply' || phase === 'compare' || phase === 'test') return 'senior';
   if (phase === 'tension' || phase === 'judge') return 'mystery';
@@ -114,8 +109,7 @@ export function createJiuxuangeProject(
       return {
         id: `jgx-task-${module.id}-${questionTemplateId}`,
         title: taskIndex === 0 ? '从事实开始' : '继续往下追问',
-        status:
-          moduleIndex === 0 && taskIndex === 0 ? ('in_progress' as const) : ('todo' as const),
+        status: moduleIndex === 0 && taskIndex === 0 ? ('in_progress' as const) : ('todo' as const),
         assignee: 'user' as const,
         hints: [],
         order: taskIndex,
@@ -125,6 +119,7 @@ export function createJiuxuangeProject(
           questionPrompt: question.prompt,
           evidenceRuleIds: question.evidenceRuleIds,
           preferredRole: roleForPhase(question.phase),
+          hintLevel: 0 as const,
         },
       };
     }),

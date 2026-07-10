@@ -15,13 +15,14 @@
 
 import { useMemo, useState } from 'react';
 import { GraduationCap, LifeBuoy, SearchCheck, Users } from 'lucide-react';
-import type { PBLProjectV2, PBLRoleType } from '@/lib/pbl/v2/types';
+import type { PBLProjectV2, PBLRole, PBLRoleType } from '@/lib/pbl/v2/types';
 import { cn } from '@/lib/utils/cn';
 import { PBLV2Chat } from './chat';
 import { ScenarioStage } from './scene-stage/scenario-stage';
 import type { SubmissionEvaluationStatus } from './submission';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import type { StreamDisplayState } from './use-instructor-stream';
+import { selectJiuxuangeRole } from '@/lib/c-cubic/runtime';
 
 interface Props {
   readonly project: PBLProjectV2;
@@ -51,6 +52,7 @@ export function PBLV2AgentTabs({
   const [activeAgentId, setActiveAgentId] = useState<string | undefined>(agents[0]?.id);
 
   const activeAgent = agents.find((a) => a.id === activeAgentId) ?? agents[0];
+  const displayedAgent = project.jiuxuange ? learnerFacingAgent(project) : activeAgent;
 
   if (agents.length === 0) {
     return (
@@ -90,7 +92,7 @@ export function PBLV2AgentTabs({
       <PBLV2Chat
         project={project}
         onProjectChange={onProjectChange}
-        agentName={activeAgent?.name}
+        agentName={displayedAgent?.name}
         submissionEvaluationStatus={submissionEvaluationStatus}
         instructorStreaming={instructorStreaming}
         onInstructorStreamingChange={onInstructorStreamingChange}
@@ -105,6 +107,12 @@ export function PBLV2AgentTabs({
 export function shouldShowAgentTabs(project: PBLProjectV2): boolean {
   if (project.jiuxuange) return false;
   return project.roles.filter((role) => role.type !== 'user').length > 1;
+}
+
+export function learnerFacingAgent(project: PBLProjectV2): PBLRole | undefined {
+  if (!project.jiuxuange) return project.roles.find((role) => role.type !== 'user');
+  const selected = selectJiuxuangeRole(project);
+  return project.roles.find((role) => role.id === selected.id);
 }
 
 function RoleIcon({ roleType }: { readonly roleType: PBLRoleType }) {

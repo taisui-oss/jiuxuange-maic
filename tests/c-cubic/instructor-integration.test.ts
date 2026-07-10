@@ -50,13 +50,17 @@ function tensionProject() {
   return { project, tension };
 }
 
-async function collectTurn(text: string): Promise<{
+async function collectTurn(
+  text: string,
+  options: { userMessage?: string; hintLevel?: 0 | 1 | 2 | 3 } = {},
+): Promise<{
   events: PBLSSEEvent[];
   project: ReturnType<typeof tensionProject>['project'];
   questionPrompt: string;
 }> {
   const { project, tension } = tensionProject();
-  const userMessage = '我觉得是增长和续约的问题。';
+  const userMessage = options.userMessage ?? '我觉得是增长和续约的问题。';
+  tension.jiuxuange!.hintLevel = options.hintLevel ?? 0;
   project.threads[0].messages.push({
     id: 'msg_local_canonical',
     roleType: 'user',
@@ -127,5 +131,28 @@ describe('Jiuxuange instructor runtime integration', () => {
     expect(visibleTokens).toBe(questionPrompt);
     expect(messagePatch.patch.message.content).toBe(questionPrompt);
     expect(visibleTokens.match(/[?？]/g)).toHaveLength(1);
+  });
+
+  it('records scaffolded evidence as hinted instead of autonomous', async () => {
+    const { events } = await collectTurn('把门店增长和续约下降放在一起，你看到了什么不一致？', {
+      userMessage: '门店在增长但续约率下降，因为方向相反，所以这种增长未必健康。',
+      hintLevel: 2,
+    });
+    const evidencePatch = events.find(
+      (event): event is Extract<PBLSSEEvent, { type: 'project_patch' }> =>
+        event.type === 'project_patch' && event.patch.kind === 'runtime_event',
+    );
+    if (!evidencePatch || evidencePatch.patch.kind !== 'runtime_event') {
+      throw new Error('Expected evidence runtime event');
+    }
+    expect(evidencePatch.patch.event).toEqual(
+      expect.objectContaining({
+        hintLevel: 2,
+        decision: expect.objectContaining({
+          satisfied: true,
+          results: expect.arrayContaining([expect.objectContaining({ status: 'hinted' })]),
+        }),
+      }),
+    );
   });
 });

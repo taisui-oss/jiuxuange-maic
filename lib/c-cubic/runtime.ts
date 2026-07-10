@@ -135,8 +135,7 @@ export function buildJiuxuangeRuntimeBlock(
 }
 
 export function countLearnerFacingQuestions(text: string): number {
-  const withoutCode = text.replace(/```[\s\S]*?```/g, '').replace(/`[^`\n]*`/g, '');
-  return withoutCode.match(/[?？]+/g)?.length ?? 0;
+  return text.match(/[?？]+/g)?.length ?? 0;
 }
 
 export function hasOneLearnerFacingQuestion(text: string): boolean {
@@ -164,6 +163,7 @@ export function normalizeJiuxuangeReply(text: string, canonicalQuestion: string)
   const candidate = text.trim();
   if (
     countLearnerFacingQuestions(candidate) !== 1 ||
+    !candidate.includes(fallback) ||
     UNSAFE_REPLY_PATTERNS.some((pattern) => pattern.test(candidate))
   ) {
     return fallback;

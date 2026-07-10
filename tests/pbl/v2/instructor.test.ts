@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   buildFirstTaskWorkspaceOrientationBlock,
+  buildHistoryMessagesForInstructor,
   buildInstructorRuntimeBrief,
   buildPriorSubmissionsBlock,
   buildScaffoldStateLine,
@@ -281,6 +282,52 @@ describe('PBL v2 — first-task workspace orientation', () => {
     expect(
       buildFirstTaskWorkspaceOrientationBlock({ project, milestone, microtask, phase: 'greeting' }),
     ).toBe('');
+  });
+
+  it('does not describe a removed sidebar in a Jiuxuange opener', () => {
+    const project = firstTaskProject();
+    project.jiuxuange = {
+      courseId: 'business-model',
+      courseVersion: '1.0.0-pilot-b',
+      moduleId: 'six-elements',
+      curriculumOrder: 2,
+      releaseStatus: 'pilot_b_only',
+      factPackHash: 'facts',
+      caseId: 'demo_chain_franchise',
+      runtimeMode: 'demo',
+      formalScoringEnabled: false,
+    };
+    const milestone = project.milestones[1];
+    const microtask = milestone.microtasks.find((task) => task.id === 'mt-1')!;
+
+    expect(
+      buildFirstTaskWorkspaceOrientationBlock({ project, milestone, microtask, phase: 'greeting' }),
+    ).toBe('');
+  });
+});
+
+describe('PBL v2 — Instructor history role compatibility', () => {
+  const thread = {
+    messages: [
+      { id: 'u', roleType: 'user' as const, content: 'learner', ts: now },
+      { id: 'i', roleType: 'instructor' as const, content: 'instructor', ts: now },
+      { id: 'm', roleType: 'mentor' as const, content: 'mentor', ts: now },
+    ],
+  };
+
+  it('keeps generic PBL history limited to Instructor messages', () => {
+    expect(buildHistoryMessagesForInstructor(thread)).toEqual([
+      { role: 'user', content: 'learner' },
+      { role: 'assistant', content: 'instructor' },
+    ]);
+  });
+
+  it('includes directed teaching roles only for Jiuxuange shared threads', () => {
+    expect(buildHistoryMessagesForInstructor(thread, true)).toEqual([
+      { role: 'user', content: 'learner' },
+      { role: 'assistant', content: 'instructor' },
+      { role: 'assistant', content: 'mentor' },
+    ]);
   });
 });
 

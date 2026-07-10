@@ -1,4 +1,5 @@
 import type { CoursePackageReadiness, JiuxuangeCoursePackage } from './types';
+import { countLearnerFacingQuestions } from '../runtime';
 
 export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
   const errors: string[] = [];
@@ -71,6 +72,9 @@ export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
   for (const [questionId, question] of Object.entries(pkg.questionTemplates)) {
     if (!question.singleQuestion) {
       errors.push(`question ${questionId} must enforce singleQuestion`);
+    }
+    if (countLearnerFacingQuestions(question.prompt) !== 1) {
+      errors.push(`question ${questionId} prompt must contain exactly one learner-facing question`);
     }
     for (const ruleId of question.evidenceRuleIds) {
       if (!pkg.evidenceRules[ruleId]) {

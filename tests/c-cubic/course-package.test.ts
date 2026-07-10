@@ -73,6 +73,15 @@ describe('business model pilot course package', () => {
     );
   });
 
+  it('rejects a question template whose text contains multiple learner-facing questions', () => {
+    const broken = structuredClone(BUSINESS_MODEL_PILOT_PACKAGE);
+    broken.questionTemplates.ground_fact.prompt = '你引用了哪条事实？它说明了什么？';
+
+    expect(validateCoursePackage(broken)).toContain(
+      'question ground_fact prompt must contain exactly one learner-facing question',
+    );
+  });
+
   it('rejects dangling module references before project creation', () => {
     const broken = structuredClone(BUSINESS_MODEL_PILOT_PACKAGE);
     broken.modules[0].conceptIds.push('missing-concept');

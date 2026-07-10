@@ -132,4 +132,22 @@ describe('Jiuxuange runtime helpers', () => {
       canonical,
     );
   });
+
+  it('rejects an alternative one-question reply that supplies a conclusion', () => {
+    const canonical = '把门店增长和续约下降放在一起，你看到了什么不一致？';
+    expect(
+      normalizeJiuxuangeReply(
+        '门店增长而续约下降说明增长与加盟商价值已经失衡。你会怎么验证这个判断？',
+        canonical,
+      ),
+    ).toBe(canonical);
+  });
+
+  it('only preserves safe framing when the canonical question remains the sole visible question', () => {
+    const canonical = '把门店增长和续约下降放在一起，你看到了什么不一致？';
+    expect(normalizeJiuxuangeReply(`先把两条事实放在一起看。${canonical}`, canonical)).toBe(
+      `先把两条事实放在一起看。${canonical}`,
+    );
+    expect(normalizeJiuxuangeReply(`先看 \`增长吗？\`。${canonical}`, canonical)).toBe(canonical);
+  });
 });
