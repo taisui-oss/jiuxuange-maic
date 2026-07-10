@@ -72,4 +72,21 @@ describe('business model pilot course package', () => {
       ]),
     );
   });
+
+  it('rejects dangling module references before project creation', () => {
+    const broken = structuredClone(BUSINESS_MODEL_PILOT_PACKAGE);
+    broken.modules[0].conceptIds.push('missing-concept');
+    broken.modules[0].caseIds.push('missing-case');
+    broken.modules[0].questionTemplateIds.push('missing-question');
+    broken.modules[0].evidenceRuleIds.push('missing-rule');
+
+    expect(validateCoursePackage(broken)).toEqual(
+      expect.arrayContaining([
+        'module six-elements references unknown concept missing-concept',
+        'module six-elements references unknown case missing-case',
+        'module six-elements references unknown question missing-question',
+        'module six-elements references unknown evidence rule missing-rule',
+      ]),
+    );
+  });
 });

@@ -3,6 +3,29 @@ import type { CoursePackageReadiness, JiuxuangeCoursePackage } from './types';
 export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
   const errors: string[] = [];
 
+  for (const module of pkg.modules) {
+    for (const conceptId of module.conceptIds) {
+      if (!pkg.concepts[conceptId]) {
+        errors.push(`module ${module.id} references unknown concept ${conceptId}`);
+      }
+    }
+    for (const caseId of module.caseIds) {
+      if (!pkg.cases[caseId]) {
+        errors.push(`module ${module.id} references unknown case ${caseId}`);
+      }
+    }
+    for (const questionId of module.questionTemplateIds) {
+      if (!pkg.questionTemplates[questionId]) {
+        errors.push(`module ${module.id} references unknown question ${questionId}`);
+      }
+    }
+    for (const ruleId of module.evidenceRuleIds) {
+      if (!pkg.evidenceRules[ruleId]) {
+        errors.push(`module ${module.id} references unknown evidence rule ${ruleId}`);
+      }
+    }
+  }
+
   for (const [conceptId, concept] of Object.entries(pkg.concepts)) {
     if (concept.sourceRefs.length === 0) {
       errors.push(`concept ${conceptId} requires a source reference`);
