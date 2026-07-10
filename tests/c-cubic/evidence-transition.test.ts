@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
+  evaluateJiuxuangeLearnerMessage,
   evaluateJiuxuangeEvidence,
   type JiuxuangeEvidenceCandidate,
   type JiuxuangeEvidenceFact,
   type JiuxuangeEvidenceSignal,
 } from '@/lib/c-cubic/evidence';
+import { BUSINESS_MODEL_PILOT_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v1';
+import { createJiuxuangeProject } from '@/lib/c-cubic/project-factory';
 
 const MODEL_VERSION = 'evidence-model-2026-07-11';
 const PACKAGE_VERSION = '1.0.0-pilot-b';
@@ -175,5 +178,58 @@ describe('Jiuxuange deterministic evidence evaluation', () => {
     expect(decision.satisfied).toBe(false);
     expect(decision.missingSignals).toEqual(['fact_ref', 'causal_link']);
     expect(decision.results.map((result) => result.status)).toEqual(['unsupported', 'unsupported']);
+  });
+
+  it('extracts fact grounding from a learner message with full provenance', () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_PILOT_PACKAGE, {
+      now: '2026-07-11T00:00:00.000Z',
+      caseId: 'demo_chain_franchise',
+    });
+    const decision = evaluateJiuxuangeLearnerMessage({
+      project,
+      messageId: 'learner-message-direct',
+      message: '我引用 [demo-f1]，因为门店增长但续约下降，所以增长质量需要重新判断。',
+      hintLevel: 0,
+      modelVersion: MODEL_VERSION,
+    });
+
+    expect(decision.satisfied).toBe(true);
+    expect(decision.factIds).toEqual(['demo-f1']);
+    expect(decision.sourceMessageIds).toEqual(['learner-message-direct']);
+    expect(decision.results.every((result) => result.status === 'autonomous')).toBe(true);
+  });
+
+  it('does not accept jargon without a verified fact reference', () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_PILOT_PACKAGE, {
+      now: '2026-07-11T00:00:00.000Z',
+      caseId: 'demo_chain_franchise',
+    });
+    const decision = evaluateJiuxuangeLearnerMessage({
+      project,
+      messageId: 'learner-message-jargon',
+      message: '我觉得就是商业模式六要素不够清晰。',
+      hintLevel: 0,
+      modelVersion: MODEL_VERSION,
+    });
+
+    expect(decision.satisfied).toBe(false);
+    expect(decision.missingSignals).toEqual(['fact_ref', 'causal_link']);
+  });
+
+  it('recognizes a natural-language reference to a verified project fact without requiring its id', () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_PILOT_PACKAGE, {
+      now: '2026-07-11T00:00:00.000Z',
+      caseId: 'demo_chain_franchise',
+    });
+    const decision = evaluateJiuxuangeLearnerMessage({
+      project,
+      messageId: 'learner-message-natural-fact',
+      message: '门店在增长但续约率下降，因为两者方向相反，所以这种增长未必健康。',
+      hintLevel: 0,
+      modelVersion: MODEL_VERSION,
+    });
+
+    expect(decision.satisfied).toBe(true);
+    expect(decision.factIds).toEqual(['demo-f1']);
   });
 });

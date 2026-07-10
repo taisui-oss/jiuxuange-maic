@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { db, type LearningPathRecord } from '@/lib/utils/database';
+import { db, type LearningPathRecord, type SceneRecord } from '@/lib/utils/database';
 import { loadStageData } from '@/lib/utils/stage-storage';
 import { hasStartedProject } from '@/lib/pbl/v2/operations/progress';
 import { BUSINESS_MODEL_PILOT_PACKAGE } from './course-package/business-model-v1';
@@ -71,10 +71,7 @@ function refFromRecord(record: LearningPathRecord): LearningSessionRef | null {
   };
 }
 
-function sceneMatchesRef(
-  scene: Awaited<ReturnType<typeof db.scenes.get>>,
-  ref: LearningSessionRef,
-): boolean {
+function sceneMatchesRef(scene: SceneRecord | undefined, ref: LearningSessionRef): boolean {
   if (!scene || scene.content.type !== 'pbl' || !scene.content.projectV2?.jiuxuange) return false;
   const metadata = scene.content.projectV2.jiuxuange;
   return (
@@ -179,6 +176,8 @@ export async function getOrCreateBusinessModelSession(
       data.scenes.map((scene) => ({
         ...scene,
         stageId,
+        createdAt: scene.createdAt ?? now.getTime(),
+        updatedAt: scene.updatedAt ?? now.getTime(),
       })),
     );
     await db.learningPaths.put({

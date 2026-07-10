@@ -152,3 +152,21 @@ export function enforceOneLearnerFacingQuestion(text: string): string {
 }
 
 export const enforceSingleLearnerFacingQuestion = enforceOneLearnerFacingQuestion;
+
+const UNSAFE_REPLY_PATTERNS = [
+  /(?:你的|该项目的|这个案例的)(?:核心)?矛盾(?:是|在于)/u,
+  /矛盾在于/u,
+  /(?:矛盾发现卡|商模判断卡|反速通|评分维度|证据门槛|内部评分|隐藏评分)/u,
+];
+
+export function normalizeJiuxuangeReply(text: string, canonicalQuestion: string): string {
+  const fallback = enforceOneLearnerFacingQuestion(canonicalQuestion.trim());
+  const candidate = text.trim();
+  if (
+    countLearnerFacingQuestions(candidate) !== 1 ||
+    UNSAFE_REPLY_PATTERNS.some((pattern) => pattern.test(candidate))
+  ) {
+    return fallback;
+  }
+  return candidate;
+}

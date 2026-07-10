@@ -65,6 +65,13 @@ export interface CompletionReportViewModel {
   readonly stats: CompletionStats;
 }
 
+export interface CompletionLearnerVisibility {
+  readonly showStars: boolean;
+  readonly showDuration: boolean;
+  readonly showStageCounts: boolean;
+  readonly showCoachEvaluation: boolean;
+}
+
 function formatDuration(totalSeconds: number, t: ReturnType<typeof useI18n>['t']): string {
   if (totalSeconds <= 0) return '—';
   const m = Math.floor(totalSeconds / 60);
@@ -97,6 +104,16 @@ export function buildCompletionReportViewModel(project: PBLProjectV2): Completio
   };
 }
 
+export function completionLearnerVisibility(project: PBLProjectV2): CompletionLearnerVisibility {
+  const formalScoringEnabled = project.jiuxuange?.formalScoringEnabled !== false;
+  return {
+    showStars: formalScoringEnabled,
+    showDuration: formalScoringEnabled,
+    showStageCounts: !project.jiuxuange,
+    showCoachEvaluation: formalScoringEnabled,
+  };
+}
+
 export function cleanCompletionIntro(feedback: string | undefined): string | undefined {
   const intro = stripEvaluationTail(feedback ?? '')
     .replace(/\{\{\s*[^}]+\s*\}\}/g, '')
@@ -108,6 +125,7 @@ export function PBLV2Completion({ project, onBack }: Props) {
   const { t } = useI18n();
   const report = buildCompletionReportViewModel(project);
   const { stats } = report;
+  const visibility = completionLearnerVisibility(project);
 
   // Shared shell (celebration, hero, stars, what's-next) is identical for both
   // project kinds; the BODY between hero and what's-next is fully split by
@@ -116,15 +134,17 @@ export function PBLV2Completion({ project, onBack }: Props) {
   const heroCaption = stats.kind === 'scenario' ? stats.sceneCaption : undefined;
   const heroSummary =
     report.intro ??
-    (stats.kind === 'scenario'
-      ? t('pbl.v2.completion.scenario.summary', {
-          acts: stats.acts.total,
-        })
-      : t('pbl.v2.completion.summary', {
-          completed: report.completedMicrotasks,
-          total: report.totalMicrotasks,
-          stages: report.stageCount,
-        }));
+    (!visibility.showStageCounts
+      ? project.description
+      : stats.kind === 'scenario'
+        ? t('pbl.v2.completion.scenario.summary', {
+            acts: stats.acts.total,
+          })
+        : t('pbl.v2.completion.summary', {
+            completed: report.completedMicrotasks,
+            total: report.totalMicrotasks,
+            stages: report.stageCount,
+          }));
 
   return (
     <div className="relative h-full w-full overflow-y-auto bg-[radial-gradient(circle_at_20%_10%,rgba(124,92,255,0.18),transparent_32%),radial-gradient(circle_at_88%_0%,rgba(34,211,238,0.14),transparent_30%),linear-gradient(135deg,#0b1220_0%,#111c33_52%,#0a1020_100%)] text-slate-100">
@@ -161,7 +181,7 @@ export function PBLV2Completion({ project, onBack }: Props) {
                 {heroSummary}
               </p>
             </div>
-            {typeof report.stars === 'number' && (
+            {visibility.showStars && typeof report.stars === 'number' && (
               <div className="shrink-0 rounded-2xl border border-amber-200/15 bg-amber-300/[0.08] px-4 py-3 text-right">
                 <div className="mb-1 text-[10px] uppercase tracking-wider text-amber-200/90">
                   Stars
@@ -178,9 +198,9 @@ export function PBLV2Completion({ project, onBack }: Props) {
 
         {/* ── Body (split by project kind — no shared fields) ── */}
         {stats.kind === 'scenario' ? (
-          <ScenarioCompletionBody stats={stats} report={report} />
+          <ScenarioCompletionBody stats={stats} report={report} visibility={visibility} />
         ) : (
-          <StandardCompletionBody stats={stats} report={report} />
+          <StandardCompletionBody stats={stats} report={report} visibility={visibility} />
         )}
 
         {/* ── What's next ── */}
@@ -204,9 +224,11 @@ export function PBLV2Completion({ project, onBack }: Props) {
 function StandardCompletionBody({
   stats,
   report,
+  visibility,
 }: {
   readonly stats: StandardCompletionStats;
   readonly report: CompletionReportViewModel;
+  readonly visibility: CompletionLearnerVisibility;
 }) {
   const { t } = useI18n();
   return (
@@ -223,16 +245,20 @@ function StandardCompletionBody({
           label={t('pbl.v2.completion.statTurns')}
           value={String(stats.totalTurns)}
         />
-        <StatCard
-          icon={<Layers className="h-4 w-4" />}
-          label={t('pbl.v2.completion.statScope')}
-          value={`${report.stageCount} · ${report.totalMicrotasks}`}
-        />
-        <StatCard
-          icon={<Clock className="h-4 w-4" />}
-          label={t('pbl.v2.completion.statDuration')}
-          value={formatDuration(stats.totalDurationSeconds, t)}
-        />
+        {visibility.showStageCounts && (
+          <StatCard
+            icon={<Layers className="h-4 w-4" />}
+            label={t('pbl.v2.completion.statScope')}
+            value={`${report.stageCount} · ${report.totalMicrotasks}`}
+          />
+        )}
+        {visibility.showDuration && (
+          <StatCard
+            icon={<Clock className="h-4 w-4" />}
+            label={t('pbl.v2.completion.statDuration')}
+            value={formatDuration(stats.totalDurationSeconds, t)}
+          />
+        )}
         <StatCard
           icon={<Hammer className="h-4 w-4" />}
           label={t('pbl.v2.completion.statSubmissions')}
@@ -257,21 +283,23 @@ function StandardCompletionBody({
       </div>
 
       {/* ── Stage review ── */}
-      {stats.stageDetails.length > 0 && (
-        <section className="mt-4 rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5">
-          <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-100">
-            <ShieldCheck className="h-4 w-4 text-cyan-300" />
-            {t('pbl.v2.completion.stageReview')}
-          </div>
-          <ol className="grid gap-3 md:grid-cols-2">
-            {stats.stageDetails.map((sd, idx) => (
-              <StageReviewItem key={`${idx}-${sd.milestoneTitle}`} detail={sd} index={idx} />
-            ))}
-          </ol>
-        </section>
-      )}
+      {visibility.showCoachEvaluation &&
+        visibility.showStageCounts &&
+        stats.stageDetails.length > 0 && (
+          <section className="mt-4 rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5">
+            <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-100">
+              <ShieldCheck className="h-4 w-4 text-cyan-300" />
+              {t('pbl.v2.completion.stageReview')}
+            </div>
+            <ol className="grid gap-3 md:grid-cols-2">
+              {stats.stageDetails.map((sd, idx) => (
+                <StageReviewItem key={`${idx}-${sd.milestoneTitle}`} detail={sd} index={idx} />
+              ))}
+            </ol>
+          </section>
+        )}
 
-      {stats.highlights.length > 0 && (
+      {visibility.showCoachEvaluation && stats.highlights.length > 0 && (
         <section className="mt-4 rounded-2xl border border-amber-200/15 bg-amber-300/[0.05] p-5">
           <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-amber-100">
             <Award className="h-4 w-4 text-amber-300" />
@@ -296,9 +324,11 @@ function StandardCompletionBody({
 function ScenarioCompletionBody({
   stats,
   report,
+  visibility,
 }: {
   readonly stats: ScenarioCompletionStats;
   readonly report: CompletionReportViewModel;
+  readonly visibility: CompletionLearnerVisibility;
 }) {
   const { t } = useI18n();
   const cov = stats.goalCoverage;
@@ -306,28 +336,32 @@ function ScenarioCompletionBody({
     <>
       {/* ── Stat cards ── */}
       <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-        {cov && (
+        {visibility.showCoachEvaluation && cov && (
           <StatCard
             icon={<Target className="h-4 w-4" />}
             label={t('pbl.v2.completion.scenario.statGoals')}
             value={`${cov.achieved}/${cov.total}`}
           />
         )}
-        <StatCard
-          icon={<Layers className="h-4 w-4" />}
-          label={t('pbl.v2.completion.scenario.statActs')}
-          value={String(stats.acts.total)}
-        />
+        {visibility.showStageCounts && (
+          <StatCard
+            icon={<Layers className="h-4 w-4" />}
+            label={t('pbl.v2.completion.scenario.statActs')}
+            value={String(stats.acts.total)}
+          />
+        )}
         <StatCard
           icon={<MessageCircle className="h-4 w-4" />}
           label={t('pbl.v2.completion.statTurns')}
           value={String(stats.totalTurns)}
         />
-        <StatCard
-          icon={<Clock className="h-4 w-4" />}
-          label={t('pbl.v2.completion.statDuration')}
-          value={formatDuration(stats.totalDurationSeconds, t)}
-        />
+        {visibility.showDuration && (
+          <StatCard
+            icon={<Clock className="h-4 w-4" />}
+            label={t('pbl.v2.completion.statDuration')}
+            value={formatDuration(stats.totalDurationSeconds, t)}
+          />
+        )}
       </div>
 
       {/* ── LLM skill summary ── */}
@@ -347,7 +381,7 @@ function ScenarioCompletionBody({
       </div>
 
       {/* ── Per-act goal review (externalised hidden goals) ── */}
-      {cov && (
+      {visibility.showCoachEvaluation && cov && (
         <section className="mt-4 rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5">
           <div className="mb-1 flex items-center gap-2 text-sm font-semibold text-slate-100">
             <Target className="h-4 w-4 text-cyan-300" />
@@ -373,22 +407,25 @@ function ScenarioCompletionBody({
           authored "what each act asked you to do" read-only, so the structured
           review survives instead of dropping to a bare narrative. Mutually
           exclusive with the scored review above. */}
-      {!cov && stats.goalScaffold && stats.goalScaffold.length > 0 && (
-        <section className="mt-4 rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5">
-          <div className="mb-1 flex items-center gap-2 text-sm font-semibold text-slate-100">
-            <Target className="h-4 w-4 text-cyan-300" />
-            {t('pbl.v2.completion.scenario.goalListTitle')}
-          </div>
-          <p className="mb-4 text-xs leading-relaxed text-slate-400">
-            {t('pbl.v2.completion.scenario.goalListHint')}
-          </p>
-          <ol className="grid gap-3 md:grid-cols-2">
-            {stats.goalScaffold.map((act, idx) => (
-              <ActGoalListItem key={`${idx}-${act.milestoneId}`} act={act} index={idx} />
-            ))}
-          </ol>
-        </section>
-      )}
+      {visibility.showCoachEvaluation &&
+        !cov &&
+        stats.goalScaffold &&
+        stats.goalScaffold.length > 0 && (
+          <section className="mt-4 rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5">
+            <div className="mb-1 flex items-center gap-2 text-sm font-semibold text-slate-100">
+              <Target className="h-4 w-4 text-cyan-300" />
+              {t('pbl.v2.completion.scenario.goalListTitle')}
+            </div>
+            <p className="mb-4 text-xs leading-relaxed text-slate-400">
+              {t('pbl.v2.completion.scenario.goalListHint')}
+            </p>
+            <ol className="grid gap-3 md:grid-cols-2">
+              {stats.goalScaffold.map((act, idx) => (
+                <ActGoalListItem key={`${idx}-${act.milestoneId}`} act={act} index={idx} />
+              ))}
+            </ol>
+          </section>
+        )}
 
       {/* ── Cast ── */}
       {stats.characterNames.length > 0 && (

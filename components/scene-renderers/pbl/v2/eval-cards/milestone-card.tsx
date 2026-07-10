@@ -52,10 +52,19 @@ interface Props {
   /** Called when the learner clicks "继续到下一阶段". The wiring
    *  (continueAfterHandover + open-task setup) lives in PR 6.6. */
   onContinue?: () => void;
+  showEvaluationDetails?: boolean;
+  showNextMilestoneTitle?: boolean;
   className?: string;
 }
 
-export function MilestoneCard({ evaluation, handover, onContinue, className }: Props) {
+export function MilestoneCard({
+  evaluation,
+  handover,
+  onContinue,
+  showEvaluationDetails = true,
+  showNextMilestoneTitle = true,
+  className,
+}: Props) {
   const { t } = useI18n();
   if (evaluation.kind !== 'milestone') return null;
   const learned = evaluation.strengths ?? [];
@@ -67,6 +76,7 @@ export function MilestoneCard({ evaluation, handover, onContinue, className }: P
   const narrative = handover ? rawNarrative : stripFinalMilestoneContinueGuidance(rawNarrative);
   const ctaState = milestoneHandoverCtaState(handover);
   const consumed = ctaState === 'consumed';
+  const visibility = milestoneEvaluationVisibility(evaluation, showEvaluationDetails);
 
   return (
     <div
@@ -86,7 +96,7 @@ export function MilestoneCard({ evaluation, handover, onContinue, className }: P
           </span>
           {t('pbl.v2.milestoneCard.title')}
         </div>
-        {stars !== null && (
+        {visibility.showStars && stars !== null && (
           <div className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1">
             <StarRating value={stars} size={18} />
           </div>
@@ -104,7 +114,7 @@ export function MilestoneCard({ evaluation, handover, onContinue, className }: P
       )}
 
       {/* Learned bullets */}
-      {learned.length > 0 && (
+      {visibility.showLearned && learned.length > 0 && (
         <div className="relative">
           <div className="text-[10px] uppercase tracking-wider text-slate-500 font-medium mb-2">
             {t('pbl.v2.milestoneCard.youLearned')}
@@ -121,7 +131,7 @@ export function MilestoneCard({ evaluation, handover, onContinue, className }: P
       )}
 
       {/* Performance prose */}
-      {performance && (
+      {visibility.showPerformance && performance && (
         <div className="relative border-l-2 border-violet-300 bg-white/35 py-1.5 pl-3 pr-2 text-[13px] italic text-slate-600">
           {performance}
         </div>
@@ -131,15 +141,19 @@ export function MilestoneCard({ evaluation, handover, onContinue, className }: P
       <div className="relative border-t border-violet-200/80 pt-2">
         {handover ? (
           <div className="space-y-2">
-            <div className="text-xs text-slate-600">
-              {t('pbl.v2.milestoneCard.nextStage')}
-              <span className="font-medium text-slate-800 ml-1">{handover.nextMilestoneTitle}</span>
-              {!consumed && (
-                <div className="text-[11px] text-slate-500 mt-0.5">
-                  {t('pbl.v2.milestoneCard.continueHint')}
-                </div>
-              )}
-            </div>
+            {showNextMilestoneTitle && (
+              <div className="text-xs text-slate-600">
+                {t('pbl.v2.milestoneCard.nextStage')}
+                <span className="font-medium text-slate-800 ml-1">
+                  {handover.nextMilestoneTitle}
+                </span>
+                {!consumed && (
+                  <div className="text-[11px] text-slate-500 mt-0.5">
+                    {t('pbl.v2.milestoneCard.continueHint')}
+                  </div>
+                )}
+              </div>
+            )}
             <button
               type="button"
               onClick={consumed ? undefined : onContinue}
@@ -172,6 +186,20 @@ export function MilestoneCard({ evaluation, handover, onContinue, className }: P
       </div>
     </div>
   );
+}
+
+export function milestoneEvaluationVisibility(
+  evaluation: PBLEvaluation,
+  showEvaluationDetails = true,
+): { showStars: boolean; showLearned: boolean; showPerformance: boolean } {
+  if (evaluation.kind !== 'milestone' || !showEvaluationDetails) {
+    return { showStars: false, showLearned: false, showPerformance: false };
+  }
+  return {
+    showStars: typeof evaluation.stars === 'number',
+    showLearned: (evaluation.strengths?.length ?? 0) > 0,
+    showPerformance: Boolean((evaluation.improvements ?? [])[0]),
+  };
 }
 
 export function milestoneHandoverCtaState(handover?: PBLHandover): 'hidden' | 'ready' | 'consumed' {

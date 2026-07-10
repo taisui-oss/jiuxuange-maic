@@ -143,6 +143,30 @@ export function PBLV2Sidebar({
     [project.milestones],
   );
 
+  if (!shouldShowLearnerRoadmap(project)) {
+    const continuationKind = jiuxuangeContinuationKind(project);
+
+    return (
+      <aside className="flex h-full flex-col justify-end overflow-hidden p-3">
+        {continuationKind && onCompleteTask && (
+          <button
+            type="button"
+            onClick={taskBusy || sceneBusy ? undefined : onCompleteTask}
+            disabled={taskBusy || sceneBusy}
+            className={cn(
+              'flex w-full items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold transition-colors',
+              'bg-gradient-to-r from-primary to-violet-400 text-primary-foreground shadow-[0_8px_22px_rgba(124,92,255,0.30)] hover:brightness-110',
+              'disabled:cursor-not-allowed disabled:opacity-60',
+            )}
+          >
+            {t('pbl.v2.sidebar.completeTask')}
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </aside>
+    );
+  }
+
   return (
     <aside className="flex h-full flex-col overflow-hidden">
       <header className="border-b border-cyan-100/[0.12] bg-[#1a2746]/86 px-4 py-3 shadow-[inset_0_-1px_0_rgba(125,211,252,0.05)]">
@@ -227,6 +251,16 @@ export function PBLV2Sidebar({
       </div>
     </aside>
   );
+}
+
+export function shouldShowLearnerRoadmap(project: PBLProjectV2): boolean {
+  return !project.jiuxuange;
+}
+
+export function jiuxuangeContinuationKind(project: PBLProjectV2): 'complete-task' | undefined {
+  if (!project.jiuxuange) return undefined;
+  if (project.pendingTaskCompletion) return 'complete-task';
+  return undefined;
 }
 
 /** SCENARIO ONLY. A small section header marking a three-act boundary. The

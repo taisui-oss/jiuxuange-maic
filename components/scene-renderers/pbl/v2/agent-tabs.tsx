@@ -30,6 +30,8 @@ interface Props {
   readonly instructorStreaming: boolean;
   readonly onInstructorStreamingChange: (active: boolean) => void;
   readonly externalStream?: StreamDisplayState | null;
+  readonly onCompleteTask?: () => void;
+  readonly taskBusy?: boolean;
 }
 
 export function PBLV2AgentTabs({
@@ -39,6 +41,8 @@ export function PBLV2AgentTabs({
   instructorStreaming,
   onInstructorStreamingChange,
   externalStream,
+  onCompleteTask,
+  taskBusy,
 }: Props) {
   const { t } = useI18n();
   // Stage A only has Instructor; future agents push more entries here.
@@ -56,7 +60,7 @@ export function PBLV2AgentTabs({
     );
   }
 
-  const showTabsBar = agents.length > 1;
+  const showTabsBar = shouldShowAgentTabs(project);
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -91,9 +95,16 @@ export function PBLV2AgentTabs({
         instructorStreaming={instructorStreaming}
         onInstructorStreamingChange={onInstructorStreamingChange}
         externalStream={externalStream}
+        onCompleteTask={onCompleteTask}
+        taskBusy={taskBusy}
       />
     </div>
   );
+}
+
+export function shouldShowAgentTabs(project: PBLProjectV2): boolean {
+  if (project.jiuxuange) return false;
+  return project.roles.filter((role) => role.type !== 'user').length > 1;
 }
 
 function RoleIcon({ roleType }: { readonly roleType: PBLRoleType }) {

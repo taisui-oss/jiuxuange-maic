@@ -31,18 +31,17 @@ import type { PBLEvaluation } from '@/lib/pbl/v2/types';
 
 interface Props {
   evaluation: PBLEvaluation;
+  showStructuredDetails?: boolean;
   className?: string;
 }
 
-export function TaskEvaluationCard({ evaluation, className }: Props) {
+export function TaskEvaluationCard({ evaluation, showStructuredDetails = true, className }: Props) {
   const { t } = useI18n();
-  if (evaluation.kind !== 'task') return null;
+  const visibility = taskEvaluationVisibility(evaluation, showStructuredDetails);
+  if (!visibility.showCard) return null;
   const strengths = evaluation.strengths ?? [];
   const improvements = evaluation.improvements ?? [];
   const score = typeof evaluation.score === 'number' ? evaluation.score : undefined;
-  if (strengths.length === 0 && improvements.length === 0 && score === undefined) {
-    return null;
-  }
 
   return (
     <div
@@ -56,7 +55,7 @@ export function TaskEvaluationCard({ evaluation, className }: Props) {
           <ClipboardCheck className="h-3 w-3" />
           {t('pbl.v2.taskEvalCard.title')}
         </span>
-        {score !== undefined && (
+        {visibility.showScore && score !== undefined && (
           <span
             className="rounded-md border border-violet-200/70 bg-violet-100/90 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-violet-700 shadow-sm"
             aria-label={`Score ${score} out of 100`}
@@ -101,4 +100,21 @@ export function TaskEvaluationCard({ evaluation, className }: Props) {
       )}
     </div>
   );
+}
+
+export function taskEvaluationVisibility(
+  evaluation: PBLEvaluation,
+  showStructuredDetails = true,
+): { showCard: boolean; showScore: boolean } {
+  if (evaluation.kind !== 'task' || !showStructuredDetails) {
+    return { showCard: false, showScore: false };
+  }
+  const showScore = typeof evaluation.score === 'number';
+  return {
+    showCard:
+      (evaluation.strengths?.length ?? 0) > 0 ||
+      (evaluation.improvements?.length ?? 0) > 0 ||
+      showScore,
+    showScore,
+  };
 }

@@ -19,6 +19,7 @@ import type {
   PBLMicrotask,
   PBLMilestone,
   PBLEngagementEvent,
+  PBLRuntimeEvent,
 } from '../types';
 
 // ---------------------------------------------------------------------------
@@ -104,6 +105,10 @@ export interface SSEProjectPatchEvent {
         milestoneId?: string;
         ts?: string;
         payload?: Record<string, unknown>;
+      }
+    | {
+        kind: 'runtime_event';
+        event: PBLRuntimeEvent;
       }
     | {
         kind: 'evaluation';

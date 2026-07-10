@@ -121,6 +121,8 @@ export function PBLV2Workspace({
   const [taskBusy, setTaskBusy] = useState(false);
   const [workspaceStream, setWorkspaceStream] = useState<StreamDisplayState | null>(null);
   const activeMilestoneIndex = useMemo(() => workspaceActiveMilestoneIndex(project), [project]);
+  const showRoadmap = !project.jiuxuange;
+  const gridTemplateColumns = workspaceGridTemplateColumns(project, panelWidths);
 
   // SCENARIO ONLY. Once the learner has ENTERED the scenario (the prep stage is
   // complete), the right column gains a "scenario briefing" tab beside the
@@ -347,38 +349,43 @@ export function PBLV2Workspace({
       style={{
         ...PBL_WORKSPACE_THEME,
         gridTemplateRows: '58px minmax(0, 1fr)',
-        gridTemplateColumns: `${panelWidths.sidebar}fr 6px ${panelWidths.chat}fr 6px ${panelWidths.submission}fr`,
+        gridTemplateColumns,
       }}
     >
       <WorkspaceTopBar
         project={project}
         activeMilestoneIndex={activeMilestoneIndex}
-        panelWidths={panelWidths}
+        showProgress={shouldShowWorkspaceProgress(project)}
+        gridTemplateColumns={gridTemplateColumns}
         onReturnToHero={onReturnToHero}
         onExpand={onExpand}
       />
-      <Panel slot="sidebar">
-        {/* Scene controls ("finish this act" / enter / continue) are disabled
+      {showRoadmap && (
+        <Panel slot="sidebar">
+          {/* Scene controls ("finish this act" / enter / continue) are disabled
             while ANYTHING is generating: character speaking, narrator,
             evaluation, submission analysis and opener streams all flip
             `instructorStreaming` (ref-counted across remounts). It is never the
             learner's turn to advance the scene mid-generation, so gating here
             stops a click from racing an in-flight stream and corrupting state. */}
-        <PBLV2Sidebar
-          project={project}
-          onEnterScenario={handleEnterScenario}
-          onContinueHandover={handleContinueHandover}
-          onCompleteAct={handleCompleteAct}
-          onCompleteTask={handleCompleteTask}
-          sceneBusy={sceneBusy || instructorStreaming}
-          taskBusy={taskBusy}
+          <PBLV2Sidebar
+            project={project}
+            onEnterScenario={handleEnterScenario}
+            onContinueHandover={handleContinueHandover}
+            onCompleteAct={handleCompleteAct}
+            onCompleteTask={handleCompleteTask}
+            sceneBusy={sceneBusy || instructorStreaming}
+            taskBusy={taskBusy}
+          />
+        </Panel>
+      )}
+      {showRoadmap && (
+        <WorkspaceResizeHandle
+          side="left"
+          active={resizingHandle === 'left'}
+          onMouseDown={handleResizeStart}
         />
-      </Panel>
-      <WorkspaceResizeHandle
-        side="left"
-        active={resizingHandle === 'left'}
-        onMouseDown={handleResizeStart}
-      />
+      )}
       <Panel slot="chat">
         <PBLV2AgentTabs
           project={project}
@@ -387,6 +394,8 @@ export function PBLV2Workspace({
           instructorStreaming={instructorStreaming}
           onInstructorStreamingChange={onInstructorStreamingChange}
           externalStream={workspaceStream}
+          onCompleteTask={handleCompleteTask}
+          taskBusy={taskBusy}
         />
       </Panel>
       <WorkspaceResizeHandle
@@ -420,13 +429,15 @@ export function PBLV2Workspace({
 function WorkspaceTopBar({
   project,
   activeMilestoneIndex,
-  panelWidths,
+  showProgress,
+  gridTemplateColumns,
   onReturnToHero,
   onExpand,
 }: {
   readonly project: PBLProjectV2;
   readonly activeMilestoneIndex: number;
-  readonly panelWidths: typeof DEFAULT_PANEL_WIDTHS;
+  readonly showProgress: boolean;
+  readonly gridTemplateColumns: string;
   readonly onReturnToHero: () => void;
   readonly onExpand?: () => void;
 }) {
@@ -435,7 +446,7 @@ function WorkspaceTopBar({
     <header
       className="relative z-40 col-span-full grid min-w-0 items-center overflow-hidden border-b border-cyan-100/[0.12] bg-[#111d35]/88 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_14px_42px_rgba(5,12,28,0.24)] backdrop-blur-xl"
       style={{
-        gridTemplateColumns: `${panelWidths.sidebar}fr 6px ${panelWidths.chat}fr 6px ${panelWidths.submission}fr`,
+        gridTemplateColumns,
       }}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(157,140,255,0.20),transparent_30%),radial-gradient(circle_at_78%_0%,rgba(34,211,238,0.13),transparent_26%),linear-gradient(90deg,rgba(255,255,255,0.05),transparent_34%,rgba(255,255,255,0.035))]" />
@@ -479,40 +490,42 @@ function WorkspaceTopBar({
         </div>
       </div>
 
-      <div className="relative col-start-3 hidden min-w-0 items-center gap-2 lg:flex">
-        <div className="flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-indigo-100/[0.14] bg-white/[0.045] px-2.5 text-[11px] font-medium text-indigo-100/82">
-          <Workflow className="h-3.5 w-3.5 text-violet-200/90" />
-          {t('pbl.v2.workspace.progressLabel')}
-        </div>
-        <div className="flex min-w-0 flex-1 items-center gap-1.5">
-          {project.milestones.map((milestone, index) => {
-            const active = index === activeMilestoneIndex;
-            const completed = milestone.status === 'completed';
-            return (
-              <div
-                key={milestone.id}
-                className="group relative flex min-w-0 flex-1 items-center"
-                title={milestone.title}
-              >
+      {showProgress && (
+        <div className="relative col-start-3 hidden min-w-0 items-center gap-2 lg:flex">
+          <div className="flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-indigo-100/[0.14] bg-white/[0.045] px-2.5 text-[11px] font-medium text-indigo-100/82">
+            <Workflow className="h-3.5 w-3.5 text-violet-200/90" />
+            {t('pbl.v2.workspace.progressLabel')}
+          </div>
+          <div className="flex min-w-0 flex-1 items-center gap-1.5">
+            {project.milestones.map((milestone, index) => {
+              const active = index === activeMilestoneIndex;
+              const completed = milestone.status === 'completed';
+              return (
                 <div
-                  className={cn(
-                    'h-1.5 min-w-4 flex-1 rounded-full transition-colors',
-                    completed && 'bg-cyan-300/70 shadow-[0_0_12px_rgba(103,232,249,0.30)]',
-                    active && 'bg-violet-300 shadow-[0_0_16px_rgba(167,139,250,0.42)]',
-                    !active && !completed && 'bg-slate-500/35',
-                  )}
-                />
-                {active && (
+                  key={milestone.id}
+                  className="group relative flex min-w-0 flex-1 items-center"
+                  title={milestone.title}
+                >
                   <div
-                    className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/50 bg-violet-300 shadow-[0_0_18px_rgba(167,139,250,0.58)] transition-[left] duration-500 ease-out"
-                    style={{ left: `${milestoneProgressFraction(milestone) * 100}%` }}
+                    className={cn(
+                      'h-1.5 min-w-4 flex-1 rounded-full transition-colors',
+                      completed && 'bg-cyan-300/70 shadow-[0_0_12px_rgba(103,232,249,0.30)]',
+                      active && 'bg-violet-300 shadow-[0_0_16px_rgba(167,139,250,0.42)]',
+                      !active && !completed && 'bg-slate-500/35',
+                    )}
                   />
-                )}
-              </div>
-            );
-          })}
+                  {active && (
+                    <div
+                      className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/50 bg-violet-300 shadow-[0_0_18px_rgba(167,139,250,0.58)] transition-[left] duration-500 ease-out"
+                      style={{ left: `${milestoneProgressFraction(milestone) * 100}%` }}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {onExpand && (
         <button
@@ -555,6 +568,20 @@ export function workspaceActiveMilestoneIndex(project: PBLProjectV2): number {
   if (activeIndex >= 0) return activeIndex;
   if (project.status === 'completed') return -1;
   return project.milestones.length > 0 ? 0 : -1;
+}
+
+export function shouldShowWorkspaceProgress(project: PBLProjectV2): boolean {
+  return !project.jiuxuange;
+}
+
+export function workspaceGridTemplateColumns(
+  project: PBLProjectV2,
+  widths: typeof DEFAULT_PANEL_WIDTHS,
+): string {
+  if (project.jiuxuange) {
+    return `${widths.sidebar + widths.chat}fr 6px ${widths.submission}fr`;
+  }
+  return `${widths.sidebar}fr 6px ${widths.chat}fr 6px ${widths.submission}fr`;
 }
 
 function WorkspaceResizeHandle({

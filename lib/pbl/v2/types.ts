@@ -509,6 +509,30 @@ export type PBLRuntimeEvent =
       entityId: string;
       from: string;
       to: string;
+    })
+  | (PBLRuntimeEventBase & {
+      kind: 'jiuxuange_evidence_evaluated';
+      sourceMessageId: string;
+      hintLevel: 0 | 1 | 2 | 3;
+      decision: {
+        satisfied: boolean;
+        missingSignals: string[];
+        results: Array<{
+          signal: string;
+          status: string;
+          sourceMessageIds: string[];
+          factIds: string[];
+          hintLevel: string | number;
+          reason: string;
+          modelVersion: string;
+          packageVersion: string;
+        }>;
+        sourceMessageIds: string[];
+        factIds: string[];
+        evidenceRefs: string[];
+        modelVersion: string;
+        packageVersion: string;
+      };
     });
 
 // ---------------------------------------------------------------------------

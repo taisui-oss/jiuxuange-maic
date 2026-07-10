@@ -31,6 +31,7 @@ import type {
   PBLChatMessage,
   PBLEvaluation,
   PBLProjectV2,
+  PBLRole,
   PBLScenarioCharacter,
 } from '@/lib/pbl/v2/types';
 import { normalizeProjectRuntime, PBL_SIMULATOR_AGENT_ID } from '@/lib/pbl/v2/operations/progress';
@@ -68,6 +69,8 @@ interface Props {
    *  sidebar "Complete" flow that chains milestone evaluation and next-task
    *  opener outside this chat hook. */
   readonly externalStream?: StreamDisplayState | null;
+  readonly onCompleteTask?: () => void;
+  readonly taskBusy?: boolean;
 }
 
 function newClientMessageId(): string {
@@ -113,6 +116,8 @@ export function PBLV2Chat({
   instructorStreaming,
   onInstructorStreamingChange,
   externalStream,
+  onCompleteTask,
+  taskBusy,
 }: Props) {
   const [input, setInput] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -504,6 +509,12 @@ export function PBLV2Chat({
   // Learner-facing intro shown on hover of the instructor avatar; falls back to
   // the role name when there's no curated intro.
   const agentIntro = instructorIntroText(instructorRole);
+  const showEvaluationDetails = shouldShowStructuredEvaluation(project);
+  const showProgressDividers = shouldShowProgressDivider(project);
+  const feedbackAgentName = displayAgentName(
+    project.roles.find((role) => role.type === 'evaluator')?.name,
+    displayName,
+  );
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
@@ -514,13 +525,15 @@ export function PBLV2Chat({
 
         {timeline.map((item) => {
           if (item.kind === 'message') {
+            const messageRole = roleForMessage(project, item.message);
             return (
               <MessageBubble
                 key={item.message.id}
                 message={item.message}
-                agentName={displayName}
+                agentName={displayAgentName(messageRole?.name, displayName)}
                 characters={scenarioCharacters}
-                agentIntro={agentIntro}
+                agentIntro={instructorIntroText(messageRole)}
+                showProgressDividers={showProgressDividers}
                 typewriter={taskReadyTypewriterIds.has(item.message.id)}
                 onTypewriterComplete={handleTaskReadyTypewriterComplete}
               />
@@ -550,7 +563,9 @@ export function PBLV2Chat({
               <div key={ev.id} className="flex justify-start">
                 <div className="pbl-v2-task-review-shell max-w-[90%] rounded-[22px] px-4 py-3 text-sm text-slate-800">
                   <div className="mb-1 text-[10px] uppercase tracking-wider text-violet-700">
-                    {displayName} · {t('pbl.v2.taskEvalCard.title')}
+                    {showEvaluationDetails
+                      ? `${displayName} · ${t('pbl.v2.taskEvalCard.title')}`
+                      : feedbackAgentName}
                   </div>
                   {feedback && (
                     <MarkdownText
@@ -558,7 +573,11 @@ export function PBLV2Chat({
                       className="pbl-v2-light-card-markdown pbl-v2-task-review-markdown text-slate-700 prose-p:text-slate-700 prose-strong:text-slate-900"
                     />
                   )}
-                  <TaskEvaluationCard evaluation={ev} className="mt-3" />
+                  <TaskEvaluationCard
+                    evaluation={ev}
+                    showStructuredDetails={showEvaluationDetails}
+                    className="mt-3"
+                  />
                 </div>
               </div>
             );
@@ -573,6 +592,8 @@ export function PBLV2Chat({
                 evaluation={ev}
                 handover={handoverForMilestoneEvaluation(ev, project.pendingHandover)}
                 onContinue={handleContinueHandover}
+                showEvaluationDetails={showEvaluationDetails}
+                showNextMilestoneTitle={!project.jiuxuange}
                 className="my-1"
               />
             );
@@ -644,6 +665,22 @@ export function PBLV2Chat({
         }
         onMouseLeave={handoverPending ? () => setHandoverHintPos(null) : undefined}
       >
+        {shouldShowJiuxuangeContinuation(project) && onCompleteTask && (
+          <button
+            type="button"
+            onClick={onCompleteTask}
+            disabled={chatBusy || taskBusy}
+            className={cn(
+              'mb-3 flex w-full items-center justify-center gap-2 rounded-md px-3 py-2.5 text-sm font-semibold transition-colors',
+              'bg-gradient-to-r from-primary to-violet-400 text-primary-foreground shadow-[0_8px_22px_rgba(124,92,255,0.30)] hover:brightness-110',
+              'disabled:cursor-not-allowed disabled:opacity-60',
+            )}
+          >
+            {taskBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+            继续学习
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        )}
         {/* Stage hand-off lives in the LEFT roadmap (sidebar), never here — and
             only once the stage's tasks are all complete. Within a roleplay
             stage the learner cannot click past an interaction; beats advance
@@ -725,6 +762,10 @@ export function PBLV2Chat({
       )}
     </div>
   );
+}
+
+export function shouldShowJiuxuangeContinuation(project: PBLProjectV2): boolean {
+  return !!project.jiuxuange && !!project.pendingTaskCompletion;
 }
 
 function SubmissionEvaluationBubble({
@@ -964,6 +1005,7 @@ function MessageBubble({
   agentName,
   characters,
   agentIntro,
+  showProgressDividers = true,
   typewriter = false,
   onTypewriterComplete,
 }: {
@@ -971,6 +1013,7 @@ function MessageBubble({
   readonly agentName: string;
   readonly characters?: readonly PBLScenarioCharacter[];
   readonly agentIntro?: string;
+  readonly showProgressDividers?: boolean;
   readonly typewriter?: boolean;
   readonly onTypewriterComplete?: (messageId: string) => void;
 }) {
@@ -1004,6 +1047,16 @@ function MessageBubble({
         </div>
       </div>
     );
+  }
+
+  if (
+    !showProgressDividers &&
+    message.roleType === 'instructor' &&
+    typeof message.content === 'string' &&
+    (message.content.startsWith(TASK_DIVIDER_PREFIX) ||
+      message.content.startsWith(MILESTONE_DIVIDER_PREFIX))
+  ) {
+    return null;
   }
 
   if (
@@ -1354,6 +1407,24 @@ function stripTailForDisplay(text: string | undefined): string {
 export function displayAgentName(name: string | undefined | null, fallback: string): string {
   const trimmed = name?.trim();
   return trimmed || fallback;
+}
+
+export function roleForMessage(
+  project: PBLProjectV2,
+  message: PBLChatMessage,
+): PBLRole | undefined {
+  return (
+    project.roles.find((role) => role.id === message.agentId) ??
+    project.roles.find((role) => role.type === 'instructor')
+  );
+}
+
+export function shouldShowStructuredEvaluation(project: PBLProjectV2): boolean {
+  return project.jiuxuange?.formalScoringEnabled !== false;
+}
+
+export function shouldShowProgressDivider(project: PBLProjectV2): boolean {
+  return !project.jiuxuange;
 }
 
 export function shouldShowStreamingDraft({

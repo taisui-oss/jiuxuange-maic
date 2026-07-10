@@ -88,6 +88,13 @@ export function applyInstructorEvent(
           }
           break;
         }
+        case 'runtime_event': {
+          next.runtimeEvents ??= [];
+          if (!next.runtimeEvents.some((existing) => existing.id === patch.event.id)) {
+            next.runtimeEvents.push(patch.event);
+          }
+          break;
+        }
         case 'advance': {
           applyAdvanceProjectPatch(next, patch);
           break;

@@ -301,6 +301,39 @@ describe('PBL v2 — apply instructor SSE events', () => {
     ]);
   });
 
+  it('persists and deduplicates Jiuxuange evidence runtime events', () => {
+    const project = makeProject();
+    const event = {
+      id: 'runtime-evidence-1',
+      kind: 'jiuxuange_evidence_evaluated' as const,
+      actorType: 'system' as const,
+      ts: '2026-07-11T00:00:02.000Z',
+      microtaskId: 'mt-1',
+      milestoneId: 'ms-1',
+      sourceMessageId: 'learner-1',
+      hintLevel: 0 as const,
+      decision: {
+        satisfied: false,
+        missingSignals: ['fact_ref' as const],
+        sourceMessageIds: ['learner-1'],
+        factIds: [],
+        evidenceRefs: [],
+        modelVersion: 'mock-model',
+        packageVersion: '1.0.0-pilot-b',
+        results: [],
+      },
+    };
+    const patch: PBLSSEEvent = {
+      type: 'project_patch',
+      patch: { kind: 'runtime_event', event },
+    };
+
+    const once = applyInstructorEvent(patch, project, () => {});
+    const twice = applyInstructorEvent(patch, once, () => {});
+
+    expect(twice.runtimeEvents).toEqual([event]);
+  });
+
   it('merges authoritative advance snapshots so evaluation keeps task process evidence', () => {
     let draft = '';
     const project = makeProject();

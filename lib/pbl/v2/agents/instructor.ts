@@ -52,6 +52,15 @@ import {
 import { DEFAULT_TIER, proficiencyDirectiveFromTarget } from '../operations/proficiency';
 import { buildAdvanceProjectPatch } from '../operations/advance-patch';
 import { formatScenarioTranscript } from '../operations/eval-prompts';
+import {
+  buildJiuxuangeRuntimeBlock,
+  getCurrentJiuxuangeMicrotask,
+  normalizeJiuxuangeReply,
+  selectJiuxuangeRole,
+} from '@/lib/c-cubic/runtime';
+import { getCoursePackage } from '@/lib/c-cubic/course-package/business-model-v1';
+import { evaluateJiuxuangeLearnerMessage } from '@/lib/c-cubic/evidence';
+import type { PBLRuntimeEvent } from '../types';
 
 const log = createLogger('PBL v2 Instructor');
 
@@ -850,6 +859,14 @@ function buildSystemPrompt(args: {
     ? `## Your persona\n${args.instructor.systemPrompt}`
     : '';
 
+  let jiuxuangeRuntimeBlock = '';
+  if (args.project.jiuxuange) {
+    const metadata = args.project.jiuxuange;
+    const coursePackage = getCoursePackage(metadata.courseId, metadata.courseVersion);
+    const selectedCase = coursePackage.cases[metadata.caseId];
+    jiuxuangeRuntimeBlock = buildJiuxuangeRuntimeBlock(args.project, selectedCase?.facts ?? []);
+  }
+
   return [
     base,
     instructorPersona,
@@ -865,6 +882,7 @@ function buildSystemPrompt(args: {
     runtimeBrief,
     synthesisBlock,
     buildAnchor(args.microtask),
+    jiuxuangeRuntimeBlock,
     // Hard rules sit last so they have positional recency over the
     // 200-line base rules. Re-asserts identity + language so the
     // LLM can't drift in greeting/setup turns where there is no
@@ -894,10 +912,15 @@ export function buildHistoryMessagesForInstructor(
   for (const m of recent) {
     if (m.roleType === 'user') {
       out.push({ role: 'user', content: m.content });
-    } else if (m.roleType === 'instructor') {
+    } else if (
+      m.roleType === 'instructor' ||
+      m.roleType === 'mentor' ||
+      m.roleType === 'collaborator' ||
+      m.roleType === 'evaluator'
+    ) {
       out.push({ role: 'assistant', content: m.content });
     }
-    // Skip other agent types for now — Stage A only wires Instructor.
+    // Simulator and system narration are not teaching-agent turns.
   }
   return out;
 }
@@ -1291,6 +1314,11 @@ export interface RunInstructorTurnArgs {
   signal?: AbortSignal;
 }
 
+function resolvedLanguageModelId(languageModel: LanguageModel): string {
+  if (typeof languageModel === 'string') return languageModel;
+  return 'modelId' in languageModel ? String(languageModel.modelId) : 'unknown-model';
+}
+
 /**
  * Drive one Instructor turn. Yields a stream of `PBLSSEEvent` that
  * the route handler forwards to the client. Mutates the in-memory
@@ -1322,6 +1350,7 @@ export async function* runInstructorTurn(
   // "enter scenario" button). Double-gated by the project-level master
   // signal + the stage marker; ordinary projects are never affected.
   const scenarioPrepStage = !!project.scenario && milestone.scenarioStage === 'prep';
+  let learnerSourceMessageId: string | undefined;
 
   // Append the learner turn to the in-memory project so the next
   // system-prompt rebuild sees it. The client is the source of
@@ -1330,18 +1359,28 @@ export async function* runInstructorTurn(
   // the user message back as a project_patch (would either
   // duplicate or require fragile id reconciliation).
   if (phase === 'instructing') {
-    const userMsg: PBLChatMessage = {
-      id: 'msg_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
-      roleType: 'user',
-      content: userMessage,
-      ts: new Date().toISOString(),
-      microtaskId: microtask.id,
-    };
     const instructorThread = project.threads.find((t) => {
       const r = project.roles.find((r) => r.id === t.agentId);
       return r?.type === 'instructor';
     });
-    if (instructorThread) instructorThread.messages.push(userMsg);
+    const existingUserMessage = instructorThread?.messages.findLast(
+      (message) =>
+        message.roleType === 'user' &&
+        message.microtaskId === microtask.id &&
+        message.content.trim() === userMessage.trim(),
+    );
+    learnerSourceMessageId = existingUserMessage?.id;
+    if (instructorThread && !existingUserMessage) {
+      const userMsg: PBLChatMessage = {
+        id: 'msg_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
+        roleType: 'user',
+        content: userMessage,
+        ts: new Date().toISOString(),
+        microtaskId: microtask.id,
+      };
+      instructorThread.messages.push(userMsg);
+      learnerSourceMessageId = userMsg.id;
+    }
     const turnEvent = recordEvent(project, 'learner_turn', {
       microtaskId: microtask.id,
       milestoneId: milestone.id,
@@ -1362,6 +1401,31 @@ export async function* runInstructorTurn(
         payload: turnEvent.payload,
       },
     };
+    if (project.jiuxuange && learnerSourceMessageId) {
+      const evidenceEvent: PBLRuntimeEvent = {
+        id: 'runtime_evidence_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
+        kind: 'jiuxuange_evidence_evaluated',
+        actorType: 'system',
+        ts: new Date().toISOString(),
+        microtaskId: microtask.id,
+        milestoneId: milestone.id,
+        sourceMessageId: learnerSourceMessageId,
+        hintLevel: 0,
+        decision: evaluateJiuxuangeLearnerMessage({
+          project,
+          messageId: learnerSourceMessageId,
+          message: userMessage,
+          hintLevel: 0,
+          modelVersion: resolvedLanguageModelId(languageModel),
+        }),
+      };
+      project.runtimeEvents ??= [];
+      project.runtimeEvents.push(evidenceEvent);
+      yield {
+        type: 'project_patch',
+        patch: { kind: 'runtime_event', event: evidenceEvent },
+      };
+    }
     // NOTE: explicit "change the difficulty / I'm a beginner" requests are NOT
     // detected here by regex anymore. The Instructor LLM judges that intent from
     // the learner's message as part of its normal turn and calls the
@@ -1372,11 +1436,15 @@ export async function* runInstructorTurn(
   }
 
   const instructor = project.roles.find((r) => r.type === 'instructor');
+  const selectedRole = project.jiuxuange ? selectJiuxuangeRole(project) : undefined;
+  const speakingRole = selectedRole
+    ? project.roles.find((role) => role.id === selectedRole.id)
+    : instructor;
   const systemPrompt = buildSystemPrompt({
     project,
     milestone,
     microtask,
-    instructor,
+    instructor: speakingRole,
     phase,
   });
 
@@ -1525,7 +1593,7 @@ export async function* runInstructorTurn(
             '';
           if (delta) {
             assistantText += delta;
-            yield { type: 'token', delta };
+            if (!project.jiuxuange) yield { type: 'token', delta };
           }
           break;
         }
@@ -1591,18 +1659,27 @@ export async function* runInstructorTurn(
   // (e.g. a lone record_observation tool call) — so the client never shows a
   // blank screen with no way to retry.
   // -------------------------------------------------------------------
+  if (project.jiuxuange) {
+    const canonicalQuestion = getCurrentJiuxuangeMicrotask(project)?.jiuxuange?.questionPrompt;
+    if (canonicalQuestion) {
+      assistantText = normalizeJiuxuangeReply(assistantText, canonicalQuestion);
+    }
+  }
   const assistantCommit = cleanInstructorCommitText(assistantText, {
     ...nextInstructionTarget(project, milestone, microtask),
     stripFinalReverseQuestion:
       phase === 'setup' && !!project.scenario && milestone.scenarioStage === 'wrapup',
   });
   const shownText = assistantCommit.text;
-  if (shownText.trim() && instructor) {
+  if (project.jiuxuange && shownText.trim()) {
+    yield { type: 'token', delta: shownText };
+  }
+  if (shownText.trim() && speakingRole) {
     lastCommittedMessageTs = new Date().toISOString();
     const assistantMsg: PBLChatMessage = {
       id: 'msg_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
-      agentId: instructor.id,
-      roleType: 'instructor',
+      agentId: speakingRole.id,
+      roleType: speakingRole.type,
       content: shownText,
       ts: lastCommittedMessageTs,
       microtaskId: microtask.id,
@@ -1612,7 +1689,7 @@ export async function* runInstructorTurn(
       type: 'project_patch',
       patch: { kind: 'message', message: assistantMsg },
     };
-  } else if (didAdjustDifficulty && instructor) {
+  } else if (didAdjustDifficulty && speakingRole) {
     // The learner asked to change difficulty and the model adjusted it via the
     // tool but wrote no text. The tier change is silent (underlying, never
     // surfaced) AND no chat patch is emitted for a no-op change, so without
@@ -1625,8 +1702,8 @@ export async function* runInstructorTurn(
     lastCommittedMessageTs = new Date().toISOString();
     const ackMsg: PBLChatMessage = {
       id: 'msg_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
-      agentId: instructor.id,
-      roleType: 'instructor',
+      agentId: speakingRole.id,
+      roleType: speakingRole.type,
       content: difficultyAdjustAck(project.language),
       ts: lastCommittedMessageTs,
       microtaskId: microtask.id,

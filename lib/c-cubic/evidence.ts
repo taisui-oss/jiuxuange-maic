@@ -10,6 +10,9 @@ export type JiuxuangeEvidenceStatus = 'autonomous' | 'hinted' | 'leaked-answer' 
 
 export type JiuxuangeHintLevel = 0 | 1 | 2 | 3 | 'none' | 'nudge' | 'scaffold' | 'answer';
 
+import type { PBLProjectV2 } from '@/lib/pbl/v2/types';
+import { getCoursePackage } from './course-package/business-model-v1';
+
 export interface JiuxuangeEvidenceFact {
   id: string;
   visibility: 'learner' | 'coach_only';
@@ -192,4 +195,100 @@ export function evaluateJiuxuangeEvidence(
     modelVersion: input.modelVersion,
     packageVersion: input.packageVersion,
   };
+}
+
+export interface EvaluateJiuxuangeLearnerMessageInput {
+  project: PBLProjectV2;
+  messageId: string;
+  message: string;
+  hintLevel: JiuxuangeHintLevel;
+  modelVersion: string;
+}
+
+function learnerSignalPresent(
+  signal: JiuxuangeEvidenceSignal,
+  message: string,
+  factIds: string[],
+): boolean {
+  switch (signal) {
+    case 'own_words':
+      return message.replace(/\s/gu, '').length >= 24;
+    case 'distinction':
+      return /(?:不是|而不是|区别|不同于|并非)/u.test(message);
+    case 'fact_ref':
+      return factIds.length > 0;
+    case 'causal_link':
+      return factIds.length > 0 && /(?:因为|所以|因此|导致|说明|意味着|使得)/u.test(message);
+    case 'boundary':
+      return /(?:前提|边界|只有在|当.+时|除非)/u.test(message);
+    case 'counterevidence':
+      return /(?:推翻|反证|除非|如果.+(?:没有|并未|不再|相反))/u.test(message);
+  }
+}
+
+function characterBigrams(text: string): Set<string> {
+  const normalized = text.replace(/[^\p{L}\p{N}]/gu, '');
+  const grams = new Set<string>();
+  for (let index = 0; index < normalized.length - 1; index += 1) {
+    grams.add(normalized.slice(index, index + 2));
+  }
+  return grams;
+}
+
+function messageReferencesFact(
+  message: string,
+  fact: JiuxuangeEvidenceFact & { text?: string },
+): boolean {
+  if (message.includes(fact.id) || message.includes(`[${fact.id}]`)) return true;
+  if (!fact.text) return false;
+  const messageGrams = characterBigrams(message);
+  let overlap = 0;
+  for (const gram of characterBigrams(fact.text)) {
+    if (messageGrams.has(gram)) overlap += 1;
+    if (overlap >= 3) return true;
+  }
+  return false;
+}
+
+export function evaluateJiuxuangeLearnerMessage(
+  input: EvaluateJiuxuangeLearnerMessageInput,
+): JiuxuangeEvidenceDecision {
+  const metadata = input.project.jiuxuange;
+  if (!metadata) throw new Error('Jiuxuange evidence evaluation requires course metadata');
+
+  const milestone = input.project.milestones.find((item) => item.status === 'active');
+  const microtask = milestone?.microtasks.find((item) => item.status === 'in_progress');
+  if (!microtask?.jiuxuange)
+    throw new Error('Jiuxuange evidence evaluation requires an active task');
+
+  const coursePackage = getCoursePackage(metadata.courseId, metadata.courseVersion);
+  const selectedCase = coursePackage.cases[metadata.caseId];
+  if (!selectedCase) throw new Error(`Unknown Jiuxuange case: ${metadata.caseId}`);
+
+  const facts = selectedCase.facts.filter(
+    (fact) => fact.visibility === 'learner' && fact.verificationStatus === 'verified',
+  );
+  const factIds = facts
+    .filter((fact) => messageReferencesFact(input.message, fact))
+    .map((fact) => fact.id);
+  const requiredSignals = microtask.jiuxuange.evidenceRuleIds.flatMap(
+    (ruleId) => coursePackage.evidenceRules[ruleId]?.requiredSignals ?? [],
+  );
+  const candidates = [...new Set(requiredSignals)].map((signal) => ({
+    signal,
+    demonstrated: learnerSignalPresent(signal, input.message, factIds),
+    sourceMessageIds: [input.messageId],
+    factIds: signal === 'fact_ref' || signal === 'causal_link' ? factIds : [],
+    hintLevel: input.hintLevel,
+    reason: `${signal} was evaluated from learner message ${input.messageId}`,
+  }));
+
+  return evaluateJiuxuangeEvidence({
+    requiredSignals,
+    candidates,
+    facts,
+    sourceMessageIds: [input.messageId],
+    modelVersion: input.modelVersion,
+    packageVersion: metadata.courseVersion,
+  });
 }

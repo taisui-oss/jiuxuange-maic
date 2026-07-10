@@ -3,25 +3,25 @@ import type { CoursePackageReadiness, JiuxuangeCoursePackage } from './types';
 export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
   const errors: string[] = [];
 
-  for (const module of pkg.modules) {
-    for (const conceptId of module.conceptIds) {
+  for (const courseModule of pkg.modules) {
+    for (const conceptId of courseModule.conceptIds) {
       if (!pkg.concepts[conceptId]) {
-        errors.push(`module ${module.id} references unknown concept ${conceptId}`);
+        errors.push(`module ${courseModule.id} references unknown concept ${conceptId}`);
       }
     }
-    for (const caseId of module.caseIds) {
+    for (const caseId of courseModule.caseIds) {
       if (!pkg.cases[caseId]) {
-        errors.push(`module ${module.id} references unknown case ${caseId}`);
+        errors.push(`module ${courseModule.id} references unknown case ${caseId}`);
       }
     }
-    for (const questionId of module.questionTemplateIds) {
+    for (const questionId of courseModule.questionTemplateIds) {
       if (!pkg.questionTemplates[questionId]) {
-        errors.push(`module ${module.id} references unknown question ${questionId}`);
+        errors.push(`module ${courseModule.id} references unknown question ${questionId}`);
       }
     }
-    for (const ruleId of module.evidenceRuleIds) {
+    for (const ruleId of courseModule.evidenceRuleIds) {
       if (!pkg.evidenceRules[ruleId]) {
-        errors.push(`module ${module.id} references unknown evidence rule ${ruleId}`);
+        errors.push(`module ${courseModule.id} references unknown evidence rule ${ruleId}`);
       }
     }
   }
@@ -82,9 +82,7 @@ export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
   return errors;
 }
 
-export function assessCoursePackageReadiness(
-  pkg: JiuxuangeCoursePackage,
-): CoursePackageReadiness {
+export function assessCoursePackageReadiness(pkg: JiuxuangeCoursePackage): CoursePackageReadiness {
   const structuralErrors = validateCoursePackage(pkg);
   const blockers = [...structuralErrors];
   const warnings: string[] = [];
@@ -102,8 +100,7 @@ export function assessCoursePackageReadiness(
     const hasVerifiedPrimaryFacts =
       learnerFacts.length > 0 &&
       learnerFacts.every(
-        (fact) =>
-          fact.sourceKind === 'primary_project' && fact.verificationStatus === 'verified',
+        (fact) => fact.sourceKind === 'primary_project' && fact.verificationStatus === 'verified',
       );
 
     if (item.availability !== 'pilot' || !hasVerifiedPrimaryFacts) {
@@ -117,7 +114,7 @@ export function assessCoursePackageReadiness(
     warnings.push('formal scoring remains disabled until human calibration is sufficient');
   }
 
-  const activeCaseIds = new Set(pkg.modules.flatMap((module) => module.caseIds));
+  const activeCaseIds = new Set(pkg.modules.flatMap((courseModule) => courseModule.caseIds));
   const hasRunnableDemo = Object.values(pkg.cases).some(
     (item) =>
       activeCaseIds.has(item.id) &&

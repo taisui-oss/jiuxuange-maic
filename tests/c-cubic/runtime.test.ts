@@ -4,6 +4,7 @@ import {
   countLearnerFacingQuestions,
   enforceOneLearnerFacingQuestion,
   getCurrentJiuxuangeMicrotask,
+  normalizeJiuxuangeReply,
   roleForJiuxuangePhase,
   selectJiuxuangeRole,
   type JiuxuangeRuntimeProject,
@@ -122,6 +123,13 @@ describe('Jiuxuange runtime helpers', () => {
     );
     expect(() => enforceOneLearnerFacingQuestion('请继续。')).toThrow(
       'Expected exactly one learner-facing question, received 0',
+    );
+  });
+
+  it('falls back to the canonical question when the model leaks the contradiction', () => {
+    const canonical = '把门店增长和续约下降放在一起，你看到了什么不一致？';
+    expect(normalizeJiuxuangeReply('你的核心矛盾是门店增长但续约下降。你同意吗？', canonical)).toBe(
+      canonical,
     );
   });
 });
