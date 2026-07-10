@@ -39,12 +39,9 @@ describe('instructor base rules — workspace reality & external tools', () => {
     }
   });
 
-  it('anchors Jiuxuange commercial-mode learning without exposing internal evidence cards', () => {
-    expect(rules).toContain('九轩阁商业模式学习');
-    expect(rules).toContain('围绕项目事实追问');
-    expect(rules).toContain('不能替学员命名矛盾');
-    expect(rules).toContain('不要向学员说出“矛盾发现卡”或“商模判断卡”');
-    expect(rules).toContain('概念理解卡');
-    expect(rules).toContain('案例观察卡');
+  it('keeps Jiuxuange commercial-mode rules out of generic PBL projects', () => {
+    expect(rules).not.toContain('九轩阁商业模式学习');
+    expect(rules).not.toContain('矛盾发现卡');
+    expect(rules).not.toContain('商模判断卡');
   });
 });
