@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '@/lib/utils/database';
-import { loadStageData, saveStageData } from '@/lib/utils/stage-storage';
+import { deleteStageData, loadStageData, saveStageData } from '@/lib/utils/stage-storage';
 import {
   courseSessionId,
   deriveBusinessModelResumeState,
@@ -124,5 +124,17 @@ describe('business model unified session', () => {
       stageId: 'missing-stage',
       sceneId: 'missing-scene',
     });
+  });
+
+  it('removes the course locator when its classroom is deleted', async () => {
+    const ref = await getOrCreateBusinessModelSession({
+      ...BASE,
+      stageIdFactory: () => 'stage-delete',
+    });
+    expect(await db.learningPaths.get(courseSessionId(BASE))).toBeDefined();
+
+    await deleteStageData(ref.stageId);
+
+    expect(await db.learningPaths.get(courseSessionId(BASE))).toBeUndefined();
   });
 });
