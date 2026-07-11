@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   buildFirstTaskWorkspaceOrientationBlock,
+  buildJiuxuangeFormalCourseOpeningBlock,
   buildHistoryMessagesForInstructor,
   buildInstructorRuntimeBrief,
   buildPriorSubmissionsBlock,
@@ -302,6 +303,61 @@ describe('PBL v2 — first-task workspace orientation', () => {
 
     expect(
       buildFirstTaskWorkspaceOrientationBlock({ project, milestone, microtask, phase: 'greeting' }),
+    ).toBe('');
+  });
+});
+
+describe('PBL v2 — Jiuxuange formal course opening', () => {
+  function jiuxuangeFirstTask() {
+    const project = makeProject();
+    project.jiuxuange = {
+      courseId: 'business-model',
+      courseVersion: '1.0.0-pilot-b',
+      moduleId: 'six-elements',
+      curriculumOrder: 2,
+      releaseStatus: 'pilot_b_only',
+      factPackHash: 'facts',
+      caseId: 'demo_chain_franchise',
+      runtimeMode: 'demo',
+      formalScoringEnabled: false,
+    };
+    const milestone = project.milestones[1];
+    const microtask = milestone.microtasks.find((task) => task.id === 'mt-1')!;
+    return { project, milestone, microtask };
+  }
+
+  it('requires the formal learning guide before the first course question', () => {
+    const args = jiuxuangeFirstTask();
+    const block = buildJiuxuangeFormalCourseOpeningBlock({ ...args, phase: 'greeting' });
+
+    expect(block).toContain('好，我们现在正式开始商业模式大课。');
+    expect(block).toContain('概念理解、案例推演和个人学习成果测评');
+    expect(block).toContain('依据事实形成并检验自己的判断');
+    expect(block).toContain('本段引导语本身不提出问题');
+  });
+
+  it('does not repeat the guide during instruction, later tasks, or ordinary projects', () => {
+    const args = jiuxuangeFirstTask();
+    expect(buildJiuxuangeFormalCourseOpeningBlock({ ...args, phase: 'instructing' })).toBe('');
+
+    const laterTask = args.milestone.microtasks.find((task) => task.id === 'mt-2')!;
+    expect(
+      buildJiuxuangeFormalCourseOpeningBlock({
+        project: args.project,
+        milestone: args.milestone,
+        microtask: laterTask,
+        phase: 'setup',
+      }),
+    ).toBe('');
+
+    const ordinary = makeProject();
+    expect(
+      buildJiuxuangeFormalCourseOpeningBlock({
+        project: ordinary,
+        milestone: ordinary.milestones[1],
+        microtask: ordinary.milestones[1].microtasks[0],
+        phase: 'greeting',
+      }),
     ).toBe('');
   });
 });

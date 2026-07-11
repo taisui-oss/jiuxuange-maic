@@ -579,6 +579,29 @@ function isFirstProjectMicrotask(
   return firstTask?.id === microtask.id;
 }
 
+export const JIUXUANGE_FORMAL_COURSE_OPENING =
+  '好，我们现在正式开始商业模式大课。接下来，你会经历概念理解、案例推演和个人学习成果测评；重点不是记住标准答案，而是依据事实形成并检验自己的判断。我们先从第一步开始。';
+
+export function buildJiuxuangeFormalCourseOpeningBlock(args: {
+  project: PBLProjectV2;
+  milestone: PBLMilestone;
+  microtask: PBLMicrotask;
+  phase: InstructorPhase;
+}): string {
+  if (!args.project.jiuxuange || args.phase !== 'greeting') return '';
+  if (!isFirstProjectMicrotask(args.project, args.milestone, args.microtask)) return '';
+
+  return [
+    '## Jiuxuange formal course opening — first entry only',
+    '',
+    'Before the current task handoff, reproduce this learner-facing guide exactly once:',
+    JIUXUANGE_FORMAL_COURSE_OPENING,
+    '',
+    '本段引导语本身不提出问题。引导语之后，只提出九轩阁本轮运行约束指定的唯一问题。',
+    '不要在续聊、后续微任务或后续阶段重复这段引导语。',
+  ].join('\n');
+}
+
 export function buildFirstTaskWorkspaceOrientationBlock(args: {
   project: PBLProjectV2;
   milestone: PBLMilestone;
@@ -846,6 +869,7 @@ function buildSystemPrompt(args: {
   const synthesisBlock = synthesisOwed ? buildStageSynthesisBlock(args.milestone) : '';
   const phaseBlock = PHASE_BLOCKS[args.phase];
   const firstTaskWorkspaceOrientationBlock = buildFirstTaskWorkspaceOrientationBlock(args);
+  const jiuxuangeFormalCourseOpeningBlock = buildJiuxuangeFormalCourseOpeningBlock(args);
   // SCENARIO ONLY. Empty for ordinary projects → no prompt change. Makes
   // the Instructor aware of the role-play scenario (preview / frame /
   // debrief) without impersonating the character.
@@ -878,6 +902,7 @@ function buildSystemPrompt(args: {
     tierBlock,
     phaseBlock,
     firstTaskWorkspaceOrientationBlock,
+    jiuxuangeFormalCourseOpeningBlock,
     scenarioAwarenessBlock,
     runtimeBrief,
     synthesisBlock,
