@@ -126,6 +126,16 @@ describe('provider-config', () => {
       expect(resolveApiKey('anthropic')).toBe('sk-anthropic');
     });
 
+    it('ignores a non-ASCII server credential instead of overriding a valid client key', async () => {
+      vi.stubEnv('ANTHROPIC_API_KEY', 'sk-demo-请输入密钥');
+      const { isServerConfiguredProvider, resolveApiKey } = await import(
+        '@/lib/server/provider-config'
+      );
+
+      expect(isServerConfiguredProvider('providers', 'anthropic')).toBe(false);
+      expect(resolveApiKey('anthropic', 'sk-client')).toBe('sk-client');
+    });
+
     it('returns empty string for unknown provider with no env var', async () => {
       const { resolveApiKey } = await import('@/lib/server/provider-config');
       expect(resolveApiKey('nonexistent-provider')).toBe('');

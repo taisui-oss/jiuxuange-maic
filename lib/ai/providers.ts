@@ -1453,6 +1453,9 @@ export function getModel(config: ModelConfig): ModelWithInfo {
   if (requiresApiKey && !config.apiKey) {
     throw new Error(`API key required for provider: ${config.providerId}`);
   }
+  if (config.apiKey && !/^[\x21-\x7e]+$/.test(config.apiKey)) {
+    throw new Error(`API key for provider ${config.providerId} must contain printable ASCII only.`);
+  }
 
   // Use provided API key, or empty string for providers that don't require one
   const effectiveApiKey = config.apiKey || '';

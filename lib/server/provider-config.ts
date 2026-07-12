@@ -143,6 +143,10 @@ type YamlData = Partial<{
   'web-search': Record<string, Partial<ServerProviderEntry>>;
 }>;
 
+function isSafeHttpCredential(value: string | undefined): value is string {
+  return typeof value === 'string' && /^[\x21-\x7e]+$/.test(value);
+}
+
 function loadYamlFile(filename: string): YamlData {
   try {
     const filePath = path.join(process.cwd(), filename);
@@ -181,13 +185,14 @@ function loadEnvSection(
   // First, add everything from YAML as defaults
   if (yamlSection) {
     for (const [id, entry] of Object.entries(yamlSection)) {
+      const yamlApiKey = isSafeHttpCredential(entry?.apiKey) ? entry.apiKey : undefined;
       if (
         requiresBaseUrlForProvider(id)
           ? !!entry?.baseUrl
-          : entry?.apiKey || (entry?.baseUrl && keylessProviders.has(id))
+          : yamlApiKey || (entry?.baseUrl && keylessProviders.has(id))
       ) {
         result[id] = {
-          apiKey: entry.apiKey || '',
+          apiKey: yamlApiKey || '',
           baseUrl: entry.baseUrl,
           models: entry.models,
           proxy: entry.proxy,
@@ -198,7 +203,11 @@ function loadEnvSection(
 
   // Then, apply env vars (env takes priority over YAML)
   for (const [prefix, providerId] of Object.entries(envMap)) {
-    const envApiKey = process.env[`${prefix}_API_KEY`] || undefined;
+    const rawEnvApiKey = process.env[`${prefix}_API_KEY`] || undefined;
+    const envApiKey = isSafeHttpCredential(rawEnvApiKey) ? rawEnvApiKey : undefined;
+    if (rawEnvApiKey && !envApiKey) {
+      log.warn(`[ServerProviderConfig] Ignored non-ASCII credential for ${providerId}.`);
+    }
     const envBaseUrl = process.env[`${prefix}_BASE_URL`] || undefined;
     const envModelsStr = process.env[`${prefix}_MODELS`];
     const envModels = envModelsStr

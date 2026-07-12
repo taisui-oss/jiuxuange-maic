@@ -74,6 +74,16 @@ describe('OpenAI provider defaults', () => {
     });
   });
 
+  it('rejects non-ASCII API keys before an SDK can construct HTTP headers', () => {
+    expect(() =>
+      getModel({
+        providerId: 'openai',
+        modelId: 'gpt-5.5',
+        apiKey: 'sk-demo-请输入密钥',
+      }),
+    ).toThrow(/printable ASCII/);
+  });
+
   it('includes GPT-5.5 as a built-in OpenAI model', () => {
     expect(getModelInfo('openai', 'gpt-5.5')).toMatchObject({
       id: 'gpt-5.5',
