@@ -24,6 +24,7 @@ import { rectsEqual, type LayoutRect } from './pbl/v2/host-rect';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { shouldShowJiuxuangeAssessment } from '@/lib/c-cubic/assessment/state';
 import { JiuxuangeAssessmentPanel } from '@/components/c-cubic/assessment-panel';
+import { shouldEnterJiuxuangeWorkspaceDirectly } from '@/lib/c-cubic/workspace-entry';
 
 const IMMERSIVE_LAUNCH_DURATION_SECONDS = 0.45;
 // The one-time Hero → workspace launch gets a slower, more deliberate
@@ -185,7 +186,9 @@ function PBLV2Container({
   // what keeps the chat's scroll position and any in-flight Instructor
   // stream alive across the toggle (a remount would reset the scroll and
   // drop the "thinking…" indicator).
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(() =>
+    shouldEnterJiuxuangeWorkspaceDirectly(projectV2),
+  );
   // One-shot request from the Hero to auto-expand on first launch. The
   // layer consumes it on mount so a later return to the workspace (e.g.
   // from Completion) stays docked instead of re-expanding.
