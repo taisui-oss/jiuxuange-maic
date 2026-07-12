@@ -326,4 +326,71 @@ describe('Jiuxuange instructor runtime integration', () => {
     expect(visible).toContain('换个问法');
     expect(visible).not.toContain('不看教材的话');
   });
+
+  it('uses a second-level scaffold when the learner says they do not know twice', async () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_GUIDED_PACKAGE, {
+      now: '2026-07-11T00:00:00.000Z',
+    });
+    project.uiPhase = 'workspace';
+    project.jiuxuange!.orientation = {
+      phase: 'goal',
+      problemDefined: true,
+      baselineCaptured: true,
+      goalConfirmed: false,
+      assessmentUnderstood: false,
+      evidenceMessageIds: ['problem', 'baseline'],
+      attachedDraftIds: ['draft-1'],
+    };
+    const activeTask = project.milestones[0].microtasks[0];
+    project.threads[0].messages.push(
+      {
+        id: 'goal-question-1',
+        agentId: 'jiuxuange-professor',
+        roleType: 'instructor',
+        content: '完成这门课后，你希望自己能独立完成什么样的商业模式判断？',
+        ts: '2026-07-11T00:00:01.000Z',
+        microtaskId: activeTask.id,
+      },
+      {
+        id: 'unknown-1',
+        roleType: 'user',
+        content: '不知道',
+        ts: '2026-07-11T00:00:02.000Z',
+        microtaskId: activeTask.id,
+      },
+      {
+        id: 'goal-question-2',
+        agentId: 'jiuxuange-professor',
+        roleType: 'instructor',
+        content: '把目标再落具体一点：课程结束后，你希望能独立完成哪个商业判断？',
+        ts: '2026-07-11T00:00:03.000Z',
+        microtaskId: activeTask.id,
+      },
+      {
+        id: 'unknown-2',
+        roleType: 'user',
+        content: '不知道',
+        ts: '2026-07-11T00:00:04.000Z',
+        microtaskId: activeTask.id,
+      },
+    );
+
+    const events: PBLSSEEvent[] = [];
+    for await (const event of runInstructorTurn({
+      project,
+      userMessage: '',
+      phase: 'greeting',
+      languageModel: timeoutModel() as never,
+    })) {
+      events.push(event);
+    }
+    const visible = events
+      .filter((event): event is Extract<PBLSSEEvent, { type: 'token' }> => event.type === 'token')
+      .map((event) => event.delta)
+      .join('');
+
+    expect(visible).toContain('临时目标');
+    expect(visible).toContain('比较两条转型路径');
+    expect(visible).not.toContain('把目标再落具体一点');
+  });
 });

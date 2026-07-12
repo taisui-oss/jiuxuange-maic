@@ -191,6 +191,44 @@ describe('Jiuxuange orientation state', () => {
     expect(followUp?.match(/[?？]/g)).toHaveLength(1);
   });
 
+  it('scaffolds repeated uncertainty with a different goal question each time', () => {
+    const state = {
+      ...createOrientationState(),
+      phase: 'goal' as const,
+      problemDefined: true,
+      baselineCaptured: true,
+    };
+
+    const first = nextOrientationQuestion(state, '不知道', 1);
+    const second = nextOrientationQuestion(state, '不知道', 2);
+
+    expect(first).toContain('你家的项目');
+    expect(first).toContain('继续原有客户与渠道');
+    expect(second).toContain('临时目标');
+    expect(second).toContain('比较两条转型路径');
+    expect(second).not.toBe(first);
+    expect(first?.match(/[?？]/g)).toHaveLength(1);
+    expect(second?.match(/[?？]/g)).toHaveLength(1);
+  });
+
+  it('repairs a persisted duplicate after repeated uncertainty', () => {
+    const state = {
+      ...createOrientationState(),
+      phase: 'goal' as const,
+      problemDefined: true,
+      baselineCaptured: true,
+    };
+    const repeated = '把目标再落具体一点：课程结束后，你希望能独立完成哪个商业判断？';
+
+    expect(
+      shouldPromptOrientation(state, [
+        { roleType: 'instructor', content: repeated },
+        { roleType: 'user', content: '不知道' },
+        { roleType: 'instructor', content: repeated },
+      ]),
+    ).toBe(true);
+  });
+
   it('does not complete until the assessment contract has evidence', () => {
     let state = attachHomeOrientation({
       state: createOrientationState(),

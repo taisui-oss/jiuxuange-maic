@@ -1444,6 +1444,7 @@ export async function* runInstructorTurn(
   let learnerSourceMessageId: string | undefined;
   let completedOrientationThisTurn = false;
   let orientationRetryMessage: string | undefined;
+  let orientationRetryAttempt = 1;
 
   // Append the learner turn to the in-memory project so the next
   // system-prompt rebuild sees it. The client is the source of
@@ -1591,6 +1592,17 @@ export async function* runInstructorTurn(
     orientationRetryMessage = instructorThread?.messages.findLast(
       (message) => message.roleType === 'user' && message.content.trim().length > 0,
     )?.content;
+  }
+  if (orientationRetryMessage) {
+    const normalizedRetry = orientationRetryMessage.trim().replace(/\s+/g, ' ');
+    orientationRetryAttempt = Math.max(
+      1,
+      instructorThread?.messages.filter(
+        (message) =>
+          message.roleType === 'user' &&
+          message.content.trim().replace(/\s+/g, ' ') === normalizedRetry,
+      ).length ?? 1,
+    );
   }
 
   const historyMessages = buildHistoryMessagesForInstructor(instructorThread, !!project.jiuxuange);
@@ -1820,7 +1832,11 @@ export async function* runInstructorTurn(
   // blank screen with no way to retry.
   // -------------------------------------------------------------------
   if (project.jiuxuange) {
-    const canonicalQuestion = getJiuxuangeCanonicalQuestion(project, orientationRetryMessage);
+    const canonicalQuestion = getJiuxuangeCanonicalQuestion(
+      project,
+      orientationRetryMessage,
+      orientationRetryAttempt,
+    );
     if (canonicalQuestion) {
       assistantText = completedOrientationThisTurn
         ? `${JIUXUANGE_FORMAL_COURSE_OPENING}\n\n${canonicalQuestion}`

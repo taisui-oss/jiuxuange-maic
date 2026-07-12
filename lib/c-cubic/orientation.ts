@@ -124,6 +124,7 @@ export function attachHomeOrientation(
 function retryOrientationQuestion(
   state: JiuxuangeOrientationState,
   learnerMessage: string,
+  retryAttempt: number,
 ): string | null {
   const normalized = learnerMessage.trim().replace(/\s+/g, ' ');
   if (!normalized) return null;
@@ -139,6 +140,11 @@ function retryOrientationQuestion(
     return '先不用下结论。你会优先核对哪一条事实，再判断这个商业模式是否成立？';
   }
   if (state.phase === 'goal') {
+    if (/^(?:不知道|不清楚|没想好|没有想法)$/u.test(normalized)) {
+      return retryAttempt >= 2
+        ? '我先给你一个可以修改的临时目标：用事实判断原有客户与渠道为什么失效，并比较两条转型路径。你愿意先用这个目标开始吗？'
+        : '不知道也可以。就你家的项目，你更想先学会判断“继续原有客户与渠道”，还是“换一种客户与交易方式”？';
+    }
     return repeatedQuestionComplaint
       ? '你说得对，我换个问法：课程结束后，你希望自己能独立做出哪个现在还做不出的判断？'
       : '把目标再落具体一点：课程结束后，你希望能独立完成哪个商业判断？';
@@ -154,10 +160,11 @@ function retryOrientationQuestion(
 export function nextOrientationQuestion(
   state: JiuxuangeOrientationState,
   learnerMessage?: string,
+  retryAttempt = 1,
 ): string | null {
   if (state.phase === 'problem' || state.phase === 'complete') return null;
   if (learnerMessage) {
-    const retry = retryOrientationQuestion(state, learnerMessage);
+    const retry = retryOrientationQuestion(state, learnerMessage, retryAttempt);
     if (retry) return retry;
   }
   return ORIENTATION_QUESTIONS[state.phase];
@@ -173,12 +180,19 @@ export function shouldPromptOrientation(
 
   const previous = messages.at(-2);
   const canonicalQuestion = nextOrientationQuestion(state);
+  const latestText = latest?.content?.trim() ?? '';
+  const duplicatedEarlier = messages
+    .slice(0, -2)
+    .some(
+      (message) => message.roleType === 'instructor' && message.content?.trim() === latestText,
+    );
   return Boolean(
     latest?.roleType === 'instructor' &&
-      canonicalQuestion &&
-      latest.content?.trim() === canonicalQuestion &&
       previous?.roleType === 'user' &&
-      /(?:问过|重复|刚才问|又问|说过了)/u.test(previous.content?.trim() ?? ''),
+      ((canonicalQuestion &&
+        latestText === canonicalQuestion &&
+        /(?:问过|重复|刚才问|又问|说过了)/u.test(previous.content?.trim() ?? '')) ||
+        (duplicatedEarlier && !hasMeaningfulOrientationAnswer(previous.content ?? ''))),
   );
 }
 
