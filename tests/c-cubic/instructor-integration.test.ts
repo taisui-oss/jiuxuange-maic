@@ -34,6 +34,14 @@ function textModel(text: string): MockLanguageModelV3 {
   });
 }
 
+function timeoutModel(): MockLanguageModelV3 {
+  return new MockLanguageModelV3({
+    doStream: async () => {
+      throw new Error('Cannot connect to API: Connect Timeout Error');
+    },
+  });
+}
+
 function tensionProject() {
   const project = createJiuxuangeProject(BUSINESS_MODEL_PILOT_PACKAGE, {
     now: '2026-07-11T00:00:00.000Z',
@@ -218,5 +226,104 @@ describe('Jiuxuange instructor runtime integration', () => {
     expect(visible).toContain(activeTask.jiuxuange!.questionPrompt);
     expect(visible.match(/正式开始商业模式大课/g)).toHaveLength(1);
     expect(visible.match(/[?？]/g)).toHaveLength(1);
+  });
+
+  it('continues the orientation locally when the model times out without repeating the question', async () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_GUIDED_PACKAGE, {
+      now: '2026-07-11T00:00:00.000Z',
+    });
+    project.uiPhase = 'workspace';
+    project.jiuxuange!.orientation = {
+      phase: 'baseline',
+      problemDefined: true,
+      baselineCaptured: false,
+      goalConfirmed: false,
+      assessmentUnderstood: false,
+      evidenceMessageIds: ['problem'],
+      attachedDraftIds: ['draft-1'],
+    };
+    const activeTask = project.milestones[0].microtasks[0];
+    project.threads[0].messages.push({
+      id: 'short-baseline-answer',
+      roleType: 'user',
+      content: '能赚钱',
+      ts: '2026-07-11T00:00:01.000Z',
+      microtaskId: activeTask.id,
+    });
+
+    const events: PBLSSEEvent[] = [];
+    for await (const event of runInstructorTurn({
+      project,
+      userMessage: '能赚钱',
+      phase: 'instructing',
+      languageModel: timeoutModel() as never,
+    })) {
+      events.push(event);
+    }
+
+    expect(events.some((event) => event.type === 'error')).toBe(false);
+    const messagePatch = events.find(
+      (event): event is Extract<PBLSSEEvent, { type: 'project_patch' }> =>
+        event.type === 'project_patch' && event.patch.kind === 'message',
+    );
+    if (!messagePatch || messagePatch.patch.kind !== 'message') {
+      throw new Error('Expected local fallback message');
+    }
+    expect(messagePatch.patch.message.content).toContain('赚钱是结果');
+    expect(messagePatch.patch.message.content).not.toContain('不看教材的话');
+    expect(project.jiuxuange!.orientation?.phase).toBe('baseline');
+  });
+
+  it('uses the last learner message when recovering an interrupted orientation turn', async () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_GUIDED_PACKAGE, {
+      now: '2026-07-11T00:00:00.000Z',
+    });
+    project.uiPhase = 'workspace';
+    project.jiuxuange!.orientation = {
+      phase: 'baseline',
+      problemDefined: true,
+      baselineCaptured: false,
+      goalConfirmed: false,
+      assessmentUnderstood: false,
+      evidenceMessageIds: ['problem'],
+      attachedDraftIds: ['draft-1'],
+    };
+    const activeTask = project.milestones[0].microtasks[0];
+    project.threads[0].messages.push(
+      {
+        id: 'baseline-question',
+        agentId: 'jiuxuange-professor',
+        roleType: 'instructor',
+        content: '不看教材的话，你现在会怎样判断一家企业的商业模式是否成立？',
+        ts: '2026-07-11T00:00:01.000Z',
+        microtaskId: activeTask.id,
+      },
+      {
+        id: 'repeat-complaint',
+        roleType: 'user',
+        content: '你问过这个问题了',
+        ts: '2026-07-11T00:00:02.000Z',
+        microtaskId: activeTask.id,
+      },
+    );
+
+    const events: PBLSSEEvent[] = [];
+    for await (const event of runInstructorTurn({
+      project,
+      userMessage: '',
+      phase: 'greeting',
+      languageModel: timeoutModel() as never,
+    })) {
+      events.push(event);
+    }
+
+    const visible = events
+      .filter((event): event is Extract<PBLSSEEvent, { type: 'token' }> => event.type === 'token')
+      .map((event) => event.delta)
+      .join('');
+    expect(events.some((event) => event.type === 'error')).toBe(false);
+    expect(visible).toContain('你说得对');
+    expect(visible).toContain('换个问法');
+    expect(visible).not.toContain('不看教材的话');
   });
 });

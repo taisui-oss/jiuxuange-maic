@@ -25,6 +25,32 @@ describe('Jiuxuange orientation state', () => {
       false,
     );
   });
+
+  it('repairs a persisted repeated question after the learner already complained', () => {
+    const state = {
+      ...createOrientationState(),
+      phase: 'baseline' as const,
+      problemDefined: true,
+    };
+    const repeated = '不看教材的话，你现在会怎样判断一家企业的商业模式是否成立？';
+
+    expect(
+      shouldPromptOrientation(state, [
+        { roleType: 'instructor', content: repeated },
+        { roleType: 'user', content: '你问过这个问题了' },
+        { roleType: 'instructor', content: repeated },
+      ]),
+    ).toBe(true);
+    expect(
+      shouldPromptOrientation(state, [
+        { roleType: 'user', content: '你问过这个问题了' },
+        {
+          roleType: 'instructor',
+          content: '你说得对，我换个问法：什么事实会让你改变判断？',
+        },
+      ]),
+    ).toBe(false);
+  });
   const now = '2026-07-11T08:00:00.000Z';
   const homeMessages = [
     {
@@ -134,6 +160,35 @@ describe('Jiuxuange orientation state', () => {
     expect(advanceOrientationFromMessage(state, { id: 'formula', content: '好的', now })).toEqual(
       state,
     );
+  });
+
+  it('deepens a short profit-only baseline answer instead of repeating the same question', () => {
+    const state = {
+      ...createOrientationState(),
+      phase: 'baseline' as const,
+      problemDefined: true,
+    };
+
+    const followUp = nextOrientationQuestion(state, '能赚钱');
+
+    expect(followUp).toContain('赚钱是结果');
+    expect(followUp).toContain('事实');
+    expect(followUp).not.toBe('不看教材的话，你现在会怎样判断一家企业的商业模式是否成立？');
+    expect(followUp?.match(/[?？]/g)).toHaveLength(1);
+  });
+
+  it('acknowledges a repeated-question complaint and changes the angle', () => {
+    const state = {
+      ...createOrientationState(),
+      phase: 'baseline' as const,
+      problemDefined: true,
+    };
+
+    const followUp = nextOrientationQuestion(state, '你问过这个问题了');
+
+    expect(followUp).toContain('你说得对');
+    expect(followUp).toContain('换个问法');
+    expect(followUp?.match(/[?？]/g)).toHaveLength(1);
   });
 
   it('does not complete until the assessment contract has evidence', () => {

@@ -121,17 +121,65 @@ export function attachHomeOrientation(
   };
 }
 
-export function nextOrientationQuestion(state: JiuxuangeOrientationState): string | null {
+function retryOrientationQuestion(
+  state: JiuxuangeOrientationState,
+  learnerMessage: string,
+): string | null {
+  const normalized = learnerMessage.trim().replace(/\s+/g, ' ');
+  if (!normalized) return null;
+  const repeatedQuestionComplaint = /(?:问过|重复|刚才问|又问|说过了)/u.test(normalized);
+
+  if (state.phase === 'baseline') {
+    if (repeatedQuestionComplaint) {
+      return '你说得对，我换个问法：以你家的项目为例，什么事实会让你判断现在的赚钱方式已经不可持续？';
+    }
+    if (/(?:赚钱|盈利|利润|收入)/u.test(normalized)) {
+      return '赚钱是结果。你会先看哪一组事实，来判断这种赚钱方式能不能持续？';
+    }
+    return '先不用下结论。你会优先核对哪一条事实，再判断这个商业模式是否成立？';
+  }
+  if (state.phase === 'goal') {
+    return repeatedQuestionComplaint
+      ? '你说得对，我换个问法：课程结束后，你希望自己能独立做出哪个现在还做不出的判断？'
+      : '把目标再落具体一点：课程结束后，你希望能独立完成哪个商业判断？';
+  }
+  if (state.phase === 'assessment_contract') {
+    return repeatedQuestionComplaint
+      ? '你说得对，我换个问法：什么证据会让你愿意修改自己的最终判断？'
+      : '为了让结论可以被检验，你准备保留哪一种可能推翻它的证据？';
+  }
+  return null;
+}
+
+export function nextOrientationQuestion(
+  state: JiuxuangeOrientationState,
+  learnerMessage?: string,
+): string | null {
   if (state.phase === 'problem' || state.phase === 'complete') return null;
+  if (learnerMessage) {
+    const retry = retryOrientationQuestion(state, learnerMessage);
+    if (retry) return retry;
+  }
   return ORIENTATION_QUESTIONS[state.phase];
 }
 
 export function shouldPromptOrientation(
   state: JiuxuangeOrientationState | undefined,
-  messages: readonly { roleType: string }[],
+  messages: readonly { roleType: string; content?: string }[],
 ): boolean {
   if (!state || state.phase === 'complete' || messages.length === 0) return false;
-  return messages.at(-1)?.roleType === 'user';
+  const latest = messages.at(-1);
+  if (latest?.roleType === 'user') return true;
+
+  const previous = messages.at(-2);
+  const canonicalQuestion = nextOrientationQuestion(state);
+  return Boolean(
+    latest?.roleType === 'instructor' &&
+      canonicalQuestion &&
+      latest.content?.trim() === canonicalQuestion &&
+      previous?.roleType === 'user' &&
+      /(?:问过|重复|刚才问|又问|说过了)/u.test(previous.content?.trim() ?? ''),
+  );
 }
 
 function hasMeaningfulOrientationAnswer(content: string): boolean {

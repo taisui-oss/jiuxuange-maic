@@ -100,10 +100,11 @@ export function selectJiuxuangeRole(project: JiuxuangeRuntimeProject): Jiuxuange
 
 export function getJiuxuangeCanonicalQuestion(
   project: JiuxuangeRuntimeProject,
+  learnerRetryMessage?: string,
 ): string | undefined {
   const orientation = project.jiuxuange?.orientation;
   if (orientation && orientation.phase !== 'complete') {
-    return nextOrientationQuestion(orientation) ?? undefined;
+    return nextOrientationQuestion(orientation, learnerRetryMessage) ?? undefined;
   }
   return getCurrentJiuxuangeMicrotask(project)?.jiuxuange?.questionPrompt.trim() || undefined;
 }

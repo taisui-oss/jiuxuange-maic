@@ -1438,8 +1438,12 @@ export async function* runInstructorTurn(
   // "enter scenario" button). Double-gated by the project-level master
   // signal + the stage marker; ordinary projects are never affected.
   const scenarioPrepStage = !!project.scenario && milestone.scenarioStage === 'prep';
+  const deterministicOrientationTurn = Boolean(
+    project.jiuxuange?.orientation && project.jiuxuange.orientation.phase !== 'complete',
+  );
   let learnerSourceMessageId: string | undefined;
   let completedOrientationThisTurn = false;
+  let orientationRetryMessage: string | undefined;
 
   // Append the learner turn to the in-memory project so the next
   // system-prompt rebuild sees it. The client is the source of
@@ -1503,6 +1507,9 @@ export async function* runInstructorTurn(
         content: userMessage,
         now,
       });
+      if (orientation.phase === orientationBefore.phase) {
+        orientationRetryMessage = userMessage;
+      }
       completedOrientationThisTurn = orientation.phase === 'complete';
       if (completedOrientationThisTurn) {
         orientation.formalOpeningDeliveredAt = now;
@@ -1576,6 +1583,15 @@ export async function* runInstructorTurn(
     const r = project.roles.find((r) => r.id === t.agentId);
     return r?.type === 'instructor';
   });
+  if (
+    !orientationRetryMessage &&
+    phase !== 'instructing' &&
+    project.jiuxuange?.orientation?.phase !== 'complete'
+  ) {
+    orientationRetryMessage = instructorThread?.messages.findLast(
+      (message) => message.roleType === 'user' && message.content.trim().length > 0,
+    )?.content;
+  }
 
   const historyMessages = buildHistoryMessagesForInstructor(instructorThread, !!project.jiuxuange);
 
@@ -1683,90 +1699,110 @@ export async function* runInstructorTurn(
   // Whether the active microtask advanced this turn. Ordinary teaching never
   // advances; scenario wrapup setup may still auto-complete below.
   let mainTurnAdvanced = false;
-  try {
-    // Greeting / Setup turns are pure-text openers — no tools. Exposing the
-    // teaching tools there lets eager-tool models emit a tool call instead of
-    // speaking, leaving the learner with an empty chat. The instructing path
-    // exposes only the two non-advance tools (record_observation /
-    // adjust_difficulty).
-    const result = withThinkingDisabled(() =>
-      streamText({
-        model: languageModel,
-        system: systemPrompt,
-        messages: finalMessages,
-        // SCENARIO ONLY: prep-stage turns are pure Q&A — expose NO tools so the
-        // model cannot record/advance; advancing the prep stage is the sidebar
-        // "enter scenario" button's job.
-        ...(phase === 'instructing' && !scenarioPrepStage
-          ? { tools, stopWhen: stepCountIs(MAX_INSTRUCTOR_STEPS) }
-          : {}),
-        ...(thinkingConfig
-          ? { providerOptions: resolveThinkingProviderOptions(languageModel, thinkingConfig) }
-          : {}),
-        ...(signal ? { abortSignal: signal } : {}),
-      }),
-    );
+  if (!deterministicOrientationTurn) {
+    try {
+      // Greeting / Setup turns are pure-text openers — no tools. Exposing the
+      // teaching tools there lets eager-tool models emit a tool call instead of
+      // speaking, leaving the learner with an empty chat. The instructing path
+      // exposes only the two non-advance tools (record_observation /
+      // adjust_difficulty).
+      const result = withThinkingDisabled(() =>
+        streamText({
+          model: languageModel,
+          system: systemPrompt,
+          messages: finalMessages,
+          // SCENARIO ONLY: prep-stage turns are pure Q&A — expose NO tools so the
+          // model cannot record/advance; advancing the prep stage is the sidebar
+          // "enter scenario" button's job.
+          ...(phase === 'instructing' && !scenarioPrepStage
+            ? { tools, stopWhen: stepCountIs(MAX_INSTRUCTOR_STEPS) }
+            : {}),
+          ...(thinkingConfig
+            ? { providerOptions: resolveThinkingProviderOptions(languageModel, thinkingConfig) }
+            : {}),
+          ...(signal ? { abortSignal: signal } : {}),
+          ...(project.jiuxuange ? { maxRetries: 0 } : {}),
+        }),
+      );
 
-    for await (const part of result.fullStream) {
-      switch (part.type) {
-        case 'text-delta': {
-          // ai SDK 6.x uses `text` for the chunk content.
-          const delta =
-            (part as unknown as { text?: string; textDelta?: string }).text ??
-            (part as unknown as { textDelta?: string }).textDelta ??
-            '';
-          if (delta) {
-            assistantText += delta;
-            if (!project.jiuxuange) yield { type: 'token', delta };
+      for await (const part of result.fullStream) {
+        switch (part.type) {
+          case 'text-delta': {
+            // ai SDK 6.x uses `text` for the chunk content.
+            const delta =
+              (part as unknown as { text?: string; textDelta?: string }).text ??
+              (part as unknown as { textDelta?: string }).textDelta ??
+              '';
+            if (delta) {
+              assistantText += delta;
+              if (!project.jiuxuange) yield { type: 'token', delta };
+            }
+            break;
           }
-          break;
-        }
-        case 'tool-call': {
-          // Only the two non-advance teaching tools reach here
-          // (record_observation / adjust_difficulty); forward them as-is.
-          yield {
-            type: 'tool_call',
-            toolName: part.toolName,
-            args: (part.input ?? {}) as Record<string, unknown>,
-            toolCallId: part.toolCallId,
-          };
-          break;
-        }
-        case 'tool-result': {
-          // Flush engagement / proficiency patches queued by the tool execute,
-          // in server-mutation order.
-          while (pendingPatches.length > 0) {
-            yield pendingPatches.shift()!;
+          case 'tool-call': {
+            // Only the two non-advance teaching tools reach here
+            // (record_observation / adjust_difficulty); forward them as-is.
+            yield {
+              type: 'tool_call',
+              toolName: part.toolName,
+              args: (part.input ?? {}) as Record<string, unknown>,
+              toolCallId: part.toolCallId,
+            };
+            break;
           }
-          break;
+          case 'tool-result': {
+            // Flush engagement / proficiency patches queued by the tool execute,
+            // in server-mutation order.
+            while (pendingPatches.length > 0) {
+              yield pendingPatches.shift()!;
+            }
+            break;
+          }
+          case 'error': {
+            const errAny = (part as unknown as { error?: unknown }).error;
+            if (project.jiuxuange) {
+              log.warn(
+                `Jiuxuange model stream degraded to local teaching fallback: ${
+                  errAny instanceof Error ? errAny.message : String(errAny ?? 'unknown LLM error')
+                }`,
+              );
+              assistantText = '';
+              break;
+            }
+            yield {
+              type: 'error',
+              code: 'LLM_ERROR',
+              message:
+                errAny instanceof Error ? errAny.message : String(errAny ?? 'unknown LLM error'),
+            };
+            break;
+          }
+          case 'finish': {
+            // End-of-step. Final assistant message is committed below.
+            break;
+          }
+          default:
+            break;
         }
-        case 'error': {
-          const errAny = (part as unknown as { error?: unknown }).error;
-          yield {
-            type: 'error',
-            code: 'LLM_ERROR',
-            message:
-              errAny instanceof Error ? errAny.message : String(errAny ?? 'unknown LLM error'),
-          };
-          break;
+      }
+    } catch (err) {
+      log.warn(`Instructor turn threw: ${err instanceof Error ? err.message : String(err)}`);
+      if (project.jiuxuange && !signal?.aborted) {
+        assistantText = '';
+      } else {
+        if (signal?.aborted) {
+          yield { type: 'done' };
+          return;
         }
-        case 'finish': {
-          // End-of-step. Final assistant message is committed below.
-          break;
-        }
-        default:
-          break;
+        yield {
+          type: 'error',
+          code: 'STREAM_ERROR',
+          message: err instanceof Error ? err.message : String(err),
+        };
+        yield { type: 'done' };
+        return;
       }
     }
-  } catch (err) {
-    log.warn(`Instructor turn threw: ${err instanceof Error ? err.message : String(err)}`);
-    yield {
-      type: 'error',
-      code: 'STREAM_ERROR',
-      message: err instanceof Error ? err.message : String(err),
-    };
-    yield { type: 'done' };
-    return;
   }
 
   // The committed instructor message is the streamed assistant text, lightly
@@ -1784,7 +1820,7 @@ export async function* runInstructorTurn(
   // blank screen with no way to retry.
   // -------------------------------------------------------------------
   if (project.jiuxuange) {
-    const canonicalQuestion = getJiuxuangeCanonicalQuestion(project);
+    const canonicalQuestion = getJiuxuangeCanonicalQuestion(project, orientationRetryMessage);
     if (canonicalQuestion) {
       assistantText = completedOrientationThisTurn
         ? `${JIUXUANGE_FORMAL_COURSE_OPENING}\n\n${canonicalQuestion}`
