@@ -10,11 +10,15 @@ import type {
 import { validateCoursePackage } from './course-package/validate';
 import type { StageStoreData } from '@/lib/utils/stage-storage';
 import { getJiuxuangeRoleProfiles } from './agent-prompts';
+import { createOrientationState } from './orientation';
+import { createAssessmentState } from './assessment/state';
 
 export interface CreateJiuxuangeProjectOptions {
   now: string;
   startModuleId?: string;
   caseId?: string;
+  sessionVariantId?: string;
+  learnerId?: string;
 }
 
 export interface CreateJiuxuangeStageOptions extends CreateJiuxuangeProjectOptions {
@@ -80,6 +84,10 @@ function learnerFactSummary(selectedCase: JiuxuangeCase): string {
     .join('\n');
 }
 
+function supportsOrientation(version: string): boolean {
+  return /^2(?:\.|$)/.test(version.trim());
+}
+
 export function createJiuxuangeProject(
   inputPackage: JiuxuangeCoursePackage,
   options: CreateJiuxuangeProjectOptions,
@@ -90,51 +98,66 @@ export function createJiuxuangeProject(
 
   const modules = options.startModuleId
     ? pkg.modules.filter((module) => module.id === options.startModuleId)
-    : pkg.modules.slice(0, 1);
+    : supportsOrientation(pkg.version)
+      ? pkg.modules
+      : pkg.modules.slice(0, 1);
   if (modules.length === 0) {
     throw new Error(`Unknown Jiuxuange module: ${options.startModuleId}`);
   }
 
-  const defaultCaseId = modules[0].caseIds[0];
+  const defaultCaseId = modules.find((module) => module.caseIds.length > 0)?.caseIds[0];
   const caseId = options.caseId ?? defaultCaseId;
+  if (!caseId) throw new Error('Jiuxuange course package requires at least one runnable case');
   const selectedCase = requireRunnableCase(pkg, caseId);
-  const milestones = modules.map((module, moduleIndex) => ({
-    id: `jgx-milestone-${module.id}`,
-    title: '当前学习任务',
-    description: `${module.learningObjective}\n\n当前案例事实：\n${learnerFactSummary(selectedCase)}`,
-    status: moduleIndex === 0 ? ('active' as const) : ('locked' as const),
-    order: moduleIndex,
-    microtasks: module.questionTemplateIds.map((questionTemplateId, taskIndex) => {
-      const question = pkg.questionTemplates[questionTemplateId];
-      return {
-        id: `jgx-task-${module.id}-${questionTemplateId}`,
-        title: taskIndex === 0 ? '从事实开始' : '继续往下追问',
-        status: moduleIndex === 0 && taskIndex === 0 ? ('in_progress' as const) : ('todo' as const),
-        assignee: 'user' as const,
-        hints: [],
-        order: taskIndex,
-        jiuxuange: {
-          phase: question.phase,
-          questionTemplateId,
-          questionPrompt: question.prompt,
-          evidenceRuleIds: question.evidenceRuleIds,
-          preferredRole: roleForPhase(question.phase),
-          hintLevel: 0 as const,
-        },
-      };
-    }),
-    documents: [
-      {
-        id: `jgx-facts-${selectedCase.id}`,
-        title: '案例观察卡',
-        content: factDocument(selectedCase),
-        docType: 'reference' as const,
-      },
-    ],
-    briefing: '我们会从一条可核对的事实开始，慢慢形成你自己的判断。',
-    completionCriteria: '学员已引用案例事实形成因果判断，并给出可推翻该判断的条件。',
-    debrief: '你已经把概念、项目事实和一项可反证的判断连了起来。',
-  }));
+  const milestones = modules.map((module, moduleIndex) => {
+    const moduleCaseId = module.caseIds[0];
+    const moduleCase = moduleCaseId ? requireRunnableCase(pkg, moduleCaseId) : undefined;
+    return {
+      id: `jgx-milestone-${module.id}`,
+      title: supportsOrientation(pkg.version) ? module.title : '当前学习任务',
+      description: moduleCase
+        ? `${module.learningObjective}\n\n当前案例事实：\n${learnerFactSummary(moduleCase)}`
+        : module.learningObjective,
+      status: moduleIndex === 0 ? ('active' as const) : ('locked' as const),
+      order: moduleIndex,
+      microtasks: module.questionTemplateIds.map((questionTemplateId, taskIndex) => {
+        const question = pkg.questionTemplates[questionTemplateId];
+        return {
+          id: `jgx-task-${module.id}-${questionTemplateId}`,
+          title: taskIndex === 0 ? '从事实开始' : '继续往下追问',
+          status:
+            moduleIndex === 0 && taskIndex === 0 ? ('in_progress' as const) : ('todo' as const),
+          assignee: 'user' as const,
+          hints: [],
+          order: taskIndex,
+          jiuxuange: {
+            phase: question.phase,
+            questionTemplateId,
+            questionPrompt: question.prompt,
+            evidenceRuleIds: question.evidenceRuleIds,
+            preferredRole: roleForPhase(question.phase),
+            hintLevel: 0 as const,
+            conceptNodeId: question.conceptNodeId,
+            caseId: question.caseId,
+            casePhase: question.casePhase,
+          },
+        };
+      }),
+      documents: moduleCase
+        ? [
+            {
+              id: `jgx-facts-${moduleCase.id}`,
+              title: '案例观察卡',
+              content: factDocument(moduleCase),
+              docType: 'reference' as const,
+            },
+          ]
+        : [],
+      briefing: '我们会从一条可核对的事实开始，慢慢形成你自己的判断。',
+      completionCriteria: '学员已引用案例事实形成因果判断，并给出可推翻该判断的条件。',
+      debrief: '你已经把概念、项目事实和一项可反证的判断连了起来。',
+    };
+  });
 
   return {
     uiPhase: 'hero',
@@ -164,8 +187,17 @@ export function createJiuxuangeProject(
       releaseStatus: pkg.releaseStatus,
       factPackHash: stableCoursePackageHash(pkg),
       caseId,
-      runtimeMode: selectedCase.mode === 'synthetic_demo' ? 'demo' : 'real_pilot',
+      runtimeMode:
+        selectedCase.mode === 'synthetic_demo'
+          ? 'demo'
+          : selectedCase.mode === 'curated_case'
+            ? 'curated_course'
+            : 'real_pilot',
       formalScoringEnabled: pkg.formalScoringEnabled,
+      ...(options.sessionVariantId ? { sessionVariantId: options.sessionVariantId } : {}),
+      ...(options.learnerId ? { learnerId: options.learnerId } : {}),
+      ...(supportsOrientation(pkg.version) ? { orientation: createOrientationState() } : {}),
+      ...(supportsOrientation(pkg.version) ? { assessment: createAssessmentState() } : {}),
     },
   };
 }

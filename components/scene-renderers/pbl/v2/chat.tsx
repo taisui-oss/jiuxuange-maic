@@ -46,6 +46,7 @@ import { TaskEvaluationCard } from './eval-cards/task-evaluation-card';
 import { MilestoneCard } from './eval-cards/milestone-card';
 import { CompletionCtaCard } from './eval-cards/completion-cta-card';
 import type { SubmissionEvaluationStatus } from './submission';
+import { shouldPromptOrientation } from '@/lib/c-cubic/orientation';
 import {
   MILESTONE_DIVIDER_PREFIX,
   TASK_DIVIDER_PREFIX,
@@ -360,8 +361,21 @@ export function PBLV2Chat({
     if (!activeAgentId) return;
     // `instructorStreaming` (ref-counted in the renderer) also guards a
     // run in flight from another instance, so we never double-open.
-    if (messages.length > 0 || draftAssistant || streaming || instructorStreaming) return;
-    const key = `${project.createdAt}:${activeAgentId}`;
+    const orientationPromptNeeded = shouldPromptOrientation(
+      project.jiuxuange?.orientation,
+      messages,
+    );
+    if (
+      (!orientationPromptNeeded && messages.length > 0) ||
+      draftAssistant ||
+      streaming ||
+      instructorStreaming
+    )
+      return;
+    const orientationKey = orientationPromptNeeded
+      ? `:orientation:${project.jiuxuange?.orientation?.phase}:${project.jiuxuange?.orientation?.evidenceMessageIds.length}`
+      : '';
+    const key = `${project.createdAt}:${activeAgentId}${orientationKey}`;
     if (autoGreetingRef.current === key) return;
     autoGreetingRef.current = key;
 
@@ -390,7 +404,7 @@ export function PBLV2Chat({
     project,
     activeAgentId,
     isRoleplay,
-    messages.length,
+    messages,
     draftAssistant,
     streaming,
     instructorStreaming,

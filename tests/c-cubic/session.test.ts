@@ -9,6 +9,7 @@ import {
   type LearningSessionRef,
 } from '@/lib/c-cubic/session';
 import { BUSINESS_MODEL_PILOT_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v1';
+import { BUSINESS_MODEL_GUIDED_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v2';
 
 const BASE = {
   learnerId: 'learner-a',
@@ -18,12 +19,19 @@ const BASE = {
 };
 
 beforeEach(async () => {
-  await db.transaction('rw', db.learningPaths, db.courseProgress, db.stages, db.scenes, async () => {
-    await db.learningPaths.clear();
-    await db.courseProgress.clear();
-    await db.stages.clear();
-    await db.scenes.clear();
-  });
+  await db.transaction(
+    'rw',
+    db.learningPaths,
+    db.courseProgress,
+    db.stages,
+    db.scenes,
+    async () => {
+      await db.learningPaths.clear();
+      await db.courseProgress.clear();
+      await db.stages.clear();
+      await db.scenes.clear();
+    },
+  );
 });
 
 describe('business model unified session', () => {
@@ -47,6 +55,77 @@ describe('business model unified session', () => {
 
     expect(second).toEqual(first);
     expect(await db.stages.count()).toBe(1);
+  });
+
+  it('attaches the resolved home exchange once to the V2 course session', async () => {
+    const coursePackage = {
+      ...structuredClone(BUSINESS_MODEL_PILOT_PACKAGE),
+      version: '2.0.0-guided-course',
+    };
+    const homeOrientationDraft = {
+      id: 'orientation-1',
+      learnerId: BASE.learnerId,
+      status: 'resolved' as const,
+      recommendedCourseId: 'business-model' as const,
+      createdAt: '2026-07-11T00:00:00.000Z',
+      resolvedAt: '2026-07-11T00:01:00.000Z',
+      initialMessages: [
+        { role: 'learner' as const, content: '加盟店增长很快，但续约率持续下降。' },
+        { role: 'professor' as const, content: '你最终需要形成什么判断？' },
+        { role: 'learner' as const, content: '我要判断是收费方式问题，还是总部价值不足。' },
+      ],
+    };
+
+    const ref = await getOrCreateBusinessModelSession({
+      ...BASE,
+      coursePackage,
+      homeOrientationDraft,
+      stageIdFactory: () => 'stage-oriented',
+    });
+    await getOrCreateBusinessModelSession({
+      ...BASE,
+      coursePackage,
+      homeOrientationDraft,
+      stageIdFactory: () => 'stage-duplicate',
+    });
+
+    const data = await loadStageData(ref.stageId);
+    const scene = data?.scenes.find((candidate) => candidate.id === ref.sceneId);
+    if (!scene || scene.content.type !== 'pbl' || !scene.content.projectV2) {
+      throw new Error('Expected Jiuxuange PBL scene');
+    }
+    expect(scene.content.projectV2.threads[0].messages).toHaveLength(3);
+    expect(scene.content.projectV2.jiuxuange?.orientation).toMatchObject({
+      phase: 'baseline',
+      problemDefined: true,
+      attachedDraftIds: ['orientation-1'],
+    });
+    expect(
+      scene.content.projectV2.jiuxuange?.orientation?.formalOpeningDeliveredAt,
+    ).toBeUndefined();
+  });
+
+  it('reuses one full guided-course session instead of keying it by the first module case', async () => {
+    const first = await getOrCreateBusinessModelSession({
+      learnerId: 'guided-learner',
+      coursePackage: BUSINESS_MODEL_GUIDED_PACKAGE,
+      stageIdFactory: () => 'guided-stage',
+    });
+    const second = await getOrCreateBusinessModelSession({
+      learnerId: 'guided-learner',
+      coursePackage: BUSINESS_MODEL_GUIDED_PACKAGE,
+      stageIdFactory: () => 'duplicate-stage',
+    });
+    const data = await loadStageData(first.stageId);
+    const scene = data?.scenes.find((candidate) => candidate.id === first.sceneId);
+    if (!scene || scene.content.type !== 'pbl' || !scene.content.projectV2) {
+      throw new Error('Expected guided PBL scene');
+    }
+
+    expect(second).toEqual(first);
+    expect(first.projectId).toBe('guided-course');
+    expect(scene.content.projectV2.milestones).toHaveLength(10);
+    expect(scene.content.projectV2.jiuxuange?.sessionVariantId).toBe('guided-course');
   });
 
   it('separates learners and package versions', async () => {

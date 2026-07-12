@@ -52,3 +52,11 @@ export function shouldShowVocationalTestUi(): boolean {
 export function shouldUseCubicUnifiedLearning(): boolean {
   return process.env.NEXT_PUBLIC_C_CUBIC_UNIFIED_LEARNING === 'true';
 }
+
+/**
+ * Gates the complete guided-course chain while preserving the current
+ * unified B-module experience as an immediate rollback target.
+ */
+export function shouldUseCubicGuidedCourseV2(): boolean {
+  return process.env.NEXT_PUBLIC_C_CUBIC_GUIDED_COURSE_V2 === 'true';
+}

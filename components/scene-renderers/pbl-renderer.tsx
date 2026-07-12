@@ -22,6 +22,8 @@ import { PBLV2Workspace } from './pbl/v2/workspace';
 import { PBLV2Completion } from './pbl/v2/completion';
 import { rectsEqual, type LayoutRect } from './pbl/v2/host-rect';
 import { useI18n } from '@/lib/hooks/use-i18n';
+import { shouldShowJiuxuangeAssessment } from '@/lib/c-cubic/assessment/state';
+import { JiuxuangeAssessmentPanel } from '@/components/c-cubic/assessment-panel';
 
 const IMMERSIVE_LAUNCH_DURATION_SECONDS = 0.45;
 // The one-time Hero → workspace launch gets a slower, more deliberate
@@ -411,6 +413,7 @@ function PBLV2WorkspaceLayer({
 }) {
   const { t } = useI18n();
   const isCompleted = project.uiPhase === 'completed';
+  const showJiuxuangeAssessment = shouldShowJiuxuangeAssessment(project);
   const [hostRect, setHostRect] = useState<LayoutRect>(() => measureHostRect(hostRef));
 
   // Animate ONLY the expand/collapse toggle (and the launch auto-expand).
@@ -613,7 +616,9 @@ function PBLV2WorkspaceLayer({
           </>
         )}
         <div className="relative z-10 h-full w-full">
-          {isCompleted ? (
+          {showJiuxuangeAssessment ? (
+            <JiuxuangeAssessmentPanel project={project} onProjectChange={onProjectChange} />
+          ) : isCompleted ? (
             <PBLV2Completion
               project={project}
               onBack={() => onProjectChange({ ...project, uiPhase: 'workspace' })}

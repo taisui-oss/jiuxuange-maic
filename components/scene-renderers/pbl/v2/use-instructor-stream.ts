@@ -48,6 +48,7 @@ import type { PBLSSEEvent } from '@/lib/pbl/v2/api/sse';
 import { trackSubmissionScore } from '@/lib/pbl/v2/operations/dynamic-signals';
 import { normalizeProjectRuntime } from '@/lib/pbl/v2/operations/progress';
 import { getCurrentModelConfig } from '@/lib/utils/model-config';
+import { setAsciiHeader } from '@/lib/utils/http-headers';
 import { createLogger } from '@/lib/logger';
 import { applyInstructorEvent } from './apply-instructor-event';
 
@@ -292,11 +293,11 @@ export async function runOneStream(args: OneStreamArgs): Promise<PBLProjectV2> {
   const modelConfig = getCurrentModelConfig();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    'x-model': modelConfig.modelString,
-    'x-api-key': modelConfig.apiKey,
   };
-  if (modelConfig.baseUrl) headers['x-base-url'] = modelConfig.baseUrl;
-  if (modelConfig.providerType) headers['x-provider-type'] = modelConfig.providerType;
+  setAsciiHeader(headers, 'x-model', modelConfig.modelString);
+  setAsciiHeader(headers, 'x-api-key', modelConfig.apiKey);
+  setAsciiHeader(headers, 'x-base-url', modelConfig.baseUrl);
+  setAsciiHeader(headers, 'x-provider-type', modelConfig.providerType);
   // PBL Planner already reads `x-user-locale` from this header for
   // generation-time language lock; the evaluator route does NOT
   // need it (the project already carries `language`) but forwarding
@@ -304,7 +305,7 @@ export async function runOneStream(args: OneStreamArgs): Promise<PBLProjectV2> {
   // may grow to depend on the UI locale.
   try {
     const stored = localStorage.getItem('locale');
-    if (stored) headers['x-user-locale'] = stored;
+    setAsciiHeader(headers, 'x-user-locale', stored ?? undefined);
   } catch {
     // localStorage unavailable; skip silently.
   }

@@ -3,12 +3,14 @@ import {
   buildJiuxuangeRuntimeBlock,
   countLearnerFacingQuestions,
   enforceOneLearnerFacingQuestion,
+  getJiuxuangeCanonicalQuestion,
   getCurrentJiuxuangeMicrotask,
   normalizeJiuxuangeReply,
   roleForJiuxuangePhase,
   selectJiuxuangeRole,
   type JiuxuangeRuntimeProject,
 } from '@/lib/c-cubic/runtime';
+import { createOrientationState } from '@/lib/c-cubic/orientation';
 
 function projectAtPhase(
   phase: Parameters<typeof roleForJiuxuangePhase>[0],
@@ -47,6 +49,20 @@ function projectAtPhase(
 }
 
 describe('Jiuxuange runtime helpers', () => {
+  it('keeps the course on mandatory orientation before concept questions', () => {
+    const project = projectAtPhase('ground');
+    project.jiuxuange = {
+      courseVersion: '2.0.0-guided-course',
+      orientation: { ...createOrientationState(), phase: 'baseline', problemDefined: true },
+    };
+
+    expect(getJiuxuangeCanonicalQuestion(project)).toContain('不看教材');
+    const block = buildJiuxuangeRuntimeBlock(project, []);
+    expect(block).toContain('本轮唯一可见角色：教授');
+    expect(block).toContain('不看教材');
+    expect(block).not.toContain('把门店增长和续约下降放在一起');
+  });
+
   it('finds only the in-progress microtask in the active milestone', () => {
     expect(getCurrentJiuxuangeMicrotask(projectAtPhase('tension'))?.id).toBe('task-tension');
   });

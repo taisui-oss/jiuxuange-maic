@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BUSINESS_MODEL_PILOT_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v1';
+import { BUSINESS_MODEL_GUIDED_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v2';
 import {
   createJiuxuangeProject,
   createJiuxuangeStage,
@@ -41,13 +42,71 @@ describe('Jiuxuange PBL project factory', () => {
     expect(project.threads).toHaveLength(1);
     expect(project.threads[0].agentId).toBe('jiuxuange-professor');
     expect(project.evaluations).toEqual([]);
-    expect(project.milestones[0].microtasks.map((task) => task.jiuxuange?.evidenceRuleIds)).toEqual([
-      ['fact_grounding'],
-      ['concept_to_case'],
-      ['fact_grounding'],
-      ['fact_grounding'],
-      ['case_to_handover'],
+    expect(project.milestones[0].microtasks.map((task) => task.jiuxuange?.evidenceRuleIds)).toEqual(
+      [
+        ['fact_grounding'],
+        ['concept_to_case'],
+        ['fact_grounding'],
+        ['fact_grounding'],
+        ['case_to_handover'],
+      ],
+    );
+  });
+
+  it('keeps 1.x packages orientation-free but initializes the 2.0 orientation state', () => {
+    const legacy = createJiuxuangeProject(BUSINESS_MODEL_PILOT_PACKAGE, {
+      now: '2026-07-11T00:00:00.000Z',
+      caseId: 'demo_chain_franchise',
+    });
+    const v2Package = { ...structuredClone(BUSINESS_MODEL_PILOT_PACKAGE), version: '2.0.0' };
+    const v2 = createJiuxuangeProject(v2Package, {
+      now: '2026-07-11T00:00:00.000Z',
+      caseId: 'demo_chain_franchise',
+    });
+
+    expect(legacy.jiuxuange?.orientation).toBeUndefined();
+    expect(v2.jiuxuange?.orientation).toEqual({
+      phase: 'problem',
+      problemDefined: false,
+      baselineCaptured: false,
+      goalConfirmed: false,
+      assessmentUnderstood: false,
+      evidenceMessageIds: [],
+      attachedDraftIds: [],
+    });
+  });
+
+  it('compiles the guided package into one continuous concept-and-case path', () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_GUIDED_PACKAGE, {
+      now: '2026-07-11T00:00:00.000Z',
+    });
+
+    expect(project.milestones).toHaveLength(10);
+    expect(project.milestones.map((milestone) => milestone.title)).toEqual([
+      '交易原理',
+      '六要素总览',
+      '定位',
+      '业务系统',
+      '关键资源能力',
+      '盈利模式',
+      '现金流结构与企业价值',
+      '便利蜂案例盲解',
+      '生鲜零售模式比较',
+      '个人学习成果测评',
     ]);
+    expect(project.milestones[0].status).toBe('active');
+    expect(project.milestones.slice(1).every((milestone) => milestone.status === 'locked')).toBe(
+      true,
+    );
+    expect(project.milestones[7].microtasks.map((task) => task.jiuxuange?.casePhase)).toEqual([
+      'blind',
+      'commit',
+      'unlock',
+      'compare',
+    ]);
+    expect(project.milestones[7].documents?.[0]?.content).not.toContain('locked_analysis');
+    expect(project.milestones[9].microtasks).toHaveLength(6);
+    expect(project.jiuxuange?.formalScoringEnabled).toBe(false);
   });
 
   it('packages only learner-visible facts into the PBL reference document', () => {

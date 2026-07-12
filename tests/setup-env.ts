@@ -3,6 +3,9 @@
  */
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { vi } from 'vitest';
+
+vi.mock('server-only', () => ({}));
 
 const envPath = resolve(__dirname, '..', '.env.local');
 try {
@@ -14,6 +17,9 @@ try {
     if (eqIdx < 0) continue;
     const key = trimmed.slice(0, eqIdx).trim();
     const value = trimmed.slice(eqIdx + 1).trim();
+    // Local product smoke tests may use a real DeepSeek key, but the unit suite
+    // must keep provider resolution deterministic and must never make live calls.
+    if (key === 'DEEPSEEK_API_KEY') continue;
     if (!process.env[key]) {
       process.env[key] = value;
     }

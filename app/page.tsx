@@ -60,11 +60,16 @@ import { SpeechButton } from '@/components/audio/speech-button';
 import { useImportClassroom } from '@/lib/import/use-import-classroom';
 import {
   shouldShowVocationalTestUi,
+  shouldUseCubicGuidedCourseV2,
   shouldUseCubicUnifiedLearning,
 } from '@/lib/config/feature-flags';
 import { useImportPptx } from '@/lib/import/use-import-pptx';
 import { BusinessModelLearningPath } from '@/components/c-cubic/business-model-learning-path';
 import { BusinessModelCourseEntry } from '@/components/c-cubic/business-model-course-entry';
+import { HomeOrientationEntry } from '@/components/c-cubic/home-orientation-entry';
+import { getOrCreateBusinessModelSession } from '@/lib/c-cubic/session';
+import { BUSINESS_MODEL_GUIDED_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v2';
+import type { HomeOrientationDraft } from '@/lib/c-cubic/home-orientation';
 
 const log = createLogger('Home');
 
@@ -99,7 +104,8 @@ function HomePage() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const showVocationalTestUi = shouldShowVocationalTestUi();
-  const unifiedLearning = shouldUseCubicUnifiedLearning();
+  const guidedCourseV2 = shouldUseCubicGuidedCourseV2();
+  const unifiedLearning = shouldUseCubicUnifiedLearning() || guidedCourseV2;
   const [form, setForm] = useState<FormState>(initialFormState);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsSection, setSettingsSection] = useState<
@@ -360,6 +366,15 @@ function HomePage() {
     }
   };
 
+  const handleOrientationResolved = async (draft: HomeOrientationDraft) => {
+    const session = await getOrCreateBusinessModelSession({
+      learnerId: draft.learnerId,
+      coursePackage: BUSINESS_MODEL_GUIDED_PACKAGE,
+      homeOrientationDraft: draft,
+    });
+    router.push(`/classroom/${session.stageId}`);
+  };
+
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -557,6 +572,9 @@ function HomePage() {
           transition={{ delay: 0.35 }}
           className="w-full"
         >
+          {guidedCourseV2 ? (
+            <HomeOrientationEntry onResolved={handleOrientationResolved} />
+          ) : (
           <div className="w-full rounded-2xl border border-border/60 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-xl shadow-black/[0.03] dark:shadow-black/20 transition-shadow focus-within:shadow-2xl focus-within:shadow-violet-500/[0.06]">
             {/* ── Greeting + Profile + Agents ── */}
             <div className="relative z-20 flex items-start justify-between">
@@ -652,9 +670,10 @@ function HomePage() {
               </button>
             </div>
           </div>
+          )}
         </motion.div>
 
-        {showVocationalTestUi && (
+        {!guidedCourseV2 && showVocationalTestUi && (
           <motion.div
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
@@ -741,7 +760,13 @@ function HomePage() {
         )}
       </motion.div>
 
-      {unifiedLearning ? <BusinessModelCourseEntry /> : <BusinessModelLearningPath />}
+      {unifiedLearning ? (
+        <BusinessModelCourseEntry
+          coursePackage={guidedCourseV2 ? BUSINESS_MODEL_GUIDED_PACKAGE : undefined}
+        />
+      ) : (
+        <BusinessModelLearningPath />
+      )}
 
       {/* ═══ Recent classrooms — collapsible ═══ */}
       {classrooms.length > 0 && (

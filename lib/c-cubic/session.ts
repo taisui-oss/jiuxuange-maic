@@ -5,6 +5,9 @@ import { hasStartedProject } from '@/lib/pbl/v2/operations/progress';
 import { BUSINESS_MODEL_PILOT_PACKAGE } from './course-package/business-model-v1';
 import type { JiuxuangeCoursePackage } from './course-package/types';
 import { createJiuxuangeStage } from './project-factory';
+import { attachHomeOrientation } from './orientation';
+import type { HomeOrientationDraft } from './home-orientation';
+import { nextOrientationQuestion } from './orientation';
 
 const LOCAL_LEARNER_ID_KEY = 'jiuxuangeLocalLearnerId';
 
@@ -34,6 +37,7 @@ export interface GetBusinessModelSessionOptions {
   coursePackage?: JiuxuangeCoursePackage;
   now?: Date;
   stageIdFactory?: () => string;
+  homeOrientationDraft?: HomeOrientationDraft;
 }
 
 export function courseSessionId(key: LearningSessionKey): string {
@@ -77,8 +81,55 @@ function sceneMatchesRef(scene: SceneRecord | undefined, ref: LearningSessionRef
   return (
     metadata.courseId === ref.courseId &&
     metadata.courseVersion === ref.packageVersion &&
-    metadata.caseId === ref.projectId
+    (metadata.sessionVariantId ?? metadata.caseId) === ref.projectId
   );
+}
+
+function sessionProjectId(pkg: JiuxuangeCoursePackage, requested?: string): string {
+  if (requested) return requested;
+  if (/^2(?:\.|$)/.test(pkg.version)) return 'guided-course';
+  const firstCaseId = pkg.modules.find((module) => module.caseIds.length > 0)?.caseIds[0];
+  if (!firstCaseId) throw new Error('Course package has no session project id');
+  return firstCaseId;
+}
+
+function attachHomeDraftToScene(
+  scene: { content: SceneRecord['content']; updatedAt?: number },
+  draft: HomeOrientationDraft | undefined,
+  now: string,
+): boolean {
+  if (!draft || draft.status !== 'resolved' || scene.content.type !== 'pbl') return false;
+  const project = scene.content.projectV2;
+  const orientation = project?.jiuxuange?.orientation;
+  if (!project || !orientation) return false;
+  const thread = project.threads.find((candidate) => candidate.agentId === 'jiuxuange-professor');
+  if (!thread) return false;
+
+  const messages = draft.initialMessages.map((message, index) => ({
+    id: `${draft.id}:${index + 1}`,
+    ...(message.role === 'professor' ? { agentId: 'jiuxuange-professor' as const } : {}),
+    roleType: message.role === 'professor' ? ('instructor' as const) : ('user' as const),
+    content: message.content,
+    ts: index === 2 ? (draft.resolvedAt ?? now) : draft.createdAt,
+  }));
+  const result = attachHomeOrientation({
+    state: orientation,
+    draftId: draft.id,
+    messages,
+    existingMessageIds: thread.messages.map((message) => message.id),
+    now,
+  });
+  if (
+    result.messages.length === 0 &&
+    result.state.attachedDraftIds.length === orientation.attachedDraftIds.length
+  ) {
+    return false;
+  }
+  thread.messages.push(...result.messages);
+  project.jiuxuange!.orientation = result.state;
+  project.updatedAt = now;
+  scene.updatedAt = Date.parse(now);
+  return true;
 }
 
 export async function deriveBusinessModelResumeState(
@@ -94,7 +145,7 @@ export async function deriveBusinessModelResumeState(
   if (
     project.jiuxuange?.courseId !== ref.courseId ||
     project.jiuxuange.courseVersion !== ref.packageVersion ||
-    project.jiuxuange.caseId !== ref.projectId
+    (project.jiuxuange.sessionVariantId ?? project.jiuxuange.caseId) !== ref.projectId
   ) {
     return { status: 'unavailable', stageId: ref.stageId, sceneId: ref.sceneId };
   }
@@ -117,7 +168,11 @@ export async function deriveBusinessModelResumeState(
     stageId: ref.stageId,
     sceneId: ref.sceneId,
     summary: lastAgentMessage?.content.slice(0, 120),
-    activeQuestion: task?.jiuxuange?.questionPrompt,
+    activeQuestion:
+      project.jiuxuange.orientation && project.jiuxuange.orientation.phase !== 'complete'
+        ? (nextOrientationQuestion(project.jiuxuange.orientation) ??
+          task?.jiuxuange?.questionPrompt)
+        : task?.jiuxuange?.questionPrompt,
   };
 }
 
@@ -128,7 +183,7 @@ export async function loadBusinessModelResumeState(
   const key: LearningSessionKey = {
     learnerId: options.learnerId ?? getOrCreateLocalLearnerId(),
     courseId: pkg.id,
-    projectId: options.projectId ?? pkg.modules[0].caseIds[0],
+    projectId: sessionProjectId(pkg, options.projectId),
     packageVersion: pkg.version,
   };
   const record = await db.learningPaths.get(courseSessionId(key));
@@ -143,7 +198,7 @@ export async function getOrCreateBusinessModelSession(
   const key: LearningSessionKey = {
     learnerId: options.learnerId ?? getOrCreateLocalLearnerId(),
     courseId: pkg.id,
-    projectId: options.projectId ?? pkg.modules[0].caseIds[0],
+    projectId: sessionProjectId(pkg, options.projectId),
     packageVersion: pkg.version,
   };
   const id = courseSessionId(key);
@@ -156,7 +211,12 @@ export async function getOrCreateBusinessModelSession(
         db.stages.get(existingRef.stageId),
         db.scenes.get(existingRef.sceneId),
       ]);
-      if (stage && sceneMatchesRef(scene, existingRef)) return existingRef;
+      if (stage && scene && sceneMatchesRef(scene, existingRef)) {
+        if (attachHomeDraftToScene(scene, options.homeOrientationDraft, now.toISOString())) {
+          await db.scenes.put(scene);
+        }
+        return existingRef;
+      }
     }
 
     const stageId = options.stageIdFactory?.() ?? nanoid(10);
@@ -165,9 +225,11 @@ export async function getOrCreateBusinessModelSession(
       now: now.toISOString(),
       stageId,
       sceneId,
-      startModuleId: pkg.modules[0].id,
-      caseId: key.projectId,
+      ...(pkg.cases[key.projectId]
+        ? { startModuleId: pkg.modules[0].id, caseId: key.projectId, learnerId: key.learnerId }
+        : { sessionVariantId: key.projectId, learnerId: key.learnerId }),
     });
+    attachHomeDraftToScene(data.scenes[0], options.homeOrientationDraft, now.toISOString());
     await db.stages.put({
       ...data.stage,
       currentSceneId: sceneId,

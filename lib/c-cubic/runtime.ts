@@ -1,3 +1,5 @@
+import { nextOrientationQuestion, type JiuxuangeOrientationState } from './orientation';
+
 export type JiuxuangeQuestionPhase =
   | 'ground'
   | 'apply'
@@ -32,6 +34,7 @@ export interface JiuxuangeRuntimeMilestone {
 export interface JiuxuangeRuntimeProject {
   jiuxuange?: {
     courseVersion?: string;
+    orientation?: JiuxuangeOrientationState;
   };
   roles: JiuxuangeRuntimeRole[];
   milestones: JiuxuangeRuntimeMilestone[];
@@ -82,11 +85,27 @@ function roleMatches(candidate: JiuxuangeRuntimeRole, role: JiuxuangeRole): bool
 }
 
 export function selectJiuxuangeRole(project: JiuxuangeRuntimeProject): JiuxuangeRuntimeRole {
+  const orientation = project.jiuxuange?.orientation;
+  if (orientation && orientation.phase !== 'complete') {
+    const professor = project.roles.find((candidate) => roleMatches(candidate, 'professor'));
+    if (!professor) throw new Error('Missing Jiuxuange role: professor');
+    return professor;
+  }
   const phase = getCurrentJiuxuangeMicrotask(project)?.jiuxuange?.phase;
   const selected = phase ? roleForJiuxuangePhase(phase) : 'professor';
   const role = project.roles.find((candidate) => roleMatches(candidate, selected));
   if (!role) throw new Error(`Missing Jiuxuange role: ${selected}`);
   return role;
+}
+
+export function getJiuxuangeCanonicalQuestion(
+  project: JiuxuangeRuntimeProject,
+): string | undefined {
+  const orientation = project.jiuxuange?.orientation;
+  if (orientation && orientation.phase !== 'complete') {
+    return nextOrientationQuestion(orientation) ?? undefined;
+  }
+  return getCurrentJiuxuangeMicrotask(project)?.jiuxuange?.questionPrompt.trim() || undefined;
 }
 
 function collectFacts(
@@ -113,7 +132,8 @@ export function buildJiuxuangeRuntimeBlock(
 ): string {
   if (!project.jiuxuange) return '';
   const microtask = getCurrentJiuxuangeMicrotask(project);
-  if (!microtask?.jiuxuange?.questionPrompt.trim()) return '';
+  const canonicalQuestion = getJiuxuangeCanonicalQuestion(project);
+  if (!microtask || !canonicalQuestion) return '';
 
   const role = selectJiuxuangeRole(project);
   const allowedFacts = collectFacts(facts).filter(isVerifiedLearnerFact);
@@ -124,7 +144,7 @@ export function buildJiuxuangeRuntimeBlock(
   return [
     '## 九轩阁本轮运行约束',
     `本轮唯一可见角色：${role.name}`,
-    `本轮唯一问题：${microtask.jiuxuange.questionPrompt.trim()}`,
+    `本轮唯一问题：${canonicalQuestion}`,
     '本轮允许引用的事实：',
     ...factLines,
     '仅以上述一个角色发言，只向学员提出上述一个问题。',

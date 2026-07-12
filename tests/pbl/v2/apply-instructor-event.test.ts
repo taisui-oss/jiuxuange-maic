@@ -334,6 +334,46 @@ describe('PBL v2 — apply instructor SSE events', () => {
     expect(twice.runtimeEvents).toEqual([event]);
   });
 
+  it('applies authoritative Jiuxuange orientation state while replaying its runtime event', () => {
+    const project = makeProject();
+    project.jiuxuange = {
+      courseId: 'business-model',
+      courseVersion: '2.0.0-guided-course',
+      moduleId: 'six-elements',
+      curriculumOrder: 2,
+      releaseStatus: 'full',
+      factPackHash: 'facts-v2',
+      caseId: 'demo_chain_franchise',
+      runtimeMode: 'demo',
+      formalScoringEnabled: false,
+    };
+    const orientation = {
+      phase: 'goal' as const,
+      problemDefined: true,
+      baselineCaptured: true,
+      goalConfirmed: false,
+      assessmentUnderstood: false,
+      evidenceMessageIds: ['home-problem', 'baseline-answer'],
+      attachedDraftIds: ['orientation-draft'],
+    };
+    const event = {
+      id: 'runtime-orientation-1',
+      kind: 'jiuxuange_orientation_updated' as const,
+      actorType: 'system' as const,
+      ts: '2026-07-11T00:00:02.000Z',
+      orientation,
+    };
+
+    const next = applyInstructorEvent(
+      { type: 'project_patch', patch: { kind: 'runtime_event', event } },
+      project,
+      () => {},
+    );
+
+    expect(next.jiuxuange?.orientation).toEqual(orientation);
+    expect(next.runtimeEvents).toEqual([event]);
+  });
+
   it('merges authoritative advance snapshots so evaluation keeps task process evidence', () => {
     let draft = '';
     const project = makeProject();

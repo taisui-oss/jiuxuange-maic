@@ -11,7 +11,7 @@ export type JiuxuangeEvidenceStatus = 'autonomous' | 'hinted' | 'leaked-answer' 
 export type JiuxuangeHintLevel = 0 | 1 | 2 | 3 | 'none' | 'nudge' | 'scaffold' | 'answer';
 
 import type { PBLProjectV2 } from '@/lib/pbl/v2/types';
-import { getCoursePackage } from './course-package/business-model-v1';
+import { getCoursePackage } from './course-package/registry';
 
 export interface JiuxuangeEvidenceFact {
   id: string;
@@ -264,7 +264,7 @@ export function evaluateJiuxuangeLearnerMessage(
     throw new Error('Jiuxuange evidence evaluation requires an active task');
 
   const coursePackage = getCoursePackage(metadata.courseId, metadata.courseVersion);
-  const selectedCase = coursePackage.cases[metadata.caseId];
+  const selectedCase = coursePackage.cases[microtask.jiuxuange.caseId ?? metadata.caseId];
   if (!selectedCase) throw new Error(`Unknown Jiuxuange case: ${metadata.caseId}`);
 
   const facts = selectedCase.facts.filter(

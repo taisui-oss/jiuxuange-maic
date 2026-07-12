@@ -93,6 +93,9 @@ export function applyInstructorEvent(
           if (!next.runtimeEvents.some((existing) => existing.id === patch.event.id)) {
             next.runtimeEvents.push(patch.event);
           }
+          if (patch.event.kind === 'jiuxuange_orientation_updated' && next.jiuxuange) {
+            next.jiuxuange.orientation = structuredClone(patch.event.orientation);
+          }
           break;
         }
         case 'advance': {

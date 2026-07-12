@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { MockLanguageModelV3, convertArrayToReadableStream } from 'ai/test';
 import { BUSINESS_MODEL_PILOT_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v1';
+import { BUSINESS_MODEL_GUIDED_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v2';
 import { createJiuxuangeProject } from '@/lib/c-cubic/project-factory';
 import { runInstructorTurn } from '@/lib/pbl/v2/agents/instructor';
 import type { PBLSSEEvent } from '@/lib/pbl/v2/api/sse';
@@ -154,5 +155,68 @@ describe('Jiuxuange instructor runtime integration', () => {
         }),
       }),
     );
+  });
+
+  it('advances mandatory orientation and delivers the formal opening exactly on completion', async () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_GUIDED_PACKAGE, {
+      now: '2026-07-11T00:00:00.000Z',
+    });
+    project.uiPhase = 'workspace';
+    project.jiuxuange!.orientation = {
+      phase: 'assessment_contract',
+      problemDefined: true,
+      baselineCaptured: true,
+      goalConfirmed: true,
+      assessmentUnderstood: false,
+      evidenceMessageIds: ['problem', 'baseline', 'goal'],
+      attachedDraftIds: ['draft-1'],
+    };
+    const activeTask = project.milestones[0].microtasks[0];
+    project.threads[0].messages.push({
+      id: 'assessment-contract-answer',
+      roleType: 'user',
+      content: '我会引用项目事实说明因果关系，也会主动寻找反例来检验自己的判断。',
+      ts: '2026-07-11T00:00:01.000Z',
+      microtaskId: activeTask.id,
+    });
+
+    const events: PBLSSEEvent[] = [];
+    for await (const event of runInstructorTurn({
+      project,
+      userMessage: '我会引用项目事实说明因果关系，也会主动寻找反例来检验自己的判断。',
+      phase: 'instructing',
+      languageModel: textModel('模型不应该决定这段开场。') as never,
+    })) {
+      events.push(event);
+    }
+
+    const orientationPatch = events.find(
+      (event): event is Extract<PBLSSEEvent, { type: 'project_patch' }> =>
+        event.type === 'project_patch' &&
+        event.patch.kind === 'runtime_event' &&
+        event.patch.event.kind === 'jiuxuange_orientation_updated',
+    );
+    if (!orientationPatch || orientationPatch.patch.kind !== 'runtime_event') {
+      throw new Error('Expected orientation update');
+    }
+    expect(orientationPatch.patch.event).toEqual(
+      expect.objectContaining({
+        kind: 'jiuxuange_orientation_updated',
+        orientation: expect.objectContaining({
+          phase: 'complete',
+          assessmentUnderstood: true,
+          formalOpeningDeliveredAt: expect.any(String),
+        }),
+      }),
+    );
+
+    const visible = events
+      .filter((event): event is Extract<PBLSSEEvent, { type: 'token' }> => event.type === 'token')
+      .map((event) => event.delta)
+      .join('');
+    expect(visible).toContain('好，我们现在正式开始商业模式大课。');
+    expect(visible).toContain(activeTask.jiuxuange!.questionPrompt);
+    expect(visible.match(/正式开始商业模式大课/g)).toHaveLength(1);
+    expect(visible.match(/[?？]/g)).toHaveLength(1);
   });
 });

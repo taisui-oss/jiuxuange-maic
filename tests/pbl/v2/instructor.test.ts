@@ -360,6 +360,32 @@ describe('PBL v2 — Jiuxuange formal course opening', () => {
       }),
     ).toBe('');
   });
+
+  it('keeps the guided-course opening locked until mandatory orientation is complete', () => {
+    const args = jiuxuangeFirstTask();
+    args.project.jiuxuange!.courseVersion = '2.0.0-guided-course';
+    args.project.jiuxuange!.orientation = {
+      phase: 'baseline',
+      problemDefined: true,
+      baselineCaptured: false,
+      goalConfirmed: false,
+      assessmentUnderstood: false,
+      evidenceMessageIds: ['home-problem', 'home-reply'],
+      attachedDraftIds: ['orientation-draft'],
+    };
+
+    expect(buildJiuxuangeFormalCourseOpeningBlock({ ...args, phase: 'greeting' })).toBe('');
+
+    args.project.jiuxuange!.orientation = {
+      ...args.project.jiuxuange!.orientation,
+      phase: 'complete',
+      baselineCaptured: true,
+      goalConfirmed: true,
+      assessmentUnderstood: true,
+      completedAt: '2026-07-11T01:00:00.000Z',
+    };
+    expect(buildJiuxuangeFormalCourseOpeningBlock({ ...args, phase: 'greeting' })).toBe('');
+  });
 });
 
 describe('PBL v2 — Instructor history role compatibility', () => {
@@ -709,6 +735,28 @@ describe('PBL v2 — instructor sees earlier submissions across the project (#51
     expect(block).toContain('handled missing keys with undefined'); // the submitted content
     expect(block).toContain('score 70'); // how it was assessed
     expect(block).toContain('to improve: Check missing keys');
+  });
+
+  it('keeps numeric evaluator scores out of Jiuxuange context when formal scoring is disabled', () => {
+    const project = makeProject();
+    project.evaluations[0].createdAt = '2026-05-29T00:15:00.000Z';
+    project.jiuxuange = {
+      courseId: 'business-model-foundations',
+      courseVersion: '2.0.0-guided-course',
+      moduleId: 'guided-course',
+      curriculumOrder: 0,
+      releaseStatus: 'full',
+      factPackHash: 'test-hash',
+      caseId: 'guided-course',
+      runtimeMode: 'curated_course',
+      formalScoringEnabled: false,
+    };
+
+    const block = buildPriorSubmissionsBlock(project, 'mt-1');
+
+    expect(block).toContain('reviewed');
+    expect(block).toContain('to improve: Check missing keys');
+    expect(block).not.toContain('score 70');
   });
 
   it('does not borrow a stale score when the latest submission postdates the eval', () => {

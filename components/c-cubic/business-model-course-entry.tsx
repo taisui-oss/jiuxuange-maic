@@ -10,8 +10,13 @@ import {
   loadBusinessModelResumeState,
   type BusinessModelResumeState,
 } from '@/lib/c-cubic/session';
+import type { JiuxuangeCoursePackage } from '@/lib/c-cubic/course-package/types';
 
-export function BusinessModelCourseEntry() {
+export function BusinessModelCourseEntry({
+  coursePackage,
+}: {
+  coursePackage?: JiuxuangeCoursePackage;
+}) {
   const router = useRouter();
   const [resume, setResume] = useState<BusinessModelResumeState>({ status: 'not_started' });
   const [loading, setLoading] = useState(true);
@@ -19,7 +24,7 @@ export function BusinessModelCourseEntry() {
 
   useEffect(() => {
     let cancelled = false;
-    void loadBusinessModelResumeState()
+    void loadBusinessModelResumeState({ coursePackage })
       .then((state) => {
         if (!cancelled) setResume(state);
       })
@@ -32,12 +37,12 @@ export function BusinessModelCourseEntry() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [coursePackage]);
 
   async function openCourse() {
     setOpening(true);
     try {
-      const session = await getOrCreateBusinessModelSession();
+      const session = await getOrCreateBusinessModelSession({ coursePackage });
       router.push(`/classroom/${session.stageId}`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : '暂时无法进入课程');
@@ -84,7 +89,11 @@ export function BusinessModelCourseEntry() {
           disabled={loading || opening}
           className="h-10 w-full shrink-0 gap-2 rounded-md bg-slate-950 px-5 text-white hover:bg-slate-800 sm:w-auto dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
         >
-          {opening ? <LoaderCircle className="size-4 animate-spin" /> : <ArrowRight className="size-4" />}
+          {opening ? (
+            <LoaderCircle className="size-4 animate-spin" />
+          ) : (
+            <ArrowRight className="size-4" />
+          )}
           <span>{opening ? '正在进入' : buttonLabel}</span>
         </Button>
       </div>

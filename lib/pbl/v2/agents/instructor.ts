@@ -54,12 +54,14 @@ import { buildAdvanceProjectPatch } from '../operations/advance-patch';
 import { formatScenarioTranscript } from '../operations/eval-prompts';
 import {
   buildJiuxuangeRuntimeBlock,
-  getCurrentJiuxuangeMicrotask,
+  getJiuxuangeCanonicalQuestion,
   normalizeJiuxuangeReply,
   selectJiuxuangeRole,
 } from '@/lib/c-cubic/runtime';
-import { getCoursePackage } from '@/lib/c-cubic/course-package/business-model-v1';
+import { getCoursePackage } from '@/lib/c-cubic/course-package/registry';
 import { evaluateJiuxuangeLearnerMessage } from '@/lib/c-cubic/evidence';
+import { advanceOrientationFromMessage } from '@/lib/c-cubic/orientation';
+import { retrieveCourseContext } from '@/lib/c-cubic/knowledge';
 import type { PBLRuntimeEvent } from '../types';
 
 const log = createLogger('PBL v2 Instructor');
@@ -164,6 +166,43 @@ function buildAnchor(microtask: PBLMicrotask): string {
   return `[ACTIVE-TASK ANCHOR]\nThe active microtask is "${microtask.title}". Anything the learner says next, interpret as their attempt at THIS task first.`;
 }
 
+export function buildJiuxuangeKnowledgeBlock(
+  project: PBLProjectV2,
+  microtask: PBLMicrotask,
+): string {
+  if (!project.jiuxuange || !microtask.jiuxuange) return '';
+  const nodeId = microtask.jiuxuange.caseId ?? microtask.jiuxuange.conceptNodeId;
+  if (!nodeId) return '';
+  const stage = microtask.jiuxuange.casePhase ?? 'blind';
+  const context = retrieveCourseContext({
+    courseId: project.jiuxuange.courseId,
+    nodeId,
+    stage,
+  });
+  if (context.sections.length === 0) return '';
+
+  const lines = [
+    '## 九轩阁内部课程上下文',
+    '以下均为经核验的短片段。只按当前问题按需使用，不展示本地路径，不提供整本材料。',
+  ];
+  for (const section of context.sections) {
+    const sourceLabels = section.sources.map((source) => {
+      const locator = 'page' in source ? `PDF第${source.page}页` : source.headingPath.join(' > ');
+      return `${source.title} · ${locator}`;
+    });
+    lines.push(
+      '',
+      section.kind === 'locked_analysis' ? '作者分析片段（不是唯一答案）' : '已核验材料片段',
+      section.content,
+      `来源定位：${sourceLabels.join('；')}`,
+    );
+  }
+  if (context.sections.some((section) => section.kind === 'locked_analysis')) {
+    lines.push('', '作者分析只用于与学员已提交的独立判断比较，不得称为标准答案。');
+  }
+  return lines.join('\n');
+}
+
 function newestByCreatedAt<T extends { createdAt: string }>(items: T[]): T | undefined {
   return items.slice().sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
 }
@@ -178,6 +217,10 @@ function latestTaskEvaluation(project: PBLProjectV2, microtaskId: string) {
   );
 }
 
+function shouldExposeFormalScores(project: PBLProjectV2): boolean {
+  return project.jiuxuange?.formalScoringEnabled !== false;
+}
+
 export function taskEvaluationStatusForMicrotask(
   project: PBLProjectV2,
   microtaskId: string,
@@ -185,11 +228,15 @@ export function taskEvaluationStatusForMicrotask(
   const latestSub = latestSubmission(project, microtaskId);
   const latestEval = latestTaskEvaluation(project, microtaskId);
   if (!latestSub) return 'no submission yet';
-  if (!latestEval) return 'latest submission has no task evaluation yet';
+  if (!latestEval) {
+    return shouldExposeFormalScores(project)
+      ? 'latest submission has no task evaluation yet'
+      : 'latest submission has not been reviewed yet';
+  }
   if (latestEval.createdAt < latestSub.createdAt) {
     return 'latest submission is newer than the latest task evaluation';
   }
-  if (typeof latestEval.score === 'number') {
+  if (shouldExposeFormalScores(project) && typeof latestEval.score === 'number') {
     const pass = latestEval.score >= 60 ? 'passes the 60-point threshold' : 'below 60, not passing';
     return `latest task evaluation score ${latestEval.score} (${pass})`;
   }
@@ -217,7 +264,9 @@ function buildTaskEvaluationBlock(project: PBLProjectV2, microtaskId: string): s
   }
   return [
     '## Latest task evaluation for active microtask',
-    `Score: ${typeof latestEval.score === 'number' ? latestEval.score : 'not scored'}`,
+    shouldExposeFormalScores(project)
+      ? `Score: ${typeof latestEval.score === 'number' ? latestEval.score : 'not scored'}`
+      : 'Review status: reviewed without a learner-visible score',
     latestEval.feedback ? `Feedback: ${latestEval.feedback}` : '',
     latestEval.strengths?.length ? `Strengths: ${latestEval.strengths.join('; ')}` : '',
     latestEval.improvements?.length ? `Improvements: ${latestEval.improvements.join('; ')}` : '',
@@ -288,7 +337,10 @@ export function buildPriorSubmissionsBlock(
       // mirrors the active-task freshness check (latestEval.createdAt < sub.createdAt).
       let evalText: string;
       if (evalRec && evalRec.createdAt >= sub.createdAt) {
-        const score = typeof evalRec.score === 'number' ? `score ${evalRec.score}` : 'reviewed';
+        const score =
+          shouldExposeFormalScores(project) && typeof evalRec.score === 'number'
+            ? `score ${evalRec.score}`
+            : 'reviewed';
         const improve = evalRec.improvements?.length
           ? `; to improve: ${evalRec.improvements.slice(0, 2).join('; ')}`
           : '';
@@ -296,9 +348,11 @@ export function buildPriorSubmissionsBlock(
       } else if (evalRec) {
         // An evaluation exists but predates this submission → the latest version
         // is not yet evaluated; do not surface the stale score as its result.
-        evalText = ' — latest version not yet evaluated';
+        evalText = shouldExposeFormalScores(project)
+          ? ' — latest version not yet evaluated'
+          : ' — latest version not yet reviewed';
       } else {
-        evalText = ' — not yet scored';
+        evalText = shouldExposeFormalScores(project) ? ' — not yet scored' : ' — not yet reviewed';
       }
       entries.push({
         ts: sub.createdAt,
@@ -589,6 +643,10 @@ export function buildJiuxuangeFormalCourseOpeningBlock(args: {
   phase: InstructorPhase;
 }): string {
   if (!args.project.jiuxuange || args.phase !== 'greeting') return '';
+  // Guided-course v2 owns this opening deterministically after the mandatory
+  // orientation contract is complete. The prompt block remains only for
+  // resumable 1.x pilot sessions.
+  if (args.project.jiuxuange.orientation) return '';
   if (!isFirstProjectMicrotask(args.project, args.milestone, args.microtask)) return '';
 
   return [
@@ -884,11 +942,14 @@ function buildSystemPrompt(args: {
     : '';
 
   let jiuxuangeRuntimeBlock = '';
+  let jiuxuangeKnowledgeBlock = '';
   if (args.project.jiuxuange) {
     const metadata = args.project.jiuxuange;
     const coursePackage = getCoursePackage(metadata.courseId, metadata.courseVersion);
-    const selectedCase = coursePackage.cases[metadata.caseId];
+    const taskCaseId = args.microtask.jiuxuange?.caseId;
+    const selectedCase = taskCaseId ? coursePackage.cases[taskCaseId] : undefined;
     jiuxuangeRuntimeBlock = buildJiuxuangeRuntimeBlock(args.project, selectedCase?.facts ?? []);
+    jiuxuangeKnowledgeBlock = buildJiuxuangeKnowledgeBlock(args.project, args.microtask);
   }
 
   return [
@@ -907,6 +968,7 @@ function buildSystemPrompt(args: {
     runtimeBrief,
     synthesisBlock,
     buildAnchor(args.microtask),
+    jiuxuangeKnowledgeBlock,
     jiuxuangeRuntimeBlock,
     // Hard rules sit last so they have positional recency over the
     // 200-line base rules. Re-asserts identity + language so the
@@ -1377,6 +1439,7 @@ export async function* runInstructorTurn(
   // signal + the stage marker; ordinary projects are never affected.
   const scenarioPrepStage = !!project.scenario && milestone.scenarioStage === 'prep';
   let learnerSourceMessageId: string | undefined;
+  let completedOrientationThisTurn = false;
 
   // Append the learner turn to the in-memory project so the next
   // system-prompt rebuild sees it. The client is the source of
@@ -1427,7 +1490,41 @@ export async function* runInstructorTurn(
         payload: turnEvent.payload,
       },
     };
-    if (project.jiuxuange && learnerSourceMessageId) {
+    const orientationBefore = project.jiuxuange?.orientation;
+    if (
+      project.jiuxuange &&
+      orientationBefore &&
+      orientationBefore.phase !== 'complete' &&
+      learnerSourceMessageId
+    ) {
+      const now = new Date().toISOString();
+      const orientation = advanceOrientationFromMessage(orientationBefore, {
+        id: learnerSourceMessageId,
+        content: userMessage,
+        now,
+      });
+      completedOrientationThisTurn = orientation.phase === 'complete';
+      if (completedOrientationThisTurn) {
+        orientation.formalOpeningDeliveredAt = now;
+      }
+      project.jiuxuange.orientation = orientation;
+      const orientationEvent: PBLRuntimeEvent = {
+        id:
+          'runtime_orientation_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
+        kind: 'jiuxuange_orientation_updated',
+        actorType: 'system',
+        ts: now,
+        microtaskId: microtask.id,
+        milestoneId: milestone.id,
+        orientation: structuredClone(orientation),
+      };
+      project.runtimeEvents ??= [];
+      project.runtimeEvents.push(orientationEvent);
+      yield {
+        type: 'project_patch',
+        patch: { kind: 'runtime_event', event: orientationEvent },
+      };
+    } else if (project.jiuxuange && learnerSourceMessageId) {
       const hintLevel = microtask.jiuxuange?.hintLevel ?? 0;
       const evidenceEvent: PBLRuntimeEvent = {
         id: 'runtime_evidence_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
@@ -1687,9 +1784,11 @@ export async function* runInstructorTurn(
   // blank screen with no way to retry.
   // -------------------------------------------------------------------
   if (project.jiuxuange) {
-    const canonicalQuestion = getCurrentJiuxuangeMicrotask(project)?.jiuxuange?.questionPrompt;
+    const canonicalQuestion = getJiuxuangeCanonicalQuestion(project);
     if (canonicalQuestion) {
-      assistantText = normalizeJiuxuangeReply(assistantText, canonicalQuestion);
+      assistantText = completedOrientationThisTurn
+        ? `${JIUXUANGE_FORMAL_COURSE_OPENING}\n\n${canonicalQuestion}`
+        : normalizeJiuxuangeReply(assistantText, canonicalQuestion);
     }
   }
   const assistantCommit = cleanInstructorCommitText(assistantText, {

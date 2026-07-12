@@ -58,6 +58,7 @@ import type {
 import type { PBLSSEEvent } from '@/lib/pbl/v2/api/sse';
 import { applyInstructorEvent } from './apply-instructor-event';
 import { getCurrentModelConfig } from '@/lib/utils/model-config';
+import { setAsciiHeader } from '@/lib/utils/http-headers';
 import { useSettingsStore } from '@/lib/store/settings';
 import { normalizeProjectRuntime } from '@/lib/pbl/v2/operations/progress';
 import { trackSubmissionScore } from '@/lib/pbl/v2/operations/dynamic-signals';
@@ -432,14 +433,14 @@ export function PBLV2SubmissionPanel({
         });
         const headers: Record<string, string> = {
           'Content-Type': 'application/json',
-          'x-model': modelConfig.modelString || '',
-          'x-api-key': modelConfig.apiKey || '',
         };
-        if (modelConfig.baseUrl) headers['x-base-url'] = modelConfig.baseUrl;
-        if (modelConfig.providerType) headers['x-provider-type'] = modelConfig.providerType;
+        setAsciiHeader(headers, 'x-model', modelConfig.modelString);
+        setAsciiHeader(headers, 'x-api-key', modelConfig.apiKey);
+        setAsciiHeader(headers, 'x-base-url', modelConfig.baseUrl);
+        setAsciiHeader(headers, 'x-provider-type', modelConfig.providerType);
         try {
           const stored = localStorage.getItem('locale');
-          if (stored) headers['x-user-locale'] = stored;
+          setAsciiHeader(headers, 'x-user-locale', stored ?? undefined);
         } catch {
           /* noop */
         }

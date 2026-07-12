@@ -13,6 +13,8 @@
  * with their own design, but no other role type exists today.
  */
 import type { SceneOutline } from '@/lib/types/generation';
+import type { JiuxuangeOrientationState } from '@/lib/c-cubic/orientation';
+import type { JiuxuangeAssessmentState } from '@/lib/c-cubic/assessment/state';
 
 // ---------------------------------------------------------------------------
 // Enums (string-literal unions; no runtime enum cost)
@@ -189,6 +191,9 @@ export interface JiuxuangeMicrotaskMetadata {
   evidenceRuleIds: string[];
   preferredRole: 'professor' | 'senior' | 'mystery' | 'growth-feedback';
   hintLevel?: 0 | 1 | 2 | 3;
+  conceptNodeId?: string;
+  caseId?: string;
+  casePhase?: 'blind' | 'commit' | 'unlock' | 'compare';
 }
 
 /** A learning document or reference material attached to a milestone. */
@@ -534,6 +539,10 @@ export type PBLRuntimeEvent =
         modelVersion: string;
         packageVersion: string;
       };
+    })
+  | (PBLRuntimeEventBase & {
+      kind: 'jiuxuange_orientation_updated';
+      orientation: JiuxuangeOrientationState;
     });
 
 // ---------------------------------------------------------------------------
@@ -898,8 +907,16 @@ export interface JiuxuangeProjectMetadata {
   releaseStatus: 'pilot_b_only' | 'full';
   factPackHash: string;
   caseId: string;
-  runtimeMode: 'demo' | 'real_pilot';
+  runtimeMode: 'demo' | 'curated_course' | 'real_pilot';
   formalScoringEnabled: boolean;
+  /** Stable session identity. Guided courses use a course-level variant rather
+   * than borrowing a case id; absent on persisted 1.x sessions. */
+  sessionVariantId?: string;
+  learnerId?: string;
+  /** Orientation state is optional so 1.x course packages keep their
+   * persisted shape. Course package 2.0+ initializes it at project creation. */
+  orientation?: JiuxuangeOrientationState;
+  assessment?: JiuxuangeAssessmentState;
 }
 
 // ---------------------------------------------------------------------------

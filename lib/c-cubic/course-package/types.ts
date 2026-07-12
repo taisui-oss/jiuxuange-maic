@@ -1,4 +1,4 @@
-export type JiuxuangeModuleCode = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+export type JiuxuangeModuleCode = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J';
 
 export type JiuxuangeQuestionPhase =
   | 'ground'
@@ -21,7 +21,8 @@ export type JiuxuangeFactSourceKind =
   | 'primary_project'
   | 'learner_report'
   | 'coach_review'
-  | 'synthetic';
+  | 'synthetic'
+  | 'course_case';
 
 export type JiuxuangeFactVisibility = 'learner' | 'coach_only';
 export type JiuxuangeVerificationStatus = 'draft' | 'verified' | 'rejected';
@@ -57,7 +58,7 @@ export interface JiuxuangeConcept {
 export interface JiuxuangeCase {
   id: string;
   title: string;
-  mode: 'synthetic_demo' | 'real_project';
+  mode: 'synthetic_demo' | 'real_project' | 'curated_case';
   availability: 'demo' | 'draft' | 'pilot';
   conceptIds: string[];
   facts: JiuxuangeCaseFact[];
@@ -70,6 +71,9 @@ export interface JiuxuangeQuestionTemplate {
   prompt: string;
   singleQuestion: boolean;
   evidenceRuleIds: string[];
+  conceptNodeId?: string;
+  caseId?: string;
+  casePhase?: 'blind' | 'commit' | 'unlock' | 'compare';
 }
 
 export interface JiuxuangeEvidenceRule {

@@ -4,6 +4,18 @@ import { countLearnerFacingQuestions } from '../runtime';
 export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
   const errors: string[] = [];
 
+  const moduleIds = pkg.modules.map((module) => module.id);
+  const moduleOrders = pkg.modules.map((module) => module.order);
+  const moduleCodes = pkg.modules.map((module) => module.code);
+  if (new Set(moduleIds).size !== moduleIds.length)
+    errors.push('course modules require unique ids');
+  if (new Set(moduleOrders).size !== moduleOrders.length) {
+    errors.push('course modules require unique order values');
+  }
+  if (new Set(moduleCodes).size !== moduleCodes.length) {
+    errors.push('course modules require unique code values');
+  }
+
   for (const courseModule of pkg.modules) {
     for (const conceptId of courseModule.conceptIds) {
       if (!pkg.concepts[conceptId]) {
@@ -66,6 +78,9 @@ export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
       if (item.mode === 'synthetic_demo' && fact.sourceKind !== 'synthetic') {
         errors.push(`case ${caseId} fact ${fact.id} must use a synthetic source`);
       }
+      if (item.mode === 'curated_case' && fact.sourceKind !== 'course_case') {
+        errors.push(`case ${caseId} fact ${fact.id} must use a course_case source`);
+      }
     }
   }
 
@@ -80,6 +95,26 @@ export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
       if (!pkg.evidenceRules[ruleId]) {
         errors.push(`question ${questionId} references unknown evidence rule ${ruleId}`);
       }
+    }
+    for (const conceptId of question.conceptIds) {
+      if (!pkg.concepts[conceptId]) {
+        errors.push(`question ${questionId} references unknown concept ${conceptId}`);
+      }
+    }
+    if (question.caseId && !pkg.cases[question.caseId]) {
+      errors.push(`question ${questionId} references unknown case ${question.caseId}`);
+    }
+  }
+
+  for (const courseModule of pkg.modules.filter((module) => module.caseIds.length > 0)) {
+    const phases = courseModule.questionTemplateIds.map(
+      (questionId) => pkg.questionTemplates[questionId]?.casePhase,
+    );
+    if (!phases.some(Boolean)) continue;
+    if (phases.join(' -> ') !== 'blind -> commit -> unlock -> compare') {
+      errors.push(
+        `case module ${courseModule.id} must follow blind -> commit -> unlock -> compare`,
+      );
     }
   }
 
