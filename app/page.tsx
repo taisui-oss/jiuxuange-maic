@@ -60,7 +60,11 @@ import { SpeechButton } from '@/components/audio/speech-button';
 import { useImportClassroom } from '@/lib/import/use-import-classroom';
 import {
   shouldShowVocationalTestUi,
+  shouldUseCubicBusinessModelMode,
   shouldUseCubicGuidedCourseV2,
+  shouldUseCubicSixLevelJourney,
+  shouldUseCubicSingleCourseOrientationV4,
+  shouldUseCubicLearningLoopV5,
   shouldUseCubicUnifiedLearning,
 } from '@/lib/config/feature-flags';
 import { useImportPptx } from '@/lib/import/use-import-pptx';
@@ -69,6 +73,9 @@ import { BusinessModelCourseEntry } from '@/components/c-cubic/business-model-co
 import { HomeOrientationEntry } from '@/components/c-cubic/home-orientation-entry';
 import { getOrCreateBusinessModelSession } from '@/lib/c-cubic/session';
 import { BUSINESS_MODEL_GUIDED_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v2';
+import { BUSINESS_MODEL_SIX_LEVEL_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v3';
+import { BUSINESS_MODEL_SINGLE_COURSE_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v4';
+import { BUSINESS_MODEL_LEARNING_LOOP_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v5';
 import type { HomeOrientationDraft } from '@/lib/c-cubic/home-orientation';
 
 const log = createLogger('Home');
@@ -104,8 +111,26 @@ function HomePage() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const showVocationalTestUi = shouldShowVocationalTestUi();
-  const guidedCourseV2 = shouldUseCubicGuidedCourseV2();
-  const unifiedLearning = shouldUseCubicUnifiedLearning() || guidedCourseV2;
+  const businessModelMode = shouldUseCubicBusinessModelMode();
+  const guidedCourseV2 = businessModelMode && shouldUseCubicGuidedCourseV2();
+  const sixLevelJourney = businessModelMode && shouldUseCubicSixLevelJourney();
+  const singleCourseOrientationV4 =
+    businessModelMode && shouldUseCubicSingleCourseOrientationV4();
+  const learningLoopV5 = businessModelMode && shouldUseCubicLearningLoopV5();
+  const activeGuidedCoursePackage = learningLoopV5
+    ? BUSINESS_MODEL_LEARNING_LOOP_PACKAGE
+    : singleCourseOrientationV4
+      ? BUSINESS_MODEL_SINGLE_COURSE_PACKAGE
+      : sixLevelJourney
+        ? BUSINESS_MODEL_SIX_LEVEL_PACKAGE
+        : BUSINESS_MODEL_GUIDED_PACKAGE;
+  const unifiedLearning =
+    businessModelMode &&
+    (shouldUseCubicUnifiedLearning() ||
+      guidedCourseV2 ||
+      sixLevelJourney ||
+      singleCourseOrientationV4 ||
+      learningLoopV5);
   const [form, setForm] = useState<FormState>(initialFormState);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsSection, setSettingsSection] = useState<
@@ -369,7 +394,7 @@ function HomePage() {
   const handleOrientationResolved = async (draft: HomeOrientationDraft) => {
     const session = await getOrCreateBusinessModelSession({
       learnerId: draft.learnerId,
-      coursePackage: BUSINESS_MODEL_GUIDED_PACKAGE,
+      coursePackage: activeGuidedCoursePackage,
       homeOrientationDraft: draft,
     });
     router.push(`/classroom/${session.stageId}`);
@@ -565,14 +590,30 @@ function HomePage() {
           {t('home.slogan')}
         </motion.p>
 
+        {businessModelMode && unifiedLearning && (
+          <div data-product-surface="business-model-primary-entry" className="mb-6 w-full">
+            <BusinessModelCourseEntry
+              coursePackage={
+                guidedCourseV2 ||
+                sixLevelJourney ||
+                singleCourseOrientationV4 ||
+                learningLoopV5
+                  ? activeGuidedCoursePackage
+                  : undefined
+              }
+            />
+          </div>
+        )}
+
         {/* ── Unified input area ── */}
         <motion.div
+          data-product-surface="unified-home-input"
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.35 }}
           className="w-full"
         >
-          {guidedCourseV2 ? (
+          {guidedCourseV2 || sixLevelJourney ? (
             <HomeOrientationEntry onResolved={handleOrientationResolved} />
           ) : (
           <div className="w-full rounded-2xl border border-border/60 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-xl shadow-black/[0.03] dark:shadow-black/20 transition-shadow focus-within:shadow-2xl focus-within:shadow-violet-500/[0.06]">
@@ -760,13 +801,7 @@ function HomePage() {
         )}
       </motion.div>
 
-      {unifiedLearning ? (
-        <BusinessModelCourseEntry
-          coursePackage={guidedCourseV2 ? BUSINESS_MODEL_GUIDED_PACKAGE : undefined}
-        />
-      ) : (
-        <BusinessModelLearningPath />
-      )}
+      {businessModelMode && !unifiedLearning && <BusinessModelLearningPath />}
 
       {/* ═══ Recent classrooms — collapsible ═══ */}
       {classrooms.length > 0 && (

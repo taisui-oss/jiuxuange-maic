@@ -4,12 +4,16 @@ import { db } from '@/lib/utils/database';
 import { deleteStageData, loadStageData, saveStageData } from '@/lib/utils/stage-storage';
 import {
   courseSessionId,
+  createNewBusinessModelAttempt,
   deriveBusinessModelResumeState,
   getOrCreateBusinessModelSession,
+  loadBusinessModelResumeState,
   type LearningSessionRef,
 } from '@/lib/c-cubic/session';
 import { BUSINESS_MODEL_PILOT_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v1';
 import { BUSINESS_MODEL_GUIDED_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v2';
+import { BUSINESS_MODEL_SIX_LEVEL_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v3';
+import { BUSINESS_MODEL_LEARNING_LOOP_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v5';
 
 const BASE = {
   learnerId: 'learner-a',
@@ -126,6 +130,96 @@ describe('business model unified session', () => {
     expect(first.projectId).toBe('guided-course');
     expect(scene.content.projectV2.milestones).toHaveLength(10);
     expect(scene.content.projectV2.jiuxuange?.sessionVariantId).toBe('guided-course');
+  });
+
+  it('isolates the six-level session and stores orientation claims as unverified drafts', async () => {
+    const draft = {
+      id: 'orientation-v3',
+      learnerId: 'six-level-learner',
+      status: 'resolved' as const,
+      recommendedCourseId: 'business-model' as const,
+      createdAt: '2026-07-20T00:00:00.000Z',
+      resolvedAt: '2026-07-20T00:01:00.000Z',
+      initialMessages: [
+        { role: 'learner' as const, content: '直营网点收缩，但线上订单连续增长。' },
+        { role: 'professor' as const, content: '你希望最终形成什么判断？' },
+        { role: 'learner' as const, content: '我要判断线上增长是否能替代直营网点。' },
+      ],
+    };
+    const ref = await getOrCreateBusinessModelSession({
+      learnerId: draft.learnerId,
+      coursePackage: BUSINESS_MODEL_SIX_LEVEL_PACKAGE,
+      homeOrientationDraft: draft,
+      stageIdFactory: () => 'six-level-stage',
+    });
+    const data = await loadStageData(ref.stageId);
+    const scene = data?.scenes.find((candidate) => candidate.id === ref.sceneId);
+    if (!scene || scene.content.type !== 'pbl' || !scene.content.projectV2) {
+      throw new Error('Expected six-level PBL scene');
+    }
+
+    expect(ref.projectId).toBe('six-level-pbl');
+    expect(scene.content.projectV2.jiuxuange?.projectFactStatus).toBe('pending_verification');
+    expect(scene.content.projectV2.jiuxuange?.projectFacts).toBeUndefined();
+    expect(scene.content.projectV2.jiuxuange?.projectFactDrafts).toHaveLength(2);
+  });
+
+  it('reuses one V5 learning-loop session with a course-level project id', async () => {
+    const first = await getOrCreateBusinessModelSession({
+      learnerId: 'learning-loop-learner',
+      coursePackage: BUSINESS_MODEL_LEARNING_LOOP_PACKAGE,
+      stageIdFactory: () => 'learning-loop-stage',
+    });
+    const second = await getOrCreateBusinessModelSession({
+      learnerId: 'learning-loop-learner',
+      coursePackage: BUSINESS_MODEL_LEARNING_LOOP_PACKAGE,
+      stageIdFactory: () => 'duplicate-learning-loop-stage',
+    });
+    const data = await loadStageData(first.stageId);
+    const scene = data?.scenes.find((candidate) => candidate.id === first.sceneId);
+    if (!scene || scene.content.type !== 'pbl' || !scene.content.projectV2) {
+      throw new Error('Expected V5 learning-loop PBL scene');
+    }
+
+    expect(second).toEqual(first);
+    expect(first.projectId).toBe('business-model-learning-loop');
+    expect(scene.content.projectV2.uiPhase).toBe('workspace');
+    expect(scene.content.projectV2.jiuxuange?.learningLoop).toEqual(
+      expect.objectContaining({ version: 'learning-loop-state.v1' }),
+    );
+  });
+
+  it('starts a new V5 attempt without overwriting the completed learning record', async () => {
+    const first = await getOrCreateBusinessModelSession({
+      learnerId: 'repeat-learner',
+      coursePackage: BUSINESS_MODEL_LEARNING_LOOP_PACKAGE,
+      now: new Date('2026-07-21T00:00:00.000Z'),
+      stageIdFactory: () => 'learning-loop-first',
+    });
+    const firstData = await loadStageData(first.stageId);
+    const firstScene = firstData?.scenes.find((candidate) => candidate.id === first.sceneId);
+    if (!firstData || !firstScene || firstScene.content.type !== 'pbl' || !firstScene.content.projectV2) {
+      throw new Error('Expected first V5 learning-loop scene');
+    }
+    firstScene.content.projectV2.status = 'completed';
+    await saveStageData(first.stageId, firstData);
+
+    const second = await createNewBusinessModelAttempt({
+      learnerId: 'repeat-learner',
+      coursePackage: BUSINESS_MODEL_LEARNING_LOOP_PACKAGE,
+      now: new Date('2026-07-21T00:05:00.000Z'),
+      attemptIdFactory: () => 'attempt-two',
+      stageIdFactory: () => 'learning-loop-second',
+    });
+
+    expect(second.stageId).toBe('learning-loop-second');
+    expect(second.projectId).toBe('business-model-learning-loop:attempt:attempt-two');
+    expect(await db.learningPaths.count()).toBe(2);
+    expect((await deriveBusinessModelResumeState(first)).status).toBe('completed');
+    expect((await loadBusinessModelResumeState({
+      learnerId: 'repeat-learner',
+      coursePackage: BUSINESS_MODEL_LEARNING_LOOP_PACKAGE,
+    })).stageId).toBe(second.stageId);
   });
 
   it('separates learners and package versions', async () => {

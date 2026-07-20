@@ -13,7 +13,7 @@
 
 import type { PBLMilestone, PBLProjectV2 } from '@/lib/pbl/v2/types';
 import Image from 'next/image';
-import { Maximize2, Workflow } from 'lucide-react';
+import { Maximize2, PanelRightOpen, Workflow, X } from 'lucide-react';
 import {
   useCallback,
   useMemo,
@@ -32,6 +32,8 @@ import { useI18n } from '@/lib/hooks/use-i18n';
 import type { CSSProperties } from 'react';
 import { runOneStream, type StreamDisplayState, type StreamStatus } from './use-instructor-stream';
 import type { PBLProjectPatch } from '@/lib/pbl/v2/api/sse';
+import { JiuxuangeSixLevelProgress } from '@/components/c-cubic/six-level-progress';
+import { getCoursePackage } from '@/lib/c-cubic/course-package/registry';
 
 interface Props {
   readonly project: PBLProjectV2;
@@ -102,6 +104,9 @@ interface CompleteTaskPayload {
   milestoneCompleted?: boolean;
   projectCompleted?: boolean;
   nextMicrotaskId?: string;
+  activatedMicrotaskId?: string;
+  autoAdvanced?: boolean;
+  evaluationSkipped?: boolean;
 }
 
 export function PBLV2Workspace({
@@ -119,6 +124,7 @@ export function PBLV2Workspace({
     useState<SubmissionEvaluationStatus | null>(null);
   const [sceneBusy, setSceneBusy] = useState(false);
   const [taskBusy, setTaskBusy] = useState(false);
+  const [mobileSubmissionOpen, setMobileSubmissionOpen] = useState(false);
   const [workspaceStream, setWorkspaceStream] = useState<StreamDisplayState | null>(null);
   const activeMilestoneIndex = useMemo(() => workspaceActiveMilestoneIndex(project), [project]);
   const showRoadmap = !project.jiuxuange;
@@ -245,20 +251,24 @@ export function PBLV2Workspace({
       if (!nextProject) return;
       onProjectChange(nextProject);
 
-      if (payload.milestoneCompleted && payload.milestoneId) {
+      if (payload.milestoneCompleted && payload.milestoneId && !payload.evaluationSkipped) {
         nextProject = await runEvaluationPhase(nextProject, 'milestone', {
           project: nextProject,
           kind: 'milestone',
           milestoneId: payload.milestoneId,
         });
       }
-      if (payload.projectCompleted) {
+      if (payload.projectCompleted && !payload.evaluationSkipped) {
         nextProject = await runEvaluationPhase(nextProject, 'final', {
           project: nextProject,
           kind: 'final',
         });
       }
-      if (!payload.milestoneCompleted && payload.nextMicrotaskId) {
+      if (
+        !payload.projectCompleted &&
+        ((!payload.milestoneCompleted && payload.nextMicrotaskId) ||
+          (payload.autoAdvanced && payload.activatedMicrotaskId))
+      ) {
         await runTaskOpenerPhase(nextProject);
       }
     } catch {
@@ -277,6 +287,41 @@ export function PBLV2Workspace({
     project,
     runEvaluationPhase,
     runTaskOpenerPhase,
+  ]);
+  const handleRetryTask = useCallback(async () => {
+    if (taskBusy || instructorStreaming || submissionEvaluationStatus) return;
+    setTaskBusy(true);
+    onInstructorStreamingChange(true);
+    try {
+      const res = await fetch('/api/pbl/v2/task/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ project, action: 'retry_jiuxuange_task' }),
+      });
+      if (!res.ok) return;
+      const data = (await res.json()) as {
+        data?: { project?: PBLProjectV2 };
+        project?: PBLProjectV2;
+      };
+      const nextProject = data.data?.project ?? data.project;
+      if (!nextProject) return;
+      onProjectChange(nextProject);
+      await runTaskOpenerPhase(nextProject);
+    } catch {
+      /* transient; the retry affordance stays available */
+    } finally {
+      setTaskBusy(false);
+      setWorkspaceStream(null);
+      onInstructorStreamingChange(false);
+    }
+  }, [
+    taskBusy,
+    instructorStreaming,
+    submissionEvaluationStatus,
+    project,
+    onProjectChange,
+    runTaskOpenerPhase,
+    onInstructorStreamingChange,
   ]);
   const handleResizeStart = useCallback(
     (event: ReactMouseEvent, side: ResizeHandleSide) => {
@@ -344,6 +389,7 @@ export function PBLV2Workspace({
         'grid h-full w-full overflow-hidden bg-background text-foreground ring-1 ring-indigo-100/[0.16]',
         'shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_24px_72px_rgba(42,50,95,0.20)]',
         'bg-[radial-gradient(circle_at_18%_5%,rgba(119,102,255,0.20),transparent_31%),radial-gradient(circle_at_86%_10%,rgba(20,184,166,0.17),transparent_29%),radial-gradient(circle_at_52%_105%,rgba(96,165,250,0.10),transparent_34%),linear-gradient(180deg,#182542_0%,#111c34_48%,#162743_100%)]',
+        project.jiuxuange && 'max-md:!grid-cols-1',
       )}
       data-pbl-workspace="true"
       style={{
@@ -395,6 +441,7 @@ export function PBLV2Workspace({
           onInstructorStreamingChange={onInstructorStreamingChange}
           externalStream={workspaceStream}
           onCompleteTask={handleCompleteTask}
+          onRetryTask={handleRetryTask}
           taskBusy={taskBusy}
         />
       </Panel>
@@ -402,8 +449,39 @@ export function PBLV2Workspace({
         side="right"
         active={resizingHandle === 'right'}
         onMouseDown={handleResizeStart}
+        hiddenOnMobile={!!project.jiuxuange}
       />
-      <Panel slot="submission">
+      {project.jiuxuange && !mobileSubmissionOpen && (
+        <button
+          type="button"
+          onClick={() => setMobileSubmissionOpen(true)}
+          className="fixed bottom-24 right-4 z-40 flex h-11 items-center gap-2 rounded-md border border-violet-200/25 bg-[#202b4d] px-3 text-xs font-semibold text-violet-100 shadow-xl md:hidden"
+          aria-label="打开当前任务和提交区"
+          title="当前任务"
+        >
+          <PanelRightOpen className="h-4 w-4" />
+          当前任务
+        </button>
+      )}
+      <Panel
+        slot="submission"
+        className={cn(
+          project.jiuxuange && !mobileSubmissionOpen && 'max-md:hidden',
+          project.jiuxuange &&
+            mobileSubmissionOpen &&
+            'max-md:fixed max-md:inset-0 max-md:z-50 max-md:block',
+        )}
+      >
+        {project.jiuxuange && mobileSubmissionOpen && (
+          <button
+            type="button"
+            onClick={() => setMobileSubmissionOpen(false)}
+            className="absolute right-14 top-3 z-50 flex h-9 w-9 items-center justify-center rounded-md border border-white/15 bg-slate-900/70 text-slate-100 md:hidden"
+            aria-label="关闭当前任务和提交区"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
         {showScenarioBriefing ? (
           <PBLV2RightPanelTabs
             project={project}
@@ -442,6 +520,7 @@ function WorkspaceTopBar({
   readonly onExpand?: () => void;
 }) {
   const { t } = useI18n();
+  const allowReturnToHero = shouldShowWorkspaceReturnToHero(project);
   return (
     <header
       className="relative z-40 col-span-full grid min-w-0 items-center overflow-hidden border-b border-cyan-100/[0.12] bg-[#111d35]/88 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_14px_42px_rgba(5,12,28,0.24)] backdrop-blur-xl"
@@ -474,14 +553,20 @@ function WorkspaceTopBar({
             className="mt-0.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide"
             aria-label={t('pbl.v2.workspace.returnToHero')}
           >
-            <button
-              type="button"
-              onClick={onReturnToHero}
-              title={t('pbl.v2.workspace.returnToHero')}
-              className="rounded bg-gradient-to-r from-violet-200 via-cyan-200 to-sky-200 bg-clip-text text-transparent transition-opacity hover:opacity-80 focus-visible:underline focus-visible:outline-none"
-            >
-              {t('pbl.v2.workspace.breadcrumbOverview')}
-            </button>
+            {allowReturnToHero ? (
+              <button
+                type="button"
+                onClick={onReturnToHero}
+                title={t('pbl.v2.workspace.returnToHero')}
+                className="rounded bg-gradient-to-r from-violet-200 via-cyan-200 to-sky-200 bg-clip-text text-transparent transition-opacity hover:opacity-80 focus-visible:underline focus-visible:outline-none"
+              >
+                {t('pbl.v2.workspace.breadcrumbOverview')}
+              </button>
+            ) : (
+              <span className="bg-gradient-to-r from-violet-200 via-cyan-200 to-sky-200 bg-clip-text text-transparent">
+                已进入课程
+              </span>
+            )}
             <span aria-hidden className="text-indigo-100/40">
               ›
             </span>
@@ -490,7 +575,13 @@ function WorkspaceTopBar({
         </div>
       </div>
 
-      {showProgress && (
+      {showProgress && project.jiuxuange && (
+        <div className="absolute right-12 top-1/2 flex w-[min(62vw,900px)] min-w-0 -translate-y-1/2 items-center">
+          <JiuxuangeSixLevelProgress project={project} />
+        </div>
+      )}
+
+      {showProgress && !project.jiuxuange && (
         <div className="relative col-start-3 hidden min-w-0 items-center gap-2 lg:flex">
           <div className="flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-indigo-100/[0.14] bg-white/[0.045] px-2.5 text-[11px] font-medium text-indigo-100/82">
             <Workflow className="h-3.5 w-3.5 text-violet-200/90" />
@@ -571,7 +662,21 @@ export function workspaceActiveMilestoneIndex(project: PBLProjectV2): number {
 }
 
 export function shouldShowWorkspaceProgress(project: PBLProjectV2): boolean {
-  return !project.jiuxuange;
+  if (!project.jiuxuange) return true;
+  try {
+    return !!getCoursePackage(project.jiuxuange.courseId, project.jiuxuange.courseVersion).journey;
+  } catch {
+    return false;
+  }
+}
+
+export function shouldShowWorkspaceReturnToHero(project: PBLProjectV2): boolean {
+  if (!project.jiuxuange) return true;
+  try {
+    return !getCoursePackage(project.jiuxuange.courseId, project.jiuxuange.courseVersion).journey;
+  } catch {
+    return true;
+  }
 }
 
 export function workspaceGridTemplateColumns(
@@ -588,10 +693,12 @@ function WorkspaceResizeHandle({
   side,
   active,
   onMouseDown,
+  hiddenOnMobile = false,
 }: {
   readonly side: ResizeHandleSide;
   readonly active: boolean;
   readonly onMouseDown: (event: ReactMouseEvent, side: ResizeHandleSide) => void;
+  readonly hiddenOnMobile?: boolean;
 }) {
   const { t } = useI18n();
   return (
@@ -605,6 +712,7 @@ function WorkspaceResizeHandle({
       }
       className={cn(
         'group relative z-30 row-start-2 h-full cursor-col-resize select-none bg-transparent',
+        hiddenOnMobile && 'max-md:hidden',
         active && 'bg-primary/[0.04]',
       )}
       onMouseDown={(event) => onMouseDown(event, side)}
@@ -627,7 +735,15 @@ function WorkspaceResizeHandle({
   );
 }
 
-function Panel({ slot, children }: { readonly slot: PanelSlot; readonly children: ReactNode }) {
+function Panel({
+  slot,
+  children,
+  className,
+}: {
+  readonly slot: PanelSlot;
+  readonly children: ReactNode;
+  readonly className?: string;
+}) {
   return (
     <div
       className={cn(
@@ -638,6 +754,7 @@ function Panel({ slot, children }: { readonly slot: PanelSlot; readonly children
           'bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.10),transparent_34%),linear-gradient(180deg,rgba(15,27,51,0.78)_0%,rgba(11,23,43,0.82)_100%)]',
         slot === 'submission' &&
           'bg-[linear-gradient(180deg,rgba(18,43,65,0.94)_0%,rgba(18,32,58,0.94)_100%)] shadow-[inset_18px_0_38px_rgba(5,12,28,0.10)]',
+        className,
       )}
     >
       <div className="relative z-10 h-full">{children}</div>

@@ -45,10 +45,8 @@ export interface OrientationLearnerMessage {
   now: string;
 }
 
-const ORIENTATION_QUESTIONS: Record<
-  Exclude<JiuxuangeOrientationPhase, 'problem' | 'complete'>,
-  string
-> = {
+const ORIENTATION_QUESTIONS: Record<Exclude<JiuxuangeOrientationPhase, 'complete'>, string> = {
+  problem: '先带着一个真实问题开始：你现在最想通过这门课解决哪个具体的商业判断？',
   baseline: '不看教材的话，你现在会怎样判断一家企业的商业模式是否成立？',
   goal: '完成这门课后，你希望自己能独立完成什么样的商业模式判断？',
   assessment_contract: '到课程结束时，你准备用哪些事实、推理和反证来证明自己的判断？',
@@ -130,6 +128,13 @@ function retryOrientationQuestion(
   if (!normalized) return null;
   const repeatedQuestionComplaint = /(?:问过|重复|刚才问|又问|说过了)/u.test(normalized);
 
+  if (state.phase === 'problem') {
+    if (repeatedQuestionComplaint) {
+      return '你说得对，我换个入口：你家的项目现在哪一个变化最让你拿不准？';
+    }
+    return '先不用完整定义问题。眼下最困扰你的，是客户减少、收入下降，还是原有做法开始失效？';
+  }
+
   if (state.phase === 'baseline') {
     if (repeatedQuestionComplaint) {
       return '你说得对，我换个问法：以你家的项目为例，什么事实会让你判断现在的赚钱方式已经不可持续？';
@@ -162,7 +167,7 @@ export function nextOrientationQuestion(
   learnerMessage?: string,
   retryAttempt = 1,
 ): string | null {
-  if (state.phase === 'problem' || state.phase === 'complete') return null;
+  if (state.phase === 'complete') return null;
   if (learnerMessage) {
     const retry = retryOrientationQuestion(state, learnerMessage, retryAttempt);
     if (retry) return retry;
@@ -183,23 +188,28 @@ export function shouldPromptOrientation(
   const latestText = latest?.content?.trim() ?? '';
   const duplicatedEarlier = messages
     .slice(0, -2)
-    .some(
-      (message) => message.roleType === 'instructor' && message.content?.trim() === latestText,
-    );
+    .some((message) => message.roleType === 'instructor' && message.content?.trim() === latestText);
+  const legacyEmptyFallback =
+    latestText.startsWith('刚才的回复没有完整生成。') ||
+    latestText.startsWith('导师本轮没有产生新的内容。');
   return Boolean(
     latest?.roleType === 'instructor' &&
-      previous?.roleType === 'user' &&
-      ((canonicalQuestion &&
-        latestText === canonicalQuestion &&
-        /(?:问过|重复|刚才问|又问|说过了)/u.test(previous.content?.trim() ?? '')) ||
-        (duplicatedEarlier && !hasMeaningfulOrientationAnswer(previous.content ?? ''))),
+    previous?.roleType === 'user' &&
+    ((canonicalQuestion &&
+      latestText === canonicalQuestion &&
+      /(?:问过|重复|刚才问|又问|说过了)/u.test(previous.content?.trim() ?? '')) ||
+      (duplicatedEarlier && !hasMeaningfulOrientationAnswer(previous.content ?? '')) ||
+      legacyEmptyFallback),
   );
 }
 
 function hasMeaningfulOrientationAnswer(content: string): boolean {
   const normalized = content.trim().replace(/\s+/g, ' ');
   const compact = normalized.replace(/[\s\p{P}\p{S}]/gu, '');
-  return compact.length >= 8 && !FORMULAIC_REPLIES.has(normalized.toLowerCase());
+  const asksForGuidance = /不(?:知道|清楚|确定).*(?:引导|提示)/u.test(normalized);
+  return (
+    compact.length >= 8 && !FORMULAIC_REPLIES.has(normalized.toLowerCase()) && !asksForGuidance
+  );
 }
 
 export function advanceOrientationFromMessage(
@@ -209,6 +219,9 @@ export function advanceOrientationFromMessage(
   if (!hasMeaningfulOrientationAnswer(message.content)) return structuredClone(state);
 
   const evidenceMessageIds = appendUnique(state.evidenceMessageIds, [message.id]);
+  if (state.phase === 'problem') {
+    return { ...state, phase: 'baseline', problemDefined: true, evidenceMessageIds };
+  }
   if (state.phase === 'baseline') {
     return { ...state, phase: 'goal', baselineCaptured: true, evidenceMessageIds };
   }

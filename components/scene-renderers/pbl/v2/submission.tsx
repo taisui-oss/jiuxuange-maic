@@ -36,6 +36,7 @@ import {
   FileText,
   Image as ImageIcon,
   Lightbulb,
+  SearchCheck,
   Paperclip,
   Upload,
   X,
@@ -70,6 +71,8 @@ import {
   taskEvaluationCanComplete,
 } from '@/lib/pbl/v2/operations/task-completion';
 import { useI18n } from '@/lib/hooks/use-i18n';
+import { getCoursePackage } from '@/lib/c-cubic/course-package/registry';
+import { deriveJiuxuangeLearningFactCard } from '@/lib/c-cubic/learning-loop-view';
 import i18n from '@/lib/i18n/config';
 import {
   assertNotStreamError,
@@ -117,6 +120,46 @@ export interface SubmissionEvaluationStatus {
   readonly streamStatus?: StreamStatus;
   readonly draft?: string;
   readonly startedAt: string;
+}
+
+function activeTask(project: PBLProjectV2) {
+  const milestone = project.milestones.find((candidate) => candidate.status === 'active');
+  const task = milestone?.microtasks.find(
+    (candidate) => candidate.status === 'todo' || candidate.status === 'in_progress',
+  );
+  return milestone && task ? { milestone, task } : undefined;
+}
+
+export function shouldShowJiuxuangeSubmission(project: PBLProjectV2): boolean {
+  if (!project.jiuxuange) return true;
+  if (project.jiuxuange.entryMode === 'learning-loop') return false;
+  try {
+    const coursePackage = getCoursePackage(
+      project.jiuxuange.courseId,
+      project.jiuxuange.courseVersion,
+    );
+    if (!coursePackage.journey) return true;
+  } catch {
+    return true;
+  }
+
+  const current = activeTask(project);
+  if (!current) return false;
+  if (current.task.jiuxuange?.casePhase === 'commit') return true;
+  return (
+    current.milestone.id === 'jgx-milestone-project-synthesis' ||
+    current.milestone.id === 'jgx-milestone-personal-assessment'
+  );
+}
+
+function jiuxuangeTaskTitle(project: PBLProjectV2, fallback: string): string {
+  if (
+    (project.jiuxuange?.orientation && project.jiuxuange.orientation.phase !== 'complete') ||
+    activeTask(project)?.milestone.id === 'jgx-milestone-course-foundations'
+  ) {
+    return '学习导入';
+  }
+  return fallback;
 }
 
 /** 5 MB cap. Larger than the v1 repo's 1 MB because v2 stores
@@ -281,13 +324,9 @@ export function PBLV2SubmissionPanel({
   instructorStreaming,
 }: Props) {
   const { t } = useI18n();
-  const current = useMemo(() => {
-    const ms = project.milestones.find((m) => m.status === 'active');
-    if (!ms) return undefined;
-    const task = ms.microtasks.find((t) => t.status === 'todo' || t.status === 'in_progress');
-    if (!task) return undefined;
-    return { milestone: ms, task };
-  }, [project.milestones]);
+  const current = useMemo(() => activeTask(project), [project]);
+  const submissionRequired = shouldShowJiuxuangeSubmission(project);
+  const learningFactCard = useMemo(() => deriveJiuxuangeLearningFactCard(project), [project]);
 
   const existing = useMemo(
     () => (current ? listSubmissionsForMicrotask(project, current.task.id) : []),
@@ -304,7 +343,7 @@ export function PBLV2SubmissionPanel({
     const { milestone, task } = current;
     if (milestone.scenarioStage !== 'roleplay') {
       return {
-        title: task.title,
+        title: jiuxuangeTaskTitle(project, task.title),
         brief: task.learnerBrief || task.description || '',
         hints: task.hints ?? [],
       };
@@ -317,7 +356,7 @@ export function PBLV2SubmissionPanel({
       .join('\n\n');
     const hints = beats.flatMap((b) => b.hints ?? []).filter(Boolean);
     return { title: milestone.title, brief, hints };
-  }, [current]);
+  }, [current, project]);
 
   // Project-wide submission history (all tasks/stages), newest first, so a
   // learner can always see — and re-open — every output they have produced,
@@ -607,6 +646,37 @@ export function PBLV2SubmissionPanel({
             )}
           </div>
 
+          {learningFactCard && (
+            <section
+              aria-labelledby="jiuxuange-case-observation-title"
+              className="rounded-xl border border-cyan-200/[0.16] bg-cyan-950/20 p-4"
+            >
+              <div className="mb-1.5 flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-cyan-200/80">
+                <SearchCheck className="size-3" />
+                <span>案例观察</span>
+              </div>
+              <h4
+                id="jiuxuange-case-observation-title"
+                className="text-sm font-medium text-white"
+              >
+                {learningFactCard.title}
+              </h4>
+              <ol className="mt-3 space-y-3">
+                {learningFactCard.facts.map((fact, index) => (
+                  <li key={fact.id} className="text-xs leading-5 text-indigo-50/85">
+                    <div className="flex gap-2">
+                      <span className="shrink-0 text-cyan-200/70">{index + 1}.</span>
+                      <span>{fact.text}</span>
+                    </div>
+                    <div className="mt-1 pl-5 text-[10px] leading-4 text-slate-400">
+                      {fact.sourceLabel}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
+
           {display && display.hints.length > 0 && (
             <div className="rounded-xl border border-cyan-100/[0.12] bg-slate-800/[0.40] p-4">
               <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-cyan-200/80 mb-2">
@@ -624,43 +694,51 @@ export function PBLV2SubmissionPanel({
             </div>
           )}
 
-          <div className="rounded-xl border border-cyan-100/[0.12] bg-slate-800/[0.46] p-3">
-            <button
-              type="button"
-              onClick={() => {
-                if (!submitLocked) setModalOpen(true);
-              }}
-              disabled={submitLocked}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary px-3 py-2 text-xs font-medium text-primary-foreground shadow-[0_0_28px_rgba(155,124,255,0.26)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <Upload className="w-3.5 h-3.5" />
-              {t('pbl.v2.submission.submitOutput')}
-            </button>
-            {evaluating ? (
-              <div className="mt-2 text-[10px] text-muted-foreground text-center">
-                {t('pbl.v2.submission.evaluating')}
-              </div>
-            ) : (
-              instructorStreaming && (
-                <div className="mt-2 text-[10px] text-muted-foreground text-center">
-                  {t('pbl.v2.submission.lockedWhileStreaming')}
-                </div>
-              )
-            )}
-            {existing.length > 0 && (
-              <div className="mt-3 text-[10px] text-muted-foreground text-center">
-                {t('pbl.v2.submission.submittedCount', { count: existing.length })}
-              </div>
-            )}
-            {evalError && (
-              <div
-                role="alert"
-                className="mt-2 rounded-md border border-destructive/30 bg-destructive/10 px-2.5 py-2 text-[11px] leading-snug text-destructive"
+          {submissionRequired ? (
+            <div className="rounded-xl border border-cyan-100/[0.12] bg-slate-800/[0.46] p-3">
+              <button
+                type="button"
+                onClick={() => {
+                  if (!submitLocked) setModalOpen(true);
+                }}
+                disabled={submitLocked}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary px-3 py-2 text-xs font-medium text-primary-foreground shadow-[0_0_28px_rgba(155,124,255,0.26)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {t('pbl.v2.submission.evalFailed', { error: evalError })}
-              </div>
-            )}
-          </div>
+                <Upload className="w-3.5 h-3.5" />
+                {t('pbl.v2.submission.submitOutput')}
+              </button>
+              {evaluating ? (
+                <div className="mt-2 text-[10px] text-muted-foreground text-center">
+                  {t('pbl.v2.submission.evaluating')}
+                </div>
+              ) : (
+                instructorStreaming && (
+                  <div className="mt-2 text-[10px] text-muted-foreground text-center">
+                    {t('pbl.v2.submission.lockedWhileStreaming')}
+                  </div>
+                )
+              )}
+              {existing.length > 0 && (
+                <div className="mt-3 text-[10px] text-muted-foreground text-center">
+                  {t('pbl.v2.submission.submittedCount', { count: existing.length })}
+                </div>
+              )}
+              {evalError && (
+                <div
+                  role="alert"
+                  className="mt-2 rounded-md border border-destructive/30 bg-destructive/10 px-2.5 py-2 text-[11px] leading-snug text-destructive"
+                >
+                  {t('pbl.v2.submission.evalFailed', { error: evalError })}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-cyan-100/[0.12] bg-slate-800/[0.40] p-4 text-xs leading-5 text-indigo-100/75">
+              {project.jiuxuange?.orientation && project.jiuxuange.orientation.phase !== 'complete'
+                ? '你已经进入课程。当前通过对话完成学习导入，不需要提交案例或文件。'
+                : '当前任务在对话中完成。回答当前问题即可继续，不需要额外提交。'}
+            </div>
+          )}
         </>
       ) : (
         <div className="rounded-xl border border-cyan-100/[0.12] bg-slate-800/[0.40] p-4 text-xs text-muted-foreground">
@@ -677,7 +755,7 @@ export function PBLV2SubmissionPanel({
         />
       )}
 
-      {modalOpen && current && (
+      {modalOpen && current && submissionRequired && (
         <SubmissionModal
           project={project}
           microtaskId={current.task.id}

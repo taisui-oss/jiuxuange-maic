@@ -59,9 +59,19 @@ import {
   selectJiuxuangeRole,
 } from '@/lib/c-cubic/runtime';
 import { getCoursePackage } from '@/lib/c-cubic/course-package/registry';
-import { evaluateJiuxuangeLearnerMessage } from '@/lib/c-cubic/evidence';
+import {
+  applyJiuxuangeEvidenceGate,
+  applyJiuxuangeLearningFirstPreludeProgress,
+  applyJiuxuangeLearningLoopProgress,
+  evaluateJiuxuangeLearnerMessage,
+} from '@/lib/c-cubic/evidence';
 import { advanceOrientationFromMessage } from '@/lib/c-cubic/orientation';
 import { retrieveCourseContext } from '@/lib/c-cubic/knowledge';
+import {
+  ensureJiuxuangeLearningLoopFeedback,
+  formatJiuxuangeLearningLoopFeedback,
+  recordJiuxuangeLearningLoopTurn,
+} from '@/lib/c-cubic/learning-loop';
 import type { PBLRuntimeEvent } from '../types';
 
 const log = createLogger('PBL v2 Instructor');
@@ -636,6 +646,9 @@ function isFirstProjectMicrotask(
 export const JIUXUANGE_FORMAL_COURSE_OPENING =
   '好，我们现在正式开始商业模式大课。接下来，你会经历概念理解、案例推演和个人学习成果测评；重点不是记住标准答案，而是依据事实形成并检验自己的判断。我们先从第一步开始。';
 
+export const JIUXUANGE_LEARNING_FIRST_OPENING =
+  '好，我们现在直接开始商业模式大课。导学先建立必要概念，再用一个固定案例看见概念之间的连接。';
+
 export function buildJiuxuangeFormalCourseOpeningBlock(args: {
   project: PBLProjectV2;
   milestone: PBLMilestone;
@@ -653,7 +666,9 @@ export function buildJiuxuangeFormalCourseOpeningBlock(args: {
     '## Jiuxuange formal course opening — first entry only',
     '',
     'Before the current task handoff, reproduce this learner-facing guide exactly once:',
-    JIUXUANGE_FORMAL_COURSE_OPENING,
+    args.project.jiuxuange.entryMode === 'learning-first'
+      ? JIUXUANGE_LEARNING_FIRST_OPENING
+      : JIUXUANGE_FORMAL_COURSE_OPENING,
     '',
     '本段引导语本身不提出问题。引导语之后，只提出九轩阁本轮运行约束指定的唯一问题。',
     '不要在续聊、后续微任务或后续阶段重复这段引导语。',
@@ -947,8 +962,12 @@ function buildSystemPrompt(args: {
     const metadata = args.project.jiuxuange;
     const coursePackage = getCoursePackage(metadata.courseId, metadata.courseVersion);
     const taskCaseId = args.microtask.jiuxuange?.caseId;
-    const selectedCase = taskCaseId ? coursePackage.cases[taskCaseId] : undefined;
-    jiuxuangeRuntimeBlock = buildJiuxuangeRuntimeBlock(args.project, selectedCase?.facts ?? []);
+    const selectedCase = coursePackage.cases[taskCaseId ?? metadata.caseId];
+    const runtimeFacts =
+      args.microtask.jiuxuange?.factScope === 'project'
+        ? (metadata.projectFacts ?? [])
+        : (selectedCase?.facts ?? []);
+    jiuxuangeRuntimeBlock = buildJiuxuangeRuntimeBlock(args.project, runtimeFacts);
     jiuxuangeKnowledgeBlock = buildJiuxuangeKnowledgeBlock(args.project, args.microtask);
   }
 
@@ -1386,6 +1405,32 @@ function difficultyAdjustAck(language: string | undefined): string {
   }
 }
 
+/**
+ * Visible, task-grounded continuation for the rare turn where the provider
+ * returns no prose. This is deliberately deterministic: a provider failure
+ * must not be reframed as the learner asking a bad question, and it must not
+ * advance or mutate the learning state.
+ */
+function emptyInstructorFallback(language: string | undefined, taskTitle: string): string {
+  const title = truncateForPrompt(taskTitle.trim() || '当前任务', 120);
+  switch (language) {
+    case 'zh-CN':
+      return `刚才的回复没有完整生成。我们先留在「${title}」：请用自己的话说明你目前的判断依据。`;
+    case 'zh-TW':
+      return `剛才的回覆沒有完整產生。我們先留在「${title}」：請用自己的話說明你目前的判斷依據。`;
+    case 'ja-JP':
+      return `直前の応答が完全に生成されませんでした。「${title}」に留まり、現時点の判断根拠を自分の言葉で説明してください。`;
+    case 'ru-RU':
+      return `Предыдущий ответ не сформировался полностью. Останемся на «${title}»: объясните своими словами, на чём сейчас основано ваше суждение.`;
+    case 'pt-BR':
+      return `A resposta anterior não foi gerada por completo. Vamos permanecer em “${title}”: explique com suas palavras quais evidências sustentam seu julgamento atual.`;
+    case 'ar-SA':
+      return `لم يكتمل إنشاء الرد السابق. لنبقَ مع «${title}»: اشرح بكلماتك ما الأدلة التي يستند إليها حكمك الحالي.`;
+    default:
+      return `The previous response did not complete. Let's stay with "${title}": explain in your own words what evidence supports your current judgment.`;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Public entry point
 // ---------------------------------------------------------------------------
@@ -1445,6 +1490,10 @@ export async function* runInstructorTurn(
   let completedOrientationThisTurn = false;
   let orientationRetryMessage: string | undefined;
   let orientationRetryAttempt = 1;
+  let learningFirstPreludeReady = false;
+  let learningFirstPreludeAssisted = false;
+  let learningLoopReady = false;
+  let learningLoopAssisted = false;
 
   // Append the learner turn to the in-memory project so the next
   // system-prompt rebuild sees it. The client is the source of
@@ -1534,29 +1583,84 @@ export async function* runInstructorTurn(
       };
     } else if (project.jiuxuange && learnerSourceMessageId) {
       const hintLevel = microtask.jiuxuange?.hintLevel ?? 0;
+      const evidenceDecision = evaluateJiuxuangeLearnerMessage({
+        project,
+        messageId: learnerSourceMessageId,
+        message: userMessage,
+        hintLevel,
+        modelVersion: resolvedLanguageModelId(languageModel),
+      });
+      const evidenceNow = new Date().toISOString();
       const evidenceEvent: PBLRuntimeEvent = {
         id: 'runtime_evidence_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
         kind: 'jiuxuange_evidence_evaluated',
         actorType: 'system',
-        ts: new Date().toISOString(),
+        ts: evidenceNow,
         microtaskId: microtask.id,
         milestoneId: milestone.id,
         sourceMessageId: learnerSourceMessageId,
         hintLevel,
-        decision: evaluateJiuxuangeLearnerMessage({
-          project,
-          messageId: learnerSourceMessageId,
-          message: userMessage,
-          hintLevel,
-          modelVersion: resolvedLanguageModelId(languageModel),
-        }),
+        decision: evidenceDecision,
       };
       project.runtimeEvents ??= [];
       project.runtimeEvents.push(evidenceEvent);
+      applyJiuxuangeEvidenceGate(project, evidenceDecision, {
+        sourceMessageId: learnerSourceMessageId,
+        message: userMessage,
+        now: evidenceNow,
+      });
+      learningFirstPreludeAssisted = applyJiuxuangeLearningFirstPreludeProgress(
+        project,
+        evidenceDecision,
+        {
+          sourceMessageId: learnerSourceMessageId,
+          message: userMessage,
+          now: evidenceNow,
+        },
+      );
+      learningLoopAssisted = applyJiuxuangeLearningLoopProgress(project, evidenceDecision, {
+        sourceMessageId: learnerSourceMessageId,
+        message: userMessage,
+        now: evidenceNow,
+      });
+      const learningLoopTurn = recordJiuxuangeLearningLoopTurn(project, evidenceDecision, {
+        sourceMessageId: learnerSourceMessageId,
+        message: userMessage,
+        now: evidenceNow,
+        assisted: learningLoopAssisted,
+      });
+      if (learningLoopTurn.revision) {
+        const generated = ensureJiuxuangeLearningLoopFeedback(project, evidenceNow);
+        if (generated.event) learningLoopTurn.events.push(generated.event);
+      }
+      learningFirstPreludeReady =
+        project.jiuxuange.entryMode === 'learning-first' &&
+        project.pendingTaskCompletion?.microtaskId === microtask.id;
+      learningLoopReady =
+        project.jiuxuange.entryMode === 'learning-loop' &&
+        project.pendingTaskCompletion?.microtaskId === microtask.id;
       yield {
         type: 'project_patch',
         patch: { kind: 'runtime_event', event: evidenceEvent },
       };
+      for (const event of learningLoopTurn.events) {
+        yield {
+          type: 'project_patch',
+          patch: { kind: 'runtime_event', event },
+        };
+      }
+      if (
+        (learningFirstPreludeReady || learningLoopReady) &&
+        project.pendingTaskCompletion?.microtaskId === microtask.id
+      ) {
+        yield {
+          type: 'project_patch',
+          patch: {
+            kind: 'pending_task_completion',
+            pending: structuredClone(project.pendingTaskCompletion),
+          },
+        };
+      }
     }
     // NOTE: explicit "change the difficulty / I'm a beginner" requests are NOT
     // detected here by regex anymore. The Instructor LLM judges that intent from
@@ -1838,9 +1942,35 @@ export async function* runInstructorTurn(
       orientationRetryAttempt,
     );
     if (canonicalQuestion) {
-      assistantText = completedOrientationThisTurn
-        ? `${JIUXUANGE_FORMAL_COURSE_OPENING}\n\n${canonicalQuestion}`
-        : normalizeJiuxuangeReply(assistantText, canonicalQuestion);
+      const learningLoopFeedback = project.jiuxuange.learningLoop?.feedback;
+      const authoredTeachingText =
+        microtask.jiuxuange?.learningNodeId === 'evidence_feedback' && learningLoopFeedback
+          ? formatJiuxuangeLearningLoopFeedback(learningLoopFeedback)
+          : microtask.jiuxuange?.teachingText;
+      if (project.jiuxuange.entryMode === 'learning-loop' && phase !== 'instructing') {
+        assistantText = authoredTeachingText
+          ? `${authoredTeachingText}\n\n${canonicalQuestion}`
+          : canonicalQuestion;
+      } else if (learningFirstPreludeReady || learningLoopReady) {
+        const assisted = learningFirstPreludeAssisted || learningLoopAssisted;
+        const continuationInstruction =
+          project.jiuxuange.entryMode === 'learning-loop'
+            ? '你可以点击「继续学习」。'
+            : '你可以点击「完成」继续学习。';
+        assistantText = assisted
+          ? `${authoredTeachingText ?? '没关系，我们先把这一点讲清楚。'}\n\n这一步先按“辅助理解”记录。${continuationInstruction}`
+          : `你的回答已经留下了学习证据。${continuationInstruction}`;
+      } else {
+        assistantText = completedOrientationThisTurn
+          ? `${JIUXUANGE_FORMAL_COURSE_OPENING}\n\n${canonicalQuestion}`
+          : normalizeJiuxuangeReply(
+              assistantText,
+              canonicalQuestion,
+              microtask.jiuxuange?.teachingMode === 'explain-then-check'
+                ? authoredTeachingText
+                : undefined,
+            );
+      }
     }
   }
   const assistantCommit = cleanInstructorCommitText(assistantText, {
@@ -1892,22 +2022,34 @@ export async function* runInstructorTurn(
       patch: { kind: 'message', message: ackMsg },
     };
   } else if (
+    speakingRole &&
     shouldReportEmptyOutput({
       mainTurnAdvanced,
       assistantText: shownText,
       producedAck: didAdjustDifficulty,
     })
   ) {
-    // Empty-bubble fallback: the turn produced NOTHING the learner can
-    // perceive — no scenario auto-completion, no committed text, no difficulty
-    // ack. Applies to greeting / setup openers and to any instructing turn
-    // that went silent (for example a lone record_observation). Emitted after
-    // project patches so the client, which aborts the stream on the first
-    // `error` frame, never drops a later patch to a premature error.
+    // Provider silence is an infrastructure condition, not evidence that the
+    // learner asked a poor question. Preserve every earlier analytics patch,
+    // then commit one visible continuation without advancing the task.
+    const fallbackText = emptyInstructorFallback(project.language, microtask.title);
+    log.warn(
+      `Instructor produced no visible text; committed local continuation ` +
+        `(project=${project.title}, microtask=${microtask.id}, jiuxuange=${!!project.jiuxuange})`,
+    );
+    lastCommittedMessageTs = new Date().toISOString();
+    const fallbackMsg: PBLChatMessage = {
+      id: 'msg_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
+      agentId: speakingRole.id,
+      roleType: speakingRole.type,
+      content: fallbackText,
+      ts: lastCommittedMessageTs,
+      microtaskId: microtask.id,
+    };
+    if (instructorThread) instructorThread.messages.push(fallbackMsg);
     yield {
-      type: 'error',
-      code: 'EMPTY_LLM_OUTPUT',
-      message: '导师本轮没有产生新的内容。请稍后再试，或者把你的问题再说得具体一些。',
+      type: 'project_patch',
+      patch: { kind: 'message', message: fallbackMsg },
     };
   }
 

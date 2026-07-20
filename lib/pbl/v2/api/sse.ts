@@ -20,6 +20,7 @@ import type {
   PBLMilestone,
   PBLEngagementEvent,
   PBLRuntimeEvent,
+  PBLPendingTaskCompletion,
 } from '../types';
 
 // ---------------------------------------------------------------------------
@@ -109,6 +110,10 @@ export interface SSEProjectPatchEvent {
     | {
         kind: 'runtime_event';
         event: PBLRuntimeEvent;
+      }
+    | {
+        kind: 'pending_task_completion';
+        pending: PBLPendingTaskCompletion;
       }
     | {
         kind: 'evaluation';

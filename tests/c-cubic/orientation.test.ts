@@ -8,6 +8,57 @@ import {
 } from '@/lib/c-cubic/orientation';
 
 describe('Jiuxuange orientation state', () => {
+  it('starts direct course entry with a concrete problem question and records the answer', () => {
+    const state = createOrientationState();
+
+    expect(nextOrientationQuestion(state)).toBe(
+      '先带着一个真实问题开始：你现在最想通过这门课解决哪个具体的商业判断？',
+    );
+
+    const next = advanceOrientationFromMessage(state, {
+      id: 'direct-entry-problem',
+      content: '我想判断现有美容院渠道是否还能支撑转型。',
+      now: '2026-07-20T00:00:00.000Z',
+    });
+
+    expect(next).toMatchObject({ phase: 'baseline', problemDefined: true });
+    expect(next.evidenceMessageIds).toContain('direct-entry-problem');
+  });
+
+  it('keeps uncertainty in the current phase and changes from repetition to scaffolding', () => {
+    const state = createOrientationState();
+    const uncertain = advanceOrientationFromMessage(state, {
+      id: 'uncertain',
+      content: '我不知道要判断什么，你需要引导我。',
+      now: '2026-07-20T00:00:00.000Z',
+    });
+
+    expect(uncertain).toEqual(state);
+    expect(nextOrientationQuestion(state, '我不知道要判断什么，你需要引导我。')).toContain(
+      '最困扰你的',
+    );
+  });
+
+  it('recovers an incomplete orientation after the legacy empty-output fallback', () => {
+    const state = {
+      ...createOrientationState(),
+      phase: 'goal' as const,
+      problemDefined: true,
+      baselineCaptured: true,
+    };
+
+    expect(
+      shouldPromptOrientation(state, [
+        { roleType: 'user', content: '我不知道要判断，你需要引导我。' },
+        {
+          roleType: 'instructor',
+          content:
+            '刚才的回复没有完整生成。我们先留在「概念理解」：请用自己的话说明你目前的判断依据。',
+        },
+      ]),
+    ).toBe(true);
+  });
+
   it('requests the next orientation question when the attached home exchange ends with the learner', () => {
     const state = {
       ...createOrientationState(),

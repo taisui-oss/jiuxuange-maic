@@ -8,6 +8,7 @@ const BIANLIFENG_SOURCE: JiuxuangeKnowledgeSource = {
   title: '便利蜂商业模式',
   authority: 'primary',
   verificationStatus: 'verified',
+  contentHash: 'sha256:b5162cb5d933e7160d8910b4bce66f9d09de0be8f59c82e4b4f18161eee854e3',
   page: 5,
 };
 
@@ -18,6 +19,7 @@ const DINGDONG_SOURCE: JiuxuangeKnowledgeSource = {
   title: '生鲜零售行业商业模式对比',
   authority: 'primary',
   verificationStatus: 'verified',
+  contentHash: 'sha256:143d8f315ed246ca3224cc2b11f067476a519d3b12bbf3322d534298265a3a36',
   page: 11,
 };
 
@@ -104,11 +106,27 @@ export const JIUXUANGE_KNOWLEDGE_DOCUMENTS: JiuxuangeKnowledgeDocument[] = [
       },
       {
         id: 'cash-value-definition',
-        nodeIds: ['cash-flow-enterprise-value'],
+        nodeIds: ['cash-flow-enterprise-value', 'cash-flow-structure', 'enterprise-value'],
         order: 1,
         kind: 'learner_fact',
         content: '现金流结构关注流入流出的组成与时序，企业价值是六要素持续运行和相互作用的结果。',
         sources: [principlesSource('3.7 现金流结构与企业价值')],
+      },
+      {
+        id: 'cash-flow-definition',
+        nodeIds: ['cash-flow-structure'],
+        order: 2,
+        kind: 'learner_fact',
+        content: '现金流结构需要同时观察流入流出的对象、金额与发生时序，不能用会计利润替代。',
+        sources: [principlesSource('3.7 现金流结构')],
+      },
+      {
+        id: 'enterprise-value-definition',
+        nodeIds: ['enterprise-value'],
+        order: 2,
+        kind: 'learner_fact',
+        content: '企业价值是前五个要素持续运行后形成的未来净现金流价值，需回到其驱动因素与风险。',
+        sources: [principlesSource('3.8 企业价值')],
       },
     ],
   },
@@ -120,7 +138,7 @@ export const JIUXUANGE_KNOWLEDGE_DOCUMENTS: JiuxuangeKnowledgeDocument[] = [
     sections: [
       {
         id: 'bianlifeng-data-inputs-fact',
-        nodeIds: ['six-elements', 'convenience-bee'],
+        nodeIds: ['six-elements', 'convenience-bee', 'convenience-bee-loop'],
         order: 1,
         kind: 'learner_fact',
         content:
@@ -129,7 +147,7 @@ export const JIUXUANGE_KNOWLEDGE_DOCUMENTS: JiuxuangeKnowledgeDocument[] = [
       },
       {
         id: 'bianlifeng-ordering-fact',
-        nodeIds: ['six-elements', 'convenience-bee'],
+        nodeIds: ['six-elements', 'convenience-bee', 'convenience-bee-loop'],
         order: 2,
         kind: 'learner_fact',
         content:
@@ -138,7 +156,7 @@ export const JIUXUANGE_KNOWLEDGE_DOCUMENTS: JiuxuangeKnowledgeDocument[] = [
       },
       {
         id: 'bianlifeng-analysis',
-        nodeIds: ['six-elements', 'convenience-bee'],
+        nodeIds: ['six-elements', 'convenience-bee', 'convenience-bee-loop'],
         order: 3,
         kind: 'locked_analysis',
         content:

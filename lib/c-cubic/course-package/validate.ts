@@ -16,6 +16,40 @@ export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
     errors.push('course modules require unique code values');
   }
 
+  if (pkg.journey) {
+    const expectedLevelIds = [
+      'positioning',
+      'business-system',
+      'key-resources-capabilities',
+      'profit-model',
+      'cash-flow-structure',
+      'enterprise-value',
+    ];
+    if (pkg.journey.levels.length !== expectedLevelIds.length) {
+      errors.push('course journey requires exactly six visible levels');
+    }
+    if (pkg.journey.levels.map((level) => level.id).join(',') !== expectedLevelIds.join(',')) {
+      errors.push('course journey visible levels require the canonical six-element order');
+    }
+    const referencedModuleIds = [
+      ...pkg.journey.preludeModuleIds,
+      ...pkg.journey.levels.flatMap((level) => level.moduleIds),
+      ...pkg.journey.postludeModuleIds,
+    ];
+    for (const moduleId of referencedModuleIds) {
+      if (!moduleIds.includes(moduleId)) {
+        errors.push(`course journey references unknown module ${moduleId}`);
+      }
+    }
+    for (const level of pkg.journey.levels) {
+      if (level.calibrationCaseId && !pkg.cases[level.calibrationCaseId]) {
+        errors.push(
+          `course journey level ${level.id} references unknown case ${level.calibrationCaseId}`,
+        );
+      }
+    }
+  }
+
   for (const courseModule of pkg.modules) {
     for (const conceptId of courseModule.conceptIds) {
       if (!pkg.concepts[conceptId]) {
@@ -104,6 +138,18 @@ export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
     if (question.caseId && !pkg.cases[question.caseId]) {
       errors.push(`question ${questionId} references unknown case ${question.caseId}`);
     }
+    if (question.scaffolds) {
+      if (question.scaffolds.map((item) => item.hintLevel).join(',') !== '1,2,3') {
+        errors.push(`question ${questionId} scaffolds require hint levels 1, 2 and 3`);
+      }
+      for (const scaffold of question.scaffolds) {
+        if (countLearnerFacingQuestions(scaffold.prompt) !== 1) {
+          errors.push(
+            `question ${questionId} scaffold ${scaffold.hintLevel} must contain one question`,
+          );
+        }
+      }
+    }
   }
 
   for (const courseModule of pkg.modules.filter((module) => module.caseIds.length > 0)) {
@@ -111,9 +157,13 @@ export function validateCoursePackage(pkg: JiuxuangeCoursePackage): string[] {
       (questionId) => pkg.questionTemplates[questionId]?.casePhase,
     );
     if (!phases.some(Boolean)) continue;
-    if (phases.join(' -> ') !== 'blind -> commit -> unlock -> compare') {
+    const expectedPhases =
+      pkg.entryMode === 'learning-loop' && courseModule.id === 'case-convenience-bee-loop'
+        ? 'blind -> commit -> compare'
+        : 'blind -> commit -> unlock -> compare';
+    if (phases.join(' -> ') !== expectedPhases) {
       errors.push(
-        `case module ${courseModule.id} must follow blind -> commit -> unlock -> compare`,
+        `case module ${courseModule.id} must follow ${expectedPhases}`,
       );
     }
   }

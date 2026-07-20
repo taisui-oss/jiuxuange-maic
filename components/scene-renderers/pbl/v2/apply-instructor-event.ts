@@ -89,13 +89,43 @@ export function applyInstructorEvent(
           break;
         }
         case 'runtime_event': {
+          const runtimeEvent = patch.event;
           next.runtimeEvents ??= [];
-          if (!next.runtimeEvents.some((existing) => existing.id === patch.event.id)) {
-            next.runtimeEvents.push(patch.event);
+          if (!next.runtimeEvents.some((existing) => existing.id === runtimeEvent.id)) {
+            next.runtimeEvents.push(runtimeEvent);
           }
-          if (patch.event.kind === 'jiuxuange_orientation_updated' && next.jiuxuange) {
-            next.jiuxuange.orientation = structuredClone(patch.event.orientation);
+          if (runtimeEvent.kind === 'jiuxuange_orientation_updated' && next.jiuxuange) {
+            next.jiuxuange.orientation = structuredClone(runtimeEvent.orientation);
           }
+          if (next.jiuxuange?.learningLoop) {
+            const learningLoop = next.jiuxuange.learningLoop;
+            switch (runtimeEvent.kind) {
+              case 'jiuxuange_claim_recorded':
+                if (!learningLoop.claims.some((item) => item.id === runtimeEvent.claim.id)) {
+                  learningLoop.claims.push(structuredClone(runtimeEvent.claim));
+                }
+                break;
+              case 'jiuxuange_disclosure_recorded':
+                if (
+                  !learningLoop.disclosures.some((item) => item.id === runtimeEvent.disclosure.id)
+                ) {
+                  learningLoop.disclosures.push(structuredClone(runtimeEvent.disclosure));
+                }
+                break;
+              case 'jiuxuange_judgment_revision_recorded':
+                if (!learningLoop.revisions.some((item) => item.id === runtimeEvent.revision.id)) {
+                  learningLoop.revisions.push(structuredClone(runtimeEvent.revision));
+                }
+                break;
+              case 'jiuxuange_feedback_generated':
+                learningLoop.feedback = structuredClone(runtimeEvent.feedback);
+                break;
+            }
+          }
+          break;
+        }
+        case 'pending_task_completion': {
+          next.pendingTaskCompletion = structuredClone(patch.pending);
           break;
         }
         case 'advance': {

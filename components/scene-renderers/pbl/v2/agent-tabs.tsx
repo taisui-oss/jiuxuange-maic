@@ -32,6 +32,7 @@ interface Props {
   readonly onInstructorStreamingChange: (active: boolean) => void;
   readonly externalStream?: StreamDisplayState | null;
   readonly onCompleteTask?: () => void;
+  readonly onRetryTask?: () => void;
   readonly taskBusy?: boolean;
 }
 
@@ -43,6 +44,7 @@ export function PBLV2AgentTabs({
   onInstructorStreamingChange,
   externalStream,
   onCompleteTask,
+  onRetryTask,
   taskBusy,
 }: Props) {
   const { t } = useI18n();
@@ -98,6 +100,7 @@ export function PBLV2AgentTabs({
         onInstructorStreamingChange={onInstructorStreamingChange}
         externalStream={externalStream}
         onCompleteTask={onCompleteTask}
+        onRetryTask={onRetryTask}
         taskBusy={taskBusy}
       />
     </div>

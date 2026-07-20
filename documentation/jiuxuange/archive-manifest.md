@@ -4,9 +4,11 @@
 
 - 工作区：`/Users/sijia/Documents/C 立方/OpenMAIC/.worktrees/jiuxuange-unified-learning`
 - 开发分支：`codex/jiuxuange-unified-learning-phase1`
-- 归档前实现基线：`36a2cc3`
-- 产品范围：九轩阁商业模式大课统一学习空间第一阶段
+- 归档前实现基线：`77756f4`
+- 产品范围：九轩阁商业模式大课 V5.1 学习闭环、首页入口、十五境服务端接入与完整测试归档
 - 运行形态：Next.js 16 + React 19 + OpenMAIC PBL v2 + Dexie
+- 私有 GitHub 仓库：`https://github.com/taisui-oss/jiuxuange-maic`
+- Git 远端：`origin` 保留 OpenMAIC 上游；`jiuxuange` 指向九轩阁私有仓库
 
 ## 2. 回退点
 
@@ -15,8 +17,10 @@
 | `codex/checkpoint-before-unified-learning-20260711` | 统一学习空间开发前 |
 | `codex/checkpoint-unified-learning-deepseek-20260711` | 统一运行时与 DeepSeek 配置阶段 |
 | `codex/checkpoint-before-guided-course-v2-20260711` | 完整导学、概念、案例、测评链开发前 |
+| `codex/archive-jiuxuange-phase1-20260713` | 第一阶段业务逻辑归档 |
+| `codex/checkpoint-jiuxuange-maic-v5.1-20260721` | 基本操作流程确认后的 V5.1 完整源代码与文档回退点 |
 
-归档完成后，另建立阶段归档分支，指向包含本目录的归档提交。
+本次归档同时建立标签 `jiuxuange-maic-v5.1-confirmed-20260721`。回退分支、标签与私有仓库 `main` 指向同一提交。
 
 ## 3. 功能开关
 
@@ -24,6 +28,9 @@
 |---|---|---|
 | `NEXT_PUBLIC_C_CUBIC_UNIFIED_LEARNING` | 显示统一课程入口 | 恢复旧学习路径页面 |
 | `NEXT_PUBLIC_C_CUBIC_GUIDED_COURSE_V2` | 启用首页导学和 V2 完整链 | 回到 V1 B 模块统一课堂 |
+| `NEXT_PUBLIC_C_CUBIC_SIX_LEVEL_JOURNEY` | 启用 V3 六关 PBL 地图 | 回到较早课程包 |
+| `NEXT_PUBLIC_C_CUBIC_SINGLE_COURSE_ORIENTATION_V4` | 启用 V4 单课导学 | 回到 V3 |
+| `NEXT_PUBLIC_C_CUBIC_LEARNING_LOOP_V5` | 启用 V5 最小可验证学习闭环与 V5.1 入口行为 | 回到 V4，不删除 V5 会话 |
 
 关闭功能开关不会删除已有本地会话。
 
@@ -42,15 +49,18 @@
 - PBL 教学运行时：`lib/pbl/v2/agents/instructor.ts`
 - 学员工作台：`components/scene-renderers/pbl-renderer.tsx`
 - 回归测试：`tests/c-cubic/`
+- V5.1 入口与新一轮合同：`documentation/jiuxuange/learning-loop-v5-entry-recovery-20260721.md`
 
 ## 5. 本地运行
 
 ```bash
 pnpm install
-pnpm dev --hostname 127.0.0.1 --port 8788
+WATCHPACK_POLLING=true pnpm dev --hostname 127.0.0.1 --port 8792 --webpack
 ```
 
 模型凭据放在被 Git 忽略的 `.env.local` 或正式服务端密钥管理中。归档不保存、不复制任何真实 API key。
+
+本次归档前验证：44 个相关测试文件、207 项测试通过；相关 ESLint 0 error、1 个既有 Hook warning；TypeScript 通过；本地 `HEAD /` 返回 200。
 
 ## 6. 数据归档限制
 
@@ -64,7 +74,7 @@ pnpm dev --hostname 127.0.0.1 --port 8788
 
 ## 7. 恢复检查
 
-1. 切换到对应归档分支或提交。
+1. 切换到 `codex/checkpoint-jiuxuange-maic-v5.1-20260721`，或检出标签 `jiuxuange-maic-v5.1-confirmed-20260721`。
 2. 安装锁定依赖。
 3. 配置服务端可用模型凭据，不在源码中写密钥。
 4. 开启所需功能开关并重新构建。

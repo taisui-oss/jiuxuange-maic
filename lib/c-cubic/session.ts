@@ -4,6 +4,7 @@ import { loadStageData } from '@/lib/utils/stage-storage';
 import { hasStartedProject } from '@/lib/pbl/v2/operations/progress';
 import { BUSINESS_MODEL_PILOT_PACKAGE } from './course-package/business-model-v1';
 import type { JiuxuangeCoursePackage } from './course-package/types';
+import type { JiuxuangeCaseFact } from './course-package/types';
 import { createJiuxuangeStage } from './project-factory';
 import { attachHomeOrientation } from './orientation';
 import type { HomeOrientationDraft } from './home-orientation';
@@ -38,6 +39,12 @@ export interface GetBusinessModelSessionOptions {
   now?: Date;
   stageIdFactory?: () => string;
   homeOrientationDraft?: HomeOrientationDraft;
+  projectFacts?: JiuxuangeCaseFact[];
+}
+
+export interface CreateNewBusinessModelAttemptOptions
+  extends Omit<GetBusinessModelSessionOptions, 'projectId'> {
+  attemptIdFactory?: () => string;
 }
 
 export function courseSessionId(key: LearningSessionKey): string {
@@ -87,6 +94,8 @@ function sceneMatchesRef(scene: SceneRecord | undefined, ref: LearningSessionRef
 
 function sessionProjectId(pkg: JiuxuangeCoursePackage, requested?: string): string {
   if (requested) return requested;
+  if (pkg.entryMode === 'learning-loop') return 'business-model-learning-loop';
+  if (pkg.journey) return 'six-level-pbl';
   if (/^2(?:\.|$)/.test(pkg.version)) return 'guided-course';
   const firstCaseId = pkg.modules.find((module) => module.caseIds.length > 0)?.caseIds[0];
   if (!firstCaseId) throw new Error('Course package has no session project id');
@@ -100,8 +109,9 @@ function attachHomeDraftToScene(
 ): boolean {
   if (!draft || draft.status !== 'resolved' || scene.content.type !== 'pbl') return false;
   const project = scene.content.projectV2;
-  const orientation = project?.jiuxuange?.orientation;
-  if (!project || !orientation) return false;
+  const jiuxuange = project?.jiuxuange;
+  const orientation = jiuxuange?.orientation;
+  if (!project || !jiuxuange || !orientation) return false;
   const thread = project.threads.find((candidate) => candidate.agentId === 'jiuxuange-professor');
   if (!thread) return false;
 
@@ -126,7 +136,30 @@ function attachHomeDraftToScene(
     return false;
   }
   thread.messages.push(...result.messages);
-  project.jiuxuange!.orientation = result.state;
+  jiuxuange.orientation = result.state;
+  if (jiuxuange.courseVersion === '3.0.0-six-level-pbl') {
+    const learnerMessages = messages.filter((message) => message.roleType === 'user');
+    const existingDraftIds = new Set(
+      (jiuxuange.projectFactDrafts ?? []).map((item) => item.id),
+    );
+    const drafts = learnerMessages
+      .map((message) => ({
+        id: `project-fact-draft:${message.id}`,
+        text: message.content,
+        sourceMessageId: message.id,
+        capturedAt: message.ts,
+      }))
+      .filter((item) => !existingDraftIds.has(item.id));
+    if (drafts.length > 0) {
+      jiuxuange.projectFactDrafts = [
+        ...(jiuxuange.projectFactDrafts ?? []),
+        ...drafts,
+      ];
+      if (jiuxuange.projectFactStatus !== 'verified') {
+        jiuxuange.projectFactStatus = 'pending_verification';
+      }
+    }
+  }
   project.updatedAt = now;
   scene.updatedAt = Date.parse(now);
   return true;
@@ -180,14 +213,49 @@ export async function loadBusinessModelResumeState(
   options: Pick<GetBusinessModelSessionOptions, 'learnerId' | 'projectId' | 'coursePackage'> = {},
 ): Promise<BusinessModelResumeState> {
   const pkg = options.coursePackage ?? BUSINESS_MODEL_PILOT_PACKAGE;
+  const learnerId = options.learnerId ?? getOrCreateLocalLearnerId();
+  const baseProjectId = sessionProjectId(pkg, options.projectId);
   const key: LearningSessionKey = {
-    learnerId: options.learnerId ?? getOrCreateLocalLearnerId(),
+    learnerId,
     courseId: pkg.id,
-    projectId: sessionProjectId(pkg, options.projectId),
+    projectId: baseProjectId,
     packageVersion: pkg.version,
   };
-  const record = await db.learningPaths.get(courseSessionId(key));
+  const record = options.projectId
+    ? await db.learningPaths.get(courseSessionId(key))
+    : (
+        await db.learningPaths
+          .filter(
+            (candidate) =>
+              candidate.learnerId === learnerId &&
+              candidate.courseId === pkg.id &&
+              candidate.packageVersion === pkg.version &&
+              (candidate.projectId === baseProjectId ||
+                candidate.projectId?.startsWith(`${baseProjectId}:attempt:`) === true),
+          )
+          .toArray()
+      ).sort(
+        (left, right) =>
+          right.updatedAt - left.updatedAt || right.createdAt - left.createdAt,
+      )[0];
   return deriveBusinessModelResumeState(record ? refFromRecord(record) : null);
+}
+
+export async function createNewBusinessModelAttempt(
+  options: CreateNewBusinessModelAttemptOptions = {},
+): Promise<LearningSessionRef> {
+  const pkg = options.coursePackage ?? BUSINESS_MODEL_PILOT_PACKAGE;
+  if (pkg.entryMode !== 'learning-loop') {
+    throw new Error('Only the learning-loop course supports starting a new round');
+  }
+  const attemptId = options.attemptIdFactory?.() ?? nanoid(10);
+  const projectId = `${sessionProjectId(pkg)}:attempt:${attemptId}`;
+  const { attemptIdFactory: _attemptIdFactory, ...sessionOptions } = options;
+  return getOrCreateBusinessModelSession({
+    ...sessionOptions,
+    coursePackage: pkg,
+    projectId,
+  });
 }
 
 export async function getOrCreateBusinessModelSession(
@@ -212,7 +280,23 @@ export async function getOrCreateBusinessModelSession(
         db.scenes.get(existingRef.sceneId),
       ]);
       if (stage && scene && sceneMatchesRef(scene, existingRef)) {
-        if (attachHomeDraftToScene(scene, options.homeOrientationDraft, now.toISOString())) {
+        let sceneChanged = attachHomeDraftToScene(
+          scene,
+          options.homeOrientationDraft,
+          now.toISOString(),
+        );
+        if (
+          pkg.journey &&
+          scene.content.type === 'pbl' &&
+          scene.content.projectV2?.uiPhase === 'hero' &&
+          !hasStartedProject(scene.content.projectV2)
+        ) {
+          scene.content.projectV2.uiPhase = 'workspace';
+          scene.content.projectV2.updatedAt = now.toISOString();
+          scene.updatedAt = now.getTime();
+          sceneChanged = true;
+        }
+        if (sceneChanged) {
           await db.scenes.put(scene);
         }
         return existingRef;
@@ -226,8 +310,17 @@ export async function getOrCreateBusinessModelSession(
       stageId,
       sceneId,
       ...(pkg.cases[key.projectId]
-        ? { startModuleId: pkg.modules[0].id, caseId: key.projectId, learnerId: key.learnerId }
-        : { sessionVariantId: key.projectId, learnerId: key.learnerId }),
+        ? {
+            startModuleId: pkg.modules[0].id,
+            caseId: key.projectId,
+            learnerId: key.learnerId,
+            projectFacts: options.projectFacts,
+          }
+        : {
+            sessionVariantId: key.projectId,
+            learnerId: key.learnerId,
+            projectFacts: options.projectFacts,
+          }),
     });
     attachHomeDraftToScene(data.scenes[0], options.homeOrientationDraft, now.toISOString());
     await db.stages.put({

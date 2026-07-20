@@ -3,6 +3,7 @@ import { makeScene } from '@/lib/types/stage';
 import { projectV2ToLegacyProjectConfig } from '@/lib/pbl/v2/compat';
 import type { JiuxuangeMicrotaskMetadata, PBLProjectV2 } from '@/lib/pbl/v2/types';
 import type {
+  JiuxuangeCaseFact,
   JiuxuangeCase,
   JiuxuangeCoursePackage,
   JiuxuangeQuestionPhase,
@@ -12,6 +13,7 @@ import type { StageStoreData } from '@/lib/utils/stage-storage';
 import { getJiuxuangeRoleProfiles } from './agent-prompts';
 import { createOrientationState } from './orientation';
 import { createAssessmentState } from './assessment/state';
+import { createJiuxuangeLearningLoopState } from './learning-loop';
 
 export interface CreateJiuxuangeProjectOptions {
   now: string;
@@ -19,6 +21,7 @@ export interface CreateJiuxuangeProjectOptions {
   caseId?: string;
   sessionVariantId?: string;
   learnerId?: string;
+  projectFacts?: JiuxuangeCaseFact[];
 }
 
 export interface CreateJiuxuangeStageOptions extends CreateJiuxuangeProjectOptions {
@@ -85,7 +88,38 @@ function learnerFactSummary(selectedCase: JiuxuangeCase): string {
 }
 
 function supportsOrientation(version: string): boolean {
-  return /^2(?:\.|$)/.test(version.trim());
+  const major = Number.parseInt(version.trim().split('.')[0] ?? '0', 10);
+  return Number.isFinite(major) && major >= 2;
+}
+
+function usesLegacyOrientation(pkg: JiuxuangeCoursePackage): boolean {
+  return (
+    pkg.entryMode !== 'learning-first' &&
+    pkg.entryMode !== 'learning-loop' &&
+    supportsOrientation(pkg.version)
+  );
+}
+
+function validateProjectFacts(facts: readonly JiuxuangeCaseFact[]): void {
+  for (const fact of facts) {
+    if (
+      fact.sourceKind !== 'primary_project' ||
+      fact.visibility !== 'learner' ||
+      fact.verificationStatus !== 'verified' ||
+      fact.sourceRef.verificationStatus !== 'verified'
+    ) {
+      throw new Error(`Project fact ${fact.id} must be a verified learner-visible primary fact`);
+    }
+  }
+}
+
+function taskTitle(moduleId: string, phase: JiuxuangeQuestionPhase, taskIndex: number): string {
+  if (moduleId === 'course-foundations') return '学习导入';
+  if (phase === 'ground') return '概念理解';
+  if (phase === 'apply') return '真实项目应用';
+  if (phase === 'tension' || phase === 'judge') return '边界与反例挑战';
+  if (phase === 'reflect') return '判断修正与回顾';
+  return taskIndex === 0 ? '从事实开始' : '继续往下追问';
 }
 
 export function createJiuxuangeProject(
@@ -93,6 +127,7 @@ export function createJiuxuangeProject(
   options: CreateJiuxuangeProjectOptions,
 ): PBLProjectV2 {
   const pkg = structuredClone(inputPackage);
+  if (options.projectFacts) validateProjectFacts(options.projectFacts);
   const errors = validateCoursePackage(pkg);
   if (errors.length > 0) throw new Error(`Invalid Jiuxuange course package: ${errors.join('; ')}`);
 
@@ -124,7 +159,7 @@ export function createJiuxuangeProject(
         const question = pkg.questionTemplates[questionTemplateId];
         return {
           id: `jgx-task-${module.id}-${questionTemplateId}`,
-          title: taskIndex === 0 ? '从事实开始' : '继续往下追问',
+          title: taskTitle(module.id, question.phase, taskIndex),
           status:
             moduleIndex === 0 && taskIndex === 0 ? ('in_progress' as const) : ('todo' as const),
           assignee: 'user' as const,
@@ -137,9 +172,13 @@ export function createJiuxuangeProject(
             evidenceRuleIds: question.evidenceRuleIds,
             preferredRole: roleForPhase(question.phase),
             hintLevel: 0 as const,
+            factScope: question.factScope ?? (question.caseId || !pkg.journey ? 'case' : 'none'),
             conceptNodeId: question.conceptNodeId,
             caseId: question.caseId,
             casePhase: question.casePhase,
+            teachingMode: question.teachingMode,
+            teachingText: question.teachingText,
+            learningNodeId: question.learningNodeId,
           },
         };
       }),
@@ -160,7 +199,7 @@ export function createJiuxuangeProject(
   });
 
   return {
-    uiPhase: 'hero',
+    uiPhase: pkg.journey || pkg.entryMode === 'learning-loop' ? 'workspace' : 'hero',
     title: pkg.title,
     description: '通过概念、案例与反证形成可验证的商业模式判断。',
     learningObjective: modules[0].learningObjective,
@@ -194,10 +233,17 @@ export function createJiuxuangeProject(
             ? 'curated_course'
             : 'real_pilot',
       formalScoringEnabled: pkg.formalScoringEnabled,
+      entryMode: pkg.entryMode ?? 'legacy-contract',
       ...(options.sessionVariantId ? { sessionVariantId: options.sessionVariantId } : {}),
       ...(options.learnerId ? { learnerId: options.learnerId } : {}),
-      ...(supportsOrientation(pkg.version) ? { orientation: createOrientationState() } : {}),
-      ...(supportsOrientation(pkg.version) ? { assessment: createAssessmentState() } : {}),
+      projectFactStatus:
+        options.projectFacts && options.projectFacts.length > 0 ? 'verified' : 'missing',
+      ...(options.projectFacts ? { projectFacts: structuredClone(options.projectFacts) } : {}),
+      ...(usesLegacyOrientation(pkg) ? { orientation: createOrientationState() } : {}),
+      ...(usesLegacyOrientation(pkg) ? { assessment: createAssessmentState() } : {}),
+      ...(pkg.entryMode === 'learning-loop'
+        ? { learningLoop: createJiuxuangeLearningLoopState() }
+        : {}),
     },
   };
 }

@@ -234,9 +234,8 @@ describe('Instructor — adjust_difficulty leaves a visible, tier-agnostic reply
   it('does NOT commit the difficulty ACK for record_observation-only turns (the ack is scoped to adjust_difficulty)', async () => {
     // record_observation is internal bookkeeping, NOT a learner difficulty
     // request — so it must never trigger the neutral difficulty confirmation.
-    // It also produces no user-perceivable output on its own, so the
-    // empty-output retry fallback is the correct outcome (#593 point 1) — the
-    // learner must not get silence.
+    // It also produces no user-perceivable output on its own, so the local
+    // task-grounded continuation must keep the turn learnable.
     const events = await runTurn(
       scriptedModel([
         toolCallStep('record_observation', {
@@ -247,9 +246,10 @@ describe('Instructor — adjust_difficulty leaves a visible, tier-agnostic reply
       ]),
       '我写完 lookup 了',
     );
-    // No neutral difficulty confirmation was committed.
-    expect(committedMessages(events)).toHaveLength(0);
-    // The turn produced nothing user-perceivable → retry fallback fires.
-    expect(hasEmptyOutputError(events)).toBe(true);
+    const committed = committedMessages(events);
+    expect(committed).toHaveLength(1);
+    expect(committed[0]).not.toBe('好的，我来调整一下讲解的方式。');
+    expect(committed[0]).toContain('Implement lookup');
+    expect(hasEmptyOutputError(events)).toBe(false);
   });
 });

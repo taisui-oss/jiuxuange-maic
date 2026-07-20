@@ -1,15 +1,13 @@
 /**
- * Instructor — empty-output fallback fires on a "silent dead turn" (reviewer #593, point 1).
+ * Instructor — empty-output fallback keeps a silent turn learnable.
  *
  * The reviewer flagged that suppressing the empty-output error on ANY tool call
  * was too broad: a turn that only called an internal bookkeeping tool, with no
  * acknowledgment text, left the learner with NOTHING — no chat bubble, no
  * error, no retry. The page just sat there.
  *
- * Fix under test (flow level): the empty-output error is keyed on real
- * user-perceivable output (scenario auto-completion, committed text, or a
- * difficulty ack), not on "a tool was called", so a genuinely silent turn
- * surfaces the retry fallback instead of dead air.
+ * Fix under test (flow level): a genuinely silent turn commits a deterministic
+ * continuation instead of blaming the learner or leaving dead air.
  *
  * Note on ordering: the client aborts the whole SSE stream on the first `error`
  * frame (assertNotStreamError). Emitting the empty error before a later patch
@@ -19,6 +17,9 @@ import { describe, expect, it } from 'vitest';
 import { MockLanguageModelV3, convertArrayToReadableStream } from 'ai/test';
 
 import { runInstructorTurn } from '@/lib/pbl/v2/agents/instructor';
+import { BUSINESS_MODEL_SIX_LEVEL_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v3';
+import { BUSINESS_MODEL_SINGLE_COURSE_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v4';
+import { createJiuxuangeProject } from '@/lib/c-cubic/project-factory';
 import type { PBLProjectV2 } from '@/lib/pbl/v2/types';
 import type { PBLSSEEvent } from '@/lib/pbl/v2/api/sse';
 
@@ -126,8 +127,65 @@ function emptyOutputIndex(events: PBLSSEEvent[]): number {
   );
 }
 
-describe('Instructor — empty-output fallback on a silent dead turn (#593 point 1)', () => {
-  it('reports EMPTY_LLM_OUTPUT when record_observation ran and the model wrote no text', async () => {
+describe('Instructor — learnable fallback on a silent dead turn', () => {
+  it('teaches and opens continuation instead of repeating the V4 question after “不知道”', async () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_SINGLE_COURSE_PACKAGE, {
+      now: '2026-07-20T00:00:00.000Z',
+    });
+    const originalQuestion =
+      project.milestones[0]?.microtasks[0]?.jiuxuange?.questionPrompt ?? '';
+    const events: PBLSSEEvent[] = [];
+
+    for await (const event of runInstructorTurn({
+      project,
+      userMessage: '不知道',
+      phase: 'instructing',
+      languageModel: scriptedModel([]) as never,
+    })) {
+      events.push(event);
+    }
+
+    const messages = committedMessages(events);
+    expect(messages).toHaveLength(1);
+    expect(messages[0]).toContain('商业模式不等于');
+    expect(messages[0]).toContain('点击「完成」继续学习');
+    expect(messages[0]).not.toContain(originalQuestion);
+    expect(project.pendingTaskCompletion?.reason).toBe('jiuxuange_assisted_learning');
+    expect(events).toContainEqual(
+      expect.objectContaining({
+        type: 'project_patch',
+        patch: expect.objectContaining({ kind: 'pending_task_completion' }),
+      }),
+    );
+  });
+
+  it('uses the current orientation question when Jiuxuange receives an empty model response', async () => {
+    const project = createJiuxuangeProject(BUSINESS_MODEL_SIX_LEVEL_PACKAGE, {
+      now: '2026-07-20T00:00:00.000Z',
+    });
+    project.jiuxuange!.orientation = {
+      ...project.jiuxuange!.orientation!,
+      phase: 'goal',
+      problemDefined: true,
+      baselineCaptured: true,
+    };
+    const events: PBLSSEEvent[] = [];
+
+    for await (const event of runInstructorTurn({
+      project,
+      userMessage: '不知道',
+      phase: 'instructing',
+      languageModel: scriptedModel([]) as never,
+    })) {
+      events.push(event);
+    }
+
+    expect(committedMessages(events)).toEqual([
+      '不知道也可以。就你家的项目，你更想先学会判断“继续原有客户与渠道”，还是“换一种客户与交易方式”？',
+    ]);
+  });
+
+  it('commits a task-grounded continuation when record_observation ran and the model wrote no text', async () => {
     // record_observation is internal bookkeeping. No text, no scenario
     // auto-completion, no difficulty ack → previously the `toolCalled` guard
     // swallowed the error and the learner saw nothing.
@@ -142,12 +200,13 @@ describe('Instructor — empty-output fallback on a silent dead turn (#593 point
       '这里为什么要先算 hash？',
     );
 
-    expect(emptyOutputIndex(events)).toBeGreaterThanOrEqual(0);
-    // Nothing user-facing was committed.
-    expect(committedMessages(events)).toHaveLength(0);
+    expect(emptyOutputIndex(events)).toBe(-1);
+    expect(committedMessages(events)).toEqual([
+      '刚才的回复没有完整生成。我们先留在「Implement lookup」：请用自己的话说明你目前的判断依据。',
+    ]);
   });
 
-  it('emits the empty-output error LAST (after any project_patch frame) so the client cannot drop a later patch', async () => {
+  it('commits the fallback after observation patches so the client keeps both state and visible guidance', async () => {
     const events = await runTurn(
       scriptedModel([
         toolCallStep('record_observation', {
@@ -159,15 +218,18 @@ describe('Instructor — empty-output fallback on a silent dead turn (#593 point
       '这里为什么要先算 hash？',
     );
 
-    const errIdx = emptyOutputIndex(events);
-    expect(errIdx).toBeGreaterThanOrEqual(0);
-    const lastPatchIdx = events.reduce((acc, e, i) => (e.type === 'project_patch' ? i : acc), -1);
-    // The empty-output error must come after the last project_patch (if any).
-    expect(errIdx).toBeGreaterThan(lastPatchIdx);
+    const messagePatchIdx = events.findIndex(
+      (event) => event.type === 'project_patch' && event.patch.kind === 'message',
+    );
+    const observationPatchIdx = events.findIndex(
+      (event) => event.type === 'project_patch' && event.patch.kind === 'engagement_event',
+    );
+    expect(messagePatchIdx).toBeGreaterThan(observationPatchIdx);
   });
 
-  it('still reports empty output on a totally silent turn (no tool, no text)', async () => {
+  it('also commits a continuation on a totally silent turn', async () => {
     const events = await runTurn(scriptedModel([]), '在吗');
-    expect(emptyOutputIndex(events)).toBeGreaterThanOrEqual(0);
+    expect(emptyOutputIndex(events)).toBe(-1);
+    expect(committedMessages(events)).toHaveLength(1);
   });
 });

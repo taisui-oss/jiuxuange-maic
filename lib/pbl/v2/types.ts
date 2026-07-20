@@ -15,6 +15,17 @@
 import type { SceneOutline } from '@/lib/types/generation';
 import type { JiuxuangeOrientationState } from '@/lib/c-cubic/orientation';
 import type { JiuxuangeAssessmentState } from '@/lib/c-cubic/assessment/state';
+import type {
+  JiuxuangeDisclosureRecord,
+  JiuxuangeJudgmentRevision,
+  JiuxuangeLearnerClaim,
+  JiuxuangeLearningFeedback,
+  JiuxuangeLearningLoopState,
+} from '@/lib/c-cubic/learning-loop-types';
+import type {
+  JiuxuangeCaseFact,
+  JiuxuangeLearningNodeId,
+} from '@/lib/c-cubic/course-package/types';
 
 // ---------------------------------------------------------------------------
 // Enums (string-literal unions; no runtime enum cost)
@@ -191,9 +202,15 @@ export interface JiuxuangeMicrotaskMetadata {
   evidenceRuleIds: string[];
   preferredRole: 'professor' | 'senior' | 'mystery' | 'growth-feedback';
   hintLevel?: 0 | 1 | 2 | 3;
+  factScope?: 'project' | 'case' | 'disclosed' | 'none';
+  questionFingerprint?: string;
+  deliveredQuestionFingerprints?: string[];
   conceptNodeId?: string;
   caseId?: string;
   casePhase?: 'blind' | 'commit' | 'unlock' | 'compare';
+  teachingMode?: 'question-first' | 'explain-then-check';
+  teachingText?: string;
+  learningNodeId?: JiuxuangeLearningNodeId;
 }
 
 /** A learning document or reference material attached to a milestone. */
@@ -543,6 +560,49 @@ export type PBLRuntimeEvent =
   | (PBLRuntimeEventBase & {
       kind: 'jiuxuange_orientation_updated';
       orientation: JiuxuangeOrientationState;
+    })
+  | (PBLRuntimeEventBase & {
+      kind: 'jiuxuange_assisted_progress';
+      sourceMessageId: string;
+      reason: string;
+      packageVersion: string;
+    })
+  | (PBLRuntimeEventBase & {
+      kind: 'jiuxuange_retry_requested';
+      hintLevel: 1 | 2 | 3;
+      questionFingerprint: string;
+    })
+  | (PBLRuntimeEventBase & {
+      kind: 'jiuxuange_question_delivered';
+      hintLevel: 0 | 1 | 2 | 3;
+      questionFingerprint: string;
+      question: string;
+      packageVersion: string;
+    })
+  | (PBLRuntimeEventBase & {
+      kind: 'jiuxuange_level_reflected';
+      sourceMessageId: string;
+      previousClaim?: string;
+      revisedClaim: string;
+      reason: string;
+      factIds: string[];
+      hintLevel: 0 | 1 | 2 | 3;
+    })
+  | (PBLRuntimeEventBase & {
+      kind: 'jiuxuange_claim_recorded';
+      claim: JiuxuangeLearnerClaim;
+    })
+  | (PBLRuntimeEventBase & {
+      kind: 'jiuxuange_disclosure_recorded';
+      disclosure: JiuxuangeDisclosureRecord;
+    })
+  | (PBLRuntimeEventBase & {
+      kind: 'jiuxuange_judgment_revision_recorded';
+      revision: JiuxuangeJudgmentRevision;
+    })
+  | (PBLRuntimeEventBase & {
+      kind: 'jiuxuange_feedback_generated';
+      feedback: JiuxuangeLearningFeedback;
     });
 
 // ---------------------------------------------------------------------------
@@ -909,14 +969,26 @@ export interface JiuxuangeProjectMetadata {
   caseId: string;
   runtimeMode: 'demo' | 'curated_course' | 'real_pilot';
   formalScoringEnabled: boolean;
+  entryMode?: 'legacy-contract' | 'learning-first' | 'learning-loop';
   /** Stable session identity. Guided courses use a course-level variant rather
    * than borrowing a case id; absent on persisted 1.x sessions. */
   sessionVariantId?: string;
   learnerId?: string;
+  projectFactStatus?: 'missing' | 'pending_verification' | 'verified';
+  projectFacts?: JiuxuangeCaseFact[];
+  /** Learner statements awaiting source verification. They are retained for
+   * coach review but never enter the Instructor's verified fact context. */
+  projectFactDrafts?: Array<{
+    id: string;
+    text: string;
+    sourceMessageId: string;
+    capturedAt: string;
+  }>;
   /** Orientation state is optional so 1.x course packages keep their
    * persisted shape. Course package 2.0+ initializes it at project creation. */
   orientation?: JiuxuangeOrientationState;
   assessment?: JiuxuangeAssessmentState;
+  learningLoop?: JiuxuangeLearningLoopState;
 }
 
 // ---------------------------------------------------------------------------

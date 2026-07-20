@@ -4,7 +4,8 @@ export type JiuxuangeEvidenceSignal =
   | 'fact_ref'
   | 'causal_link'
   | 'boundary'
-  | 'counterevidence';
+  | 'counterevidence'
+  | 'judgment_revision';
 
 export type JiuxuangeEvidenceStatus = 'autonomous' | 'hinted' | 'leaked-answer' | 'unsupported';
 
@@ -12,6 +13,7 @@ export type JiuxuangeHintLevel = 0 | 1 | 2 | 3 | 'none' | 'nudge' | 'scaffold' |
 
 import type { PBLProjectV2 } from '@/lib/pbl/v2/types';
 import { getCoursePackage } from './course-package/registry';
+import { setPendingTaskCompletion } from '@/lib/pbl/v2/operations/task-completion';
 
 export interface JiuxuangeEvidenceFact {
   id: string;
@@ -223,6 +225,10 @@ function learnerSignalPresent(
       return /(?:前提|边界|只有在|当.+时|除非)/u.test(message);
     case 'counterevidence':
       return /(?:推翻|反证|除非|如果.+(?:没有|并未|不再|相反))/u.test(message);
+    case 'judgment_revision':
+      return /(?:原先|之前|刚开始).*(?:现在|修正|改为|调整)|(?:修正|改为|调整).*(?:因为|依据|事实)/u.test(
+        message,
+      );
   }
 }
 
@@ -238,8 +244,18 @@ function characterBigrams(text: string): Set<string> {
 function messageReferencesFact(
   message: string,
   fact: JiuxuangeEvidenceFact & { text?: string },
+  visibleOrdinal?: number,
 ): boolean {
   if (message.includes(fact.id) || message.includes(`[${fact.id}]`)) return true;
+  if (
+    visibleOrdinal !== undefined &&
+    new RegExp(
+      `(?:第\\s*${visibleOrdinal}\\s*条(?:事实)?|事实\\s*${visibleOrdinal}(?:\\s*号)?)`,
+      'u',
+    ).test(message)
+  ) {
+    return true;
+  }
   if (!fact.text) return false;
   const messageGrams = characterBigrams(message);
   const factGrams = characterBigrams(fact.text);
@@ -264,14 +280,35 @@ export function evaluateJiuxuangeLearnerMessage(
     throw new Error('Jiuxuange evidence evaluation requires an active task');
 
   const coursePackage = getCoursePackage(metadata.courseId, metadata.courseVersion);
-  const selectedCase = coursePackage.cases[microtask.jiuxuange.caseId ?? metadata.caseId];
-  if (!selectedCase) throw new Error(`Unknown Jiuxuange case: ${metadata.caseId}`);
-
-  const facts = selectedCase.facts.filter(
+  const selectedCase = microtask.jiuxuange.caseId
+    ? coursePackage.cases[microtask.jiuxuange.caseId]
+    : coursePackage.cases[metadata.caseId];
+  const sourceFacts =
+    microtask.jiuxuange.factScope === 'project'
+      ? (metadata.projectFacts ?? [])
+      : microtask.jiuxuange.factScope === 'disclosed'
+        ? Object.values(coursePackage.cases)
+            .flatMap((item) => item.facts)
+            .filter((fact) =>
+              (metadata.learningLoop?.disclosures ?? []).some((disclosure) =>
+                disclosure.factIds.includes(fact.id),
+              ),
+            )
+      : microtask.jiuxuange.factScope === 'none'
+        ? []
+        : (selectedCase?.facts ?? []);
+  const facts = sourceFacts.filter(
     (fact) => fact.visibility === 'learner' && fact.verificationStatus === 'verified',
   );
+  const allowVisibleOrdinal = microtask.jiuxuange.factScope === 'case';
   const factIds = facts
-    .filter((fact) => messageReferencesFact(input.message, fact))
+    .filter((fact, index) =>
+      messageReferencesFact(
+        input.message,
+        fact,
+        allowVisibleOrdinal ? index + 1 : undefined,
+      ),
+    )
     .map((fact) => fact.id);
   const requiredSignals = microtask.jiuxuange.evidenceRuleIds.flatMap(
     (ruleId) => coursePackage.evidenceRules[ruleId]?.requiredSignals ?? [],
@@ -280,7 +317,10 @@ export function evaluateJiuxuangeLearnerMessage(
     signal,
     demonstrated: learnerSignalPresent(signal, input.message, factIds),
     sourceMessageIds: [input.messageId],
-    factIds: signal === 'fact_ref' || signal === 'causal_link' ? factIds : [],
+    factIds:
+      signal === 'fact_ref' || signal === 'causal_link' || signal === 'judgment_revision'
+        ? factIds
+        : [],
     hintLevel: input.hintLevel,
     reason: `${signal} was evaluated from learner message ${input.messageId}`,
   }));
@@ -293,4 +333,162 @@ export function evaluateJiuxuangeLearnerMessage(
     modelVersion: input.modelVersion,
     packageVersion: metadata.courseVersion,
   });
+}
+
+export function applyJiuxuangeEvidenceGate(
+  project: PBLProjectV2,
+  decision: JiuxuangeEvidenceDecision,
+  options: { sourceMessageId: string; message: string; now: string },
+): boolean {
+  if (!decision.satisfied) return false;
+  const milestone = project.milestones.find((item) => item.status === 'active');
+  const microtask = milestone?.microtasks.find((item) => item.status === 'in_progress');
+  if (!milestone || !microtask?.jiuxuange) return false;
+
+  const signature = `${project.jiuxuange?.courseVersion ?? 'unknown'}:${microtask.id}:${decision.results
+    .map((result) => `${result.signal}:${result.status}`)
+    .join('|')}`;
+  setPendingTaskCompletion(project, {
+    microtaskId: microtask.id,
+    milestoneId: milestone.id,
+    reason: 'jiuxuange_evidence_gate_satisfied',
+    assessment: {
+      resolution: `Evidence gate satisfied by ${options.sourceMessageId}`,
+      performance: decision.results.map((result) => `${result.signal}:${result.status}`).join(', '),
+    },
+    evidence: {
+      path: 'concept_unlocked',
+      signature,
+      label: microtask.title,
+      note: decision.results.map((result) => result.reason).join('; '),
+    },
+  });
+
+  if (microtask.jiuxuange.phase === 'reflect') {
+    project.runtimeEvents ??= [];
+    project.runtimeEvents.push({
+      id: `runtime_reflection_${Date.parse(options.now).toString(16)}_${microtask.id}`,
+      kind: 'jiuxuange_level_reflected',
+      actorType: 'system',
+      ts: options.now,
+      microtaskId: microtask.id,
+      milestoneId: milestone.id,
+      sourceMessageId: options.sourceMessageId,
+      revisedClaim: options.message,
+      reason: decision.results.map((result) => result.reason).join('; '),
+      factIds: decision.factIds,
+      hintLevel: microtask.jiuxuange.hintLevel ?? 0,
+    });
+  }
+  return true;
+}
+
+export function applyJiuxuangeLearningFirstPreludeProgress(
+  project: PBLProjectV2,
+  decision: JiuxuangeEvidenceDecision,
+  options: { sourceMessageId: string; message: string; now: string },
+): boolean {
+  if (
+    decision.satisfied ||
+    project.jiuxuange?.entryMode !== 'learning-first' ||
+    !options.message.trim()
+  ) {
+    return false;
+  }
+  const milestone = project.milestones.find((item) => item.status === 'active');
+  const microtask = milestone?.microtasks.find((item) => item.status === 'in_progress');
+  if (!milestone || !microtask?.jiuxuange || milestone.id !== 'jgx-milestone-course-foundations') {
+    return false;
+  }
+
+  setPendingTaskCompletion(project, {
+    microtaskId: microtask.id,
+    milestoneId: milestone.id,
+    reason: 'jiuxuange_assisted_learning',
+    assessment: {
+      resolution: `Assisted learning recorded from ${options.sourceMessageId}`,
+      performance: 'The learner received the authored teaching fragment before continuing.',
+    },
+    evidence: {
+      path: 'concept_unlocked',
+      signature: `${project.jiuxuange.courseVersion}:${microtask.id}:assisted`,
+      label: microtask.title,
+      note: 'Assisted progress is retained separately and is not autonomous evidence.',
+    },
+  });
+
+  project.runtimeEvents ??= [];
+  const exists = project.runtimeEvents.some(
+    (event) =>
+      event.kind === 'jiuxuange_assisted_progress' &&
+      event.sourceMessageId === options.sourceMessageId,
+  );
+  if (!exists) {
+    project.runtimeEvents.push({
+      id: `runtime_assisted_${Date.parse(options.now).toString(16)}_${microtask.id}`,
+      kind: 'jiuxuange_assisted_progress',
+      actorType: 'system',
+      ts: options.now,
+      microtaskId: microtask.id,
+      milestoneId: milestone.id,
+      sourceMessageId: options.sourceMessageId,
+      reason: 'The prelude teaches before checking; an unsupported answer must not block learning.',
+      packageVersion: project.jiuxuange.courseVersion,
+    });
+  }
+  return true;
+}
+
+export function applyJiuxuangeLearningLoopProgress(
+  project: PBLProjectV2,
+  decision: JiuxuangeEvidenceDecision,
+  options: { sourceMessageId: string; message: string; now: string },
+): boolean {
+  if (
+    project.jiuxuange?.entryMode !== 'learning-loop' ||
+    decision.satisfied ||
+    !options.message.trim()
+  ) {
+    return false;
+  }
+  const milestone = project.milestones.find((item) => item.status === 'active');
+  const microtask = milestone?.microtasks.find((item) => item.status === 'in_progress');
+  if (!milestone || !microtask?.jiuxuange?.learningNodeId) return false;
+
+  setPendingTaskCompletion(project, {
+    microtaskId: microtask.id,
+    milestoneId: milestone.id,
+    reason: 'jiuxuange_assisted_learning_loop',
+    assessment: {
+      resolution: `Assisted learning recorded from ${options.sourceMessageId}`,
+      performance: 'The learner completed the learning action with support; no autonomous mastery is claimed.',
+    },
+    evidence: {
+      path: 'concept_unlocked',
+      signature: `${project.jiuxuange.courseVersion}:${microtask.id}:assisted`,
+      label: microtask.title,
+      note: 'Progress permission is separate from mastery evidence.',
+    },
+  });
+
+  project.runtimeEvents ??= [];
+  const exists = project.runtimeEvents.some(
+    (event) =>
+      event.kind === 'jiuxuange_assisted_progress' &&
+      event.sourceMessageId === options.sourceMessageId,
+  );
+  if (!exists) {
+    project.runtimeEvents.push({
+      id: `runtime_loop_assisted_${options.sourceMessageId}`,
+      kind: 'jiuxuange_assisted_progress',
+      actorType: 'system',
+      ts: options.now,
+      microtaskId: microtask.id,
+      milestoneId: milestone.id,
+      sourceMessageId: options.sourceMessageId,
+      reason: 'The learner may continue after a non-empty attempt, but the result is not autonomous evidence.',
+      packageVersion: project.jiuxuange.courseVersion,
+    });
+  }
+  return true;
 }

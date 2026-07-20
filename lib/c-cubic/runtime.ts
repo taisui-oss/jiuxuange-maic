@@ -22,6 +22,13 @@ export interface JiuxuangeRuntimeMicrotask {
   jiuxuange?: {
     phase: JiuxuangeQuestionPhase;
     questionPrompt: string;
+    questionTemplateId?: string;
+    hintLevel?: 0 | 1 | 2 | 3;
+    factScope?: 'project' | 'case' | 'disclosed' | 'none';
+    questionFingerprint?: string;
+    deliveredQuestionFingerprints?: string[];
+    teachingMode?: 'question-first' | 'explain-then-check';
+    teachingText?: string;
   };
 }
 
@@ -34,6 +41,7 @@ export interface JiuxuangeRuntimeMilestone {
 export interface JiuxuangeRuntimeProject {
   jiuxuange?: {
     courseVersion?: string;
+    entryMode?: 'legacy-contract' | 'learning-first' | 'learning-loop';
     orientation?: JiuxuangeOrientationState;
   };
   roles: JiuxuangeRuntimeRole[];
@@ -180,15 +188,23 @@ const UNSAFE_REPLY_PATTERNS = [
   /(?:矛盾发现卡|商模判断卡|反速通|评分维度|证据门槛|内部评分|隐藏评分)/u,
 ];
 
-export function normalizeJiuxuangeReply(text: string, canonicalQuestion: string): string {
+export function normalizeJiuxuangeReply(
+  text: string,
+  canonicalQuestion: string,
+  teachingText?: string,
+): string {
   const fallback = enforceOneLearnerFacingQuestion(canonicalQuestion.trim());
+  const deterministicTurn = teachingText?.trim()
+    ? `${teachingText.trim()}\n\n${fallback}`
+    : fallback;
   const candidate = text.trim();
   if (
     countLearnerFacingQuestions(candidate) !== 1 ||
     !candidate.includes(fallback) ||
+    (teachingText?.trim() && !candidate.includes(teachingText.trim())) ||
     UNSAFE_REPLY_PATTERNS.some((pattern) => pattern.test(candidate))
   ) {
-    return fallback;
+    return deterministicTurn;
   }
   return candidate;
 }

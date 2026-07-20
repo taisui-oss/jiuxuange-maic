@@ -12,6 +12,7 @@ interface JiuxuangeKnowledgeSourceBase {
   title: string;
   authority: JiuxuangeKnowledgeAuthority;
   verificationStatus: JiuxuangeKnowledgeVerificationStatus;
+  contentHash?: `sha256:${string}`;
 }
 
 export type JiuxuangeKnowledgeSource = JiuxuangeKnowledgeSourceBase &

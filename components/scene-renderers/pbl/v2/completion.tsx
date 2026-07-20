@@ -46,6 +46,11 @@ import {
   type ScenarioActGoalScaffold,
   type StageDetail,
 } from '@/lib/pbl/v2/operations/completion-stats';
+import { getCoursePackage } from '@/lib/c-cubic/course-package/registry';
+import {
+  buildJiuxuangeLearningReview,
+  type JiuxuangeLearningReview,
+} from '@/lib/c-cubic/learning-review';
 
 interface Props {
   readonly project: PBLProjectV2;
@@ -126,6 +131,7 @@ export function PBLV2Completion({ project, onBack }: Props) {
   const report = buildCompletionReportViewModel(project);
   const { stats } = report;
   const visibility = completionLearnerVisibility(project);
+  const jiuxuangeReview = buildJourneyReview(project);
 
   // Shared shell (celebration, hero, stars, what's-next) is identical for both
   // project kinds; the BODY between hero and what's-next is fully split by
@@ -197,7 +203,9 @@ export function PBLV2Completion({ project, onBack }: Props) {
         </section>
 
         {/* ── Body (split by project kind — no shared fields) ── */}
-        {stats.kind === 'scenario' ? (
+        {jiuxuangeReview ? (
+          <JiuxuangeCompletionBody review={jiuxuangeReview} />
+        ) : stats.kind === 'scenario' ? (
           <ScenarioCompletionBody stats={stats} report={report} visibility={visibility} />
         ) : (
           <StandardCompletionBody stats={stats} report={report} visibility={visibility} />
@@ -216,6 +224,112 @@ export function PBLV2Completion({ project, onBack }: Props) {
       </div>
     </div>
   );
+}
+
+function buildJourneyReview(project: PBLProjectV2): JiuxuangeLearningReview | undefined {
+  if (!project.jiuxuange) return undefined;
+  try {
+    const coursePackage = getCoursePackage(
+      project.jiuxuange.courseId,
+      project.jiuxuange.courseVersion,
+    );
+    if (!coursePackage.journey) return undefined;
+    return buildJiuxuangeLearningReview(project, coursePackage);
+  } catch {
+    return undefined;
+  }
+}
+
+function JiuxuangeCompletionBody({ review }: { readonly review: JiuxuangeLearningReview }) {
+  return (
+    <>
+      <section className="mt-5 rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5">
+        <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-white">
+          <Layers className="h-4 w-4 text-violet-300" />
+          六关学习回顾
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {review.levels.map((level) => (
+            <div
+              key={level.id}
+              className="flex items-center gap-3 rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-2.5"
+            >
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-violet-300/30 bg-violet-300/10 text-xs font-semibold text-violet-100">
+                {level.status === 'completed' ? <Check className="h-4 w-4" /> : level.order}
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs text-slate-400">第{level.order}关</div>
+                <div className="truncate text-sm font-medium text-slate-100">{level.title}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <section className="rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5">
+          <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
+            <ShieldCheck className="h-4 w-4 text-cyan-300" />
+            学习证据
+          </div>
+          <div className="space-y-2 text-sm text-slate-300">
+            <p>自主形成的有效证据：{review.autonomousEvidenceCount} 条</p>
+            <p>在提示后形成的有效证据：{review.hintedEvidenceCount} 条</p>
+          </div>
+        </section>
+        <section className="rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5">
+          <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
+            <Contrast className="h-4 w-4 text-violet-300" />
+            未解决问题
+          </div>
+          {review.unresolvedSignals.length > 0 ? (
+            <ul className="space-y-1.5 text-sm text-slate-300">
+              {review.unresolvedSignals.map((signal) => (
+                <li key={signal}>仍需补充：{learnerFacingSignal(signal)}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-slate-400">当前没有遗留的证据缺口。</p>
+          )}
+        </section>
+      </div>
+
+      <section className="mt-4 rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5">
+        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
+          <Sparkles className="h-4 w-4 text-amber-300" />
+          关键判断变化
+        </div>
+        {review.revisions.length > 0 ? (
+          <div className="space-y-3">
+            {review.revisions.map((revision, index) => (
+              <div key={`${revision.levelTitle}-${index}`} className="border-l-2 border-violet-300/40 pl-3">
+                <div className="text-xs font-medium text-violet-200">{revision.levelTitle}</div>
+                <p className="mt-1 text-sm leading-relaxed text-slate-200">{revision.revisedClaim}</p>
+                {revision.hintLevel > 0 && (
+                  <p className="mt-1 text-xs text-slate-500">这次修正发生在获得提示之后。</p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-slate-400">完成阶段回顾后，这里会呈现你的判断变化。</p>
+        )}
+      </section>
+    </>
+  );
+}
+
+function learnerFacingSignal(signal: string): string {
+  const labels: Record<string, string> = {
+    own_words: '用自己的话表达概念',
+    distinction: '说明概念边界',
+    fact_ref: '引用项目事实',
+    causal_link: '建立因果联系',
+    boundary: '提出适用边界',
+    counterevidence: '寻找反向证据',
+    judgment_revision: '说明判断如何修正',
+  };
+  return labels[signal] ?? '补充当前判断的依据';
 }
 
 /** Knowledge-project body: stat cards + built/learned + stage review +

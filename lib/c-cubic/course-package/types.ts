@@ -1,4 +1,24 @@
-export type JiuxuangeModuleCode = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J';
+export type JiuxuangeModuleCode =
+  | 'A'
+  | 'B'
+  | 'C'
+  | 'D'
+  | 'E'
+  | 'F'
+  | 'G'
+  | 'H'
+  | 'I'
+  | 'J'
+  | 'K'
+  | 'L';
+
+export type JiuxuangeVisibleLevelId =
+  | 'positioning'
+  | 'business-system'
+  | 'key-resources-capabilities'
+  | 'profit-model'
+  | 'cash-flow-structure'
+  | 'enterprise-value';
 
 export type JiuxuangeQuestionPhase =
   | 'ground'
@@ -15,7 +35,18 @@ export type JiuxuangeEvidenceSignal =
   | 'fact_ref'
   | 'causal_link'
   | 'boundary'
-  | 'counterevidence';
+  | 'counterevidence'
+  | 'judgment_revision';
+
+export type JiuxuangeLearningNodeId =
+  | 'baseline_capture'
+  | 'must_know_instruction'
+  | 'bee_fact_observation'
+  | 'bee_independent_commit'
+  | 'bee_unlock_compare'
+  | 'fresh_transfer'
+  | 'judgment_revision'
+  | 'evidence_feedback';
 
 export type JiuxuangeFactSourceKind =
   | 'primary_project'
@@ -32,6 +63,7 @@ export interface JiuxuangeSourceRef {
   title: string;
   locator: string;
   verificationStatus: JiuxuangeVerificationStatus;
+  contentHash?: `sha256:${string}`;
 }
 
 export interface JiuxuangeCaseFact {
@@ -71,9 +103,20 @@ export interface JiuxuangeQuestionTemplate {
   prompt: string;
   singleQuestion: boolean;
   evidenceRuleIds: string[];
+  factScope?: 'project' | 'case' | 'disclosed' | 'none';
+  learningFragmentIds?: string[];
+  scaffolds?: JiuxuangeQuestionScaffold[];
   conceptNodeId?: string;
   caseId?: string;
   casePhase?: 'blind' | 'commit' | 'unlock' | 'compare';
+  teachingMode?: 'question-first' | 'explain-then-check';
+  teachingText?: string;
+  learningNodeId?: JiuxuangeLearningNodeId;
+}
+
+export interface JiuxuangeQuestionScaffold {
+  hintLevel: 1 | 2 | 3;
+  prompt: string;
 }
 
 export interface JiuxuangeEvidenceRule {
@@ -101,12 +144,29 @@ export interface JiuxuangeTransferRule {
   toModuleId?: string;
 }
 
+export interface JiuxuangeCourseJourneyLevel {
+  id: JiuxuangeVisibleLevelId;
+  title: string;
+  order: number;
+  moduleIds: string[];
+  calibrationCaseId?: string;
+}
+
+export interface JiuxuangeCourseJourney {
+  version: string;
+  preludeModuleIds: string[];
+  levels: JiuxuangeCourseJourneyLevel[];
+  postludeModuleIds: string[];
+}
+
 export interface JiuxuangeCoursePackage {
   id: 'business-model';
   version: string;
   releaseStatus: 'pilot_b_only' | 'full';
   formalScoringEnabled: boolean;
   title: string;
+  entryMode?: 'legacy-contract' | 'learning-first' | 'learning-loop';
+  journey?: JiuxuangeCourseJourney;
   modules: JiuxuangeCourseModule[];
   concepts: Record<string, JiuxuangeConcept>;
   cases: Record<string, JiuxuangeCase>;

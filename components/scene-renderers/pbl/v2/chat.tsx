@@ -23,6 +23,7 @@ import {
   Lightbulb,
   Loader2,
   MessageSquare,
+  RotateCcw,
 } from 'lucide-react';
 import { AvatarDisplay } from '@/components/ui/avatar-display';
 import { SpeechButton } from '@/components/audio/speech-button';
@@ -47,6 +48,7 @@ import { MilestoneCard } from './eval-cards/milestone-card';
 import { CompletionCtaCard } from './eval-cards/completion-cta-card';
 import type { SubmissionEvaluationStatus } from './submission';
 import { shouldPromptOrientation } from '@/lib/c-cubic/orientation';
+import { getCoursePackage } from '@/lib/c-cubic/course-package/registry';
 import {
   MILESTONE_DIVIDER_PREFIX,
   TASK_DIVIDER_PREFIX,
@@ -71,6 +73,7 @@ interface Props {
    *  opener outside this chat hook. */
   readonly externalStream?: StreamDisplayState | null;
   readonly onCompleteTask?: () => void;
+  readonly onRetryTask?: () => void;
   readonly taskBusy?: boolean;
 }
 
@@ -105,6 +108,20 @@ function currentMicrotaskId(project: PBLProjectV2): string | undefined {
   return ms?.microtasks.find((t) => t.status === 'todo' || t.status === 'in_progress')?.id;
 }
 
+export function learnerVisibleMessages(
+  project: PBLProjectV2,
+  messages: readonly PBLChatMessage[],
+): PBLChatMessage[] {
+  if (!project.jiuxuange) return [...messages];
+  return messages.filter((message) => {
+    const content = message.content?.trim() ?? '';
+    return (
+      !content.startsWith('刚才的回复没有完整生成。') &&
+      !content.startsWith('导师本轮没有产生新的内容。')
+    );
+  });
+}
+
 const MIN_ROWS = 1;
 const MAX_INPUT_HEIGHT_PX = 200;
 const TASK_READY_TYPEWRITER_DONE_DELAY_MS = 700;
@@ -118,6 +135,7 @@ export function PBLV2Chat({
   onInstructorStreamingChange,
   externalStream,
   onCompleteTask,
+  onRetryTask,
   taskBusy,
 }: Props) {
   const [input, setInput] = useState('');
@@ -288,6 +306,10 @@ export function PBLV2Chat({
     const thread = project.threads.find((t) => t.agentId === activeAgentId);
     return thread?.messages ?? [];
   }, [project.threads, activeAgentId]);
+  const visibleMessages = useMemo(
+    () => learnerVisibleMessages(project, messages),
+    [project, messages],
+  );
 
   // SCENARIO ONLY. Once the learner is OUT of the roleplay scene (i.e. the chat
   // is showing the Instructor thread again — wrapup, or back here from the
@@ -463,8 +485,8 @@ export function PBLV2Chat({
   // Rendered items are typed so the render switch can branch
   // cleanly on `.kind`.
   const timeline = useMemo<TimelineItem[]>(
-    () => buildTimeline(messages, project.evaluations, roleplayHistory),
-    [messages, project.evaluations, roleplayHistory],
+    () => buildTimeline(visibleMessages, project.evaluations, roleplayHistory),
+    [visibleMessages, project.evaluations, roleplayHistory],
   );
 
   // Auto-grow textarea as the learner types.
@@ -679,6 +701,21 @@ export function PBLV2Chat({
         }
         onMouseLeave={handoverPending ? () => setHandoverHintPos(null) : undefined}
       >
+        {shouldShowJiuxuangeRetry(project) && onRetryTask && (
+          <button
+            type="button"
+            onClick={onRetryTask}
+            disabled={chatBusy || taskBusy}
+            className="mb-2 flex items-center gap-1.5 rounded px-2 py-1.5 text-xs font-medium text-violet-200 transition-colors hover:bg-violet-300/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {taskBusy ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <RotateCcw className="h-3.5 w-3.5" />
+            )}
+            换个角度再想一次
+          </button>
+        )}
         {shouldShowJiuxuangeContinuation(project) && onCompleteTask && (
           <button
             type="button"
@@ -780,6 +817,24 @@ export function PBLV2Chat({
 
 export function shouldShowJiuxuangeContinuation(project: PBLProjectV2): boolean {
   return !!project.jiuxuange && !!project.pendingTaskCompletion;
+}
+
+export function shouldShowJiuxuangeRetry(project: PBLProjectV2): boolean {
+  if (!project.jiuxuange || project.pendingTaskCompletion) return false;
+  const milestone = project.milestones.find((candidate) => candidate.status === 'active');
+  const task = milestone?.microtasks.find(
+    (candidate) => candidate.status === 'in_progress' || candidate.status === 'todo',
+  );
+  if (!task?.jiuxuange) return false;
+  try {
+    const coursePackage = getCoursePackage(
+      project.jiuxuange.courseId,
+      project.jiuxuange.courseVersion,
+    );
+    return !!coursePackage.questionTemplates[task.jiuxuange.questionTemplateId]?.scaffolds?.length;
+  } catch {
+    return false;
+  }
 }
 
 function SubmissionEvaluationBubble({

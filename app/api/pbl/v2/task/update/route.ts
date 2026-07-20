@@ -33,6 +33,8 @@ import {
 } from '@/lib/pbl/v2/operations/progress';
 import type { PBLProjectV2 } from '@/lib/pbl/v2/types';
 import { currentPendingTaskCompletion } from '@/lib/pbl/v2/operations/task-completion';
+import { getCoursePackage } from '@/lib/c-cubic/course-package/registry';
+import { retryJiuxuangeTask } from '@/lib/c-cubic/retry';
 
 interface UpdateRequest {
   project: PBLProjectV2;
@@ -41,7 +43,8 @@ interface UpdateRequest {
     | 'continue_handover'
     | 'enter_scenario'
     | 'complete_act'
-    | 'complete_pending_task';
+    | 'complete_pending_task'
+    | 'retry_jiuxuange_task';
   microtaskId?: string;
 }
 
@@ -91,15 +94,30 @@ export async function POST(req: NextRequest) {
       if (!adv.ok) {
         return apiError('INVALID_REQUEST', 400, `Could not complete task: ${adv.error}`);
       }
-      const nextTask = adv.nextMicrotaskId
-        ? current.milestone.microtasks.find((task) => task.id === adv.nextMicrotaskId)
+      const learningLoop = project.jiuxuange?.entryMode === 'learning-loop';
+      let activatedMicrotaskId = adv.nextMicrotaskId;
+      let autoAdvanced = false;
+      if (learningLoop && adv.milestoneCompleted && !adv.projectCompleted) {
+        const continued = continueAfterHandover(project);
+        if (!continued.ok) {
+          return apiError('INVALID_REQUEST', 400, 'Could not enter the next learning step.');
+        }
+        activatedMicrotaskId = continued.activatedMicrotaskId;
+        autoAdvanced = true;
+      }
+      const nextTask = activatedMicrotaskId
+        ? project.milestones
+            .flatMap((milestone) => milestone.microtasks)
+            .find((task) => task.id === activatedMicrotaskId)
         : undefined;
-      appendTaskDividerMessage(project, {
-        completedMicrotaskId: current.microtask.id,
-        nextMicrotaskId: adv.nextMicrotaskId,
-        completedTitle: current.microtask.title,
-        nextTitle: nextTask?.title,
-      });
+      if (!adv.milestoneCompleted) {
+        appendTaskDividerMessage(project, {
+          completedMicrotaskId: current.microtask.id,
+          nextMicrotaskId: activatedMicrotaskId,
+          completedTitle: current.microtask.title,
+          nextTitle: nextTask?.title,
+        });
+      }
       return apiSuccess({
         project,
         completedMicrotaskId: current.microtask.id,
@@ -107,7 +125,31 @@ export async function POST(req: NextRequest) {
         milestoneCompleted: adv.milestoneCompleted,
         projectCompleted: adv.projectCompleted,
         nextMicrotaskId: adv.nextMicrotaskId,
+        activatedMicrotaskId,
+        autoAdvanced,
+        evaluationSkipped: learningLoop,
       });
+    }
+    case 'retry_jiuxuange_task': {
+      if (!project.jiuxuange) {
+        return apiError('INVALID_REQUEST', 400, 'Not a Jiuxuange course project.');
+      }
+      const coursePackage = getCoursePackage(
+        project.jiuxuange.courseId,
+        project.jiuxuange.courseVersion,
+      );
+      try {
+        const result = retryJiuxuangeTask(project, coursePackage, {
+          now: new Date().toISOString(),
+        });
+        return apiSuccess({ project, ...result });
+      } catch (error) {
+        return apiError(
+          'INVALID_REQUEST',
+          400,
+          error instanceof Error ? error.message : 'Current task cannot be retried.',
+        );
+      }
     }
     // SCENARIO ONLY. The learner clicked "enter scenario" under the prep
     // stage in the sidebar. Deterministically complete the prep stage and
