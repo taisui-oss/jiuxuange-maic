@@ -73,5 +73,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|logos/).*)'],
+  // Skip HMAC verification for static assets (images, fonts, media, etc.) —
+  // the check only matters for pages and API routes.
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|logos/|.*\\.(?:png|jpe?g|gif|svg|webp|avif|ico|woff2?|ttf|otf|mp4|webm|mp3|wav|pdf)$).*)',
+  ],
 };
