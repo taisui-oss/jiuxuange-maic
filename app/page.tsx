@@ -72,13 +72,34 @@ import { BusinessModelLearningPath } from '@/components/c-cubic/business-model-l
 import { BusinessModelCourseEntry } from '@/components/c-cubic/business-model-course-entry';
 import { HomeOrientationEntry } from '@/components/c-cubic/home-orientation-entry';
 import { getOrCreateBusinessModelSession } from '@/lib/c-cubic/session';
-import { BUSINESS_MODEL_GUIDED_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v2';
-import { BUSINESS_MODEL_SIX_LEVEL_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v3';
-import { BUSINESS_MODEL_SINGLE_COURSE_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v4';
-import { BUSINESS_MODEL_LEARNING_LOOP_PACKAGE } from '@/lib/c-cubic/course-package/business-model-v5';
+import type { JiuxuangeCoursePackage } from '@/lib/c-cubic/course-package/types';
 import type { HomeOrientationDraft } from '@/lib/c-cubic/home-orientation';
 
 const log = createLogger('Home');
+
+// The four c-cubic course packages (~88K of course data) are only needed once
+// the user actually enters the guided course, so they are code-split out of the
+// home page bundle and loaded on demand.
+type GuidedCoursePackageKind = 'v2' | 'v3' | 'v4' | 'v5';
+
+async function loadGuidedCoursePackage(
+  kind: GuidedCoursePackageKind,
+): Promise<JiuxuangeCoursePackage> {
+  switch (kind) {
+    case 'v5':
+      return (await import('@/lib/c-cubic/course-package/business-model-v5'))
+        .BUSINESS_MODEL_LEARNING_LOOP_PACKAGE;
+    case 'v4':
+      return (await import('@/lib/c-cubic/course-package/business-model-v4'))
+        .BUSINESS_MODEL_SINGLE_COURSE_PACKAGE;
+    case 'v3':
+      return (await import('@/lib/c-cubic/course-package/business-model-v3'))
+        .BUSINESS_MODEL_SIX_LEVEL_PACKAGE;
+    default:
+      return (await import('@/lib/c-cubic/course-package/business-model-v2'))
+        .BUSINESS_MODEL_GUIDED_PACKAGE;
+  }
+}
 
 const WEB_SEARCH_STORAGE_KEY = 'webSearchEnabled';
 const RECENT_OPEN_STORAGE_KEY = 'recentClassroomsOpen';
@@ -117,13 +138,30 @@ function HomePage() {
   const singleCourseOrientationV4 =
     businessModelMode && shouldUseCubicSingleCourseOrientationV4();
   const learningLoopV5 = businessModelMode && shouldUseCubicLearningLoopV5();
-  const activeGuidedCoursePackage = learningLoopV5
-    ? BUSINESS_MODEL_LEARNING_LOOP_PACKAGE
+  const guidedCourseActive =
+    guidedCourseV2 || sixLevelJourney || singleCourseOrientationV4 || learningLoopV5;
+  const activeGuidedCourseKind: GuidedCoursePackageKind = learningLoopV5
+    ? 'v5'
     : singleCourseOrientationV4
-      ? BUSINESS_MODEL_SINGLE_COURSE_PACKAGE
+      ? 'v4'
       : sixLevelJourney
-        ? BUSINESS_MODEL_SIX_LEVEL_PACKAGE
-        : BUSINESS_MODEL_GUIDED_PACKAGE;
+        ? 'v3'
+        : 'v2';
+  // Loaded lazily after mount (see loadGuidedCoursePackage); null until ready.
+  const [activeGuidedCoursePackage, setActiveGuidedCoursePackage] =
+    useState<JiuxuangeCoursePackage | null>(null);
+  useEffect(() => {
+    if (!businessModelMode) return;
+    let cancelled = false;
+    loadGuidedCoursePackage(activeGuidedCourseKind)
+      .then((pkg) => {
+        if (!cancelled) setActiveGuidedCoursePackage(pkg);
+      })
+      .catch((err) => log.error('Failed to load guided course package:', err));
+    return () => {
+      cancelled = true;
+    };
+  }, [businessModelMode, activeGuidedCourseKind]);
   const unifiedLearning =
     businessModelMode &&
     (shouldUseCubicUnifiedLearning() ||
@@ -392,9 +430,11 @@ function HomePage() {
   };
 
   const handleOrientationResolved = async (draft: HomeOrientationDraft) => {
+    const coursePackage =
+      activeGuidedCoursePackage ?? (await loadGuidedCoursePackage(activeGuidedCourseKind));
     const session = await getOrCreateBusinessModelSession({
       learnerId: draft.learnerId,
-      coursePackage: activeGuidedCoursePackage,
+      coursePackage,
       homeOrientationDraft: draft,
     });
     router.push(`/classroom/${session.stageId}`);
@@ -590,16 +630,11 @@ function HomePage() {
           {t('home.slogan')}
         </motion.p>
 
-        {businessModelMode && unifiedLearning && (
+        {businessModelMode && unifiedLearning && (!guidedCourseActive || activeGuidedCoursePackage) && (
           <div data-product-surface="business-model-primary-entry" className="mb-6 w-full">
             <BusinessModelCourseEntry
               coursePackage={
-                guidedCourseV2 ||
-                sixLevelJourney ||
-                singleCourseOrientationV4 ||
-                learningLoopV5
-                  ? activeGuidedCoursePackage
-                  : undefined
+                guidedCourseActive ? (activeGuidedCoursePackage ?? undefined) : undefined
               }
             />
           </div>
@@ -1279,6 +1314,29 @@ function GreetingBar() {
   );
 }
 
+/**
+ * Cheap "near viewport" IntersectionObserver so off-screen course cards skip
+ * the live SlideCanvas thumbnail render (which mounts a downscaled slide
+ * scene). Cards within 200px of the viewport remain eager so scrolling feels
+ * instant. Mirrors `useNearViewport` in components/edit/SlideNavRail/ThumbItem.tsx.
+ */
+function useNearViewport(ref: React.RefObject<Element | null>) {
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) setVisible(e.isIntersecting);
+      },
+      { root: null, rootMargin: '200px 0px', threshold: 0 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref]);
+  return visible;
+}
+
 // ─── Classroom Card — clean, minimal style ──────────────────────
 function ClassroomCard({
   classroom,
@@ -1304,6 +1362,9 @@ function ClassroomCard({
   const { t } = useI18n();
   const thumbRef = useRef<HTMLDivElement>(null);
   const [thumbWidth, setThumbWidth] = useState(0);
+  // Lazy-mount the live slide canvas only when the card approaches the viewport
+  // (mirrors the editor nav rail's ThumbItem useNearViewport).
+  const thumbVisible = useNearViewport(thumbRef);
   const [editing, setEditing] = useState(false);
   const [nameDraft, setNameDraft] = useState('');
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -1355,6 +1416,7 @@ function ClassroomCard({
             size={thumbWidth}
             viewportSize={slide.viewportSize ?? 1000}
             viewportRatio={slide.viewportRatio ?? 0.5625}
+            visible={thumbVisible}
           />
         ) : !slide ? (
           <div className="absolute inset-0 flex items-center justify-center">
