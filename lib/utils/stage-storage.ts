@@ -5,9 +5,10 @@
  * Each stage has its own storage key based on stageId
  */
 
+import Dexie from 'dexie';
 import { makeScene, Stage, Scene } from '../types/stage';
 import { ChatSession } from '../types/chat';
-import { db } from './database';
+import { db, mediaFileKey, type MediaFileRecord, type SceneRecord } from './database';
 import { saveChatSessions, loadChatSessions, deleteChatSessions } from './chat-storage';
 import { clearPlaybackState } from './playback-storage';
 import { clearAllForScene } from '@/lib/quiz/persistence';
@@ -212,10 +213,6 @@ function getThumbnailMediaRef(element: ThumbnailMediaElement): string | undefine
   return undefined;
 }
 
-function getMediaRecordElementId(recordId: string): string {
-  return recordId.includes(':') ? recordId.split(':').slice(1).join(':') : recordId;
-}
-
 function blobWithType(blob: Blob, mimeType: string): Blob {
   return blob.type ? blob : new Blob([blob], { type: mimeType });
 }
@@ -239,10 +236,60 @@ export function revokeThumbnailSlideMediaUrls(slides: Record<string, ThumbnailSl
   }
 }
 
+/** Dexie 4's runtime iteration cursor supports stop(); the public typings omit it. */
+function stopCursor(cursor: unknown) {
+  (cursor as { stop: () => void }).stop();
+}
+
+/**
+ * Find the first slide-type scene of a stage, in `order` sequence, reading as
+ * few scene records as possible. Uses the `[stageId+order]` compound index and
+ * stops the cursor at the first match instead of `sortBy()`-materializing every
+ * scene (full canvas JSON) of the stage.
+ */
+async function findFirstSlideScene(stageId: string): Promise<SceneRecord | undefined> {
+  let found: SceneRecord | undefined;
+  await db.scenes
+    .where('[stageId+order]')
+    .between([stageId, Dexie.minKey], [stageId, Dexie.maxKey])
+    .each((scene, cursor) => {
+      if (scene.content?.type === 'slide') {
+        found = scene;
+        stopCursor(cursor);
+      }
+    });
+  return found;
+}
+
+/**
+ * Legacy `gen_vid_<n>` refs predate the compound mediaFiles key scheme and
+ * cannot be point-fetched. The legacy fallback only applies when the stage has
+ * exactly one usable (non-error) video record, so scan with early exit: finding
+ * a second usable video means the fallback can never apply.
+ */
+async function findSingleUsableVideoRecord(
+  stageId: string,
+): Promise<MediaFileRecord | undefined> {
+  const usable: MediaFileRecord[] = [];
+  await db.mediaFiles
+    .where('[stageId+type]')
+    .equals([stageId, 'video'])
+    .each((record, cursor) => {
+      if (record.error) return;
+      usable.push(record);
+      if (usable.length > 1) stopCursor(cursor);
+    });
+  return usable.length === 1 ? usable[0] : undefined;
+}
+
 /**
  * Get first slide scene's canvas data for each stage (for thumbnail preview).
  * Also resolves generated image/video refs from mediaFiles so thumbnails show real media.
  * Returns a map of stageId -> Slide (canvas data with resolved media)
+ *
+ * Memory-conscious: only the media records actually referenced by the thumbnail
+ * slide are fetched (point lookups by compound primary key), and video blobs are
+ * never object-URL'd when a (much smaller) poster is available.
  */
 export async function getFirstSlideByStages(
   stageIds: string[],
@@ -251,8 +298,7 @@ export async function getFirstSlideByStages(
   try {
     await Promise.all(
       stageIds.map(async (stageId) => {
-        const scenes = await db.scenes.where('stageId').equals(stageId).sortBy('order');
-        const firstSlide = scenes.find((s) => s.content?.type === 'slide');
+        const firstSlide = await findFirstSlideScene(stageId);
         if (firstSlide && firstSlide.content.type === 'slide') {
           const slide = structuredClone(firstSlide.content.canvas);
 
@@ -260,13 +306,35 @@ export async function getFirstSlideByStages(
             getThumbnailMediaRef(el as ThumbnailMediaElement),
           );
           if (mediaElements.length > 0) {
-            const mediaRecords = await db.mediaFiles.where('stageId').equals(stageId).toArray();
-            const videoRecords = mediaRecords.filter(
-              (record) => !record.error && record.type === 'video',
+            // Point-fetch exactly the records the slide references instead of
+            // toArray()-ing every media blob of the stage into memory.
+            const mediaRefs = [
+              ...new Set(
+                (mediaElements as ThumbnailMediaElement[])
+                  .map((el) => getThumbnailMediaRef(el))
+                  .filter((ref): ref is string => !!ref),
+              ),
+            ];
+            const records = await db.mediaFiles.bulkGet(
+              mediaRefs.map((ref) => mediaFileKey(stageId, ref)),
             );
             const mediaMap = new Map(
-              mediaRecords.map((record) => [getMediaRecordElementId(record.id), record] as const),
+              mediaRefs
+                .map((ref, i) => [ref, records[i]] as const)
+                .filter((entry): entry is readonly [string, MediaFileRecord] => !!entry[1]),
             );
+
+            // Legacy sequential video refs have no compound-key record; resolve
+            // them against the stage's single usable video, as before — but only
+            // scan the video records when such a ref actually occurs.
+            const needsLegacyVideo = (mediaElements as ThumbnailMediaElement[]).some((el) => {
+              if (el.type !== 'video') return false;
+              const ref = getThumbnailMediaRef(el);
+              return !!ref && !mediaMap.has(ref) && isLegacySequentialVideoRef(ref);
+            });
+            const legacyVideoRecord = needsLegacyVideo
+              ? await findSingleUsableVideoRecord(stageId)
+              : undefined;
 
             for (const el of mediaElements as ThumbnailMediaElement[]) {
               const mediaRef = getThumbnailMediaRef(el);
@@ -275,9 +343,8 @@ export async function getFirstSlideByStages(
               const legacyRecord =
                 !exactRecord &&
                 el.type === 'video' &&
-                isLegacySequentialVideoRef(mediaRef) &&
-                videoRecords.length === 1
-                  ? videoRecords[0]
+                isLegacySequentialVideoRef(mediaRef)
+                  ? legacyVideoRecord
                   : undefined;
               const record = usableExactRecord ?? legacyRecord;
 
@@ -293,9 +360,16 @@ export async function getFirstSlideByStages(
               if (el.type === 'image' && record.type === 'image') {
                 el.src = URL.createObjectURL(blobWithType(record.blob, record.mimeType));
               } else if (el.type === 'video' && record.type === 'video') {
-                el.src = URL.createObjectURL(blobWithType(record.blob, record.mimeType));
                 if (record.poster) {
+                  // The poster alone drives the thumbnail — avoid pinning the
+                  // (often hundreds of MB) video blob via createObjectURL.
+                  // Empty src makes SlideThumbnail render the poster-only frame.
+                  el.src = '';
                   el.poster = URL.createObjectURL(blobWithType(record.poster, 'image/jpeg'));
+                } else {
+                  // No poster: keep the video blob URL so the thumbnail still
+                  // shows the first frame, exactly as before.
+                  el.src = URL.createObjectURL(blobWithType(record.blob, record.mimeType));
                 }
               } else if (el.type === 'image') {
                 el.src = '';

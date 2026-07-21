@@ -111,20 +111,24 @@ function useResolvedSlide(slide: Slide): Slide {
  * rotated wrapper, so this only paints the inner content. The `src` it receives
  * is already media-store-resolved by `useResolvedSlide`.
  *
- * The play-badge (`thumbnail-video-indicator`) always shows; the `<video>` only
- * renders for a real (resolved, non-placeholder) src so unresolved media falls
- * through to the badge-only frame instead of an empty `<video>`.
+ * The play-badge (`thumbnail-video-indicator`) always shows; the `<video>`
+ * renders for a real (resolved, non-placeholder) src, or src-less when only a
+ * poster is available (the home-page thumbnail loader deliberately withholds
+ * the video blob URL and ships just the poster — the poster frame still paints
+ * without a src). Media with neither falls through to the badge-only frame
+ * instead of an empty `<video>`.
  */
 function renderThumbnailVideo(element: PPTVideoElement) {
   const src = element.src && !isMediaPlaceholder(element.src) ? element.src : undefined;
+  const poster = element.poster || undefined;
   return (
     <>
-      {src ? (
+      {src || poster ? (
         <video
           className="w-full h-full"
           style={{ objectFit: 'contain' }}
           src={src}
-          poster={element.poster}
+          poster={poster}
           preload="metadata"
           muted
           playsInline
