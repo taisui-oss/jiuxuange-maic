@@ -22,6 +22,91 @@ const log = createLogger('LLM');
 // Re-export for external use
 export type { ThinkingConfig } from '@/lib/types/provider';
 
+// ---------------------------------------------------------------------------
+// Request timeouts
+//
+// Without an explicit timeout, a hung upstream (connection accepted but never
+// answered, or a stream that stalls mid-generation) keeps the request — and
+// the SSE pump feeding the UI — alive forever. Every callLLM/streamLLM call
+// therefore gets:
+//   - a request timeout (default 120s, LLM_REQUEST_TIMEOUT_MS) bounding the
+//     non-streaming call and, for streams, connection setup + first chunk;
+//   - for streams, an idle watchdog (default 90s, LLM_STREAM_IDLE_TIMEOUT_MS):
+//     any gap with no chunk at all aborts the stream.
+// Caller-supplied abortSignals keep working: they are combined with the
+// timeout signal, and a caller abort is never reported as a timeout.
+// ---------------------------------------------------------------------------
+
+export type LLMTimeoutKind = 'request' | 'idle';
+
+export class LLMTimeoutError extends Error {
+  readonly kind: LLMTimeoutKind;
+  readonly timeoutMs: number;
+
+  constructor(kind: LLMTimeoutKind, timeoutMs: number) {
+    super(
+      kind === 'idle'
+        ? `LLM stream stalled: no chunk received for ${Math.round(timeoutMs / 1000)}s`
+        : `LLM request timed out after ${Math.round(timeoutMs / 1000)}s`,
+    );
+    this.name = 'LLMTimeoutError';
+    this.kind = kind;
+    this.timeoutMs = timeoutMs;
+  }
+}
+
+export function isLLMTimeoutError(error: unknown): error is LLMTimeoutError {
+  return error instanceof LLMTimeoutError;
+}
+
+const DEFAULT_LLM_REQUEST_TIMEOUT_MS = 120_000;
+const DEFAULT_LLM_STREAM_IDLE_TIMEOUT_MS = 90_000;
+
+function readTimeoutEnv(name: string, fallback: number): number {
+  const raw = process.env[name];
+  if (!raw) return fallback;
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+/** Timeout for a non-streaming LLM call, or for stream connect + first chunk. */
+export function getLlmRequestTimeoutMs(): number {
+  return readTimeoutEnv('LLM_REQUEST_TIMEOUT_MS', DEFAULT_LLM_REQUEST_TIMEOUT_MS);
+}
+
+/** Max gap between streamed chunks before the stream is aborted. */
+export function getLlmStreamIdleTimeoutMs(): number {
+  return readTimeoutEnv('LLM_STREAM_IDLE_TIMEOUT_MS', DEFAULT_LLM_STREAM_IDLE_TIMEOUT_MS);
+}
+
+/**
+ * Combine an optional caller signal with a fresh timeout signal.
+ * Returns the timeout signal too, so callers can tell *which* signal fired
+ * (a timeout abort maps to LLMTimeoutError; a caller abort passes through).
+ */
+function combineWithTimeout(
+  callerSignal: AbortSignal | undefined,
+  timeoutMs: number,
+): { signal: AbortSignal; timeoutSignal: AbortSignal } {
+  const timeoutSignal = AbortSignal.timeout(timeoutMs);
+  return {
+    signal: callerSignal ? AbortSignal.any([callerSignal, timeoutSignal]) : timeoutSignal,
+    timeoutSignal,
+  };
+}
+
+/**
+ * Streams whose last activity gap/connect phase exceeded a timeout, keyed by
+ * the StreamTextResult returned from streamLLM. Routes consuming the stream
+ * can check this after the stream ends (an abort ends v6 streams cleanly, so
+ * the timeout would otherwise look like a short/empty completion).
+ */
+const streamTimeoutErrors = new WeakMap<object, LLMTimeoutError>();
+
+export function getLlmStreamTimeoutError(result: object): LLMTimeoutError | undefined {
+  return streamTimeoutErrors.get(result);
+}
+
 // Re-export the parameter types accepted by AI SDK
 type GenerateTextParams = Parameters<typeof generateText>[0];
 type StreamTextParams = Parameters<typeof streamText>[0];
@@ -329,10 +414,21 @@ export async function callLLM<T extends GenerateTextParams>(
   let lastError: unknown;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    // Fresh timeout per attempt: a hung upstream aborts instead of blocking
+    // forever. The caller's own abortSignal still wins (and is not misreported
+    // as a timeout).
+    const callerSignal = (params as Record<string, unknown>).abortSignal as
+      | AbortSignal
+      | undefined;
+    const requestTimeoutMs = getLlmRequestTimeoutMs();
+    const { signal, timeoutSignal } = combineWithTimeout(callerSignal, requestTimeoutMs);
     try {
       // Resolve effective thinking config: per-call > global env > undefined
       const effectiveThinking = thinking ?? getGlobalThinkingConfig();
-      const injectedParams = injectProviderOptions(params, effectiveThinking);
+      const injectedParams = injectProviderOptions(
+        { ...params, abortSignal: signal },
+        effectiveThinking,
+      );
 
       // Wrap in thinkingContext so the custom fetch wrapper in providers.ts
       // can read the config and inject vendor-specific body params for
@@ -353,7 +449,12 @@ export async function callLLM<T extends GenerateTextParams>(
       recordUsageSafe(result.usage, buildUsageMeta(params, source));
       return result;
     } catch (error) {
-      lastError = error;
+      // Timeout abort → explicit upstream-timeout error. A caller-initiated
+      // abort passes through untouched so cancellation semantics are preserved.
+      lastError =
+        timeoutSignal.aborted && !callerSignal?.aborted
+          ? new LLMTimeoutError('request', requestTimeoutMs)
+          : error;
 
       if (attempt < maxAttempts) {
         log.warn(`[${source}] Call failed (attempt ${attempt}/${maxAttempts}), retrying...`, error);
@@ -385,6 +486,61 @@ export function streamLLM<T extends StreamTextParams>(
   // Resolve effective thinking config and wrap in thinkingContext
   const effectiveThinking = thinking ?? getGlobalThinkingConfig();
 
+  // --- Timeout wiring -------------------------------------------------------
+  // Request timeout bounds connection setup + first chunk; after the first
+  // chunk an idle watchdog takes over (any gap with no chunk aborts). The
+  // caller's abortSignal (e.g. client disconnect) is combined in and never
+  // reported as a timeout.
+  const callerSignal = (params as Record<string, unknown>).abortSignal as AbortSignal | undefined;
+  const requestTimeoutMs = getLlmRequestTimeoutMs();
+  const idleTimeoutMs = getLlmStreamIdleTimeoutMs();
+  const watchdog = new AbortController();
+  let watchdogTimer: ReturnType<typeof setTimeout> | undefined;
+  // Indirection so the watchdog callback can key the error map by the result
+  // object even though the timer is armed before streamText returns it.
+  const resultHolder: { current?: object } = {};
+
+  const clearWatchdog = () => {
+    if (watchdogTimer) {
+      clearTimeout(watchdogTimer);
+      watchdogTimer = undefined;
+    }
+  };
+  const armWatchdog = (ms: number, kind: LLMTimeoutKind) => {
+    clearWatchdog();
+    watchdogTimer = setTimeout(() => {
+      const error = new LLMTimeoutError(kind, ms);
+      if (resultHolder.current) streamTimeoutErrors.set(resultHolder.current, error);
+      log.warn(
+        `[${source}] ${kind === 'idle' ? `stream idle for ${Math.round(ms / 1000)}s` : `no response within ${Math.round(ms / 1000)}s`} — aborting upstream request`,
+      );
+      watchdog.abort();
+    }, ms);
+    // Never keep the process alive just for a pending watchdog.
+    (watchdogTimer as { unref?: () => void }).unref?.();
+  };
+  armWatchdog(requestTimeoutMs, 'request');
+
+  const onCallerAbort = () => {
+    clearWatchdog();
+    watchdog.abort();
+  };
+  callerSignal?.addEventListener('abort', onCallerAbort, { once: true });
+
+  const combinedSignal = callerSignal
+    ? AbortSignal.any([callerSignal, watchdog.signal])
+    : watchdog.signal;
+
+  const callerOnChunk = (params as Record<string, unknown>).onChunk as
+    | ((event: unknown) => void | Promise<void>)
+    | undefined;
+  const callerOnError = (params as Record<string, unknown>).onError as
+    | ((event: { error: unknown }) => void | Promise<void>)
+    | undefined;
+  const callerOnAbort = (params as Record<string, unknown>).onAbort as
+    | ((event: unknown) => void | Promise<void>)
+    | undefined;
+
   // Wrap onFinish to capture usage when the stream completes, preserving any
   // caller-supplied onFinish. totalUsage aggregates across steps.
   const usageMeta = buildUsageMeta(params, source);
@@ -393,14 +549,41 @@ export function streamLLM<T extends StreamTextParams>(
     | undefined;
   const wrappedParams = {
     ...params,
+    abortSignal: combinedSignal,
+    onChunk: async (event: unknown) => {
+      // First chunk ends the connect/first-chunk phase; from here on only the
+      // idle gap between chunks is watched.
+      armWatchdog(idleTimeoutMs, 'idle');
+      if (callerOnChunk) await callerOnChunk(event);
+    },
     onFinish: async (event: { totalUsage?: unknown; usage?: unknown }) => {
+      clearWatchdog();
+      callerSignal?.removeEventListener('abort', onCallerAbort);
       recordUsageSafe(event.totalUsage ?? event.usage, usageMeta);
       if (callerOnFinish) await callerOnFinish(event);
+    },
+    onError: async (event: { error: unknown }) => {
+      clearWatchdog();
+      callerSignal?.removeEventListener('abort', onCallerAbort);
+      if (callerOnError) await callerOnError(event);
+    },
+    onAbort: async (event: unknown) => {
+      clearWatchdog();
+      callerSignal?.removeEventListener('abort', onCallerAbort);
+      if (callerOnAbort) await callerOnAbort(event);
     },
   } as T;
 
   const injectedParams = injectProviderOptions(wrappedParams, effectiveThinking);
-  const result = thinkingContext.run(effectiveThinking, () => streamText(injectedParams));
+  let result: StreamTextResult<any, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  try {
+    result = thinkingContext.run(effectiveThinking, () => streamText(injectedParams));
+  } catch (error) {
+    clearWatchdog();
+    callerSignal?.removeEventListener('abort', onCallerAbort);
+    throw error;
+  }
+  resultHolder.current = result;
 
   return result;
 }

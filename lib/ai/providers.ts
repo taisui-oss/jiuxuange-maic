@@ -1516,6 +1516,9 @@ export function getModel(config: ModelConfig): ModelWithInfo {
             }
           }
 
+          // `init` (including its abort signal from callLLM/streamLLM's request
+          // timeout) is forwarded verbatim, so a hung upstream is aborted when
+          // the timeout fires instead of suspending this fetch forever.
           const response = await globalThis.fetch(url, init);
 
           // Recover reasoning that @ai-sdk/openai's chat schema drops: rewrite

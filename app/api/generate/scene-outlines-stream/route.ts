@@ -14,7 +14,7 @@
  */
 
 import { NextRequest } from 'next/server';
-import { streamLLM } from '@/lib/ai/llm';
+import { streamLLM, getLlmStreamTimeoutError, isLLMTimeoutError } from '@/lib/ai/llm';
 import { buildPrompt, PROMPT_IDS } from '@/lib/prompts';
 import {
   formatImageDescription,
@@ -282,6 +282,11 @@ function ensureUniqueOutlineId(outline: SceneOutline, usedIds: Set<string>): Sce
 }
 
 function formatUpstreamGenerationError(error: unknown, modelString?: string): string {
+  if (isLLMTimeoutError(error)) {
+    const minutes = Math.max(1, Math.round(error.timeoutMs / 60000));
+    return `模型服务在 ${minutes} 分钟内没有响应，请检查设置里的 API 地址和网络。`;
+  }
+
   const raw = error instanceof Error ? error.message : String(error);
   const detail =
     error && typeof error === 'object' && 'responseBody' in error
@@ -301,6 +306,10 @@ function formatUpstreamGenerationError(error: unknown, modelString?: string): st
 }
 
 function isNonRetryableUpstreamError(error: unknown): boolean {
+  // Upstream timeouts surface immediately: retrying a hung endpoint just
+  // multiplies the wait (each attempt would block for the full timeout again).
+  if (isLLMTimeoutError(error)) return true;
+
   const raw = error instanceof Error ? error.message : String(error);
   const detail =
     error && typeof error === 'object' && 'responseBody' in error
@@ -451,6 +460,16 @@ export async function POST(req: NextRequest) {
         try {
           startHeartbeat();
 
+          // AI SDK v6's textStream swallows stream errors (they only surface in
+          // fullStream / onError), which used to turn a hard upstream failure
+          // like a 401 into a misleading "empty response" after max retries.
+          // Capture the first stream error per attempt so it can be surfaced
+          // with its real cause (and skip retries for non-retryable errors).
+          let streamError: unknown;
+          const onStreamError = ({ error }: { error: unknown }) => {
+            streamError ??= error;
+          };
+
           const streamParams = visionImages?.length
             ? {
                 model: languageModel,
@@ -465,6 +484,7 @@ export async function POST(req: NextRequest) {
                 // Tear down the upstream LLM request when the client disconnects,
                 // instead of letting it run to completion for a dead connection.
                 abortSignal: req.signal,
+                onError: onStreamError,
               }
             : {
                 model: languageModel,
@@ -472,6 +492,7 @@ export async function POST(req: NextRequest) {
                 prompt: prompts.user,
                 maxOutputTokens: modelInfo?.outputWindow,
                 abortSignal: req.signal,
+                onError: onStreamError,
               };
 
           let parsedOutlines: SceneOutline[] = [];
@@ -486,14 +507,15 @@ export async function POST(req: NextRequest) {
               parsedOutlines = [];
               languageDirective = null;
               courseTitle = null;
+              streamError = undefined;
               const usedOutlineIds = new Set<string>();
-              const textStream = streamLLM(
+              const streamResult = streamLLM(
                 streamParams,
                 'scene-outlines-stream',
                 thinkingConfig,
-              ).textStream;
+              );
 
-              for await (const chunk of textStream) {
+              for await (const chunk of streamResult.textStream) {
                 // Stop doing work the moment the client goes away — otherwise
                 // generation keeps running and buffering for a dead connection.
                 if (req.signal?.aborted) {
@@ -560,6 +582,22 @@ export async function POST(req: NextRequest) {
                   });
                   controller.enqueue(encoder.encode(`data: ${event}\n\n`));
                 }
+              }
+
+              // An upstream timeout aborts the stream; with AI SDK v6 that ends
+              // the iteration cleanly, which would otherwise masquerade as an
+              // empty/short completion and trigger pointless retries. Surface it
+              // as the explicit timeout error instead.
+              const streamTimeoutError = getLlmStreamTimeoutError(streamResult);
+              if (streamTimeoutError) {
+                throw streamTimeoutError;
+              }
+
+              // Surface a swallowed upstream stream error (e.g. auth failure)
+              // with its real cause when the stream produced nothing usable —
+              // non-retryable errors then skip the remaining attempts.
+              if (streamError && parsedOutlines.length === 0) {
+                throw streamError;
               }
 
               // Validate: got outlines?
