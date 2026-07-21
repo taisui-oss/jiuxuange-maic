@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
-import pptxgen from 'pptxgenjs';
+// Type-only import: the ~1MB runtime is dynamically imported on demand inside
+// buildPptxBlob so it stays out of the classroom page's initial bundle.
+import type pptxgen from 'pptxgenjs';
 import tinycolor from 'tinycolor2';
 import { saveAs } from 'file-saver';
 import { toast } from 'sonner';
@@ -370,7 +372,9 @@ export async function buildPptxBlob(
   ratioPx2Inch: number,
   ratioPx2Pt: number,
 ): Promise<Blob> {
-  const pptx = new pptxgen();
+  // Load pptxgenjs lazily — it is only needed when the user actually exports.
+  const PptxGenJS = (await import('pptxgenjs')).default;
+  const pptx = new PptxGenJS();
 
   // Set layout based on aspect ratio
   if (viewportRatio === 0.625) pptx.layout = 'LAYOUT_16x10';
