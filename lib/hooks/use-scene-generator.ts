@@ -27,8 +27,16 @@ import {
   withGenerationRetry,
   type GenerationRetryOptions,
 } from '@/lib/generation/generation-retry';
+import { withTimeoutSignal } from '@/lib/utils/fetch-timeout';
 
 const log = createLogger('SceneGenerator');
+
+// Per-attempt fetch timeouts. Without these a hung server keeps the fetch
+// pending forever and the retry logic below never gets a chance to run.
+// TimeoutError is retryable, so a timeout feeds the normal retry path.
+const SCENE_CONTENT_TIMEOUT_MS = 120_000;
+const SCENE_ACTIONS_TIMEOUT_MS = 120_000;
+const TTS_TIMEOUT_MS = 60_000;
 
 interface SceneContentResult {
   success: boolean;
@@ -135,7 +143,7 @@ export async function fetchSceneContent(
           method: 'POST',
           headers: getApiHeaders(),
           body: JSON.stringify(withThinkingConfig(params)),
-          signal,
+          signal: withTimeoutSignal(signal, SCENE_CONTENT_TIMEOUT_MS),
         });
 
         const data = await readJsonResponse(response);
@@ -180,7 +188,7 @@ export async function fetchSceneActions(
           method: 'POST',
           headers: getApiHeaders(),
           body: JSON.stringify(withThinkingConfig(params)),
-          signal,
+          signal: withTimeoutSignal(signal, SCENE_ACTIONS_TIMEOUT_MS),
         });
 
         const data = await readJsonResponse(response);
@@ -259,7 +267,7 @@ export async function generateAndStoreTTS(
             ttsProviderConfig?.baseUrl || ttsProviderConfig?.customDefaultBaseUrl || undefined,
           ttsProviderOptions: providerOptions,
         }),
-        signal,
+        signal: withTimeoutSignal(signal, TTS_TIMEOUT_MS),
       });
 
       const data = (await readJsonResponse(response)) as TTSApiResponse;

@@ -22,6 +22,7 @@ import {
   generateAndStoreTTS,
 } from '@/lib/hooks/use-scene-generator';
 import { isAbortError } from '@/lib/generation/generation-retry';
+import { createStreamWatchdog, withTimeoutSignal } from '@/lib/utils/fetch-timeout';
 import { FOREGROUND_SCENE_RETRY_OPTIONS } from './foreground-retry';
 import {
   loadImageMapping,
@@ -48,6 +49,14 @@ import { resolveTaskEngineModeFromOutlineDoneEvent } from './vocational-mode';
 
 const log = createLogger('GenerationPreview');
 const OUTLINE_REVIEW_AUTO_CONTINUE_MS = 2500;
+// Outline SSE watchdog: if the server goes completely silent (not even a
+// heartbeat) for 2 minutes, or the stream stays open past 6 minutes without
+// completing, abort and show an actionable error instead of spinning forever.
+const OUTLINE_STREAM_NO_EVENT_TIMEOUT_MS = 120_000;
+const OUTLINE_STREAM_TOTAL_TIMEOUT_MS = 6 * 60_000;
+// Web search is an auxiliary step — a hung search provider must not wedge the
+// whole generation flow.
+const WEB_SEARCH_TIMEOUT_MS = 30_000;
 
 function GenerationPreviewContent() {
   const router = useRouter();
@@ -415,7 +424,7 @@ function GenerationPreviewContent() {
               baiduSubSources: wsProviderId === 'baidu' ? wsSettings.baiduSubSources : undefined,
             }),
           ),
-          signal,
+          signal: withTimeoutSignal(signal, WEB_SEARCH_TIMEOUT_MS),
         });
 
         if (!res.ok) {
@@ -489,6 +498,35 @@ function GenerationPreviewContent() {
           let directive: string | undefined;
           let title: string | undefined;
 
+          // Watchdog: the pump below otherwise only settles on done/error/close,
+          // so a server that holds the connection open without ever sending
+          // anything would spin forever. Any received bytes (including the
+          // server's `:heartbeat` comments) count as activity.
+          let streamReader: ReadableStreamDefaultReader<Uint8Array> | undefined;
+          const watchdog = createStreamWatchdog({
+            noEventMs: OUTLINE_STREAM_NO_EVENT_TIMEOUT_MS,
+            totalMs: OUTLINE_STREAM_TOTAL_TIMEOUT_MS,
+            onTimeout: (reason) => {
+              log.warn(`Outline stream watchdog fired (${reason}); aborting`);
+              streamReader?.cancel().catch(() => undefined);
+              settleReject(new Error(t('generation.outlineStreamTimeout')));
+            },
+          });
+          const settleResolve = (value: {
+            outlines: SceneOutline[];
+            languageDirective: string;
+            courseTitle?: string;
+            taskEngineMode: boolean;
+          }) => {
+            watchdog.stop();
+            resolve(value);
+          };
+          const settleReject = (error: unknown) => {
+            watchdog.stop();
+            reject(error);
+          };
+          watchdog.start();
+
           fetch('/api/generate/scene-outlines-stream', {
             method: 'POST',
             headers: getApiHeaders(),
@@ -506,15 +544,16 @@ function GenerationPreviewContent() {
             .then((res) => {
               if (!res.ok) {
                 return res.json().then((d) => {
-                  reject(new Error(d.error || t('generation.outlineGenerateFailed')));
+                  settleReject(new Error(d.error || t('generation.outlineGenerateFailed')));
                 });
               }
 
               const reader = res.body?.getReader();
               if (!reader) {
-                reject(new Error(t('generation.streamNotReadable')));
+                settleReject(new Error(t('generation.streamNotReadable')));
                 return;
               }
+              streamReader = reader;
 
               const decoder = new TextDecoder();
               let sseBuffer = '';
@@ -522,6 +561,7 @@ function GenerationPreviewContent() {
               const pump = (): Promise<void> =>
                 reader.read().then(({ done, value }) => {
                   if (value) {
+                    watchdog.notifyActivity();
                     sseBuffer += decoder.decode(value, { stream: !done });
                     const lines = sseBuffer.split('\n');
                     sseBuffer = lines.pop() || '';
@@ -549,7 +589,7 @@ function GenerationPreviewContent() {
                           setStatusMessage(t('generation.outlineRetrying'));
                         } else if (evt.type === 'done') {
                           directive = evt.languageDirective || directive;
-                          resolve({
+                          settleResolve({
                             outlines: evt.outlines || collected,
                             languageDirective:
                               directive ||
@@ -559,7 +599,7 @@ function GenerationPreviewContent() {
                           });
                           return;
                         } else if (evt.type === 'error') {
-                          reject(new Error(evt.error));
+                          settleReject(new Error(evt.error));
                           return;
                         }
                       } catch (e) {
@@ -569,7 +609,7 @@ function GenerationPreviewContent() {
                   }
                   if (done) {
                     if (collected.length > 0) {
-                      resolve({
+                      settleResolve({
                         outlines: collected,
                         languageDirective:
                           directive || 'Teach in the language that matches the user requirement.',
@@ -581,16 +621,16 @@ function GenerationPreviewContent() {
                         taskEngineMode: false,
                       });
                     } else {
-                      reject(new Error(t('generation.outlineEmptyResponse')));
+                      settleReject(new Error(t('generation.outlineEmptyResponse')));
                     }
                     return;
                   }
                   return pump();
                 });
 
-              pump().catch(reject);
+              pump().catch(settleReject);
             })
-            .catch(reject);
+            .catch(settleReject);
         });
 
         outlines = outlineResult.outlines;
@@ -1198,6 +1238,18 @@ function GenerationPreviewContent() {
                   : t('generation.reviewOutlineDesc')}
               </p>
             </div>
+
+            {/* The flow is parked in waitForOutlineReviewChoice until the user
+                confirms — make that explicit so it isn't mistaken for a hang. */}
+            {!isOutlineStreaming && (
+              <div className="mx-auto flex w-fit items-center gap-2 rounded-full border border-amber-400/40 bg-amber-500/10 px-4 py-1.5 text-sm font-medium text-amber-600 dark:text-amber-300">
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75" />
+                  <span className="relative inline-flex size-2 rounded-full bg-amber-500" />
+                </span>
+                {t('generation.reviewOutlineWaitingConfirm')}
+              </div>
+            )}
 
             {error && (
               <div className="mx-auto max-w-2xl rounded-md border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-300">

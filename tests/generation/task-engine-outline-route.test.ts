@@ -7,6 +7,10 @@ let originalVocationalFlag: string | undefined;
 
 vi.mock('@/lib/ai/llm', () => ({
   streamLLM: streamLLMMock,
+  // The route consults these for upstream-timeout handling; the mocked stream
+  // never times out.
+  getLlmStreamTimeoutError: () => undefined,
+  isLLMTimeoutError: () => false,
 }));
 
 vi.mock('@/lib/server/resolve-model', () => ({
