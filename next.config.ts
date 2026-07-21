@@ -38,6 +38,17 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Static public assets: cache for a day at the browser instead of
+      // revalidating (default max-age=0) on every page load.
+      ...['/avatars/:path*', '/logos/:path*', '/vendor/:path*'].map((source) => ({
+        source,
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=86400' }],
+      })),
+      {
+        source:
+          '/:file(jiuxuange-maic-mark\\.png|logo-horizontal\\.png|openmaic-mark\\.png|favicon\\.ico)',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=86400' }],
+      },
     ];
   },
 };
