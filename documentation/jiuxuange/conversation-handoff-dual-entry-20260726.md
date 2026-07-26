@@ -74,3 +74,19 @@
 documentation/jiuxuange/free-learning-course-generation-hotfix-20260727.md
 eval/jiuxuange-learning-partner/scenarios/document-extraction-regression.v1.json
 ```
+
+## 2026-07-27 麦客思项目卡补充
+
+[KNOWN, HIGH] 已从 37 页小组作业建立 `project-card-mckess@1.0.0-draft`，并将报告事实、学员主张、改造建议、预测假设和开放矛盾分开保存。
+
+[KNOWN, HIGH] 该项目卡不同于正式教学案例：教授不能把它当教材；学长用于练习支架，神秘角色用于利益相关者对抗，成长反馈官用于判断修正回放。
+
+[KNOWN, HIGH] 所有来源陈述目前均为 `draft`。它尚未绑定课程、项目组或 Agent 运行时，新对话不得将“数据资产已建立”描述为“项目互动已上线”。
+
+后续还需读取：
+
+```text
+documentation/jiuxuange/project-card-mckess-v1-20260727.md
+lib/jiuxuange/project-card/mckess-v1.ts
+tests/jiuxuange/project-card-mckess.test.ts
+```
