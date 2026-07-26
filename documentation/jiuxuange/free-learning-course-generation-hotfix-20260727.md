@@ -10,6 +10,20 @@
 
 [KNOWN, HIGH] 本次修复不改变正式课程、个人项目测评、PBL 状态、学习证据或评分逻辑。
 
+## 用户确认的体验基线
+
+[KNOWN, HIGH] 2026-07-27，产品负责人确认：“现在的自由学习技能，是我最满意的一版。”
+
+本确认冻结为当前自由学习体验基线，覆盖：
+
+- 自由学习与正式课程、个人测评的入口分工；
+- 上传个人资料后生成课程；
+- 文本型 PDF 无 MinerU 时仍可进入课堂；
+- TTS 故障时保留文字课程并继续播放；
+- 当前九轩阁 MAIC 的课堂呈现与交互。
+
+[KNOWN, HIGH] 该确认不外推为课程内容已通过教授审校、语音已恢复、学习深度达标或真实学习增益已验证。后续改动必须与本版本做浏览器回放对比，出现入口、资料生成或课堂可用性退化时不得直接覆盖。
+
 ## 真实故障链
 
 真实样本：
@@ -84,6 +98,7 @@ eval/jiuxuange-learning-partner/scenarios/document-extraction-regression.v1.json
 - 修复分支：`fix/jiuxuange-pdf-local-fallback-20260727`
 - 修复前标签：`jiuxuange-maic-dual-entry-v1-20260727`
 - 修复版本标签：`jiuxuange-maic-dual-entry-v1.0.1-20260727`
+- 用户确认基线标签：`jiuxuange-maic-free-learning-confirmed-20260727`
 - 本地测试入口：`http://127.0.0.1:8794/`
 
 回退到修复前标签不会删除浏览器 IndexedDB 中已经生成的课堂。若只需关闭语音，可关闭 TTS；文档解析与学习数据不受影响。
