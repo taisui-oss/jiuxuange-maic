@@ -6,7 +6,9 @@ import { useRouter } from 'next/navigation';
 import type { JiuxuangeCoursePackage } from '@/lib/c-cubic/course-package/types';
 import type { LearnerPortalView } from '@/lib/jiuxuange/portal/types';
 import { BusinessModelCourseEntry } from '@/components/c-cubic/business-model-course-entry';
+import { BusinessModelCourseHubEntry } from '@/components/jiuxuange/business-model-course-hub-entry';
 import { Button } from '@/components/ui/button';
+import { shouldUseJiuxuangeCourseHubV1 } from '@/lib/config/feature-flags';
 
 interface PortalResponse {
   success: boolean;
@@ -20,6 +22,7 @@ export function JiuxuangeLearningPortal({
   coursePackage?: JiuxuangeCoursePackage;
 }) {
   const router = useRouter();
+  const courseHubEnabled = shouldUseJiuxuangeCourseHubV1();
   const [portal, setPortal] = useState<LearnerPortalView | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,10 +63,16 @@ export function JiuxuangeLearningPortal({
             正式课程拥有独立进度与学习证据；再次进入会恢复同一课程会话。
           </p>
         </div>
-        {!portal && !error && <LoaderCircle className="size-4 animate-spin text-muted-foreground" />}
+        {!portal && !error && (
+          <LoaderCircle className="size-4 animate-spin text-muted-foreground" />
+        )}
       </div>
 
-      <BusinessModelCourseEntry coursePackage={coursePackage} />
+      {courseHubEnabled ? (
+        <BusinessModelCourseHubEntry coursePackage={coursePackage} />
+      ) : (
+        <BusinessModelCourseEntry coursePackage={coursePackage} />
+      )}
 
       <div className="mt-3 border-y border-violet-400/20 bg-violet-500/[0.025] py-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

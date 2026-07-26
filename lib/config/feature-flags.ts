@@ -103,3 +103,13 @@ export function shouldUseCubicLearningLoopV5(): boolean {
 export function shouldUseJiuxuangeDualEntryV1(): boolean {
   return process.env.NEXT_PUBLIC_JIUXUANGE_DUAL_ENTRY_V1 === 'true';
 }
+
+/**
+ * Inserts a course hub between the assigned-course portal and the existing
+ * business-model learning session. Default ON for the dual-entry experience;
+ * setting the value to the literal `false` restores the direct classroom
+ * entry without deleting any course or project-card data.
+ */
+export function shouldUseJiuxuangeCourseHubV1(): boolean {
+  return process.env.NEXT_PUBLIC_JIUXUANGE_COURSE_HUB_V1 !== 'false';
+}

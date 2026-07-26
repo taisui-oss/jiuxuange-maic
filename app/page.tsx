@@ -646,7 +646,7 @@ function HomePage() {
           {t('home.slogan')}
         </motion.p>
 
-        {dualEntryV1 && businessModelMode && unifiedLearning && (!guidedCourseActive || activeGuidedCoursePackage) && (
+        {dualEntryV1 && businessModelMode && unifiedLearning && (
           <div data-product-surface="jiuxuange-learning-portal" className="mb-6 w-full">
             <JiuxuangeLearningPortal
               coursePackage={

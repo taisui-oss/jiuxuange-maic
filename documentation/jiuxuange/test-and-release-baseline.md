@@ -162,8 +162,12 @@ pnpm test tests/c-cubic \
 | TTS 故障不阻断课程生成 | `use-scene-generator-retry.test.ts`、`document-extraction-regression.v1.json` | 2026-07-27：首场景、后台续生成和重试均按无声模式继续 |
 | macOS 本地免费中文语音 | `system-tts.test.ts`、`provider-config.test.ts`、`settings-server-sync.test.ts` | 2026-07-26：125 项核心测试、26 项音频回归通过；生产接口生成 125002 字节 WAV；设置页测试播放无 TTS 错误 |
 | 双入口业务合同与个人测评隔离 | `dual-entry-domain.test.ts`、`jiuxuange-dual-entry-route.test.ts` | 2026-07-26：10 项核心合同通过；同组同题、个人隔离、发布门、两次提交和活跃时长已覆盖 |
+| 商业模式课程中心与草案项目卡 | `business-model-course-hub.test.ts`、`project-card-mckess.test.ts` | 2026-07-27：首页可见性、六案例目录、项目/案例分域、回退开关和本机草案门已覆盖 |
+| standalone 静态资源完整性 | `standalone-assets.test.ts` | 2026-07-27：构建自动复制 `.next/static` 与 `public`；真实页面引用 chunk 返回 HTTP 200 |
 
 [KNOWN, HIGH] 2026-07-27 双入口 V1 GitHub 发布前整包回归覆盖 14 个测试文件、185 项测试，包含 V5 会话、学习深度回放、双入口、DOCX、本地语音、Provider 和设置同步，全部通过。
+
+[KNOWN, HIGH] `jgx-business-model-course-hub-v1-20260727-01` 覆盖 6 个测试文件、39 项测试并通过生产构建；浏览器完成首页、课程中心、项目卡以及桌面/移动端验收。该运行证明入口与页面成立，不证明案例教学效果。
 
 ## 3. 未覆盖或覆盖不足
 

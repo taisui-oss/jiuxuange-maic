@@ -8,7 +8,7 @@
 2. 读 `dual-entry-v1-implementation-20260726.md`。
 3. 读 `conversation-handoff-learning-depth-20260722.md`，继承尚未关闭的学习深度 P0。
 4. 检查当前 Git 工作树，不得覆盖学习深度、DOCX、本地语音和双入口未提交改动。
-5. 检查实际服务端口与构建来源；`8792` 曾被孤立旧进程反复占用，本轮可信测试端口为 `8794`。
+5. 检查实际服务端口与构建来源；当前 launchd 服务使用 `8792`，且 `pnpm build` 必须完成 standalone 静态资源装配。
 
 ## 当前已实现
 
@@ -40,7 +40,7 @@
 
 ## 当前测试页
 
-`http://127.0.0.1:8794/`
+`http://127.0.0.1:8792/`
 
 ## GitHub 版本
 
@@ -89,4 +89,21 @@ eval/jiuxuange-learning-partner/scenarios/document-extraction-regression.v1.json
 documentation/jiuxuange/project-card-mckess-v1-20260727.md
 lib/jiuxuange/project-card/mckess-v1.ts
 tests/jiuxuange/project-card-mckess.test.ts
+```
+
+## 2026-07-27 商业模式课程中心 V1 补充
+
+[KNOWN, HIGH] 首页“我的课程”现在明确显示商业模式大课，点击进入 `/courses/business-model` 后可见六个案例候选和麦客思项目练习。
+
+[KNOWN, HIGH] 便利蜂、生鲜零售只表示已进入既有主线；SHEIN、花西子、整车货运平台和智能汽车仍是“审校中”，不得描述为已可互动。
+
+[KNOWN, HIGH] 麦客思项目卡已经可见，但仍是草案预览。项目方核验、项目组绑定和 Agent 运行时接线均未完成。
+
+[KNOWN, HIGH] 本轮同时修复 standalone 缺少 `.next/static` 导致“页面可见但点击无效”的启动缺陷。后续必须通过 `pnpm build` 生成完整 standalone 产物，不得手工省略静态资源阶段。
+
+后续新对话还需读取：
+
+```text
+documentation/jiuxuange/business-model-course-hub-v1-20260727.md
+eval/jiuxuange-learning-partner/scenarios/business-model-course-hub.v1.json
 ```

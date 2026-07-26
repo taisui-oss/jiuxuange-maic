@@ -1,0 +1,47 @@
+{
+  "suiteId": "jiuxuange-business-model-course-hub",
+  "version": 1,
+  "createdAt": "2026-07-27",
+  "owner": "Jiuxuange product",
+  "scenarios": [
+    {
+      "id": "course-hub-home-visibility-001",
+      "must": [
+        "assigned_course_visible_before_resume_finishes",
+        "course_entry_clickable_before_resume_finishes",
+        "free_learning_remains_separate"
+      ]
+    },
+    {
+      "id": "course-hub-case-catalog-001",
+      "must": [
+        "exactly_six_case_candidates",
+        "integrated_and_review_status_visible",
+        "all_six_business_model_elements_covered"
+      ]
+    },
+    {
+      "id": "course-hub-project-card-boundary-001",
+      "must": [
+        "project_practice_separate_from_teaching_cases",
+        "draft_source_status_visible",
+        "no_claim_of_runtime_interaction"
+      ]
+    },
+    {
+      "id": "course-hub-rollback-001",
+      "must": [
+        "course_hub_flag_false_restores_direct_entry",
+        "existing_learning_session_not_deleted"
+      ]
+    },
+    {
+      "id": "course-hub-standalone-assets-001",
+      "must": [
+        "build_stages_next_static",
+        "build_stages_public_assets",
+        "homepage_javascript_chunks_return_200"
+      ]
+    }
+  ]
+}

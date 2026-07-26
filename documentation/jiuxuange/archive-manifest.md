@@ -36,6 +36,7 @@
 | `NEXT_PUBLIC_C_CUBIC_LEARNING_LOOP_V5` | 启用 V5 最小可验证学习闭环与 V5.1 入口行为 | 回到 V4，不删除 V5 会话 |
 | `NEXT_PUBLIC_C_CUBIC_FREE_TTS` | 九轩阁首次同步时选择本机免费语音 | 不自动选择本机免费语音 |
 | `NEXT_PUBLIC_JIUXUANGE_DUAL_ENTRY_V1` | 显示我的课程、个人项目测评和自由学习分层 | 恢复 V5.1 首页入口，不删除测评数据 |
+| `NEXT_PUBLIC_JIUXUANGE_COURSE_HUB_V1` | 首页课程入口先进入六案例课程中心 | 恢复直接进入既有商业模式课堂，不删除会话 |
 | `TTS_SYSTEM_ENABLED` | macOS 服务端公布 `system-tts` Provider | 服务端不提供该 Provider |
 
 关闭功能开关不会删除已有本地会话。
@@ -59,6 +60,11 @@
 - 双入口服务端仓库与身份：`lib/server/jiuxuange/`
 - 个人项目测评页：`app/assessment/[assignmentId]/page.tsx`
 - 双入口固定合同：`eval/jiuxuange-learning-partner/scenarios/dual-entry-contract.v1.json`
+- 商业模式课程中心：`app/courses/business-model/page.tsx`
+- 麦客思项目卡预览：`app/courses/business-model/projects/mckess/page.tsx`
+- 商业模式案例目录：`lib/jiuxuange/course-catalog/business-model.ts`
+- 课程中心固定合同：`eval/jiuxuange-learning-partner/scenarios/business-model-course-hub.v1.json`
+- standalone 静态资源装配：`scripts/prepare-standalone-assets.mjs`
 - 回归测试：`tests/c-cubic/`
 - V5.1 入口与新一轮合同：`documentation/jiuxuange/learning-loop-v5-entry-recovery-20260721.md`
 - 真实可见对话回放：`documentation/jiuxuange/learning-loop-v5.1-transcript--9HjnSKv4w-20260722.md`
@@ -76,6 +82,8 @@ WATCHPACK_POLLING=true pnpm dev --hostname 127.0.0.1 --port 8792 --webpack
 ```
 
 模型凭据放在被 Git 忽略的 `.env.local` 或正式服务端密钥管理中。归档不保存、不复制任何真实 API key。
+
+生产构建会自动把 `.next/static` 和 `public` 复制进 `.next/standalone`。若跳过该步骤，页面只能显示服务端 HTML，按钮、课程恢复和客户端路由均不可用。
 
 本次归档前验证：44 个相关测试文件、207 项测试通过；相关 ESLint 0 error、1 个既有 Hook warning；TypeScript 通过；本地 `HEAD /` 返回 200。
 
