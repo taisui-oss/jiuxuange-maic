@@ -6,6 +6,8 @@ const mocks = vi.hoisted(() => ({
   isServerConfiguredProvider: vi.fn(() => false),
   resolvePDFApiKey: vi.fn((_providerId: string, clientKey?: string) => clientKey || ''),
   resolvePDFBaseUrl: vi.fn((_providerId: string, clientBaseUrl?: string) => clientBaseUrl),
+  parsePDF: vi.fn(),
+  parseWithMinerUDocument: vi.fn(),
   parseWithMinerUCloud: vi.fn(),
 }));
 
@@ -26,6 +28,11 @@ vi.mock('@/lib/server/provider-config', () => ({
 
 vi.mock('@/lib/pdf/mineru-cloud', () => ({
   parseWithMinerUCloud: mocks.parseWithMinerUCloud,
+}));
+
+vi.mock('@/lib/pdf/pdf-providers', () => ({
+  parsePDF: mocks.parsePDF,
+  parseWithMinerUDocument: mocks.parseWithMinerUDocument,
 }));
 
 async function postExtractDocument(input: {
@@ -96,6 +103,16 @@ describe('POST /api/extract-document', () => {
     mocks.resolvePDFBaseUrl.mockImplementation(
       (_providerId: string, clientBaseUrl?: string) => clientBaseUrl,
     );
+    mocks.parsePDF.mockReset();
+    mocks.parsePDF.mockResolvedValue({
+      text: 'local parsed text',
+      images: [],
+      metadata: {
+        pageCount: 1,
+        parser: 'unpdf',
+      },
+    });
+    mocks.parseWithMinerUDocument.mockReset();
     mocks.parseWithMinerUCloud.mockReset();
     mocks.parseWithMinerUCloud.mockResolvedValue({
       text: 'cloud parsed text',
@@ -176,11 +193,64 @@ describe('POST /api/extract-document', () => {
     expect(json.data.text).toContain('商业模式课程导读');
   });
 
-  it('returns actionable 422 diagnostics when explicitly selected MinerU is unconfigured', async () => {
+  it('falls back to local DOCX extraction when explicitly selected MinerU is unconfigured', async () => {
     const res = await postExtractDocument({
-      file: new File(['not really docx'], 'lesson.docx', {
-        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      file: await createDocxFile('本地降级后的课程正文'),
+      providerId: 'mineru',
+    });
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json).toMatchObject({
+      success: true,
+      data: {
+        text: expect.stringContaining('本地降级后的课程正文'),
+        metadata: {
+          parser: 'docx-local',
+          fallbackFromProviderId: 'mineru',
+        },
+      },
+    });
+  });
+
+  it('falls back to local PDF extraction when explicitly selected MinerU is unconfigured', async () => {
+    const res = await postExtractDocument({
+      file: new File(['%PDF-1.4'], 'lesson.pdf', { type: 'application/pdf' }),
+      providerId: 'mineru',
+    });
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json).toMatchObject({
+      success: true,
+      data: {
+        text: 'local parsed text',
+        metadata: {
+          parser: 'unpdf',
+          fallbackFromProviderId: 'mineru',
+        },
+      },
+    });
+    expect(mocks.parsePDF).toHaveBeenCalledWith(
+      expect.objectContaining({
+        providerId: 'unpdf',
       }),
+      expect.any(Buffer),
+    );
+  });
+
+  it('rejects a PDF when local extraction produces no readable text', async () => {
+    mocks.parsePDF.mockResolvedValueOnce({
+      text: '   ',
+      images: [],
+      metadata: {
+        pageCount: 1,
+        parser: 'unpdf',
+      },
+    });
+
+    const res = await postExtractDocument({
+      file: new File(['%PDF-1.4'], 'scanned.pdf', { type: 'application/pdf' }),
       providerId: 'mineru',
     });
     const json = await res.json();
@@ -188,10 +258,10 @@ describe('POST /api/extract-document', () => {
     expect(res.status).toBe(422);
     expect(json).toMatchObject({
       success: false,
-      errorCode: 'INVALID_REQUEST',
+      errorCode: 'PARSE_FAILED',
     });
-    expect(json.error).toContain('DOCX extraction requires a configured MinerU document extractor');
-    expect(json.error).toContain('self-hosted MinerU base URL or a MinerU Cloud API key');
+    expect(json.error).toContain('没有识别到可读文字');
+    expect(json.error).toContain('MinerU OCR');
   });
 
   it('allows MinerU Cloud PDF extraction with an API key and no base URL', async () => {

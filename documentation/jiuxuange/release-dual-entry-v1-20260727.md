@@ -2,6 +2,8 @@
 
 发布日期：2026-07-27
 
+> 后续版本：自由学习 PDF 与 TTS 降级问题已在 `jiuxuange-maic-dual-entry-v1.0.1-20260727` 修复。V1 标签保留为不可变回退点，不重写历史。
+
 ## 版本标识
 
 - 产品版本：`Jiuxuange MAIC Dual Entry V1`

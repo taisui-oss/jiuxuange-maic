@@ -38,6 +38,7 @@ import { useTheme } from '@/lib/hooks/use-theme';
 import { nanoid } from 'nanoid';
 import { storePdfBlob } from '@/lib/utils/image-storage';
 import { normalizeDocumentMimeType } from '@/lib/document/mime';
+import { isPdfProviderAvailable } from '@/lib/pdf/provider-availability';
 import type { UserRequirements } from '@/lib/types/generation';
 import { useSettingsStore } from '@/lib/store/settings';
 import { hasUsableLLMProvider } from '@/lib/store/settings-validation';
@@ -399,8 +400,20 @@ function HomePage() {
         });
 
         const settings = useSettingsStore.getState();
-        pdfProviderId = settings.pdfProviderId;
-        const providerCfg = settings.pdfProvidersConfig?.[settings.pdfProviderId];
+        const selectedProviderId = settings.pdfProviderId;
+        const selectedProviderConfig = settings.pdfProvidersConfig?.[selectedProviderId];
+        const effectiveProviderId = isPdfProviderAvailable(
+          selectedProviderId,
+          selectedProviderConfig,
+        )
+          ? selectedProviderId
+          : 'unpdf';
+        if (effectiveProviderId !== selectedProviderId) {
+          settings.setPDFProvider(effectiveProviderId);
+        }
+
+        pdfProviderId = effectiveProviderId;
+        const providerCfg = settings.pdfProvidersConfig?.[effectiveProviderId];
         if (providerCfg) {
           pdfProviderConfig = {
             apiKey: providerCfg.apiKey,

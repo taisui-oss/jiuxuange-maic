@@ -18,6 +18,7 @@ import { useSettingsStore } from '@/lib/store/settings';
 import { isLLMProviderConfigured } from '@/lib/store/settings-validation';
 import { PDF_PROVIDERS } from '@/lib/pdf/constants';
 import type { PDFProviderId } from '@/lib/pdf/types';
+import { isPdfProviderAvailable } from '@/lib/pdf/provider-availability';
 import { WEB_SEARCH_PROVIDERS, getWebSearchProviderDisplayName } from '@/lib/web-search/constants';
 import type { WebSearchProviderId } from '@/lib/web-search/types';
 import type { ProviderId } from '@/lib/ai/providers';
@@ -213,8 +214,7 @@ export function GenerationToolbar({
                 <SelectContent>
                   {Object.values(PDF_PROVIDERS).map((provider) => {
                     const cfg = pdfProvidersConfig[provider.id];
-                    const available =
-                      !provider.requiresApiKey || !!cfg?.apiKey || !!cfg?.isServerConfigured;
+                    const available = isPdfProviderAvailable(provider.id, cfg);
                     return (
                       <SelectItem key={provider.id} value={provider.id} disabled={!available}>
                         <div

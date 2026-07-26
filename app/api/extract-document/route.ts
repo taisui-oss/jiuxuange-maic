@@ -33,6 +33,22 @@ function isSelfHostedMinerUProvider(
   return providerId === 'mineru';
 }
 
+function isMinerUProvider(
+  providerId: string,
+): providerId is Extract<PDFProviderId, 'mineru' | 'mineru-cloud'> {
+  return providerId === 'mineru' || providerId === 'mineru-cloud';
+}
+
+function getLocalTextFallbackProvider(mimeType: string) {
+  if (mimeType === 'application/pdf') {
+    return getDocumentExtractorProvider('unpdf');
+  }
+  if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+    return getDocumentExtractorProvider('docx-local');
+  }
+  return undefined;
+}
+
 function requestedTypeLabel(mimeType: string): string {
   if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
     return 'DOCX';
@@ -46,6 +62,7 @@ function requestedTypeLabel(mimeType: string): string {
 export async function POST(req: NextRequest) {
   let fileName: string | undefined;
   let resolvedProviderId: string | undefined;
+  let fallbackFromProviderId: string | undefined;
   try {
     const contentType = req.headers.get('content-type') || '';
     if (!contentType.includes('multipart/form-data')) {
@@ -125,7 +142,28 @@ export async function POST(req: NextRequest) {
         resolvedProviderId = provider.id;
       }
     }
-    if (isSelfHostedMinerUProvider(provider.id) && !managed && !clientBaseUrl) {
+
+    const resolvedApiKey =
+      isPdfProviderId(provider.id) && provider.id === 'mineru-cloud'
+        ? resolvePDFApiKey(provider.id, managed ? undefined : apiKey || undefined)
+        : undefined;
+    const minerUUnavailable =
+      isSelfHostedMinerUProvider(provider.id) && !managed && !clientBaseUrl
+        ? true
+        : provider.id === 'mineru-cloud' && !managed && !resolvedApiKey;
+
+    if (isMinerUProvider(provider.id) && minerUUnavailable) {
+      const localFallback = getLocalTextFallbackProvider(mimeType);
+      if (localFallback) {
+        fallbackFromProviderId = provider.id;
+        provider = localFallback;
+        managed = false;
+        clientBaseUrl = undefined;
+        resolvedProviderId = provider.id;
+      }
+    }
+
+    if (isMinerUProvider(provider.id) && minerUUnavailable) {
       return apiError(
         'INVALID_REQUEST',
         422,
@@ -160,6 +198,13 @@ export async function POST(req: NextRequest) {
       config,
     });
     const result = documentArtifactToParsedPdfContent(artifact);
+    if (!result.text.trim()) {
+      return apiError(
+        'PARSE_FAILED',
+        422,
+        '本地 PDF 解析器没有识别到可读文字。若文件是扫描件或主要由图片、复杂表格组成，请配置 MinerU OCR 后重试。',
+      );
+    }
 
     const resultWithMetadata: ParsedPdfContent = {
       ...result,
@@ -170,6 +215,7 @@ export async function POST(req: NextRequest) {
         fileSize: documentFile.size,
         mimeType,
         parser: result.metadata?.parser ?? provider.id,
+        ...(fallbackFromProviderId ? { fallbackFromProviderId } : {}),
       },
     };
 

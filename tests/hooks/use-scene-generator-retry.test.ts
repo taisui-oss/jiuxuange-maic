@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import type { SceneOutline } from '@/lib/types/generation';
+import type { Scene } from '@/lib/types/stage';
 
 const mocks = vi.hoisted(() => ({
   getCurrentModelConfig: vi.fn(),
@@ -201,6 +202,93 @@ describe('browser scene generation retry wrappers', () => {
     expect(mocks.audioPut).toHaveBeenCalledWith(
       expect.objectContaining({
         id: 'tts_s2_action_1',
+        format: 'wav',
+      }),
+    );
+  });
+
+  it('keeps a generated scene usable when every TTS clip fails', async () => {
+    const { generateTTSForScene } = await import('@/lib/hooks/use-scene-generator');
+    const scene = {
+      id: 'scene-tts-failure',
+      stageId: 'stage-1',
+      type: 'slide',
+      title: 'Text-first lesson',
+      order: 3,
+      content: {
+        type: 'slide',
+        canvas: {
+          id: 'canvas-1',
+          elements: [],
+        },
+      },
+      actions: [
+        {
+          id: 'speech-1',
+          type: 'speech',
+          agentId: 'professor',
+          text: 'The lesson must remain readable without generated audio.',
+        },
+      ],
+    } as unknown as Scene;
+    mockFetch.mockResolvedValue(jsonResponse(503, { error: 'system TTS unavailable' }));
+
+    const result = await generateTTSForScene(scene, 'English', undefined, retryOptions);
+
+    expect(result).toMatchObject({
+      success: false,
+      failedCount: 1,
+      error: 'system TTS unavailable',
+    });
+    expect(scene.actions).toEqual([
+      expect.objectContaining({
+        id: 'speech-1',
+        text: 'The lesson must remain readable without generated audio.',
+      }),
+    ]);
+    expect(scene.actions?.[0]).not.toHaveProperty('audioId');
+    expect(mocks.audioPut).not.toHaveBeenCalled();
+  });
+
+  it('adds an audio id only after a TTS clip is stored successfully', async () => {
+    const { generateTTSForScene } = await import('@/lib/hooks/use-scene-generator');
+    const scene = {
+      id: 'scene-tts-success',
+      stageId: 'stage-1',
+      type: 'slide',
+      title: 'Lesson with audio',
+      order: 4,
+      content: {
+        type: 'slide',
+        canvas: {
+          id: 'canvas-2',
+          elements: [],
+        },
+      },
+      actions: [
+        {
+          id: 'speech-2',
+          type: 'speech',
+          agentId: 'professor',
+          text: 'Audio is optional, but this clip succeeds.',
+        },
+      ],
+    } as unknown as Scene;
+    mockFetch.mockResolvedValue(
+      jsonResponse(200, {
+        success: true,
+        base64: btoa('audio-data'),
+        format: 'wav',
+      }),
+    );
+
+    const result = await generateTTSForScene(scene, 'English', undefined, retryOptions);
+
+    expect(result).toEqual({ success: true, failedCount: 0, error: undefined });
+    expect(scene.actions?.[0]).toHaveProperty('audioId', 'tts_s4_speech-2');
+    expect(mocks.audioPut).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'tts_s4_speech-2',
         format: 'wav',
       }),
     );

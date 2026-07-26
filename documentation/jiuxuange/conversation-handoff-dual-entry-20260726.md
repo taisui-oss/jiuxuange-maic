@@ -52,3 +52,23 @@
 ## 回退
 
 设置 `NEXT_PUBLIC_JIUXUANGE_DUAL_ENTRY_V1=false` 后重新构建。关闭开关不删除新旧数据。
+
+## 2026-07-27 V1.0.1 热修复补充
+
+[KNOWN, HIGH] 自由学习入口曾因浏览器保留未配置的 MinerU 而无法读取 PDF；文档解析通过后，`system-tts` 空音频又会把整门课程判为失败。
+
+[KNOWN, HIGH] 当前热修复已完成：
+
+- 文本型 PDF 自动回退 `unpdf`，普通 DOCX 自动回退 `docx-local`；
+- 本地解析无可读正文时停止生成并提示 OCR；
+- TTS 失败不再丢弃课程，失败片段不写失效 `audioId`；
+- 真实便利蜂 PDF 已进入课堂 `/classroom/3HHRH5pw6S`，无声播放可运行。
+
+[KNOWN, HIGH] 当前 `system-tts` 仍返回空音频，因此只能确认文字课程可用，不能确认教授语音已恢复。
+
+后续新对话还需读取：
+
+```text
+documentation/jiuxuange/free-learning-course-generation-hotfix-20260727.md
+eval/jiuxuange-learning-partner/scenarios/document-extraction-regression.v1.json
+```

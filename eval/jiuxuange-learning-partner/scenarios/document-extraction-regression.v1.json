@@ -1,0 +1,71 @@
+{
+  "suiteId": "jiuxuange-document-extraction-regression",
+  "version": 1,
+  "createdAt": "2026-07-27",
+  "owner": "Jiuxuange product",
+  "source": "browser replay at http://127.0.0.1:8794/generation-preview",
+  "scenarios": [
+    {
+      "id": "free-learning-pdf-stale-mineru-001",
+      "input": {
+        "mimeType": "application/pdf",
+        "selectedProviderId": "mineru",
+        "providerConfigured": false
+      },
+      "observedFailure": {
+        "status": 422,
+        "error": "application/pdf extraction requires a configured MinerU document extractor."
+      },
+      "must": [
+        "fall_back_to_unpdf",
+        "preserve_extracted_course_text",
+        "continue_course_generation"
+      ],
+      "mustNot": [
+        "create_course_without_readable_source_text",
+        "claim_scanned_pdf_ocr_succeeded",
+        "require_paid_extractor_for_text_pdf"
+      ]
+    },
+    {
+      "id": "free-learning-scanned-pdf-no-text-001",
+      "input": {
+        "mimeType": "application/pdf",
+        "selectedProviderId": "mineru",
+        "providerConfigured": false,
+        "localExtractedText": ""
+      },
+      "must": [
+        "stop_before_course_generation",
+        "explain_ocr_requirement",
+        "preserve_source_file_for_retry"
+      ],
+      "mustNot": ["generate_generic_course_from_filename_only", "mark_document_analysis_complete"]
+    },
+    {
+      "id": "free-learning-tts-nonfatal-001",
+      "input": {
+        "sourceExtractionSucceeded": true,
+        "courseOutlineGenerated": true,
+        "firstSceneGenerated": true,
+        "ttsProviderEnabled": true,
+        "ttsResult": "failure"
+      },
+      "observedFailure": {
+        "error": "语音合成失败",
+        "effect": "generated_course_was_discarded_before_classroom_entry"
+      },
+      "must": [
+        "preserve_generated_scene",
+        "continue_to_classroom_text_only",
+        "omit_audio_id_for_failed_clips",
+        "record_tts_warning"
+      ],
+      "mustNot": [
+        "mark_scene_failed",
+        "discard_outline_content_or_actions",
+        "advance_learning_state_from_audio_failure"
+      ]
+    }
+  ]
+}

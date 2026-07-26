@@ -19,7 +19,7 @@ import { useI18n } from '@/lib/hooks/use-i18n';
 import {
   fetchSceneActions,
   fetchSceneContent,
-  generateAndStoreTTS,
+  generateTTSForScene,
 } from '@/lib/hooks/use-scene-generator';
 import { isAbortError } from '@/lib/generation/generation-retry';
 import { createStreamWatchdog, withTimeoutSignal } from '@/lib/utils/fetch-timeout';
@@ -941,7 +941,8 @@ function GenerationPreviewContent() {
       }
       const firstScene = data.scene;
 
-      // Generate TTS for first scene (part of actions step — blocking)
+      // Generate optional audio for the first scene. The text lesson remains usable
+      // when a local or remote TTS provider is temporarily unavailable.
       if (
         settings.ttsEnabled &&
         settings.ttsProviderId !== 'browser-native-tts' &&
@@ -950,41 +951,18 @@ function GenerationPreviewContent() {
           settings.ttsProvidersConfig?.[settings.ttsProviderId],
         )
       ) {
-        const speechActions = (firstScene.actions || []).filter(
-          (a: {
-            id: string;
-            type: string;
-            text?: string;
-          }): a is {
-            id: string;
-            type: 'speech';
-            text: string;
-            audioId?: string;
-          } => a.type === 'speech' && !!a.text,
+        const ttsResult = await generateTTSForScene(
+          firstScene,
+          languageDirective,
+          signal,
+          FOREGROUND_SCENE_RETRY_OPTIONS,
         );
-
-        let ttsFailCount = 0;
-        for (const action of speechActions) {
-          const audioId = `tts_${action.id}`;
-          action.audioId = audioId;
-          try {
-            await generateAndStoreTTS(
-              audioId,
-              action.text,
-              languageDirective,
-              signal,
-              FOREGROUND_SCENE_RETRY_OPTIONS,
-            );
-          } catch (err) {
-            if (isAbortError(err)) throw err;
-
-            log.warn(`[TTS] Failed for ${audioId}:`, err);
-            ttsFailCount++;
-          }
-        }
-
-        if (ttsFailCount > 0 && speechActions.length > 0) {
-          throw new Error(t('generation.speechFailed'));
+        if (!ttsResult.success) {
+          log.warn('[TTS] First scene will continue without generated audio', {
+            sceneId: firstScene.id,
+            failedCount: ttsResult.failedCount,
+            error: ttsResult.error,
+          });
         }
       }
 

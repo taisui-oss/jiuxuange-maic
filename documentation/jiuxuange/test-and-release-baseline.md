@@ -2,6 +2,26 @@
 
 ## 1. 当前自动化基线
 
+### 自由学习 PDF 与 TTS 降级基线（2026-07-27）
+
+`eval_run_id`: `jgx-free-learning-pdf-tts-hotfix-20260727-01`
+
+| 字段 | 值 |
+|---|---|
+| 基础标签 | `jiuxuange-maic-dual-entry-v1-20260727` |
+| 修复分支 | `fix/jiuxuange-pdf-local-fallback-20260727` |
+| 固定失败集 | `document-extraction-regression.v1.json`，3 条场景 |
+| 定向自动化 | 4 文件、22 项通过 |
+| 相关扩展回归 | 6 文件、144 项通过 |
+| TypeScript | 通过 |
+| 精确 ESLint | 0 error；首页 1 个既有 Hook warning |
+| 生产构建 | 通过；45 个路由 |
+| 真实解析样本 | 便利蜂 PDF，`unpdf`，9 页，3946 个正文字符 |
+| 浏览器闭环 | 首页上传 → 大纲 → 页面 → 教学动作 → TTS 失败降级 → `/classroom/3HHRH5pw6S` |
+| 发布判断 | `allow L0 hotfix`；文本课程可用，语音能力仍未恢复 |
+
+[KNOWN, HIGH] 本基线证明普通文本型 PDF 能生成课程，且 TTS 故障不再吞掉课程。它不证明扫描 PDF 可解析、有声体验稳定、课程内容已经教授审校或学习效果成立。
+
 ### V5.1 真实回放与反馈真实性基线（2026-07-22）
 
 `eval_run_id`: `jgx-v5.1-learning-depth-replay-20260722-01`
@@ -119,6 +139,8 @@ pnpm test tests/c-cubic \
 | V5 证据随课堂 ZIP 的 `manifest.json` 往返保留 | `export-classroom-inline.test.ts` | 已覆盖 |
 | V5 真实浅层完成回放与反馈真实性 | `learning-depth-replay.test.ts`、`learning-loop-v5-state.test.ts` | 已覆盖样本与反馈措辞；教学补偿未覆盖 |
 | DOCX 默认本地正文提取与 MinerU 显式回退 | `extract-document-route.test.ts`、`extractor-registry.test.ts` | 2026-07-26：6 个文档测试文件、27 项通过；生产构建与 8792 页面上传通过 |
+| PDF Provider 可用性、本地回退与空文本阻断 | `extract-document-route.test.ts`、`pdf-provider-availability.test.ts` | 2026-07-27：真实便利蜂 PDF 回放通过；扫描件继续需要 OCR |
+| TTS 故障不阻断课程生成 | `use-scene-generator-retry.test.ts`、`document-extraction-regression.v1.json` | 2026-07-27：首场景、后台续生成和重试均按无声模式继续 |
 | macOS 本地免费中文语音 | `system-tts.test.ts`、`provider-config.test.ts`、`settings-server-sync.test.ts` | 2026-07-26：125 项核心测试、26 项音频回归通过；生产接口生成 125002 字节 WAV；设置页测试播放无 TTS 错误 |
 | 双入口业务合同与个人测评隔离 | `dual-entry-domain.test.ts`、`jiuxuange-dual-entry-route.test.ts` | 2026-07-26：10 项核心合同通过；同组同题、个人隔离、发布门、两次提交和活跃时长已覆盖 |
 
@@ -144,6 +166,8 @@ pnpm test tests/c-cubic \
 | 成本与稳定性 | Provider 超时、限流、费用上限和降级率 | P1 |
 | 复杂 Office 结构 | DOCX 图片、复杂表格、公式、页码及 PPTX 本地解析仍依赖 MinerU | P1 |
 | 公网语音部署 | 当前免费语音依赖 macOS `/usr/bin/say`；Linux、容器和公网实例尚无正式 TTS Provider | P1 |
+| 本机语音跨进程稳定性 | 2026-07-27 当前生产进程的 `/usr/bin/say` 返回空音频；历史单次成功不能作为当前稳定能力 | P0 体验、P1 学习链正确性 |
+| TTS 故障等待时间 | 音频已非阻塞，但每个片段仍会重试后再降级 | P1 |
 | 双入口生产身份 | localhost 使用演示身份；真实花名、班级和项目组接口未接入 | P0 |
 | 双入口管理员发布 | 当前课程、项目卡和六题为 seed；无管理员确认与发布界面 | P0 |
 | 三类活跃时长完整接线 | 仅个人测评页发送服务端心跳；正式课程与自由学习尚未接线 | P1 |
