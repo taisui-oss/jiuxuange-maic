@@ -1,9 +1,11 @@
+import { docxDocumentExtractorProvider } from './docx';
 import { pdfDocumentExtractorProviders } from './pdf';
 import { textDocumentExtractorProvider } from './text';
 import type { DocumentExtractorProvider, DocumentExtractorProviderId } from '../types';
 
 const documentExtractorProviders = [
   textDocumentExtractorProvider,
+  docxDocumentExtractorProvider,
   ...pdfDocumentExtractorProviders,
 ];
 

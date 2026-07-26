@@ -87,15 +87,11 @@ describe('Jiuxuange V5 learning-loop state', () => {
     expect(premature.disclosures).toEqual([]);
 
     activateNode(value, 'bee_independent_commit');
-    const commit = recordJiuxuangeLearningLoopTurn(
-      value,
-      decision('autonomous', ['bee-loop-f3']),
-      {
-        sourceMessageId: 'msg-bee-commit',
-        message: 'bee-loop-f3说明订货决策从店长转给中央系统，因此可能减少经验差异。',
-        now: '2026-07-20T14:03:00.000Z',
-      },
-    );
+    const commit = recordJiuxuangeLearningLoopTurn(value, decision('autonomous', ['bee-loop-f3']), {
+      sourceMessageId: 'msg-bee-commit',
+      message: 'bee-loop-f3说明订货决策从店长转给中央系统，因此可能减少经验差异。',
+      now: '2026-07-20T14:03:00.000Z',
+    });
     activateNode(value, 'bee_unlock_compare');
     const compare = recordJiuxuangeLearningLoopTurn(value, decision('hinted'), {
       sourceMessageId: 'msg-bee-compare',
@@ -109,8 +105,9 @@ describe('Jiuxuange V5 learning-loop state', () => {
       phase: 'analysis',
       unlockedByClaimId: commit.claim?.id,
     });
-    expect(value.jiuxuange?.learningLoop?.claims.find((item) => item.id === commit.claim?.id)?.text)
-      .toBe(commit.claim?.text);
+    expect(
+      value.jiuxuange?.learningLoop?.claims.find((item) => item.id === commit.claim?.id)?.text,
+    ).toBe(commit.claim?.text);
   });
 
   it('classifies an assisted transfer as B rather than autonomous learning', () => {
@@ -152,6 +149,48 @@ describe('Jiuxuange V5 learning-loop state', () => {
     expect(JSON.stringify(feedback)).not.toMatch(/(?:分数|得分|score)/iu);
   });
 
+  it('does not describe shallow observed answers as completed learning actions', () => {
+    const value = project();
+    activateNode(value, 'baseline_capture');
+    recordJiuxuangeLearningLoopTurn(value, decision('unsupported'), {
+      sourceMessageId: 'msg-observed-baseline',
+      message: '可能利润是负的，',
+      now: '2026-07-22T09:01:00.000Z',
+    });
+    activateNode(value, 'bee_independent_commit');
+    recordJiuxuangeLearningLoopTurn(value, decision('unsupported'), {
+      sourceMessageId: 'msg-observed-commit',
+      message: '不知道',
+      now: '2026-07-22T09:02:00.000Z',
+      assisted: true,
+    });
+    activateNode(value, 'fresh_transfer');
+    recordJiuxuangeLearningLoopTurn(value, decision('unsupported'), {
+      sourceMessageId: 'msg-observed-transfer',
+      message: '物流',
+      now: '2026-07-22T09:03:00.000Z',
+      assisted: true,
+    });
+    activateNode(value, 'judgment_revision');
+    recordJiuxuangeLearningLoopTurn(value, decision('unsupported'), {
+      sourceMessageId: 'msg-observed-revision',
+      message: '不知道',
+      now: '2026-07-22T09:04:00.000Z',
+      assisted: true,
+    });
+
+    const feedback = buildJiuxuangeLearningLoopFeedback(value, '2026-07-22T09:05:00.000Z');
+    const feedbackText = feedback.statements.map((statement) => statement.text).join('\n');
+
+    expect(feedback.outcome).toBe('B');
+    expect(feedbackText).toContain('尚未形成可复述的判断');
+    expect(feedbackText).toContain('尚未形成可验证的迁移判断');
+    expect(feedbackText).toContain('尚未形成可验证的修正');
+    expect(feedbackText).not.toContain('形成了判断：“不知道”');
+    expect(feedbackText).not.toContain('完成了迁移');
+    expect(feedbackText).not.toContain('做出的修正是：“不知道”');
+  });
+
   it('classifies autonomous transfer plus evidenced revision as A', () => {
     const value = project();
     activateNode(value, 'baseline_capture');
@@ -172,26 +211,22 @@ describe('Jiuxuange V5 learning-loop state', () => {
       decision('autonomous', ['fresh-transfer-f1', 'fresh-transfer-f6']),
       {
         sourceMessageId: 'msg-a-transfer',
-        message: 'fresh-transfer-f1和fresh-transfer-f6说明自提关系减少末端配送，因此履约费用率更低。',
+        message:
+          'fresh-transfer-f1和fresh-transfer-f6说明自提关系减少末端配送，因此履约费用率更低。',
         now: '2026-07-20T14:03:00.000Z',
       },
     );
     activateNode(value, 'judgment_revision');
-    recordJiuxuangeLearningLoopTurn(
-      value,
-      decision('autonomous', ['fresh-transfer-f6']),
-      {
-        sourceMessageId: 'msg-a-revision',
-        message: '我原来主要看销量，现在会同时看决策权与履约关系，因为fresh-transfer-f6显示费用结构不同。',
-        now: '2026-07-20T14:04:00.000Z',
-      },
-    );
+    recordJiuxuangeLearningLoopTurn(value, decision('autonomous', ['fresh-transfer-f6']), {
+      sourceMessageId: 'msg-a-revision',
+      message:
+        '我原来主要看销量，现在会同时看决策权与履约关系，因为fresh-transfer-f6显示费用结构不同。',
+      now: '2026-07-20T14:04:00.000Z',
+    });
 
     const feedback = buildJiuxuangeLearningLoopFeedback(value, '2026-07-20T14:05:00.000Z');
     expect(feedback.outcome).toBe('A');
     expect(feedback.statements.flatMap((item) => item.evidenceRefs)).toContain('msg-a-transfer');
-    expect(feedback.statements.flatMap((item) => item.evidenceRefs)).toContain(
-      'fresh-transfer-f6',
-    );
+    expect(feedback.statements.flatMap((item) => item.evidenceRefs)).toContain('fresh-transfer-f6');
   });
 });

@@ -86,6 +86,16 @@ vi.mock('@/lib/audio/constants', () => ({
       supportedFormats: ['browser'],
       speedRange: { min: 0.1, max: 10, default: 1 },
     },
+    'system-tts': {
+      id: 'system-tts',
+      name: 'Jiuxuange Local Voice',
+      requiresApiKey: false,
+      defaultModelId: 'macos-say',
+      models: [{ id: 'macos-say', name: 'macOS System Voice' }],
+      voices: [{ id: 'Tingting', name: 'Tingting', language: 'zh-CN', gender: 'female' }],
+      supportedFormats: ['wav'],
+      speedRange: { min: 0.5, max: 2, default: 1 },
+    },
   },
   ASR_PROVIDERS: {
     'openai-whisper': {
@@ -109,6 +119,7 @@ vi.mock('@/lib/audio/constants', () => ({
   },
   DEFAULT_TTS_VOICES: {
     'openai-tts': 'alloy',
+    'system-tts': 'Tingting',
     'browser-native-tts': 'default',
   },
 }));
@@ -1510,6 +1521,7 @@ describe('settings store — outline review preference', () => {
 describe('TTS provider enablement (#665)', () => {
   beforeEach(() => {
     vi.resetModules();
+    vi.unstubAllEnvs();
     storage.clear();
     mockFetch.mockReset();
   });
@@ -1542,6 +1554,49 @@ describe('TTS provider enablement (#665)', () => {
     const store = await getStore();
     await store.getState().fetchServerProviders();
     expect(store.getState().ttsEnabled).toBe(false);
+  });
+
+  it('Jiuxuange auto-selects the managed free system voice exactly once', async () => {
+    vi.stubEnv('NEXT_PUBLIC_C_CUBIC_FREE_TTS', 'true');
+    mockServerResponse({ tts: { 'system-tts': {} } });
+    const store = await getStore();
+
+    await store.getState().fetchServerProviders();
+
+    expect(store.getState().ttsEnabled).toBe(true);
+    expect(store.getState().ttsProviderId).toBe('system-tts');
+    expect(store.getState().ttsVoice).toBe('Tingting');
+    expect(store.getState().jiuxuangeFreeTtsAutoConfigured).toBe(true);
+
+    store.getState().setTTSEnabled(false);
+    mockServerResponse({ tts: { 'system-tts': {} } });
+    await store.getState().fetchServerProviders();
+
+    expect(store.getState().ttsEnabled).toBe(false);
+    expect(store.getState().ttsProviderId).toBe('system-tts');
+  });
+
+  it('does not auto-select the free system voice outside Jiuxuange mode', async () => {
+    vi.stubEnv('NEXT_PUBLIC_C_CUBIC_FREE_TTS', 'false');
+    storage.set(
+      'settings-storage',
+      JSON.stringify({
+        version: 4,
+        state: {
+          autoConfigApplied: true,
+          ttsEnabled: false,
+          ttsProviderId: 'browser-native-tts',
+          ttsVoice: 'default',
+        },
+      }),
+    );
+    mockServerResponse({ tts: { 'system-tts': {} } });
+    const store = await getStore();
+
+    await store.getState().fetchServerProviders();
+
+    expect(store.getState().ttsEnabled).toBe(false);
+    expect(store.getState().jiuxuangeFreeTtsAutoConfigured).toBe(false);
   });
 
   it('non-browser-native built-ins default enabled:true (configured ⇒ visible)', async () => {

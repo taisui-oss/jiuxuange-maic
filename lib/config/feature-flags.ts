@@ -94,3 +94,12 @@ export function shouldUseCubicSingleCourseOrientationV4(): boolean {
 export function shouldUseCubicLearningLoopV5(): boolean {
   return process.env.NEXT_PUBLIC_C_CUBIC_LEARNING_LOOP_V5 === 'true';
 }
+
+/**
+ * Separates the home experience into an assigned-course portal, a personal
+ * project assessment, and private free learning. Disabling it restores the
+ * V5.1 home entry without deleting portal or assessment data.
+ */
+export function shouldUseJiuxuangeDualEntryV1(): boolean {
+  return process.env.NEXT_PUBLIC_JIUXUANGE_DUAL_ENTRY_V1 === 'true';
+}

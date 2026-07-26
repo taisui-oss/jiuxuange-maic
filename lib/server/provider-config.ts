@@ -85,6 +85,7 @@ const TTS_ENV_MAP: Record<string, string> = {
  */
 const TTS_DISABLE_ENV_MAP: Record<string, string> = {
   ...TTS_ENV_MAP,
+  TTS_SYSTEM: 'system-tts',
   TTS_BROWSER_NATIVE: 'browser-native-tts',
 };
 
@@ -310,14 +311,28 @@ function buildConfig(yamlData: YamlData): ServerConfig {
     }),
     yamlData.image,
   );
+  const tts = loadEnvSection(TTS_ENV_MAP, yamlData.tts, {
+    keylessProviders: new Set(['voxcpm-tts', 'lemonade-tts']),
+  });
+  const systemTtsEnabled =
+    process.env.TTS_SYSTEM_ENABLED ?? process.env.NEXT_PUBLIC_C_CUBIC_FREE_TTS;
+  if (
+    process.platform === 'darwin' &&
+    systemTtsEnabled !== undefined &&
+    systemTtsEnabled.trim() !== '' &&
+    parseBooleanEnv(systemTtsEnabled)
+  ) {
+    tts['system-tts'] = {
+      apiKey: '',
+      models: ['macos-say'],
+    };
+  }
 
   return {
     providers: loadEnvSection(LLM_ENV_MAP, yamlData.providers, {
       keylessProviders: new Set(['ollama', 'lemonade']),
     }),
-    tts: loadEnvSection(TTS_ENV_MAP, yamlData.tts, {
-      keylessProviders: new Set(['voxcpm-tts', 'lemonade-tts']),
-    }),
+    tts,
     asr: loadEnvSection(ASR_ENV_MAP, yamlData.asr, {
       keylessProviders: new Set(['lemonade-asr']),
     }),

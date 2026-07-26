@@ -1,7 +1,9 @@
 # 商业模式大课学习闭环 V5：固定测试合同
 
-状态：**开发前基线，尚未运行**  
-版本：`learning-loop-eval.v1`  
+状态：**固定回归已运行；真实学习效果仍未验证**
+
+版本：`learning-loop-eval.v1`
+
 目标课程包：`5.0.0-learning-loop-pilot`
 
 ## 1. 测试对象
@@ -56,6 +58,7 @@ source: synthetic_regression
 | `v5-llm-failure-001` | 故障降级 | 超时、空输出、非法 JSON 均不自动通过 |
 | `v5-v4-rollback-001` | 版本隔离 | 功能开关关闭后 V4 正常；V5 会话数据保留 |
 | `v5-structured-resume-context-001` | 结构化学习记忆 | 压缩或移除早期聊天后，仅凭 claim/evidence/revision/disclosure 仍恢复正确节点和下一问 |
+| `v5-real-replay-shallow-completion-001` | 真实完成态浅层回放 | “不知道”不写成形成判断或完成修正；无事实短词不写成完成迁移；弱回答必须触发节点专属教学补偿 |
 
 ## 3. 节点状态断言
 
@@ -89,6 +92,8 @@ source: synthetic_regression
 5. [INFERRED, HIGH] V4 回退测试失败时不得合并功能开关改动。
 6. [KNOWN, HIGH] 人工金标准不足时，AI 草评不得进入正式学员报告或管理员成绩报表。
 7. [INFERRED, HIGH] 系统若必须读取完整历史聊天才能恢复正确状态，视为结构化记忆测试失败。
+8. [INFERRED, HIGH] 最终反馈若把 attempted/assisted 描述为已经形成、完成或掌握，视为结果语义失败并阻止发布。
+9. [INFERRED, HIGH] 节点角色与冻结合同漂移且没有新决策记录时，视为 Agent 设计回归失败。
 
 ## 6. 运行记录
 
@@ -120,3 +125,4 @@ interface JiuxuangeEvalRun {
 - [INFERRED, HIGH] 真实试点中出现的新失败必须先脱敏，再新增为 fixture，不能只修 Prompt。
 - [INFERRED, HIGH] 事实包更新后同时保留旧事实版本和旧测试结果，避免无法解释历史表现变化。
 - [INFERRED, HIGH] 每次上线保存 decision log，明确接受的失败、责任人和复查版本。
+- [KNOWN, HIGH] 2026-07-22 已新增 `learning-depth-replay.v1.json`，保存课堂 `-9HjnSKv4w` 的 26 条完整可见消息和六项已观察失败；它不替代内部事件账本。

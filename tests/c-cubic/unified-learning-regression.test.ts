@@ -92,6 +92,18 @@ describe('C Cubic unified learning flag', () => {
     const source = readFileSync('app/page.tsx', 'utf8');
     expect(source).toContain('shouldUseCubicGuidedCourseV2');
     expect(source).toContain('<HomeOrientationEntry');
-    expect(source).toContain('guidedCourseV2 || sixLevelJourney ?');
+    expect(source).toContain(
+      '!dualEntryV1 && (guidedCourseV2 || sixLevelJourney) ?',
+    );
+  });
+
+  it('keeps the dual-entry portal behind an independent rollback flag', () => {
+    const source = readFileSync('app/page.tsx', 'utf8');
+    const flags = readFileSync('lib/config/feature-flags.ts', 'utf8');
+
+    expect(source).toContain('shouldUseJiuxuangeDualEntryV1');
+    expect(source).toContain('<JiuxuangeLearningPortal');
+    expect(source).toContain('!dualEntryV1 && businessModelMode');
+    expect(flags).toContain('NEXT_PUBLIC_JIUXUANGE_DUAL_ENTRY_V1');
   });
 });

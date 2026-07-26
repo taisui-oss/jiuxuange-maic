@@ -19,8 +19,11 @@
 | `codex/checkpoint-before-guided-course-v2-20260711` | 完整导学、概念、案例、测评链开发前 |
 | `codex/archive-jiuxuange-phase1-20260713` | 第一阶段业务逻辑归档 |
 | `codex/checkpoint-jiuxuange-maic-v5.1-20260721` | 基本操作流程确认后的 V5.1 完整源代码与文档回退点 |
+| `release/jiuxuange-dual-entry-v1-20260727` | 双入口 V1、学习深度回放、DOCX 与本地语音的完整发布分支 |
 
 本次归档同时建立标签 `jiuxuange-maic-v5.1-confirmed-20260721`。回退分支、标签与私有仓库 `main` 指向同一提交。
+
+双入口 V1 建立标签 `jiuxuange-maic-dual-entry-v1-20260727`；该标签只表示 L0 可运行归档，不代表达到正式课程或正式测评发布条件。
 
 ## 3. 功能开关
 
@@ -31,6 +34,9 @@
 | `NEXT_PUBLIC_C_CUBIC_SIX_LEVEL_JOURNEY` | 启用 V3 六关 PBL 地图 | 回到较早课程包 |
 | `NEXT_PUBLIC_C_CUBIC_SINGLE_COURSE_ORIENTATION_V4` | 启用 V4 单课导学 | 回到 V3 |
 | `NEXT_PUBLIC_C_CUBIC_LEARNING_LOOP_V5` | 启用 V5 最小可验证学习闭环与 V5.1 入口行为 | 回到 V4，不删除 V5 会话 |
+| `NEXT_PUBLIC_C_CUBIC_FREE_TTS` | 九轩阁首次同步时选择本机免费语音 | 不自动选择本机免费语音 |
+| `NEXT_PUBLIC_JIUXUANGE_DUAL_ENTRY_V1` | 显示我的课程、个人项目测评和自由学习分层 | 恢复 V5.1 首页入口，不删除测评数据 |
+| `TTS_SYSTEM_ENABLED` | macOS 服务端公布 `system-tts` Provider | 服务端不提供该 Provider |
 
 关闭功能开关不会删除已有本地会话。
 
@@ -48,8 +54,19 @@
 - 测评：`lib/c-cubic/assessment/`
 - PBL 教学运行时：`lib/pbl/v2/agents/instructor.ts`
 - 学员工作台：`components/scene-renderers/pbl-renderer.tsx`
+- 免费本地语音：`lib/server/system-tts.ts`
+- 双入口领域合同：`lib/jiuxuange/portal/`
+- 双入口服务端仓库与身份：`lib/server/jiuxuange/`
+- 个人项目测评页：`app/assessment/[assignmentId]/page.tsx`
+- 双入口固定合同：`eval/jiuxuange-learning-partner/scenarios/dual-entry-contract.v1.json`
 - 回归测试：`tests/c-cubic/`
 - V5.1 入口与新一轮合同：`documentation/jiuxuange/learning-loop-v5-entry-recovery-20260721.md`
+- 真实可见对话回放：`documentation/jiuxuange/learning-loop-v5.1-transcript--9HjnSKv4w-20260722.md`
+- Agent 设计与运行审计：`documentation/jiuxuange/agent-design-runtime-audit-20260722.md`
+- 机器可复跑样本：`eval/jiuxuange-learning-partner/scenarios/learning-depth-replay.v1.json`
+- 当前新对话交接入口：`documentation/jiuxuange/conversation-handoff-dual-entry-20260726.md`
+- 本地免费语音热修复：`documentation/jiuxuange/free-local-tts-hotfix-20260726.md`
+- 双入口 V1 GitHub 发布记录：`documentation/jiuxuange/release-dual-entry-v1-20260727.md`
 
 ## 5. 本地运行
 
@@ -69,6 +86,7 @@ WATCHPACK_POLLING=true pnpm dev --hostname 127.0.0.1 --port 8792 --webpack
 - 本地 `.env.local` 不进入 Git。
 - 本机教材原文件不复制到仓库，只保存来源标识和短片段目录。
 - 现有测试样本以代码测试为主，尚未形成完整 YAML 固定基准资产库。
+- 课堂 `-9HjnSKv4w` 已保存完整可见逐字稿和 JSON 回放，但消息 ID、时间戳、案例卡正文与内部事件仍未从 IndexedDB 导出。
 
 因此本归档能恢复“产品代码状态”，不能恢复某个浏览器中的完整真实学习会话。下一阶段必须增加服务端导出与事件归档能力。
 

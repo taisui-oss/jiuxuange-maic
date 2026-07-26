@@ -1183,6 +1183,7 @@
     "providerElevenLabsTTS": "ElevenLabs TTS",
     "providerMiniMaxTTS": "MiniMax TTS",
     "providerLemonadeTTS": "Lemonade TTS (Local)",
+    "providerSystemTTS": "Voz local Jiuxuange (gratuita)",
     "providerBrowserNativeTTS": "TTS Nativo do Navegador",
     "voxcpmBackend": "Backend",
     "voxcpmBaseUrlPending": "Digite uma URL base para gerar a URL da requisição",

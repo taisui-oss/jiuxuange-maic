@@ -186,6 +186,8 @@ export interface SettingsState {
 
   // Auto-config lifecycle flag (persisted)
   autoConfigApplied: boolean;
+  /** Jiuxuange's managed free voice is applied once, then user choices win. */
+  jiuxuangeFreeTtsAutoConfigured: boolean;
 
   // Playback controls
   ttsMuted: boolean;
@@ -446,6 +448,12 @@ const getDefaultAudioConfig = () => ({
       apiKey: '',
       baseUrl: '',
       modelId: 'kokoro-v1',
+      enabled: true,
+    },
+    'system-tts': {
+      apiKey: '',
+      baseUrl: '',
+      modelId: 'macos-say',
       enabled: true,
     },
     // Browser-native is OFF by default — fully opt-in. Native voice quality is
@@ -908,6 +916,7 @@ export const useSettingsStore = create<SettingsState>()(
         parallelSceneConcurrency: 0,
 
         autoConfigApplied: false,
+        jiuxuangeFreeTtsAutoConfigured: false,
 
         // Web Search settings (use defaults)
         ...defaultWebSearchConfig,
@@ -1652,6 +1661,9 @@ export const useSettingsStore = create<SettingsState>()(
               let autoImageEnabled: boolean | undefined;
               let autoVideoEnabled: boolean | undefined;
               let autoTtsEnabled: boolean | undefined;
+              const serverTtsIds = Object.entries(data.tts)
+                .filter(([, info]) => !info.disabled)
+                .map(([id]) => id) as TTSProviderId[];
 
               if (!state.autoConfigApplied) {
                 // PDF: unpdf → mineru-cloud or mineru if server has it
@@ -1665,9 +1677,6 @@ export const useSettingsStore = create<SettingsState>()(
 
                 // TTS: select first server provider if current is not server-configured.
                 // Skip server-disabled entries — they are force-off, not selectable.
-                const serverTtsIds = Object.entries(data.tts)
-                  .filter(([, info]) => !info.disabled)
-                  .map(([id]) => id) as TTSProviderId[];
                 if (
                   serverTtsIds.length > 0 &&
                   !newTTSConfig[state.ttsProviderId]?.isServerConfigured
@@ -1720,6 +1729,19 @@ export const useSettingsStore = create<SettingsState>()(
                 }
               }
 
+              let jiuxuangeFreeTtsAutoConfigured =
+                state.jiuxuangeFreeTtsAutoConfigured ?? false;
+              if (
+                process.env.NEXT_PUBLIC_C_CUBIC_FREE_TTS === 'true' &&
+                !jiuxuangeFreeTtsAutoConfigured &&
+                serverTtsIds.includes('system-tts')
+              ) {
+                autoTtsProvider = 'system-tts';
+                autoTtsVoice = DEFAULT_TTS_VOICES['system-tts'];
+                autoTtsEnabled = true;
+                jiuxuangeFreeTtsAutoConfigured = true;
+              }
+
               // (LLM first-load auto-select removed: the symmetric provider
               // recovery + resolveSelectedModel above now resolve LLM provider
               // and model atomically at the source, covering server-configured
@@ -1741,6 +1763,7 @@ export const useSettingsStore = create<SettingsState>()(
                   Math.floor(data.generation?.parallelSceneConcurrency ?? 0),
                 ),
                 autoConfigApplied: true,
+                jiuxuangeFreeTtsAutoConfigured,
                 // Validated selections
                 ...(validLLMProvider !== state.providerId && {
                   providerId: validLLMProvider as ProviderId,

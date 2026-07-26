@@ -66,11 +66,13 @@ import {
   shouldUseCubicSingleCourseOrientationV4,
   shouldUseCubicLearningLoopV5,
   shouldUseCubicUnifiedLearning,
+  shouldUseJiuxuangeDualEntryV1,
 } from '@/lib/config/feature-flags';
 import { useImportPptx } from '@/lib/import/use-import-pptx';
 import { BusinessModelLearningPath } from '@/components/c-cubic/business-model-learning-path';
 import { BusinessModelCourseEntry } from '@/components/c-cubic/business-model-course-entry';
 import { HomeOrientationEntry } from '@/components/c-cubic/home-orientation-entry';
+import { JiuxuangeLearningPortal } from '@/components/jiuxuange/learning-portal';
 import { getOrCreateBusinessModelSession } from '@/lib/c-cubic/session';
 import type { JiuxuangeCoursePackage } from '@/lib/c-cubic/course-package/types';
 import type { HomeOrientationDraft } from '@/lib/c-cubic/home-orientation';
@@ -138,6 +140,7 @@ function HomePage() {
   const singleCourseOrientationV4 =
     businessModelMode && shouldUseCubicSingleCourseOrientationV4();
   const learningLoopV5 = businessModelMode && shouldUseCubicLearningLoopV5();
+  const dualEntryV1 = shouldUseJiuxuangeDualEntryV1();
   const guidedCourseActive =
     guidedCourseV2 || sixLevelJourney || singleCourseOrientationV4 || learningLoopV5;
   const activeGuidedCourseKind: GuidedCoursePackageKind = learningLoopV5
@@ -630,7 +633,17 @@ function HomePage() {
           {t('home.slogan')}
         </motion.p>
 
-        {businessModelMode && unifiedLearning && (!guidedCourseActive || activeGuidedCoursePackage) && (
+        {dualEntryV1 && businessModelMode && unifiedLearning && (!guidedCourseActive || activeGuidedCoursePackage) && (
+          <div data-product-surface="jiuxuange-learning-portal" className="mb-6 w-full">
+            <JiuxuangeLearningPortal
+              coursePackage={
+                guidedCourseActive ? (activeGuidedCoursePackage ?? undefined) : undefined
+              }
+            />
+          </div>
+        )}
+
+        {!dualEntryV1 && businessModelMode && unifiedLearning && (!guidedCourseActive || activeGuidedCoursePackage) && (
           <div data-product-surface="business-model-primary-entry" className="mb-6 w-full">
             <BusinessModelCourseEntry
               coursePackage={
@@ -648,7 +661,15 @@ function HomePage() {
           transition={{ delay: 0.35 }}
           className="w-full"
         >
-          {guidedCourseV2 || sixLevelJourney ? (
+          {dualEntryV1 && (
+            <div className="mb-3 px-1">
+              <h2 className="text-base font-semibold text-foreground">自由学习</h2>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                上传资料或自由提问只进入你的私人会话，不改变正式课程进度与测评证据。
+              </p>
+            </div>
+          )}
+          {!dualEntryV1 && (guidedCourseV2 || sixLevelJourney) ? (
             <HomeOrientationEntry onResolved={handleOrientationResolved} />
           ) : (
           <div className="w-full rounded-2xl border border-border/60 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-xl shadow-black/[0.03] dark:shadow-black/20 transition-shadow focus-within:shadow-2xl focus-within:shadow-violet-500/[0.06]">

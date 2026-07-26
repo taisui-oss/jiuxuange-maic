@@ -1,0 +1,32 @@
+{
+  "suiteId": "jiuxuange-dual-entry-contract",
+  "version": 1,
+  "createdAt": "2026-07-26",
+  "owner": "Jiuxuange product",
+  "scenarios": [
+    {
+      "id": "dual-entry-group-frozen-content-001",
+      "must": ["same_project_card_version", "same_question_version", "separate_personal_sessions"]
+    },
+    {
+      "id": "dual-entry-draft-attempt-001",
+      "must": ["draft_does_not_consume_attempt", "refresh_restores_draft", "maximum_two_submissions"]
+    },
+    {
+      "id": "dual-entry-feedback-boundary-001",
+      "must": ["first_feedback_directional_only", "second_feedback_compares_answers", "no_numeric_score"]
+    },
+    {
+      "id": "dual-entry-publish-gate-001",
+      "must": ["unpublished_assignment_rejected", "guessed_url_does_not_bypass_publish"]
+    },
+    {
+      "id": "dual-entry-active-time-001",
+      "must": ["hidden_page_not_credited", "idle_page_not_credited", "heartbeat_interval_capped"]
+    },
+    {
+      "id": "dual-entry-free-learning-isolation-001",
+      "must": ["private_upload_does_not_change_course_progress", "free_chat_not_used_as_assessment_evidence"]
+    }
+  ]
+}

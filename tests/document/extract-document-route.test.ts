@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { NextRequest } from 'next/server';
+import JSZip from 'jszip';
 
 const mocks = vi.hoisted(() => ({
   isServerConfiguredProvider: vi.fn(() => false),
@@ -45,6 +46,43 @@ async function postExtractDocument(input: {
     body: formData,
   });
   return POST(request as unknown as NextRequest);
+}
+
+async function createDocxFile(text: string): Promise<File> {
+  const zip = new JSZip();
+  zip.file(
+    '[Content_Types].xml',
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+        <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+        <Default Extension="xml" ContentType="application/xml"/>
+        <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+      </Types>`,
+  );
+  zip.folder('_rels')?.file(
+    '.rels',
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+        <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+      </Relationships>`,
+  );
+  zip.folder('word')?.file(
+    'document.xml',
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+        <w:body>
+          <w:p><w:r><w:t>${text}</w:t></w:r></w:p>
+        </w:body>
+      </w:document>`,
+  );
+  const buffer = await zip.generateAsync({ type: 'uint8array' });
+  const arrayBuffer = buffer.buffer.slice(
+    buffer.byteOffset,
+    buffer.byteOffset + buffer.byteLength,
+  ) as ArrayBuffer;
+  return new File([arrayBuffer], 'lesson.docx', {
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  });
 }
 
 describe('POST /api/extract-document', () => {
@@ -119,11 +157,31 @@ describe('POST /api/extract-document', () => {
     });
   });
 
-  it('returns actionable 422 diagnostics when DOCX requires unconfigured MinerU', async () => {
+  it('extracts DOCX text locally when MinerU is not configured', async () => {
+    const res = await postExtractDocument({
+      file: await createDocxFile('商业模式课程导读'),
+    });
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json).toMatchObject({
+      success: true,
+      data: {
+        metadata: {
+          mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          parser: 'docx-local',
+        },
+      },
+    });
+    expect(json.data.text).toContain('商业模式课程导读');
+  });
+
+  it('returns actionable 422 diagnostics when explicitly selected MinerU is unconfigured', async () => {
     const res = await postExtractDocument({
       file: new File(['not really docx'], 'lesson.docx', {
         type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       }),
+      providerId: 'mineru',
     });
     const json = await res.json();
 
@@ -165,11 +223,12 @@ describe('POST /api/extract-document', () => {
     );
   });
 
-  it('falls back to MinerU Cloud for DOCX when self-hosted MinerU is unavailable and a cloud key is provided', async () => {
+  it('allows explicitly selected MinerU Cloud extraction for DOCX', async () => {
     const res = await postExtractDocument({
       file: new File(['not really docx'], 'lesson.docx', {
         type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       }),
+      providerId: 'mineru-cloud',
       apiKey: 'cloud-key',
     });
     const json = await res.json();

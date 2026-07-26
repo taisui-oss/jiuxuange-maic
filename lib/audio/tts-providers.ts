@@ -179,6 +179,11 @@ export async function generateTTS(
     case 'lemonade-tts':
       return await generateLemonadeTTS(config, text);
 
+    case 'system-tts': {
+      const { generateSystemTTS } = await import('@/lib/server/system-tts');
+      return await generateSystemTTS(config, text);
+    }
+
     case 'browser-native-tts':
       throw new Error(
         'Browser Native TTS must be handled client-side using Web Speech API. This provider cannot be used on the server.',

@@ -292,8 +292,8 @@ export function buildJiuxuangeLearningLoopFeedback(
   const autonomousTransfer = transfer?.supportStatus === 'autonomous';
   const evidencedRevision = Boolean(
     revision &&
-      revision.factIds.length > 0 &&
-      (revision.supportStatus === 'autonomous' || revision.supportStatus === 'hinted'),
+    revision.factIds.length > 0 &&
+    (revision.supportStatus === 'autonomous' || revision.supportStatus === 'hinted'),
   );
   const outcome: JiuxuangeLearningFeedback['outcome'] = !complete
     ? 'C'
@@ -309,27 +309,50 @@ export function buildJiuxuangeLearningLoopFeedback(
     });
   }
   if (commit) {
+    const unknownCommit = UNKNOWN_RESPONSE.test(commit.text.trim());
+    const demonstratedCommit =
+      !unknownCommit &&
+      commit.factIds.length > 0 &&
+      (commit.supportStatus === 'autonomous' || commit.supportStatus === 'hinted');
+    const commitText = demonstratedCommit
+      ? `在便利蜂案例中，你${commit.supportStatus === 'autonomous' ? '独立' : '在提示后'}形成了判断：“${commit.text}”。`
+      : unknownCommit
+        ? `在便利蜂案例中，你在支架帮助下进行了尝试，但本轮尚未形成可复述的判断。你的原回答是：“${commit.text}”。`
+        : `在便利蜂案例中，你在支架帮助下尝试形成判断：“${commit.text}”。本轮尚未形成可验证的案例判断。`;
     statements.push({
       id: 'feedback-bee-commit',
-      text: `在便利蜂案例中，你以${commit.supportStatus === 'autonomous' ? '独立' : '支架支持下'}形成了判断：“${commit.text}”。`,
+      text: commitText,
       evidenceRefs: claimRefs(commit),
     });
   }
   if (transfer) {
-    const independence =
-      transfer.supportStatus === 'autonomous'
-        ? '你在新情境中独立完成了事实到关系结果的迁移。'
-        : '你在新情境中借助支架完成了迁移，本次尚不能记为自主掌握。';
+    const unknownTransfer = UNKNOWN_RESPONSE.test(transfer.text.trim());
+    const demonstratedTransfer =
+      !unknownTransfer &&
+      transfer.factIds.length > 0 &&
+      (transfer.supportStatus === 'autonomous' || transfer.supportStatus === 'hinted');
+    const transferText = demonstratedTransfer
+      ? `你在新情境中${transfer.supportStatus === 'autonomous' ? '独立' : '在提示后'}完成了事实到关系结果的迁移。你的回答是：“${transfer.text}”。`
+      : unknownTransfer
+        ? `你在新情境中借助支架进行了尝试，但本轮尚未形成可复述的迁移判断。你的原回答是：“${transfer.text}”。`
+        : `你在新情境中借助支架进行了迁移尝试，本轮尚未形成可验证的迁移判断。你的回答是：“${transfer.text}”。`;
     statements.push({
       id: 'feedback-transfer',
-      text: `${independence}你的回答是：“${transfer.text}”。`,
+      text: transferText,
       evidenceRefs: claimRefs(transfer),
     });
   }
   if (revision) {
+    const unknownRevision = UNKNOWN_RESPONSE.test(revision.afterText.trim());
+    const revisionText =
+      evidencedRevision && !unknownRevision
+        ? `你对最初判断做出的修正是：“${revision.afterText}”。`
+        : unknownRevision
+          ? `你在支架帮助下尝试修正最初判断，但本轮尚未形成可验证的修正。你的原回答是：“${revision.afterText}”。`
+          : `你尝试修正最初判断：“${revision.afterText}”。本轮尚未形成可验证的修正。`;
     statements.push({
       id: 'feedback-revision',
-      text: `你对最初判断做出的修正是：“${revision.afterText}”。`,
+      text: revisionText,
       evidenceRefs: unique([revision.sourceMessageId, revision.beforeClaimId, ...revision.factIds]),
     });
   }
@@ -445,9 +468,7 @@ export function resolveJiuxuangeLearningEvidenceRef(
   }
   const metadata = project.jiuxuange;
   if (!metadata) return null;
-  const fact = Object.values(
-    getCoursePackage(metadata.courseId, metadata.courseVersion).cases,
-  )
+  const fact = Object.values(getCoursePackage(metadata.courseId, metadata.courseVersion).cases)
     .flatMap((selectedCase) => selectedCase.facts)
     .find((candidate) => candidate.id === ref);
   if (!fact) return null;

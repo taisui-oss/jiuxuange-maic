@@ -1183,6 +1183,7 @@
     "providerElevenLabsTTS": "ElevenLabs TTS",
     "providerMiniMaxTTS": "MiniMax TTS",
     "providerLemonadeTTS": "Lemonade TTS（ローカル）",
+    "providerSystemTTS": "九軒閣ローカル音声（無料）",
     "providerBrowserNativeTTS": "ブラウザネイティブTTS",
     "voxcpmBackend": "バックエンド",
     "voxcpmBaseUrlPending": "Base URL を入力するとリクエスト URL が生成されます",

@@ -31,6 +31,7 @@ const ENV_PREFIXES_TO_CLEAR = [
   'TTS_DOUBAO',
   'TTS_ELEVENLABS',
   'TTS_MINIMAX',
+  'TTS_SYSTEM',
   'ASR_OPENAI',
   'ASR_QWEN',
   'PDF_UNPDF',
@@ -57,10 +58,12 @@ function clearProviderEnv() {
     delete process.env[`${prefix}_API_KEY`];
     delete process.env[`${prefix}_BASE_URL`];
     delete process.env[`${prefix}_MODELS`];
+    delete process.env[`${prefix}_ENABLED`];
   }
   delete process.env.TAVILY_API_KEY;
   delete process.env.BOCHA_API_KEY;
   delete process.env.BOCHA_BASE_URL;
+  delete process.env.NEXT_PUBLIC_C_CUBIC_FREE_TTS;
 }
 
 vi.mock('fs', async (importOriginal) => {
@@ -482,6 +485,20 @@ pdf:
       vi.stubEnv('TTS_OPENAI_API_KEY', 'sk-tts');
       const { getServerTTSProviders } = await import('@/lib/server/provider-config');
       expect(getServerTTSProviders()['openai-tts']).toEqual({});
+    });
+
+    it('exposes the free system voice only when enabled on macOS', async () => {
+      vi.stubEnv('TTS_SYSTEM_ENABLED', 'true');
+      vi.spyOn(process, 'platform', 'get').mockReturnValue('darwin');
+      const { getServerTTSProviders } = await import('@/lib/server/provider-config');
+      expect(getServerTTSProviders()['system-tts']).toEqual({});
+    });
+
+    it('uses the Jiuxuange public flag when no runtime override is present', async () => {
+      vi.stubEnv('NEXT_PUBLIC_C_CUBIC_FREE_TTS', 'true');
+      vi.spyOn(process, 'platform', 'get').mockReturnValue('darwin');
+      const { getServerTTSProviders } = await import('@/lib/server/provider-config');
+      expect(getServerTTSProviders()['system-tts']).toEqual({});
     });
 
     it('force-disables a provider via TTS_<P>_ENABLED=false even when it has a key', async () => {

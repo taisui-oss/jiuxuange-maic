@@ -12,6 +12,7 @@ describe('document extractor registry', () => {
 
     expect(providers.map((provider) => provider.id)).toEqual([
       'plain-text',
+      'docx-local',
       'unpdf',
       'mineru',
       'mineru-cloud',
@@ -19,9 +20,34 @@ describe('document extractor registry', () => {
     expect(providers.every((provider) => provider.supportedMimeTypes)).toBe(true);
     expect(
       providers
-        .filter((provider) => provider.id !== 'plain-text')
+        .filter((provider) => !['plain-text', 'docx-local'].includes(provider.id))
         .every((provider) => provider.supportedMimeTypes.includes('application/pdf')),
     ).toBe(true);
+  });
+
+  it('uses local semantic extraction for DOCX by default', () => {
+    const docx = getDocumentExtractorProvider('docx-local');
+
+    expect(docx).toBeDefined();
+    expect(docx?.displayName).toBe('Local DOCX');
+    expect(docx?.supportedMimeTypes).toEqual([
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ]);
+    expect(docx?.capabilities).toMatchObject({
+      text: true,
+      images: false,
+      tables: false,
+      formulas: false,
+      layout: false,
+      ocr: false,
+      async: false,
+    });
+    expect(
+      selectDocumentExtractorProvider({
+        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        requiredCapabilities: { text: true },
+      }).id,
+    ).toBe('docx-local');
   });
 
   it('exposes a local plain-text extractor for TXT and Markdown', () => {
