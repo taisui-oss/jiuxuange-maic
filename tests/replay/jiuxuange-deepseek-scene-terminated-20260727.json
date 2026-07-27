@@ -1,0 +1,46 @@
+{
+  "fixtureVersion": 1,
+  "capturedAt": "2026-07-27T09:48:24Z",
+  "source": "jiuxuange-v6-browser-smoke",
+  "route": "scene-content:slide",
+  "provider": "deepseek",
+  "model": "deepseek-v4-pro",
+  "request": {
+    "modelOutputWindow": 393216,
+    "requestedMaxOutputTokens": 393216,
+    "thinkingEffort": "high"
+  },
+  "observed": {
+    "attempts": 3,
+    "httpStatus": 200,
+    "errorName": "AI_APICallError",
+    "errorMessage": "Failed to process successful response",
+    "causeName": "TypeError",
+    "causeMessage": "terminated",
+    "socketErrorMessage": "other side closed",
+    "visibleClassroomPages": 0
+  },
+  "reproduction": {
+    "samePromptWithMaxOutputTokens": 8192,
+    "thinkingEnabled": true,
+    "result": "success",
+    "finishReason": "stop"
+  },
+  "browserRegressionAfterFirstFix": {
+    "maxOutputTokens": 8192,
+    "thinkingEffort": "high",
+    "attempts": 3,
+    "approximateSecondsPerAttempt": 62,
+    "result": "failed",
+    "visibleErrorLocale": "zh-CN",
+    "visibleClassroomCountBefore": 4,
+    "visibleClassroomCountAfter": 4
+  },
+  "targetPolicy": {
+    "slideMaxOutputTokens": 4096,
+    "actionsMaxOutputTokens": 4096,
+    "deepseekSceneThinking": "disabled"
+  },
+  "containsCredentials": false,
+  "containsLearnerData": false
+}

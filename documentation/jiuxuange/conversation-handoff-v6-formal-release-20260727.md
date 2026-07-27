@@ -344,4 +344,63 @@ Gate 1 当前技术合同：
 - 仅设计：V6 PostgreSQL/身份/权限合同、项目空间、双档案、正式项目卡、异步 AI 评价、案例独立课堂。
 - 尚未完成：Gate 1 依赖刺探、花名企微登录、PostgreSQL 实现、服务端课程状态、权限、生产部署、内容审核、真实 1000 人发布。
 
+## 11. 2026-07-27 自由学习生成链 P0 热修复
+
+### 11.1 本轮目标
+
+[KNOWN, HIGH] 本轮不是 Gate 1 实现，而是关闭升级前真实浏览器测试发现的两个
+P0 阻断：
+
+1. DeepSeek 已成功返回但场景结构化响应连续解析失败；
+2. 首场景失败后最近学习残留 `0 页` 课堂。
+
+随后真实运行暴露第三个问题：当前 `system-tts` 生成空音频并重复请求，
+使可读文字课堂迟迟不能出现。本轮将其收口为可选能力失败，不改变课程生成结果。
+
+### 11.2 已实现
+
+```text
+按场景类型限制 maxOutputTokens
+→ DeepSeek 场景正文/动作关闭 thinking
+→ SDK maxRetries 固定为 0
+→ 首个完整场景成功后才提交课堂
+→ 首场景失败清理临时课堂与 Agent
+→ 失败信息本地化
+→ system-tts 单次失败后停止该场景剩余可选语音
+→ 文字课程继续可用
+```
+
+失败证据已经固定为：
+
+- `tests/replay/jiuxuange-deepseek-scene-terminated-20260727.json`
+- `tests/replay/jiuxuange-system-tts-empty-audio-20260727.json`
+
+### 11.3 验证结果
+
+| 验证 | 结果 |
+|---|---|
+| 9 页 DeepSeek 中文课程 | 课堂 `9rm7i5Yk5i` 成功进入并完成 9 页生成 |
+| 1 页 DeepSeek 中文课程 | 课堂 `4ZCjxrJCkv` 约 51 秒进入；TTS 失败不阻塞正文 |
+| 失败清理 | 首场景失败后最近学习数量不增加，无新增 0 页课堂 |
+| 定向自动化 | 27/27 通过 |
+| 受控全量自动化 | 303/303 files，2273/2273 tests 通过 |
+| TypeScript / ESLint / Build | 全部通过 |
+
+[KNOWN, HIGH] 浏览器验收使用热修复后的全新生产构建
+`http://127.0.0.1:8794`。当前 `system-tts` 没有得到有效音频，
+因此本轮只验收“语音失败时文字课堂仍可完成”，没有验收正式语音质量。
+
+### 11.4 Gate 与发布边界
+
+```text
+DeepSeek 自由学习课程生成阻断：CLOSED
+失败课堂残留阻断：CLOSED
+V6 Gate 1 implementation：NOT STARTED
+V6 formal release：NO-GO
+```
+
+[DECIDED, HIGH] 下一正式开发动作不变：只执行 Gate 1 Task 1.1
+“依赖与兼容性刺探”，不得因为本轮生成成功而跳过身份、PostgreSQL、
+关系权限、服务端状态和生产发布 Gate。
+
 [RULES I BROKE]: 无

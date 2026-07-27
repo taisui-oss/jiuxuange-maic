@@ -1,0 +1,23 @@
+{
+  "fixtureVersion": 1,
+  "capturedAt": "2026-07-27T10:50:36Z",
+  "source": "jiuxuange-v6-browser-smoke",
+  "provider": "system-tts",
+  "model": "macos-say",
+  "voice": "Tingting",
+  "observed": {
+    "outputFileBytes": 4096,
+    "audioBytes": 0,
+    "error": "macOS system TTS returned empty audio",
+    "backgroundRetriesPerClip": 6,
+    "sceneRemainedReadable": true,
+    "nextSceneWasDelayed": true
+  },
+  "targetPolicy": {
+    "systemTtsRetriesPerClip": 0,
+    "openCircuitAfterFirstFailedClip": true,
+    "textSceneRemainsUsable": true
+  },
+  "containsCredentials": false,
+  "containsLearnerData": false
+}

@@ -27,6 +27,8 @@ import { createLogger } from '@/lib/logger';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
 import { llmApiError } from '@/lib/server/llm-error-response';
 import { resolveModelFromRequest } from '@/lib/server/resolve-model';
+import { resolveSceneActionsOutputTokens } from '@/lib/generation/scene-output-token-budget';
+import { resolveSceneThinkingConfig } from '@/lib/generation/scene-thinking-policy';
 
 const log = createLogger('Scene Actions API');
 
@@ -84,10 +86,13 @@ export async function POST(req: NextRequest) {
       model: languageModel,
       modelInfo,
       modelString,
+      providerId,
       thinkingConfig,
     } = await resolveModelFromRequest(req, body, 'scene-actions');
     outlineTitle = outline?.title;
     resolvedModelString = modelString;
+    const maxOutputTokens = resolveSceneActionsOutputTokens(modelInfo?.outputWindow);
+    const sceneThinkingConfig = resolveSceneThinkingConfig(providerId, thinkingConfig);
 
     // Detect vision capability
     const hasVision = !!modelInfo?.capabilities?.vision;
@@ -109,12 +114,12 @@ export async function POST(req: NextRequest) {
                 content: buildVisionUserContent(userPrompt, images),
               },
             ],
-            maxOutputTokens: modelInfo?.outputWindow,
+            maxOutputTokens,
             maxRetries: 0,
           },
           'scene-actions',
           undefined,
-          thinkingConfig,
+          sceneThinkingConfig,
         );
         return result.text;
       }
@@ -123,12 +128,12 @@ export async function POST(req: NextRequest) {
           model: languageModel,
           system: systemPrompt,
           prompt: userPrompt,
-          maxOutputTokens: modelInfo?.outputWindow,
+          maxOutputTokens,
           maxRetries: 0,
         },
         'scene-actions',
         undefined,
-        thinkingConfig,
+        sceneThinkingConfig,
       );
       return result.text;
     };

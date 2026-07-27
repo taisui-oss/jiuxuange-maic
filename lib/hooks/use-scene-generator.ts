@@ -329,22 +329,26 @@ export async function generateTTSForScene(
 
   let failedCount = 0;
   let lastError: string | undefined;
+  const effectiveRetryOptions =
+    providerId === 'system-tts' ? { ...retryOptions, maxRetries: 0 } : retryOptions;
 
   // Use scene order to make audio IDs unique across scenes
   // This prevents audio collision when action IDs are sequential (e.g., action_1, action_2)
   const sceneOrder = scene.order;
 
-  for (const action of speechActions) {
+  for (const [index, action] of speechActions.entries()) {
     // Include scene order in audioId to prevent collision across scenes
     const audioId = `tts_s${sceneOrder}_${action.id}`;
     delete action.audioId;
     try {
-      await generateAndStoreTTS(audioId, action.text, language, signal, retryOptions);
+      await generateAndStoreTTS(audioId, action.text, language, signal, effectiveRetryOptions);
       action.audioId = audioId;
     } catch (error) {
       if (isAbortError(error)) throw error;
 
-      failedCount++;
+      // Once the provider has exhausted retries, skip the remaining optional
+      // clips so a readable scene is not held behind a provider outage.
+      failedCount += speechActions.length - index;
       lastError = error instanceof Error ? error.message : `TTS failed for action ${action.id}`;
       log.warn('TTS generation failed:', {
         providerId,
@@ -354,6 +358,7 @@ export async function generateTTSForScene(
         textLength: action.text.length,
         error: lastError,
       });
+      break;
     }
   }
 

@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import type { SceneOutline } from '@/lib/types/generation';
 import type { Scene } from '@/lib/types/stage';
+import systemTtsFailure from '@/tests/replay/jiuxuange-system-tts-empty-audio-20260727.json';
 
 const mocks = vi.hoisted(() => ({
   getCurrentModelConfig: vi.fn(),
@@ -248,6 +249,64 @@ describe('browser scene generation retry wrappers', () => {
     ]);
     expect(scene.actions?.[0]).not.toHaveProperty('audioId');
     expect(mocks.audioPut).not.toHaveBeenCalled();
+  });
+
+  it('opens the scene-level circuit after one failed system TTS clip', async () => {
+    const { generateTTSForScene } = await import('@/lib/hooks/use-scene-generator');
+    mocks.settingsState.mockReturnValue({
+      ttsProviderId: 'system-tts',
+      ttsProvidersConfig: {
+        'system-tts': {
+          modelId: 'macos-say',
+        },
+      },
+      ttsVoice: 'Tingting',
+      ttsSpeed: 1,
+    });
+    const scene = {
+      id: 'scene-system-tts-failure',
+      stageId: 'stage-1',
+      type: 'slide',
+      title: 'Text-first lesson',
+      order: 5,
+      content: {
+        type: 'slide',
+        canvas: {
+          id: 'canvas-3',
+          elements: [],
+        },
+      },
+      actions: [
+        {
+          id: 'speech-3',
+          type: 'speech',
+          agentId: 'professor',
+          text: 'The first optional clip fails.',
+        },
+        {
+          id: 'speech-4',
+          type: 'speech',
+          agentId: 'professor',
+          text: 'This clip is skipped so the scene can become available.',
+        },
+      ],
+    } as unknown as Scene;
+    mockFetch.mockResolvedValue(
+      jsonResponse(503, { error: systemTtsFailure.observed.error }),
+    );
+
+    const result = await generateTTSForScene(scene, 'English');
+
+    expect(mockFetch).toHaveBeenCalledTimes(
+      systemTtsFailure.targetPolicy.systemTtsRetriesPerClip + 1,
+    );
+    expect(result).toMatchObject({
+      success: false,
+      failedCount: 2,
+      error: systemTtsFailure.observed.error,
+    });
+    expect(scene.actions?.[0]).not.toHaveProperty('audioId');
+    expect(scene.actions?.[1]).not.toHaveProperty('audioId');
   });
 
   it('adds an audio id only after a TTS clip is stored successfully', async () => {

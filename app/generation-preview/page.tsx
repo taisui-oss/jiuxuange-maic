@@ -46,6 +46,7 @@ import {
 } from './types';
 import { StepVisualizer } from './components/visualizers';
 import { resolveTaskEngineModeFromOutlineDoneEvent } from './vocational-mode';
+import { cleanupProvisionalStage } from '@/lib/generation/provisional-stage-cleanup';
 
 const log = createLogger('GenerationPreview');
 const OUTLINE_REVIEW_AUTO_CONTINUE_MS = 2500;
@@ -238,6 +239,11 @@ function GenerationPreviewContent() {
   const startGeneration = async (sessionOverride?: GenerationSessionState) => {
     const generationSession = sessionOverride ?? session;
     if (!generationSession) return;
+    let provisionalStageId: string | null = null;
+    const previousAgentSelection = {
+      selectedAgentIds: [...useSettingsStore.getState().selectedAgentIds],
+      agentSelectionIsUserSet: useSettingsStore.getState().agentSelectionIsUserSet,
+    };
 
     // Create AbortController for this generation run
     abortControllerRef.current?.abort();
@@ -465,6 +471,7 @@ function GenerationPreviewContent() {
 
       // Create stage client-side
       const stageId = nanoid(10);
+      provisionalStageId = stageId;
       const stage: Stage = {
         id: stageId,
         name: extractTopicFromRequirement(currentSession.requirements.requirement),
@@ -869,11 +876,10 @@ function GenerationPreviewContent() {
         throw new Error(t('generation.outlineEmptyResponse'));
       }
 
-      // Store stage and outlines
+      // Keep the new classroom provisional until its first scene is complete.
+      // This prevents a failed request from appearing as a zero-page classroom.
       const store = useStageStore.getState();
       stage.videoManifest = buildVideoManifestFromOutlines(outlines);
-      store.setStage(stage);
-      store.setOutlines(outlines);
 
       // Advance to slide-content step
       const contentStepIdx = activeSteps.findIndex((s) => s.id === 'slide-content');
@@ -892,8 +898,6 @@ function GenerationPreviewContent() {
           : undefined;
 
       // Generate ONLY the first scene
-      store.setGeneratingOutlines(outlines);
-
       const firstOutline = outlines[0];
 
       // Step 2: Generate content (currentStepIndex is already 2)
@@ -914,7 +918,8 @@ function GenerationPreviewContent() {
       );
 
       if (!contentData.success || !contentData.content) {
-        throw new Error(contentData.error || t('generation.sceneGenerateFailed'));
+        log.error('[Generation] First scene content failed:', contentData.error);
+        throw new Error(t('generation.sceneGenerateFailed'));
       }
 
       // Generate actions (activate actions step indicator)
@@ -937,7 +942,8 @@ function GenerationPreviewContent() {
       );
 
       if (!data.success || !data.scene) {
-        throw new Error(data.error || t('generation.sceneGenerateFailed'));
+        log.error('[Generation] First scene actions failed:', data.error);
+        throw new Error(t('generation.sceneGenerateFailed'));
       }
       const firstScene = data.scene;
 
@@ -966,7 +972,9 @@ function GenerationPreviewContent() {
         }
       }
 
-      // Add scene to store and navigate
+      // Commit the classroom only after the first complete scene exists.
+      store.setStage(stage);
+      store.setOutlines(outlines);
       store.addScene(firstScene);
       store.setCurrentSceneId(firstScene.id);
 
@@ -987,9 +995,17 @@ function GenerationPreviewContent() {
 
       sessionStorage.removeItem('generationSession');
       await store.saveToStorage();
+      provisionalStageId = null;
       router.push(`/classroom/${stage.id}`);
     } catch (err) {
       setIsOutlineStreaming(false);
+      if (provisionalStageId) {
+        try {
+          await cleanupProvisionalStage(provisionalStageId, previousAgentSelection);
+        } catch (cleanupError) {
+          log.error('[GenerationPreview] Failed to clean provisional classroom:', cleanupError);
+        }
+      }
       // AbortError is expected when navigating away — don't show as error
       if (isAbortError(err)) {
         log.info('[GenerationPreview] Generation aborted');

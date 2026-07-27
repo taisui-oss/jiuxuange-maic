@@ -81,6 +81,33 @@ describe('scene API retry boundary', () => {
     expect(mocks.callLLM.mock.calls[0][0].maxRetries).toBe(0);
   });
 
+  it('does not pass a model-wide output window to one slide request', async () => {
+    vi.resetModules();
+    mocks.resolveModelFromRequest.mockResolvedValueOnce({
+      model: { id: 'language-model' },
+      modelInfo: { outputWindow: 393_216, capabilities: {} },
+      modelString: 'deepseek:deepseek-v4-pro',
+      providerId: 'deepseek',
+      thinkingConfig: { effort: 'high' },
+    });
+    mocks.generateSceneContent.mockImplementation(async (_outline, aiCall) => {
+      await aiCall('system', 'user');
+      return { elements: [], remark: 'ok' };
+    });
+
+    const { POST } = await import('@/app/api/generate/scene-content/route');
+    const response = await POST(mockRequest());
+    const body = await response.json();
+
+    expect(body.success).toBe(true);
+    expect(mocks.callLLM.mock.calls[0][0].maxOutputTokens).toBe(4_096);
+    expect(mocks.callLLM.mock.calls[0][3]).toEqual({
+      mode: 'disabled',
+      enabled: false,
+      effort: 'none',
+    });
+  });
+
   it('disables AI SDK retries for scene-actions model calls', async () => {
     vi.resetModules();
     mocks.generateSceneActions.mockImplementation(async (_outline, _content, aiCall) => {
@@ -106,6 +133,41 @@ describe('scene API retry boundary', () => {
 
     expect(body.success).toBe(true);
     expect(mocks.callLLM.mock.calls[0][0].maxRetries).toBe(0);
+  });
+
+  it('does not pass a model-wide output window to one actions request', async () => {
+    vi.resetModules();
+    mocks.resolveModelFromRequest.mockResolvedValueOnce({
+      model: { id: 'language-model' },
+      modelInfo: { outputWindow: 393_216, capabilities: {} },
+      modelString: 'deepseek:deepseek-v4-pro',
+      providerId: 'deepseek',
+      thinkingConfig: { effort: 'high' },
+    });
+    mocks.generateSceneActions.mockImplementation(async (_outline, _content, aiCall) => {
+      await aiCall('system', 'user');
+      return [];
+    });
+    mocks.buildCompleteScene.mockReturnValue({
+      id: 'scene-1',
+      type: 'slide',
+      title: outline.title,
+      order: outline.order,
+      content: { elements: [], remark: 'ok' },
+      actions: [],
+    });
+
+    const { POST } = await import('@/app/api/generate/scene-actions/route');
+    const response = await POST(mockRequest({ content: { elements: [], remark: 'ok' } }));
+    const body = await response.json();
+
+    expect(body.success).toBe(true);
+    expect(mocks.callLLM.mock.calls[0][0].maxOutputTokens).toBe(4_096);
+    expect(mocks.callLLM.mock.calls[0][3]).toEqual({
+      mode: 'disabled',
+      enabled: false,
+      effort: 'none',
+    });
   });
 
   it('preserves an upstream 401 from the scene-content route', async () => {
