@@ -2,13 +2,18 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { animate, motion, MotionConfig, useReducedMotion } from 'motion/react';
-import { FileText, HelpCircle, Gamepad2, Puzzle } from 'lucide-react';
+import { ArrowLeft, BookOpenText, FileText, HelpCircle, Gamepad2, Puzzle } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { useStageStore } from '@/lib/store';
 import type { Scene, SceneType } from '@/lib/types/stage';
-import { summarizeScenes } from '@/lib/classroom/complete-summary';
+import { findFirstIncompleteQuizSceneId, summarizeScenes } from '@/lib/classroom/complete-summary';
 import { readAnswersForSummary } from '@/lib/quiz/persistence';
+import {
+  isNativeClassroomPassed,
+  recordNativeClassroomCompletion,
+} from '@/lib/jiuxuange/native-classroom-progress';
 
 const SCENE_TYPE_ICONS: Record<SceneType, typeof FileText> = {
   slide: FileText,
@@ -303,9 +308,18 @@ function QuizRing({ pct, delay = 0 }: { pct: number; delay?: number }) {
 interface ClassroomCompletePageProps {
   readonly scenes: Scene[];
   readonly title: string;
+  readonly requireAllCorrect?: boolean;
+  readonly onRetryQuiz?: () => void;
+  readonly onReturn?: () => void;
 }
 
-export function ClassroomCompletePage({ scenes, title }: ClassroomCompletePageProps) {
+export function ClassroomCompletePage({
+  scenes,
+  title,
+  requireAllCorrect = false,
+  onRetryQuiz,
+  onReturn,
+}: ClassroomCompletePageProps) {
   const { t, locale } = useI18n();
   const prefersReducedMotion = useReducedMotion();
 
@@ -313,6 +327,7 @@ export function ClassroomCompletePage({ scenes, title }: ClassroomCompletePagePr
   // the underlying localStorage values only change when the user revisits a
   // quiz scene (which unmounts this page).
   const summary = useMemo(() => summarizeScenes(scenes, readAnswersForSummary), [scenes]);
+  const passed = !requireAllCorrect || isNativeClassroomPassed(summary);
 
   const dateLabel = useMemo(() => {
     try {
@@ -330,6 +345,43 @@ export function ClassroomCompletePage({ scenes, title }: ClassroomCompletePagePr
       label: t(`classroomComplete.trailLabels.${type}`),
     }),
   );
+
+  if (!passed) {
+    return (
+      <MotionConfig reducedMotion={prefersReducedMotion ? 'always' : 'user'}>
+        <section
+          className="absolute inset-0 z-[105] flex items-center justify-center overflow-auto bg-white dark:bg-gray-900"
+          aria-label="知识检测尚未完成"
+        >
+          <div className="flex w-full max-w-xl flex-col items-center px-8 py-10 text-center">
+            <span className="grid size-16 place-items-center rounded-2xl bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-200">
+              <BookOpenText className="size-8" />
+            </span>
+            <div className="mt-5 text-xs font-semibold text-violet-700 dark:text-violet-300">
+              还差一步
+            </div>
+            <h2 className="mt-2 text-2xl font-bold text-gray-900 dark:text-gray-100">
+              完成知识检测后解锁案例
+            </h2>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+              本单元的客观题需要全部答对。当前答对 {summary.quiz?.correct ?? 0}/
+              {summary.quiz?.total ?? 0}，可返回知识检测查看解释并重试。
+            </p>
+            {onRetryQuiz && (
+              <button
+                type="button"
+                onClick={onRetryQuiz}
+                className="mt-6 inline-flex h-10 items-center gap-2 rounded-md bg-violet-600 px-5 text-sm font-medium text-white transition-colors hover:bg-violet-500"
+              >
+                <ArrowLeft className="size-4" />
+                返回知识检测
+              </button>
+            )}
+          </div>
+        </section>
+      </MotionConfig>
+    );
+  }
 
   return (
     <MotionConfig reducedMotion={prefersReducedMotion ? 'always' : 'user'}>
@@ -490,6 +542,20 @@ export function ClassroomCompletePage({ scenes, title }: ClassroomCompletePagePr
               </div>
             </motion.div>
           )}
+
+          {onReturn && (
+            <motion.button
+              type="button"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.3, duration: 0.35 }}
+              onClick={onReturn}
+              className="inline-flex h-10 items-center gap-2 rounded-md bg-slate-950 px-5 text-sm font-medium text-white transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
+            >
+              返回课程目录
+              <ArrowLeft className="size-4" />
+            </motion.button>
+          )}
         </div>
       </section>
     </MotionConfig>
@@ -499,5 +565,34 @@ export function ClassroomCompletePage({ scenes, title }: ClassroomCompletePagePr
 export function ClassroomCompletePageConnected() {
   const stage = useStageStore((s) => s.stage);
   const scenes = useStageStore((s) => s.scenes);
-  return <ClassroomCompletePage scenes={scenes} title={stage?.name ?? ''} />;
+  const setCurrentSceneId = useStageStore((s) => s.setCurrentSceneId);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const requireAllCorrect = searchParams.get('completion') === 'all-correct';
+  const rawReturnTo = searchParams.get('returnTo');
+  const returnTo =
+    rawReturnTo?.startsWith('/') && !rawReturnTo.startsWith('//') ? rawReturnTo : null;
+  const summary = useMemo(() => summarizeScenes(scenes, readAnswersForSummary), [scenes]);
+  const passed = !requireAllCorrect || isNativeClassroomPassed(summary);
+  const retrySceneId = requireAllCorrect
+    ? findFirstIncompleteQuizSceneId(scenes, readAnswersForSummary)
+    : null;
+
+  useEffect(() => {
+    if (!requireAllCorrect || !passed || !stage?.id) return;
+    recordNativeClassroomCompletion({
+      classroomId: stage.id,
+      quiz: summary.quiz,
+    });
+  }, [passed, requireAllCorrect, stage?.id, summary.quiz]);
+
+  return (
+    <ClassroomCompletePage
+      scenes={scenes}
+      title={stage?.name ?? ''}
+      requireAllCorrect={requireAllCorrect}
+      onRetryQuiz={retrySceneId ? () => setCurrentSceneId(retrySceneId) : undefined}
+      onReturn={returnTo ? () => router.push(returnTo) : undefined}
+    />
+  );
 }

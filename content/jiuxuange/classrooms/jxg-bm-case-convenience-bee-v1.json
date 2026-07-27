@@ -1,0 +1,2219 @@
+{
+  "id": "jxg-bm-case-convenience-bee-v1",
+  "generationComplete": true,
+  "stage": {
+    "id": "jxg-bm-case-convenience-bee-v1",
+    "name": "便利蜂：商业模式事实观察",
+    "description": "九轩阁商业模式大课正式案例内部试学课堂",
+    "createdAt": 1785089817832,
+    "updatedAt": "2026-07-27T11:41:19.863Z",
+    "languageDirective": "本课程全程使用中文授课。核心理论采用魏朱商业模式六要素模型，讲解时结合便利蜂案例的具体实践。专业术语如“定位”、“业务系统”、“关键资源能力”等直接使用中文，公司名称和产品名称（如“便利蜂”、“中央大脑”）保持原文。语言风格专业且互动性强，引导学生主动思考各要素在案例中的体现。",
+    "style": "professional",
+    "currentSceneId": "jC0srM6rhyCMUgX4FtJo9",
+    "agentIds": ["default-1", "default-2", "default-3", "default-4"],
+    "videoManifest": {},
+    "interactiveMode": false,
+    "taskEngineMode": false
+  },
+  "scenes": [
+    {
+      "id": "jC0srM6rhyCMUgX4FtJo9",
+      "stageId": "jxg-bm-case-convenience-bee-v1",
+      "type": "slide",
+      "title": "课程导入",
+      "order": 1,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "svMQ9RuIRVjL64k0VaVcy",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_EVCI1JQW",
+              "type": "text",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 70,
+              "content": "<p style=\"font-size:32px; font-weight:bold; color:#333333; text-align:center;\">商业模式六要素分析：便利蜂案例</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_YBX8Hqo7",
+              "type": "text",
+              "left": 60,
+              "top": 135,
+              "width": 880,
+              "height": 52,
+              "content": "<p style=\"font-size:20px; color:#666666; text-align:center;\">用一套框架，看透新零售物种的基因密码</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#666666",
+              "rotate": 0
+            },
+            {
+              "id": "shape_87RXt7ai",
+              "type": "shape",
+              "left": 100,
+              "top": 220,
+              "width": 240,
+              "height": 80,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#EAF2F8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_OGtN9IPj",
+              "type": "shape",
+              "left": 380,
+              "top": 220,
+              "width": 240,
+              "height": 80,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#EAF2F8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_aV86cz8q",
+              "type": "shape",
+              "left": 660,
+              "top": 220,
+              "width": 240,
+              "height": 80,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#EAF2F8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_ejyt9lt1",
+              "type": "shape",
+              "left": 100,
+              "top": 320,
+              "width": 240,
+              "height": 80,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#EAF2F8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_0hsNy3T4",
+              "type": "shape",
+              "left": 380,
+              "top": 320,
+              "width": 240,
+              "height": 80,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#EAF2F8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_ix40p-sH",
+              "type": "shape",
+              "left": 660,
+              "top": 320,
+              "width": 240,
+              "height": 80,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#EAF2F8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_1Yky2mla",
+              "type": "text",
+              "left": 110,
+              "top": 235,
+              "width": 220,
+              "height": 49,
+              "content": "<p style=\"font-size:18px; font-weight:bold; color:#333333; text-align:center;\">定位</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_EUdL-kdt",
+              "type": "text",
+              "left": 390,
+              "top": 235,
+              "width": 220,
+              "height": 49,
+              "content": "<p style=\"font-size:18px; font-weight:bold; color:#333333; text-align:center;\">业务系统</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_XuoVindP",
+              "type": "text",
+              "left": 670,
+              "top": 235,
+              "width": 220,
+              "height": 49,
+              "content": "<p style=\"font-size:18px; font-weight:bold; color:#333333; text-align:center;\">关键资源能力</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_YCd5L7cA",
+              "type": "text",
+              "left": 110,
+              "top": 335,
+              "width": 220,
+              "height": 49,
+              "content": "<p style=\"font-size:18px; font-weight:bold; color:#333333; text-align:center;\">盈利模式</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_X19H-QAt",
+              "type": "text",
+              "left": 390,
+              "top": 335,
+              "width": 220,
+              "height": 49,
+              "content": "<p style=\"font-size:18px; font-weight:bold; color:#333333; text-align:center;\">自由现金流结构</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_FWFXE11c",
+              "type": "text",
+              "left": 670,
+              "top": 335,
+              "width": 220,
+              "height": 49,
+              "content": "<p style=\"font-size:18px; font-weight:bold; color:#333333; text-align:center;\">企业价值</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_Ekfsfh2s",
+              "type": "shape",
+              "left": 60,
+              "top": 430,
+              "width": 880,
+              "height": 80,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#E3F2FD",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_K_LKyHWy",
+              "type": "text",
+              "left": 70,
+              "top": 435,
+              "width": 860,
+              "height": 70,
+              "content": "<p style=\"font-size:16px; color:#333333;\">案例聚焦：便利蜂 —— 数字化便利店新物种，用“中央大脑”重构人货场</p><p style=\"font-size:16px; color:#555555;\">三年千店，快速扩张，它是如何用商业模式六要素解读的？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_WONMTenX",
+          "type": "spotlight",
+          "elementId": "text_EVCI1JQW"
+        },
+        {
+          "id": "action_M-sx14bK",
+          "type": "speech",
+          "text": "欢迎来到九轩阁商业模式大课！今天我们要一起拆解一个非常经典的模型——魏朱商业模式六要素。这套框架就像一把手术刀，能帮我们精准解剖任何一家企业的商业基因。而我们的案例对象，就是这几年现象级的新零售物种：便利蜂。"
+        },
+        {
+          "id": "action_Jv4wuQq0",
+          "type": "spotlight",
+          "elementId": "text_YBX8Hqo7"
+        },
+        {
+          "id": "action_yb8PEsl4",
+          "type": "speech",
+          "text": "副标题说得好：用一套框架，看透新零售物种的基因密码。我们不是看热闹，而是看门道。接下来我们先快速扫一遍这六个要素是什么，然后后面每一页都会结合便利蜂的真实操作深度讲解。"
+        },
+        {
+          "id": "action_vaKPQqEt",
+          "type": "spotlight",
+          "elementId": "text_1Yky2mla"
+        },
+        {
+          "id": "action_a0zwub1V",
+          "type": "speech",
+          "text": "第一个要素是定位。它回答的是：你到底为谁，解决什么问题？在便利蜂的案例里，它精准锁定了城市上班族的即时性消费需求。"
+        },
+        {
+          "id": "action_Pd82PenI",
+          "type": "spotlight",
+          "elementId": "text_EUdL-kdt"
+        },
+        {
+          "id": "action_hCr8EVXZ",
+          "type": "speech",
+          "text": "第二个是业务系统。也就是你的关键业务活动、合作伙伴以及内部运转的流程。便利蜂用“大中台、小前台”把效率拉满，这个我们后面细说。"
+        },
+        {
+          "id": "action_l8dKAQf5",
+          "type": "spotlight",
+          "elementId": "text_XuoVindP"
+        },
+        {
+          "id": "action_MmNMxvd9",
+          "type": "speech",
+          "text": "第三个，关键资源能力。你手里有什么独门武器？便利蜂最核心的不是货架，而是数据和算法构成的“中央大脑”。"
+        },
+        {
+          "id": "action_r0HIR1ln",
+          "type": "spotlight",
+          "elementId": "text_YCd5L7cA"
+        },
+        {
+          "id": "action_-kX6ntZR",
+          "type": "speech",
+          "text": "第四个，盈利模式。简单说就是怎么赚钱，收入从哪来，成本往哪去。便利蜂玩的是高频鲜食带低频标品的组合拳。"
+        },
+        {
+          "id": "action_kcYCGT7n",
+          "type": "spotlight",
+          "elementId": "text_X19H-QAt"
+        },
+        {
+          "id": "action_a7YGs4zz",
+          "type": "speech",
+          "text": "第五个，自由现金流结构。这决定了企业能跑多快、跑多远。便利蜂坚持直营扩张的背后，是一套非常严谨的现金管理逻辑。"
+        },
+        {
+          "id": "action_raNR16QX",
+          "type": "spotlight",
+          "elementId": "text_FWFXE11c"
+        },
+        {
+          "id": "action_Y9au58kc",
+          "type": "speech",
+          "text": "最后第六个，企业价值。也就是资本市场上怎么看你的未来。便利蜂被给予高估值，正是因为它被视为一台可以快速复制的效率机器。"
+        },
+        {
+          "id": "action_ZZd6nf2y",
+          "type": "spotlight",
+          "elementId": "text_K_LKyHWy"
+        },
+        {
+          "id": "action_2rQ_5k7Q",
+          "type": "speech",
+          "text": "便利蜂从0到千店只用了三年，用数字化重构了人、货、场。它究竟如何把这六个要素串在一起，形成商业闭环？接下来的课程，我们就一步步拆解它的模式基因。"
+        }
+      ],
+      "createdAt": 1785090013855,
+      "updatedAt": 1785090013855,
+      "outlineId": "scene_1"
+    },
+    {
+      "id": "It3NCvLlf3i10F4QhO_hx",
+      "stageId": "jxg-bm-case-convenience-bee-v1",
+      "type": "slide",
+      "title": "便利蜂：数据驱动的新零售标杆",
+      "order": 2,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "gq4-8pROxbhFScr_RAhA3",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_PZR85L2Q",
+              "type": "text",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 70,
+              "content": "<p style=\"font-size:32px;\"><strong>便利蜂：数据驱动的新零售标杆</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_2FYHGppZ",
+              "type": "shape",
+              "left": 70,
+              "top": 125,
+              "width": 860,
+              "height": 3,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_g7_D76b6",
+              "type": "text",
+              "left": 60,
+              "top": 150,
+              "width": 380,
+              "height": 103,
+              "content": "<p style=\"font-size:18px;\">● 2017-2022年，门店从零扩张至千家</p><p style=\"font-size:18px;\">● 行业痛点：市场分散，门店运营低效</p><p style=\"font-size:18px;\">● 破局思路：全链条数字化 + 中央大脑决策</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "chart_wwsO7X6k",
+              "type": "chart",
+              "left": 480,
+              "top": 150,
+              "width": 460,
+              "height": 300,
+              "chartType": "line",
+              "data": {
+                "labels": ["2017", "2018", "2019", "2020", "2021", "2022"],
+                "legends": ["门店数量"],
+                "series": [[0, 200, 500, 800, 1200, 1500]]
+              },
+              "themeColors": ["#5b9bd5"],
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_sbom4TOo",
+          "type": "spotlight",
+          "elementId": "text_PZR85L2Q"
+        },
+        {
+          "id": "action_zGL7wAYn",
+          "type": "speech",
+          "text": "便利蜂，一家用数据驱动的新零售企业，曾经在短短五年间从0开到一千家店，被称为行业里的“效率机器”。我们来具体看看它的成长轨迹。"
+        },
+        {
+          "id": "action_uGYbVJWs",
+          "type": "spotlight",
+          "elementId": "text_g7_D76b6"
+        },
+        {
+          "id": "action_3-iojLei",
+          "type": "speech",
+          "text": "从2017年到2022年，便利蜂的门店数量从零扩张至千家，但整个便利店行业其实长期存在市场分散、门店运营低效的痛点。便利蜂的破局思路很清晰：全链条数字化，用“中央大脑”来做决策，而不是依赖店长个人经验。"
+        },
+        {
+          "id": "action_5xUe7XjV",
+          "type": "spotlight",
+          "elementId": "chart_wwsO7X6k"
+        },
+        {
+          "id": "action_w9vSbi5n",
+          "type": "speech",
+          "text": "这张折线图直观地展示了它的门店增长曲线。大家注意看，从2019年开始，扩张速度明显加快，这正是数字化中台能力开始释放复制的阶段。"
+        },
+        {
+          "id": "action_jIsoGxZH",
+          "type": "laser",
+          "elementId": "chart_wwsO7X6k"
+        },
+        {
+          "id": "action_kBLXgz7X",
+          "type": "speech",
+          "text": "尤其在2020到2022年间，即使外部环境充满不确定性，它依然保持高速开店，这说明它的商业模式具备很强的抗风险和可复制性。"
+        }
+      ],
+      "createdAt": 1785090258511,
+      "updatedAt": 1785090258511,
+      "outlineId": "scene_2"
+    },
+    {
+      "id": "lGI-vI642hDMuVASiVmFh",
+      "stageId": "jxg-bm-case-convenience-bee-v1",
+      "type": "slide",
+      "title": "要素一：定位——双15生活圈",
+      "order": 3,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "uLvBf5YZBeiech-fACy08",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_eMjGg1jj",
+              "type": "text",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 70,
+              "content": "<p style=\"font-size: 32px; text-align: center;\"><strong>要素一：定位——双15生活圈</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_Kxr7hUcN",
+              "type": "shape",
+              "left": 80,
+              "top": 128,
+              "width": 840,
+              "height": 3,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_Bi3tJJgM",
+              "type": "shape",
+              "left": 60,
+              "top": 180,
+              "width": 210,
+              "height": 130,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e8f4fd",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_F1yZgmCl",
+              "type": "shape",
+              "left": 280,
+              "top": 180,
+              "width": 210,
+              "height": 130,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#dcfce7",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_Y9YnXSe5",
+              "type": "shape",
+              "left": 500,
+              "top": 180,
+              "width": 210,
+              "height": 130,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#fef3c7",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_1psWOoB7",
+              "type": "shape",
+              "left": 720,
+              "top": 180,
+              "width": 210,
+              "height": 130,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f3e8ff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_-1D18flD",
+              "type": "text",
+              "left": 80,
+              "top": 204,
+              "width": 170,
+              "height": 82,
+              "content": "<p style=\"font-size: 20px; font-weight: bold; text-align: center;\">定位理论</p><p style=\"font-size: 20px; text-align: center;\">满足需求 · 提供价值</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e40af",
+              "rotate": 0
+            },
+            {
+              "id": "text_sTeeGCVt",
+              "type": "text",
+              "left": 300,
+              "top": 204,
+              "width": 170,
+              "height": 82,
+              "content": "<p style=\"font-size: 20px; font-weight: bold; text-align: center;\">便利蜂定位</p><p style=\"font-size: 20px; text-align: center;\">15分步行 · 15元客单</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#166534",
+              "rotate": 0
+            },
+            {
+              "id": "text_-E8_NNbN",
+              "type": "text",
+              "left": 520,
+              "top": 204,
+              "width": 170,
+              "height": 82,
+              "content": "<p style=\"font-size: 20px; font-weight: bold; text-align: center;\">目标客群</p><p style=\"font-size: 20px; text-align: center;\">年轻白领 · 一人食</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#92400e",
+              "rotate": 0
+            },
+            {
+              "id": "text_lF_Rdy8v",
+              "type": "text",
+              "left": 740,
+              "top": 204,
+              "width": 170,
+              "height": 82,
+              "content": "<p style=\"font-size: 20px; font-weight: bold; text-align: center;\">价值主张</p><p style=\"font-size: 20px; text-align: center;\">热餐质优 · 一站便利</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#6b21a8",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_o114u8Xn",
+          "type": "spotlight",
+          "elementId": "text_eMjGg1jj"
+        },
+        {
+          "id": "action_1DEjQpjY",
+          "type": "speech",
+          "text": "我们进入商业模式六要素的第一个要素——定位。定位必须回答两个问题：满足谁的需求？提供什么价值？"
+        },
+        {
+          "id": "action_sRrtI_5P",
+          "type": "spotlight",
+          "elementId": "text_-1D18flD"
+        },
+        {
+          "id": "action_vuASoHmC",
+          "type": "speech",
+          "text": "定位理论告诉我们，要明确目标客户和他们需要被满足的核心需求，以此为基础构建价值主张。"
+        },
+        {
+          "id": "action_PFPB1DfY",
+          "type": "spotlight",
+          "elementId": "text_sTeeGCVt"
+        },
+        {
+          "id": "action_MtLyTSrl",
+          "type": "speech",
+          "text": "那么便利蜂的定位是什么？它独创了“双15生活圈”：步行15分钟可达，客单价控制在15元左右。用空间和价格两个维度，精准框定了服务场景。"
+        },
+        {
+          "id": "action_oD_xEvTY",
+          "type": "spotlight",
+          "elementId": "text_-E8_NNbN"
+        },
+        {
+          "id": "action_yJN6Ai5n",
+          "type": "speech",
+          "text": "这样的定位直接指向了都市里最典型的消费群体——年轻的上班族，尤其是“一人食”的消费者。他们追求快捷、性价比，同时不希望牺牲品质。"
+        },
+        {
+          "id": "action_3p1XwBye",
+          "type": "spotlight",
+          "elementId": "text_lF_Rdy8v"
+        },
+        {
+          "id": "action_-eiaOVlJ",
+          "type": "speech",
+          "text": "为此，便利蜂提出了清晰的价值主张：以质优价廉的热餐为核心，叠加一站式便利服务，成为年轻白领一日三餐的高频选择。这个定位紧紧抓住了都市生活的刚性需求。"
+        }
+      ],
+      "createdAt": 1785090582927,
+      "updatedAt": 1785090582927,
+      "outlineId": "scene_3"
+    },
+    {
+      "id": "NMCg9kGYWNjY9eSP3MiLg",
+      "stageId": "jxg-bm-case-convenience-bee-v1",
+      "type": "slide",
+      "title": "要素二：业务系统——大中台小前台",
+      "order": 4,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "lKiKtHQUB9ZKnyrJ9Rn2-",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_YklYR4qK",
+              "type": "text",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 76,
+              "content": "<p style=\"font-size:32px;\"><strong>要素二：业务系统——大中台小前台</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_rRUn3jJ0",
+              "type": "shape",
+              "left": 70,
+              "top": 136,
+              "width": 860,
+              "height": 3,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_B7BzNmYA",
+              "type": "shape",
+              "left": 60,
+              "top": 160,
+              "width": 430,
+              "height": 100,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#EBF5FB",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_v3xUzf76",
+              "type": "shape",
+              "left": 510,
+              "top": 160,
+              "width": 430,
+              "height": 100,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#E8F8F5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_Za6jxsIU",
+              "type": "text",
+              "left": 80,
+              "top": 185.5,
+              "width": 390,
+              "height": 49,
+              "content": "<p style=\"font-size:18px; text-align:center;\">业务系统：内外部利益相关者的交易结构与协作方式</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text__jqQpbJb",
+              "type": "text",
+              "left": 530,
+              "top": 185.5,
+              "width": 390,
+              "height": 49,
+              "content": "<p style=\"font-size:18px; text-align:center;\">便利蜂模式：中央大脑决策，门店执行</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "table_SPdBlIVY",
+              "type": "table",
+              "left": 50,
+              "top": 290,
+              "width": 900,
+              "height": 220,
+              "colWidths": [0.15, 0.425, 0.425],
+              "data": [
+                [
+                  {
+                    "id": "h1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "环节",
+                    "style": {
+                      "bold": true,
+                      "backcolor": "#F2F2F2"
+                    }
+                  },
+                  {
+                    "id": "h2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "传统便利店",
+                    "style": {
+                      "bold": true,
+                      "backcolor": "#F2F2F2"
+                    }
+                  },
+                  {
+                    "id": "h3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "便利蜂",
+                    "style": {
+                      "bold": true,
+                      "backcolor": "#F2F2F2"
+                    }
+                  }
+                ],
+                [
+                  {
+                    "id": "r1c1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "选址"
+                  },
+                  {
+                    "id": "r1c2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "依靠经验"
+                  },
+                  {
+                    "id": "r1c3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "系统算法评估"
+                  }
+                ],
+                [
+                  {
+                    "id": "r2c1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "选品"
+                  },
+                  {
+                    "id": "r2c2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "凭感觉"
+                  },
+                  {
+                    "id": "r2c3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "数据驱动"
+                  }
+                ],
+                [
+                  {
+                    "id": "r3c1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "订购"
+                  },
+                  {
+                    "id": "r3c2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "人工订货"
+                  },
+                  {
+                    "id": "r3c3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "系统自动订货"
+                  }
+                ],
+                [
+                  {
+                    "id": "r4c1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "陈列"
+                  },
+                  {
+                    "id": "r4c2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "固定陈列"
+                  },
+                  {
+                    "id": "r4c3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "动态优化"
+                  }
+                ],
+                [
+                  {
+                    "id": "r5c1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "定价"
+                  },
+                  {
+                    "id": "r5c2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "统一或经验"
+                  },
+                  {
+                    "id": "r5c3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "动态定价"
+                  }
+                ],
+                [
+                  {
+                    "id": "r6c1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "营销"
+                  },
+                  {
+                    "id": "r6c2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "简单促销"
+                  },
+                  {
+                    "id": "r6c3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "个性化营销"
+                  }
+                ],
+                [
+                  {
+                    "id": "r7c1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "库存"
+                  },
+                  {
+                    "id": "r7c2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "人工盘点"
+                  },
+                  {
+                    "id": "r7c3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "实时监控预测"
+                  }
+                ],
+                [
+                  {
+                    "id": "r8c1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "人力"
+                  },
+                  {
+                    "id": "r8c2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "人员密集"
+                  },
+                  {
+                    "id": "r8c3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "text": "中央大脑+门店执行"
+                  }
+                ]
+              ],
+              "outline": {
+                "width": 1,
+                "style": "solid",
+                "color": "#d0d0d0"
+              },
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_PhZ3Wgw8",
+          "type": "spotlight",
+          "elementId": "text_YklYR4qK"
+        },
+        {
+          "id": "action_t00Q_gLJ",
+          "type": "speech",
+          "text": "定位清晰之后，商业模式设计的第二个要素就是业务系统。便利蜂提出的‘大中台小前台’，正是它重构人货场、实现高效运转的核心框架。"
+        },
+        {
+          "id": "action_sfoWcitY",
+          "type": "spotlight",
+          "elementId": "text_Za6jxsIU"
+        },
+        {
+          "id": "action_nRi7yCud",
+          "type": "speech",
+          "text": "业务系统，指的是内外部利益相关者之间的交易结构和协作方式。在便利蜂，它不再是传统连锁便利店的层层授权，而是一套由数据驱动的中央决策体系。"
+        },
+        {
+          "id": "action_KzKQ0H0n",
+          "type": "spotlight",
+          "elementId": "text__jqQpbJb"
+        },
+        {
+          "id": "action_wfdnQAxZ",
+          "type": "speech",
+          "text": "它的核心模式就是‘中央大脑决策，门店执行’。简单说，选址、选品、订购、陈列、定价，甚至门店的日常管理，都由总部的算法中枢统一计算发出指令，门店只需按标准完成执行。这就大大降低了对一线人员经验的依赖。"
+        },
+        {
+          "id": "action_GMsdyfEX",
+          "type": "spotlight",
+          "elementId": "table_SPdBlIVY"
+        },
+        {
+          "id": "action__3VBw6MK",
+          "type": "speech",
+          "text": "我们通过这张对比表可以看得更清楚。传统便利店在订货、陈列、定价等八个关键环节上高度依赖店长个人判断，而便利蜂则通过系统把每个动作都变成了标准化、数字化的流程。比如动态定价，传统便利店很难做到实时调整，便利蜂却可以分秒级响应市场变化。"
+        },
+        {
+          "id": "action_UtHWKVNC",
+          "type": "speech",
+          "text": "正是这种‘大中台小前台’的业务系统，让便利蜂把复杂的零售运营变成了可复制、可管控的效率机器。这也是它区别于传统便利店的根本所在。"
+        }
+      ],
+      "createdAt": 1785091060463,
+      "updatedAt": 1785091060463,
+      "outlineId": "scene_4"
+    },
+    {
+      "id": "wnAzwdJ3YJhHfqi24v0I2",
+      "stageId": "jxg-bm-case-convenience-bee-v1",
+      "type": "quiz",
+      "title": "知识检测：定位与业务系统",
+      "order": 5,
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "q1",
+            "type": "single",
+            "question": "便利蜂在社区便利店市场中的核心定位是？",
+            "options": [
+              {
+                "value": "A",
+                "label": "传统折扣超市"
+              },
+              {
+                "value": "B",
+                "label": "数字驱动的社区便利店"
+              },
+              {
+                "value": "C",
+                "label": "高端进口商品专卖店"
+              },
+              {
+                "value": "D",
+                "label": "以生鲜为主的农贸市场"
+              }
+            ],
+            "answer": ["B"],
+            "analysis": "便利蜂从创立之初就明确要成为数字驱动的社区便利店，通过中央大脑智能系统实现全流程数字化运营，与传统便利店形成差异化定位。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "q2",
+            "type": "multiple",
+            "question": "以下哪些是便利蜂业务系统中具有独特性的组成部分？（多选）",
+            "options": [
+              {
+                "value": "A",
+                "label": "智能订货与动态定价系统"
+              },
+              {
+                "value": "B",
+                "label": "完全依赖人工补货"
+              },
+              {
+                "value": "C",
+                "label": "中央大脑驱动的运营决策"
+              },
+              {
+                "value": "D",
+                "label": "自助收银与无人值守门店"
+              }
+            ],
+            "answer": ["A", "C", "D"],
+            "analysis": "便利蜂的业务系统核心是数字化和智能化，智能订货、动态定价、中央大脑决策以及自助收银/无人店模式都是其独特之处，而完全依赖人工补货与其实践相反。",
+            "points": 15,
+            "hasAnswer": true
+          },
+          {
+            "id": "q3",
+            "type": "single",
+            "question": "在魏朱商业模式六要素模型中，“业务系统”指的是什么？",
+            "options": [
+              {
+                "value": "A",
+                "label": "企业内部的行政架构"
+              },
+              {
+                "value": "B",
+                "label": "企业选择的合作利益相关者及其交易结构"
+              },
+              {
+                "value": "C",
+                "label": "企业使用的IT系统"
+              },
+              {
+                "value": "D",
+                "label": "企业生产的全部产品组合"
+              }
+            ],
+            "answer": ["B"],
+            "analysis": "根据魏朱模型，业务系统描述的是企业如何选择利益相关者（如供应商、合作伙伴、客户）以及与他们之间的交易结构，是商业模式的核心组件之一。",
+            "points": 10,
+            "hasAnswer": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "action_ecb0_0ol",
+          "type": "speech",
+          "text": "好了，我们刚把便利蜂‘大中台小前台’的业务系统和它在双15生活圈里的定位讲透，接下来的几分钟留给你自己检验一下。几道题不长，但直指刚才的核心概念。你先独立完成，交卷后我再陪你一起过一遍。"
+        }
+      ],
+      "createdAt": 1785091360025,
+      "updatedAt": 1785091360025,
+      "outlineId": "scene_5"
+    },
+    {
+      "id": "2NuC3k6pJw2efaWBzRuzY",
+      "stageId": "jxg-bm-case-convenience-bee-v1",
+      "type": "slide",
+      "title": "要素三：关键资源能力——数据与算法",
+      "order": 6,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "gIVQeypKvUcvD4GT7Juff",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_zDayAXoK",
+              "type": "text",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 70,
+              "content": "<p style=\"font-size:32px;\"><strong>要素三：关键资源能力——数据与算法</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_NZYlBd2J",
+              "type": "text",
+              "left": 60,
+              "top": 130,
+              "width": 880,
+              "height": 58,
+              "content": "<p style=\"font-size:24px;\">揭示便利蜂持续竞争优势背后的核心资源与能力</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#666666",
+              "rotate": 0
+            },
+            {
+              "id": "shape_huIlopgz",
+              "type": "shape",
+              "left": 70,
+              "top": 198,
+              "width": 860,
+              "height": 3,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_TXJRnMNx",
+              "type": "shape",
+              "left": 60,
+              "top": 220,
+              "width": 280,
+              "height": 140,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#dbeafe",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_7Hx9fBdi",
+              "type": "shape",
+              "left": 360,
+              "top": 220,
+              "width": 280,
+              "height": 140,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#dcfce7",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_a3Smln3V",
+              "type": "shape",
+              "left": 660,
+              "top": 220,
+              "width": 280,
+              "height": 140,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#fef3c7",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_VOlhJf_c",
+              "type": "text",
+              "left": 80,
+              "top": 239,
+              "width": 240,
+              "height": 49,
+              "content": "<p style=\"font-size:18px;text-align:center;\"><strong>数据采集</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e40af",
+              "rotate": 0
+            },
+            {
+              "id": "text_DuxgVM3r",
+              "type": "text",
+              "left": 80,
+              "top": 298,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;text-align:center;\">门店、物流、供应链、外部数据</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e40af",
+              "rotate": 0
+            },
+            {
+              "id": "text_msGlfxsM",
+              "type": "text",
+              "left": 380,
+              "top": 239,
+              "width": 240,
+              "height": 49,
+              "content": "<p style=\"font-size:18px;text-align:center;\"><strong>AI算法团队</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#166534",
+              "rotate": 0
+            },
+            {
+              "id": "text_NFLM0_hA",
+              "type": "text",
+              "left": 380,
+              "top": 298,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;text-align:center;\">深度算法研发与落地</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#166534",
+              "rotate": 0
+            },
+            {
+              "id": "text_pEJ_p8ci",
+              "type": "text",
+              "left": 680,
+              "top": 239,
+              "width": 240,
+              "height": 49,
+              "content": "<p style=\"font-size:18px;text-align:center;\"><strong>鲜食工厂</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#92400e",
+              "rotate": 0
+            },
+            {
+              "id": "text_JmUQZD7i",
+              "type": "text",
+              "left": 680,
+              "top": 298,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;text-align:center;\">柔性生产与品质控制</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#92400e",
+              "rotate": 0
+            },
+            {
+              "id": "text_T5_XcuOC",
+              "type": "text",
+              "left": 60,
+              "top": 380,
+              "width": 430,
+              "height": 130,
+              "content": "<p style=\"font-size:18px;\"><strong>技术底座</strong></p><p style=\"font-size:18px;\">• 人工智能</p><p style=\"font-size:18px;\">• 物联网</p><p style=\"font-size:18px;\">• 云计算</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_K29nrzXh",
+              "type": "text",
+              "left": 530,
+              "top": 380,
+              "width": 430,
+              "height": 130,
+              "content": "<p style=\"font-size:18px;\"><strong>能力体现</strong></p><p style=\"font-size:18px;\">• 15分钟派单</p><p style=\"font-size:18px;\">• 动态定价</p><p style=\"font-size:18px;\">• C2M柔性生产</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_SSuRp_SM",
+          "type": "spotlight",
+          "elementId": "text_zDayAXoK"
+        },
+        {
+          "id": "action_mWQPvtZw",
+          "type": "speech",
+          "text": "刚才的几道题帮大家快速回顾了定位与业务系统，现在我们把视线拉到便利蜂商业模式的核心引擎——第三个要素：关键资源能力。为什么其他便利店很难复制便利蜂的效率？答案就藏在“数据与算法”这五个字里。"
+        },
+        {
+          "id": "action_AwGKwjSK",
+          "type": "spotlight",
+          "elementId": "text_NZYlBd2J"
+        },
+        {
+          "id": "action_qGtYUYKc",
+          "type": "speech",
+          "text": "这一页要揭示的，正是支撑便利蜂持续竞争优势的核心资源与能力组合。它不是单点的技术，而是一整套把业务系统真正转起来的核心资产。"
+        },
+        {
+          "id": "action_y_6WDROX",
+          "type": "spotlight",
+          "elementId": "text_VOlhJf_c"
+        },
+        {
+          "id": "action_T4X7m9j5",
+          "type": "speech",
+          "text": "首先看数据采集。便利蜂构建了一个立体的数据采集体系，覆盖门店交易、物流调度、供应链运营，甚至外部天气、商圈事件数据。每一家门店、每一次扫码、每一个货架的补货动作，都在实时回传。"
+        },
+        {
+          "id": "action_QJnRtQnA",
+          "type": "spotlight",
+          "elementId": "text_DuxgVM3r"
+        },
+        {
+          "id": "action_3SE66o_T",
+          "type": "speech",
+          "text": "门店、物流、供应链、外部数据——这四个维度的数据流不断汇集，形成了便利蜂感知商业环境的“神经系统”。有了这些数据，中央大脑才能做出精准的判断。"
+        },
+        {
+          "id": "action_-668Nyco",
+          "type": "spotlight",
+          "elementId": "text_msGlfxsM"
+        },
+        {
+          "id": "action_oEdXGa5N",
+          "type": "speech",
+          "text": "光有数据还不够，便利蜂专门组建了AI算法团队，负责深度算法研发与落地。这群人不是在做实验室里的demo，而是直接让算法在配送、定价、选品里发挥作用。"
+        },
+        {
+          "id": "action_lDFxOkEN",
+          "type": "spotlight",
+          "elementId": "text_NFLM0_hA"
+        },
+        {
+          "id": "action_qUiBKWkK",
+          "type": "speech",
+          "text": "深度算法研发与落地，意味着从预测销量到自动订货，从路径规划到动态定价，都变成了可迭代的数学模型。这才是便利蜂“大中台”里真正值钱的软资产。"
+        },
+        {
+          "id": "action_fuUIqijs",
+          "type": "spotlight",
+          "elementId": "text_pEJ_p8ci"
+        },
+        {
+          "id": "action_MXAnQ6ld",
+          "type": "speech",
+          "text": "很多人会忽略一个实体资源——鲜食工厂。便利蜂的自有鲜食工厂，配合柔性生产和品质控制能力，让它能够快速响应算法指导下的短保、高频需求，而不是被动依赖第三方供给。"
+        },
+        {
+          "id": "action_9OdaHVK7",
+          "type": "spotlight",
+          "elementId": "text_JmUQZD7i"
+        },
+        {
+          "id": "action_16qFb-DD",
+          "type": "speech",
+          "text": "柔性生产与品质控制，把数据指令直接变成货架上的差异化鲜食，这种“算法定义产品、产线快速响应”的打法，是传统便利店很难短期追赶的。"
+        },
+        {
+          "id": "action_gKoVXTl6",
+          "type": "spotlight",
+          "elementId": "text_T5_XcuOC"
+        },
+        {
+          "id": "action_7mcDGwLy",
+          "type": "speech",
+          "text": "支撑这一切的技术底座，是人工智能、物联网、云计算的能力融合。比如物联网传感器实时监控温区，云端算力支撑全链条优化，缺一不可。"
+        },
+        {
+          "id": "action_gnyJal9c",
+          "type": "spotlight",
+          "elementId": "text_K29nrzXh"
+        },
+        {
+          "id": "action_Uy0Yojmt",
+          "type": "speech",
+          "text": "最终，这些资源能力落地为三个极其具体的能力体现：15分钟派单让你在写字楼里及时吃上热餐；动态定价根据时段、库存微调；C2M柔性生产则把用户偏好直接变成明天的鲜食排产计划。这就是便利蜂作为“数据驱动的新零售标杆”的底气所在。"
+        }
+      ],
+      "createdAt": 1785091586527,
+      "updatedAt": 1785091586527,
+      "outlineId": "scene_6"
+    },
+    {
+      "id": "PqJN7lQApRUEgZhpfu123",
+      "stageId": "jxg-bm-case-convenience-bee-v1",
+      "type": "slide",
+      "title": "要素四：盈利模式——高频带低频",
+      "order": 7,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "XfkdKqKcbjFr7gZpLs2OR",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_tIw2YeoW",
+              "type": "text",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 70,
+              "content": "<p style=\"font-size:32px; text-align:center;\"><strong>要素四：盈利模式——高频带低频</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_KaE9v_XG",
+              "type": "shape",
+              "left": 70,
+              "top": 130,
+              "width": 860,
+              "height": 2,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_wK5nLyyR",
+              "type": "shape",
+              "left": 60,
+              "top": 150,
+              "width": 430,
+              "height": 160,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f0f5ff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_hzJe-D7a",
+              "type": "text",
+              "left": 80,
+              "top": 189,
+              "width": 390,
+              "height": 82,
+              "content": "<p style=\"font-size:20px; text-align:center;\"><strong>盈利模式</strong></p><p style=\"font-size:16px; text-align:center;\">收入来源 + 成本结构</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_whrilyd0",
+              "type": "shape",
+              "left": 510,
+              "top": 150,
+              "width": 430,
+              "height": 160,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f0f5ff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_4wE1fMRT",
+              "type": "text",
+              "left": 530,
+              "top": 189,
+              "width": 390,
+              "height": 82,
+              "content": "<p style=\"font-size:20px; text-align:center;\"><strong>收入驱动</strong></p><p style=\"font-size:16px; text-align:center;\">热餐（刚需）→ 日用品消费</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_-r_DYC87",
+              "type": "shape",
+              "left": 60,
+              "top": 340,
+              "width": 430,
+              "height": 160,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f0f5ff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_2AB4RMjo",
+              "type": "text",
+              "left": 80,
+              "top": 379,
+              "width": 390,
+              "height": 82,
+              "content": "<p style=\"font-size:20px; text-align:center;\"><strong>成本控制</strong></p><p style=\"font-size:16px; text-align:center;\">智能选址 · 动态定价 · 精简人员</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_O1-8pvSY",
+              "type": "shape",
+              "left": 510,
+              "top": 340,
+              "width": 430,
+              "height": 160,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f0f5ff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_UrYJrvuy",
+              "type": "text",
+              "left": 530,
+              "top": 379,
+              "width": 390,
+              "height": 82,
+              "content": "<p style=\"font-size:20px; text-align:center;\"><strong>盈利公式</strong></p><p style=\"font-size:16px; text-align:center;\">高坪效 + 低损耗 + 低人工成本</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_anQB5Npk",
+          "type": "spotlight",
+          "elementId": "text_tIw2YeoW"
+        },
+        {
+          "id": "action_YBUX2r-a",
+          "type": "speech",
+          "text": "前面我们分析了便利蜂的数据与算法资源，那这些能力是怎么直接变成利润的呢？这就涉及便利蜂的盈利模式设计，它的核心逻辑是——高频带低频。"
+        },
+        {
+          "id": "action_Fqw0QLaq",
+          "type": "spotlight",
+          "elementId": "text_hzJe-D7a"
+        },
+        {
+          "id": "action_uzSYewBO",
+          "type": "speech",
+          "text": "先看盈利模式的构成：任何商业模式都离不开收入来源和成本结构这两块。便利蜂是怎么做的？"
+        },
+        {
+          "id": "action_DdziOm2u",
+          "type": "spotlight",
+          "elementId": "text_4wE1fMRT"
+        },
+        {
+          "id": "action_KbOIpkor",
+          "type": "speech",
+          "text": "收入这一側，热餐是绝对的驱动力。白领刚需、复购率高、毛利也高，属于高频消费。用户买热餐时顺便带瓶水、买包零食，就把低频的日用品消费自然带动起来了。"
+        },
+        {
+          "id": "action_R64dV079",
+          "type": "spotlight",
+          "elementId": "text_2AB4RMjo"
+        },
+        {
+          "id": "action__dUe-Caf",
+          "type": "speech",
+          "text": "成本这一側，控制手段也很明确。智能选址摊薄了每一单的配送成本；动态定价根据时段和库存灵活调整，最大限度减少损耗；再配合精简人员，把人工成本压到最低。"
+        },
+        {
+          "id": "action_Z26WhQ8_",
+          "type": "spotlight",
+          "elementId": "text_UrYJrvuy"
+        },
+        {
+          "id": "action_S3muTBJc",
+          "type": "speech",
+          "text": "所以便利蜂的盈利公式可以概括为：高坪效加低损耗加低人工成本。这三个指标共同构成了它作为新零售标杆的利润壁垒。"
+        }
+      ],
+      "createdAt": 1785092161628,
+      "updatedAt": 1785092161628,
+      "outlineId": "scene_7"
+    },
+    {
+      "id": "Ro91f1oriog6X5hq0I-L3",
+      "stageId": "jxg-bm-case-convenience-bee-v1",
+      "type": "slide",
+      "title": "要素五：自由现金流结构——直营扩张的底气",
+      "order": 8,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "jSS_tVGCXpa2iRPVgpFBo",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_-SFDuxm3",
+              "type": "text",
+              "left": 80,
+              "top": 80,
+              "width": 840,
+              "height": 58,
+              "content": "<p style=\"font-size:24px;\"><strong>要素五：自由现金流结构——直营扩张的底气</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_poVQqhvT",
+              "type": "shape",
+              "left": 80,
+              "top": 148,
+              "width": 840,
+              "height": 3,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_H3kX494E",
+              "type": "shape",
+              "left": 80,
+              "top": 180,
+              "width": 4,
+              "height": 49,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_d9verXOE",
+              "type": "text",
+              "left": 100,
+              "top": 180,
+              "width": 820,
+              "height": 49,
+              "content": "<p style=\"font-size:18px;\"><strong>自由现金流结构：</strong>企业扩张的财务支撑</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_wLcfiEvN",
+              "type": "shape",
+              "left": 80,
+              "top": 259,
+              "width": 4,
+              "height": 49,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_LLnDVZlo",
+              "type": "text",
+              "left": 100,
+              "top": 259,
+              "width": 820,
+              "height": 49,
+              "content": "<p style=\"font-size:18px;\"><strong>直营模式：</strong>统一投入、快速回收、数据闭环</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_Z8TgdLkQ",
+              "type": "shape",
+              "left": 80,
+              "top": 338,
+              "width": 4,
+              "height": 49,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ed7d31",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_JL2Kx2Nw",
+              "type": "text",
+              "left": 100,
+              "top": 338,
+              "width": 820,
+              "height": 49,
+              "content": "<p style=\"font-size:18px;\"><strong>核心优势：</strong>标准化复制能力强、无需加盟分润</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_lNaIpaBs",
+              "type": "shape",
+              "left": 80,
+              "top": 417,
+              "width": 4,
+              "height": 49,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#70ad47",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_MeLyJ0JT",
+              "type": "text",
+              "left": 100,
+              "top": 417,
+              "width": 820,
+              "height": 49,
+              "content": "<p style=\"font-size:18px;\"><strong>投资重点：</strong>后台系统 &gt; 门店硬件，形成长期护城河</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_v_t_z7E3",
+          "type": "spotlight",
+          "elementId": "text_-SFDuxm3"
+        },
+        {
+          "id": "action_JLaJFGgd",
+          "type": "speech",
+          "text": "上一部分我们拆解了便利蜂的盈利模式，接下来进入第五个要素：自由现金流结构。这是支撑它坚持直营、快速扩张的最底层逻辑。"
+        },
+        {
+          "id": "action_eGGt5a-4",
+          "type": "spotlight",
+          "elementId": "text_d9verXOE"
+        },
+        {
+          "id": "action_bg5RpPiM",
+          "type": "speech",
+          "text": "自由现金流，简单说就是企业自己造血、支撑扩张的资本。便利蜂不靠加盟商的钱，而是靠门店快速盈利回笼现金，形成投入－回收－再投入的正循环。"
+        },
+        {
+          "id": "action_T4XOLcI_",
+          "type": "spotlight",
+          "elementId": "text_LLnDVZlo"
+        },
+        {
+          "id": "action_lj6ZKD1y",
+          "type": "speech",
+          "text": "直营模式要求统一投入，选址、装修、系统、人员都由总部直接出资。但同时，数据闭环让门店能在10个月内达到盈亏平衡，回收非常快。"
+        },
+        {
+          "id": "action_8-1dW2Ah",
+          "type": "spotlight",
+          "elementId": "text_JL2Kx2Nw"
+        },
+        {
+          "id": "action_C-_WZY9g",
+          "type": "speech",
+          "text": "这种结构最大的优势是标准化复制能力强，而且不需要给加盟商分润，全部利润留在体系内，进一步充实现金流。"
+        },
+        {
+          "id": "action_llmeVaQX",
+          "type": "spotlight",
+          "elementId": "text_MeLyJ0JT"
+        },
+        {
+          "id": "action_wDjuu8vz",
+          "type": "speech",
+          "text": "注意它的投资重点：后台系统和数据中台的投入远大于单店硬件。这就像修一条高速公路，前期投入大，但车跑起来以后边际成本极低，形成长期的护城河。"
+        },
+        {
+          "id": "action_4Kb6USvg",
+          "type": "speech",
+          "text": "所以，直营扩张的底气来自哪里？来自算法驱动的高效运营，让每一家店都能快速成为正向现金流的单元，然后复制出去。"
+        }
+      ],
+      "createdAt": 1785092404600,
+      "updatedAt": 1785092404600,
+      "outlineId": "scene_8"
+    },
+    {
+      "id": "FBVfq7Qz10Af0nmd6gDCq",
+      "stageId": "jxg-bm-case-convenience-bee-v1",
+      "type": "quiz",
+      "title": "知识检测：资源与盈利",
+      "order": 9,
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "q1",
+            "type": "single",
+            "question": "在魏朱商业模式六要素模型中，便利蜂最核心的“关键资源能力”是指？",
+            "options": [
+              {
+                "value": "A",
+                "label": "A. 海量资本注入与快速扩张门店的能力"
+              },
+              {
+                "value": "B",
+                "label": "B. 基于算法与数据的“中央大脑”决策系统"
+              },
+              {
+                "value": "C",
+                "label": "C. 覆盖全国的高效物流配送网络"
+              },
+              {
+                "value": "D",
+                "label": "D. 极具亲和力的品牌形象与营销活动"
+              }
+            ],
+            "answer": ["B"],
+            "analysis": "便利蜂的商业模式核心在于其自主研发的“中央大脑”系统，该系统利用大数据和人工智能实现选品、定价、排班、库存管理等全流程的自动化决策，是区别于传统便利店的关键资源能力。其他选项如资本、物流、品牌虽重要，但并非其独特的核心壁垒。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "q2",
+            "type": "short_answer",
+            "question": "请结合魏朱商业模式六要素模型，分析便利蜂的盈利模式主要由哪些收入来源和成本结构构成，并说明其与传统便利店盈利模式的根本差异。",
+            "commentPrompt": "评分标准：\n(1) 清晰列出便利蜂的主要收入来源（如商品销售、加盟费、增值服务等）及成本构成（技术研发、供应链、门店运营等）– 40%\n(2) 运用魏朱模型中的“盈利模式”要素（收入结构、成本结构、利润逻辑）进行系统性分析 – 30%\n(3) 指出算法驱动决策带来的差异化盈利特点（如降低人工成本、提升坪效、动态定价等），逻辑完整 – 30%",
+            "analysis": "参考答案要点：\n收入来源：直营门店商品销售收入、加盟商管理费与分成、基于数据的广告/选品推荐等增值服务收入。成本结构：技术研发与算法迭代投入、供应链采购与加工成本、门店租金与设备折旧、中央大脑的数字化基础设施成本等。与传统便利店相比，便利蜂通过算法决策大幅减少了对店长经验的依赖，降低了人力成本，同时通过动态订货与定价提升了毛利率和周转率，其盈利模式更依赖系统效率而非人员经验，因此更具有规模化复制的利润潜力。",
+            "points": 15,
+            "hasAnswer": false
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "action_YjTmOm6Q",
+          "type": "speech",
+          "text": "很好，刚才我们拆解了直营扩张的现金流逻辑，现在把焦点拉回到更内核的两个要素上——关键资源能力与盈利模式。下面有两道题，你自己先试着做一做，做完提交后我们再一起复盘。"
+        }
+      ],
+      "createdAt": 1785092753809,
+      "updatedAt": 1785092753809,
+      "outlineId": "scene_9"
+    },
+    {
+      "id": "PxVLWW3-REl_TApwnQGPV",
+      "stageId": "jxg-bm-case-convenience-bee-v1",
+      "type": "slide",
+      "title": "要素六：企业价值——可复制的效率机器",
+      "order": 10,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "TlIeKlZSYXoqRVuE3nSOn",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_Lr4_PyoB",
+              "type": "text",
+              "left": 60,
+              "top": 60,
+              "width": 880,
+              "height": 70,
+              "content": "<p style=\"font-size:32px; font-weight:bold;\">要素六：企业价值——可复制的效率机器</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_xuSvwtp2",
+              "type": "shape",
+              "left": 70,
+              "top": 140,
+              "width": 860,
+              "height": 2,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_k5McUbR6",
+              "type": "shape",
+              "left": 60,
+              "top": 200,
+              "width": 280,
+              "height": 140,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#E8F0FE",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_zqYnqv58",
+              "type": "shape",
+              "left": 360,
+              "top": 200,
+              "width": 280,
+              "height": 140,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#FCE8E6",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_mpBPDhcg",
+              "type": "shape",
+              "left": 660,
+              "top": 200,
+              "width": 280,
+              "height": 140,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#E6F4EA",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_O-Uzm6IP",
+              "type": "text",
+              "left": 80,
+              "top": 235,
+              "width": 240,
+              "height": 70,
+              "content": "<p style=\"font-size:16px; text-align:center;\"><strong>企业价值</strong></p><p style=\"font-size:16px; text-align:center;\">投资价值 · 社会价值</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_qMYpjV7y",
+              "type": "text",
+              "left": 380,
+              "top": 235,
+              "width": 240,
+              "height": 70,
+              "content": "<p style=\"font-size:16px; text-align:center;\"><strong>便利蜂模式</strong></p><p style=\"font-size:16px; text-align:center;\">万店可复制 · 数字化溢出</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_wBIuuLC-",
+              "type": "text",
+              "left": 680,
+              "top": 235,
+              "width": 240,
+              "height": 70,
+              "content": "<p style=\"font-size:16px; text-align:center;\"><strong>行业启示</strong></p><p style=\"font-size:16px; text-align:center;\">决策智能化 · 运营标准化</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_2NGnkeza",
+              "type": "text",
+              "left": 60,
+              "top": 390,
+              "width": 880,
+              "height": 70,
+              "content": "<p style=\"font-size:16px; text-align:center;\"><strong>六要素协同</strong></p><p style=\"font-size:16px; text-align:center;\">定位牵引 · 业务系统落地 · 关键资源支撑 · 盈利闭环 · 现金流保障 · 价值实现</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action__fNS6VOz",
+          "type": "spotlight",
+          "elementId": "text_Lr4_PyoB"
+        },
+        {
+          "id": "action_vfvA1lWB",
+          "type": "speech",
+          "text": "接下来，我们进入最后一个要素——企业价值。前面我们分别拆解了便利蜂的定位、业务系统、关键资源能力、盈利模式和现金流结构，这些要素最终要凝结成怎样的长期价值？"
+        },
+        {
+          "id": "action_yXZxNJH_",
+          "type": "spotlight",
+          "elementId": "text_O-Uzm6IP"
+        },
+        {
+          "id": "action_7s1786tY",
+          "type": "speech",
+          "text": "企业价值有两个维度：投资价值和社会价值。投资价值看的是可规模化的赚钱能力，社会价值看的是模式对行业的溢出效应。便利蜂恰恰在这两点上都有清晰的体现。"
+        },
+        {
+          "id": "action_EGOxjUM_",
+          "type": "laser",
+          "elementId": "text_qMYpjV7y"
+        },
+        {
+          "id": "action_j7qUrY_E",
+          "type": "speech",
+          "text": "先看投资价值。便利蜂的万店可复制性不是简单的数量扩张，而是建立在数字化基础上的效率机器——每一家新店都能快速接入同一个‘中央大脑’，保持统一的运营品质，这就是资本愿意给出高估值的原因。"
+        },
+        {
+          "id": "action_9RuR6k5c",
+          "type": "spotlight",
+          "elementId": "text_qMYpjV7y"
+        },
+        {
+          "id": "action_VuuqK-Wo",
+          "type": "speech",
+          "text": "而数字化溢出效应，则是便利蜂社会价值的核心。当这套智能决策系统和标准化流程被验证成功，它就不再只是一家零售公司的资产，而有可能重新定义整个便利店行业的运行规则。"
+        },
+        {
+          "id": "action_Hp8IDerq",
+          "type": "spotlight",
+          "elementId": "text_wBIuuLC-"
+        },
+        {
+          "id": "action_6YiT9j81",
+          "type": "speech",
+          "text": "对行业的启示非常直接：决策智能化，让一线不再依赖个人经验；运营标准化，让复杂管理变得透明可控。这两点意味着零售业的竞争门槛正在从规模转向数据密度和算法能力。"
+        },
+        {
+          "id": "action_4-Djn4_a",
+          "type": "spotlight",
+          "elementId": "text_2NGnkeza"
+        },
+        {
+          "id": "action_Y0LENkDm",
+          "type": "speech",
+          "text": "最后，我们把六个要素串起来看：定位牵引方向，业务系统落地执行，关键资源能力支撑壁垒，盈利模式完成闭环，现金流保障扩张，而企业价值正是所有这些要素协同之后自然生长出来的结果。便利蜂的案例告诉我们，真正的效率机器，是企业系统能力的结晶。"
+        }
+      ],
+      "createdAt": 1785092880100,
+      "updatedAt": 1785092880100,
+      "outlineId": "scene_10"
+    }
+  ],
+  "createdAt": "2026-07-27T11:41:19.883Z"
+}

@@ -97,6 +97,10 @@ Jiuxuange MAIC 6.0.0
 
 [DECIDED, HIGH] 便利蜂和生鲜零售只有在具名 SME 审核课程内容后才能进入正式发布。SHEIN、花西子、整车货运平台和智能汽车在审核完成前保持隐藏或审校中。
 
+[DECIDED, HIGH] 所有正式案例都必须以便利蜂为形态标准，制作成独立、预生成、
+连续多轮的 OpenMAIC 原生课堂。单张案例卡、单轮聊天或另一套自建固定对话流程
+均不构成正式案例课。
+
 ### 3.3 项目空间
 
 [DECIDED, HIGH] 项目卡不是正式教材，项目空间包含三个独立入口：
@@ -326,6 +330,25 @@ real roster integration: BLOCKED_BY_INPUTS
 real WeCom integration: BLOCKED_BY_INPUTS
 ```
 
+### Gate 2 本机试学切片
+
+```text
+native mainline entry: COMPLETE
+all-correct objective quiz gate: COMPLETE
+local case unlock: COMPLETE
+convenience-bee native classroom: COMPLETE / INTERNAL_PILOT
+cross-classroom SPA state isolation: COMPLETE
+server-authoritative progress: NOT STARTED
+direct URL authorization: NOT STARTED
+cross-device recovery: NOT STARTED
+SME approval: BLOCKED_BY_INPUTS
+formal Gate 2: NOT PASSED
+```
+
+实施与验收记录：
+
+- `v6-gate2-native-classroom-pilot-20260727.md`
+
 Gate 1 当前技术合同：
 
 - `v6-gate1-current-system-audit.md`
@@ -339,9 +362,9 @@ Gate 1 当前技术合同：
 
 ## 10. 事实边界
 
-- 已实现：课程中心、双入口 L0、六题两次提交合同、自由学习、本机课堂、麦客思草案卡。
-- 已验证：上述能力的定向测试、构建和本机浏览器路径。
-- 仅设计：V6 PostgreSQL/身份/权限合同、项目空间、双档案、正式项目卡、异步 AI 评价、案例独立课堂。
+- 已实现：课程中心、双入口 L0、六题两次提交合同、自由学习、本机课堂、麦客思草案卡、原生主线入口、本机客观题完成门、本机案例解锁、便利蜂独立多轮原生课堂。
+- 已验证：上述能力的定向测试、构建和本机浏览器路径；主线答错拦截、答对解锁、课堂 ID 切换已完成真实浏览器回归。
+- 仅设计：V6 PostgreSQL/身份/权限合同、服务端课程进度与案例解锁、项目空间、双档案、正式项目卡、异步 AI 评价。
 - 尚未完成：Gate 1 依赖刺探、花名企微登录、PostgreSQL 实现、服务端课程状态、权限、生产部署、内容审核、真实 1000 人发布。
 
 ## 11. 2026-07-27 自由学习生成链 P0 热修复

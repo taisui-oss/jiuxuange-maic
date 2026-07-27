@@ -282,4 +282,22 @@ describe('generationComplete', () => {
     expect(useStageStore.getState().generationComplete).toBe(false);
     expect(useStageStore.getState().generatingOutlines.map((o) => o.order)).toEqual([3]);
   });
+
+  it('clears a previous classroom before a different classroom misses local storage', async () => {
+    useStageStore.setState({
+      stage: makeStage(),
+      scenes: [makeSlideScene('old-scene', 1)],
+      currentSceneId: 'old-scene',
+      generationComplete: true,
+    });
+    loadStageDataMock.mockResolvedValue(null);
+    stageOutlinesGet.mockResolvedValue(undefined);
+
+    await useStageStore.getState().loadFromStorage('stage-2');
+
+    expect(useStageStore.getState().stage).toBeNull();
+    expect(useStageStore.getState().scenes).toEqual([]);
+    expect(useStageStore.getState().currentSceneId).toBeNull();
+    expect(useStageStore.getState().generationComplete).toBe(false);
+  });
 });

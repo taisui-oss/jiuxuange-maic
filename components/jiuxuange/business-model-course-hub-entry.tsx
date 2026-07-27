@@ -1,42 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { ArrowRight, BookOpenCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import type { JiuxuangeCoursePackage } from '@/lib/c-cubic/course-package/types';
-import { loadBusinessModelResumeState, type BusinessModelResumeState } from '@/lib/c-cubic/session';
 import { Button } from '@/components/ui/button';
 
-export function BusinessModelCourseHubEntry({
-  coursePackage,
-}: {
-  coursePackage?: JiuxuangeCoursePackage;
-}) {
+export function BusinessModelCourseHubEntry() {
   const router = useRouter();
-  const [resume, setResume] = useState<BusinessModelResumeState>({ status: 'not_started' });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-    void loadBusinessModelResumeState({ coursePackage })
-      .then((state) => {
-        if (!cancelled) setResume(state);
-      })
-      .catch(() => {
-        if (!cancelled) setResume({ status: 'unavailable' });
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [coursePackage]);
-
-  const supportingText =
-    resume.summary && (resume.status === 'in_progress' || resume.status === 'completed')
-      ? `上次聊到：${resume.summary}`
-      : '进入正式案例主线，并把学到的六要素带回项目练习。';
 
   return (
     <section
@@ -59,7 +28,7 @@ export function BusinessModelCourseHubEntry({
               商业模式大课
             </h2>
             <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-              {loading ? '正在恢复你的课程状态…' : supportingText}
+              进入课程目录，学习六要素主线与已解锁案例；课堂均使用 OpenMAIC 原生能力。
             </p>
           </div>
         </div>

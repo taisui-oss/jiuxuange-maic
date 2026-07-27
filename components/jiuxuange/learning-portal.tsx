@@ -60,7 +60,7 @@ export function JiuxuangeLearningPortal({
             我的课程
           </h2>
           <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-            正式课程拥有独立进度与学习证据；再次进入会恢复同一课程会话。
+            正式课程使用 OpenMAIC 原生课堂；完成主线单元后逐级解锁案例课。
           </p>
         </div>
         {!portal && !error && (
@@ -69,7 +69,7 @@ export function JiuxuangeLearningPortal({
       </div>
 
       {courseHubEnabled ? (
-        <BusinessModelCourseHubEntry coursePackage={coursePackage} />
+        <BusinessModelCourseHubEntry />
       ) : (
         <BusinessModelCourseEntry coursePackage={coursePackage} />
       )}

@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
   let sceneCount: number | undefined;
   try {
     const body = await request.json();
-    const { stage, scenes } = body;
+    const { stage, scenes, generationComplete } = body;
     stageId = stage?.id;
     sceneCount = scenes?.length;
 
@@ -31,7 +31,15 @@ export async function POST(request: NextRequest) {
     const id = stage.id || randomUUID();
     const baseUrl = buildRequestOrigin(request);
 
-    const persisted = await persistClassroom({ id, stage: { ...stage, id }, scenes }, baseUrl);
+    const persisted = await persistClassroom(
+      {
+        id,
+        stage: { ...stage, id },
+        scenes,
+        generationComplete: generationComplete !== false,
+      },
+      baseUrl,
+    );
 
     return apiSuccess({ id: persisted.id, url: persisted.url }, 201);
   } catch (error) {

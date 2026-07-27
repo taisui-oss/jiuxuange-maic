@@ -1,13 +1,25 @@
 import type { JiuxuangeVisibleLevelId } from '@/lib/c-cubic/course-package/types';
 
-export type BusinessModelCaseLessonStatus = 'integrated' | 'in_review';
+export type BusinessModelClassroomReleaseStatus = 'pilot' | 'published' | 'in_review';
+
+export interface BusinessModelMainlineUnit {
+  id: string;
+  title: string;
+  summary: string;
+  classroomId: string;
+  releaseStatus: BusinessModelClassroomReleaseStatus;
+  focus: JiuxuangeVisibleLevelId[];
+}
 
 export interface BusinessModelCaseLesson {
   id: string;
   title: string;
   summary: string;
+  format: 'native_multi_round';
   focus: JiuxuangeVisibleLevelId[];
-  status: BusinessModelCaseLessonStatus;
+  releaseStatus: BusinessModelClassroomReleaseStatus;
+  classroomId?: string;
+  unlockAfterMainlineUnitId?: string;
   sequence?: number;
 }
 
@@ -20,50 +32,86 @@ export interface BusinessModelProjectPractice {
   agentIds: Array<'senior' | 'mystery' | 'growth_feedback'>;
 }
 
+const BUSINESS_MODEL_COURSE_RETURN_TO = '/courses/business-model';
+
+export function businessModelClassroomHref(classroomId: string): string {
+  const query = new URLSearchParams({
+    returnTo: BUSINESS_MODEL_COURSE_RETURN_TO,
+    completion: 'all-correct',
+  });
+  return `/classroom/${classroomId}?${query.toString()}`;
+}
+
+export const BUSINESS_MODEL_MAINLINE_UNITS: BusinessModelMainlineUnit[] = [
+  {
+    id: 'six-elements-coffee-foundation',
+    title: '六要素概念与整体关系',
+    summary: '通过咖啡店公共案例理解商业模式要素之间的基本关系，并完成原生互动。',
+    classroomId: 'jxg-bm-mainline-six-elements-coffee-v1',
+    releaseStatus: 'pilot',
+    focus: [
+      'positioning',
+      'business-system',
+      'key-resources-capabilities',
+      'profit-model',
+      'cash-flow-structure',
+      'enterprise-value',
+    ],
+  },
+];
+
 export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
   {
     id: 'convenience-bee',
     title: '便利蜂：商业模式事实观察',
     summary: '从中央决策、门店执行和数据关系切入，练习业务系统与关键资源能力判断。',
+    format: 'native_multi_round',
     focus: ['business-system', 'key-resources-capabilities'],
-    status: 'integrated',
+    releaseStatus: 'pilot',
+    classroomId: 'jxg-bm-case-convenience-bee-v1',
+    unlockAfterMainlineUnitId: 'six-elements-coffee-foundation',
     sequence: 1,
   },
   {
     id: 'fresh-grocery-comparison',
     title: '生鲜零售：模式比较与迁移',
     summary: '比较店仓一体、前置仓、平台到家和社区团购，观察定位、系统与盈利方式如何联动。',
+    format: 'native_multi_round',
     focus: ['positioning', 'business-system', 'profit-model'],
-    status: 'integrated',
+    releaseStatus: 'in_review',
     sequence: 2,
   },
   {
     id: 'shein-system-capabilities',
     title: 'SHEIN：业务系统与关键资源能力',
     summary: '用于分析多主体协同、柔性供应链与数据能力之间的关系。',
+    format: 'native_multi_round',
     focus: ['business-system', 'key-resources-capabilities'],
-    status: 'in_review',
+    releaseStatus: 'in_review',
   },
   {
     id: 'florasis-business-model',
     title: '花西子：定位与盈利模式',
     summary: '用于观察品牌定位、渠道关系、内容投入和收入结构之间的因果链。',
+    format: 'native_multi_round',
     focus: ['positioning', 'profit-model', 'cash-flow-structure'],
-    status: 'in_review',
+    releaseStatus: 'in_review',
   },
   {
     id: 'freight-platform-ecosystem',
     title: '整车货运平台：商业模式共生体',
     summary: '用于练习平台型业务中的交易主体、利益关系和价值分配。',
+    format: 'native_multi_round',
     focus: ['business-system', 'profit-model', 'enterprise-value'],
-    status: 'in_review',
+    releaseStatus: 'in_review',
   },
   {
     id: 'smart-auto-comparison',
     title: '智能汽车：行业商业模式比较',
     summary: '用于迁移六要素框架，比较产业变化对现金流与企业价值的影响。',
+    format: 'native_multi_round',
     focus: ['positioning', 'cash-flow-structure', 'enterprise-value'],
-    status: 'in_review',
+    releaseStatus: 'in_review',
   },
 ];
 

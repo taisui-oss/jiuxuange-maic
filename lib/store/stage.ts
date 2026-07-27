@@ -421,6 +421,13 @@ const useStageStoreBase = create<StageState>()((set, get) => ({
         log.info('Stage already loaded in memory, skipping IndexedDB load:', stageId);
         return;
       }
+      // SPA navigation between two `/classroom/[id]` URLs reuses this
+      // Zustand store. Clear a different classroom before reading storage so
+      // a cache miss for the destination cannot leave the previous deck
+      // mounted and suppress the server-side fallback.
+      if (currentState.stage?.id && currentState.stage.id !== stageId) {
+        get().clearStore();
+      }
 
       const { loadStageData } = await import('@/lib/utils/stage-storage');
       const data = await loadStageData(stageId);

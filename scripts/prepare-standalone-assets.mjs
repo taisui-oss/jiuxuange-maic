@@ -5,6 +5,7 @@ const root = process.cwd();
 const standaloneRoot = resolve(root, '.next/standalone');
 const staticSource = resolve(root, '.next/static');
 const publicSource = resolve(root, 'public');
+const classroomSource = resolve(root, 'content/jiuxuange/classrooms');
 
 if (!existsSync(standaloneRoot) || !existsSync(staticSource)) {
   throw new Error('Standalone output is incomplete. Run `next build` before staging assets.');
@@ -22,4 +23,8 @@ if (existsSync(publicSource)) {
   replaceDirectory(publicSource, resolve(standaloneRoot, 'public'));
 }
 
-console.log('[standalone-assets] staged .next/static and public');
+if (existsSync(classroomSource)) {
+  replaceDirectory(classroomSource, resolve(standaloneRoot, 'content/jiuxuange/classrooms'));
+}
+
+console.log('[standalone-assets] staged .next/static, public, and classroom assets');

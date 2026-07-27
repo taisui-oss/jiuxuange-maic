@@ -1,0 +1,2310 @@
+{
+  "id": "jxg-bm-mainline-six-elements-coffee-v1",
+  "generationComplete": true,
+  "stage": {
+    "id": "jxg-bm-mainline-six-elements-coffee-v1",
+    "name": "商业模式六要素：咖啡店公共案例",
+    "description": "九轩阁商业模式大课主线内部试学课堂",
+    "createdAt": 1785149352336,
+    "updatedAt": "2026-07-27T11:41:19.813Z",
+    "languageDirective": "全程使用中文授课，采用专业、简洁的商学院教学语言。涉及商业模式画布的术语使用中文标准译法（如‘价值主张’、‘客户细分’等），英文缩写（如 CRM）首次出现时用中文全称标注。保持客观、清晰的调性，避免口语化表达。",
+    "style": "professional",
+    "currentSceneId": "deh6zyfClopsjt--XzxCG",
+    "agentIds": ["default-1", "default-2", "default-3", "default-4"],
+    "videoManifest": {},
+    "interactiveMode": false,
+    "taskEngineMode": false
+  },
+  "scenes": [
+    {
+      "id": "deh6zyfClopsjt--XzxCG",
+      "stageId": "jxg-bm-mainline-six-elements-coffee-v1",
+      "type": "slide",
+      "title": "课程导入：一家咖啡店的商业故事",
+      "order": 1,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "Ni-3sjU5MDNcOaoyt3vGd",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "shape_De_CHS5v",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 6,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#c8a96e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_zI4LUgVu",
+              "type": "text",
+              "left": 60,
+              "top": 45,
+              "width": 880,
+              "height": 76,
+              "content": "<p style=\"font-size: 30px; font-weight: bold; color: #2c3e50;\">一家咖啡店的商业故事</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#2c3e50",
+              "rotate": 0
+            },
+            {
+              "id": "text_nKosmWHc",
+              "type": "text",
+              "left": 60,
+              "top": 115,
+              "width": 880,
+              "height": 49,
+              "content": "<p style=\"font-size: 18px; color: #7f8c8d;\">精品咖啡店的诞生、成长与底层逻辑</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#7f8c8d",
+              "rotate": 0
+            },
+            {
+              "id": "shape_L0yHvTbq",
+              "type": "shape",
+              "left": 60,
+              "top": 175,
+              "width": 880,
+              "height": 1,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#d5c8b5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_zLlf6SQl",
+              "type": "text",
+              "left": 60,
+              "top": 200,
+              "width": 420,
+              "height": 130,
+              "content": "<p style=\"font-size: 18px; font-weight: bold; color: #c8a96e;\">案例简介</p><p style=\"font-size: 16px; color: #333333; line-height: 1.6;\">一家坐落于城市角落的精品咖啡店，如何从零起步建立品牌，稳定老客群，拓展新渠道，并在竞争中寻找自己的生存与增长空间。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_vI9ML5ag",
+              "type": "text",
+              "left": 520,
+              "top": 200,
+              "width": 420,
+              "height": 130,
+              "content": "<p style=\"font-size: 18px; font-weight: bold; color: #c8a96e;\">核心分析工具</p><p style=\"font-size: 16px; color: #333333; line-height: 1.6;\">商业模式六要素：价值主张、客户细分、渠道通路、收入来源、核心资源、关键合作。我们将用这套框架解剖咖啡店的商业逻辑。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_0zZlzeKu",
+              "type": "shape",
+              "left": 500,
+              "top": 215,
+              "width": 2,
+              "height": 80,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e8dfd3",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_RlFetAUJ",
+              "type": "text",
+              "left": 60,
+              "top": 360,
+              "width": 420,
+              "height": 43,
+              "content": "<p style=\"font-size: 18px; font-weight: bold; color: #c8a96e;\">学习目标</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#c8a96e",
+              "rotate": 0
+            },
+            {
+              "id": "text_2tg7_-WI",
+              "type": "text",
+              "left": 60,
+              "top": 405,
+              "width": 420,
+              "height": 94,
+              "content": "<p style=\"font-size: 16px; color: #333333;\">• 理解商业模式六要素的具体内涵</p><p style=\"font-size: 16px; color: #333333;\">• 掌握运用六要素框架分析真实案例</p><p style=\"font-size: 16px; color: #333333;\">• 洞察咖啡店经营的关键成功因素</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_Bqk33-si",
+              "type": "text",
+              "left": 520,
+              "top": 360,
+              "width": 420,
+              "height": 43,
+              "content": "<p style=\"font-size: 18px; font-weight: bold; color: #c8a96e;\">课程结构概览</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#c8a96e",
+              "rotate": 0
+            },
+            {
+              "id": "text_2xPfrLi-",
+              "type": "text",
+              "left": 520,
+              "top": 405,
+              "width": 420,
+              "height": 94,
+              "content": "<p style=\"font-size: 16px; color: #333333;\">1. 导入案例：遇见这家咖啡店</p><p style=\"font-size: 16px; color: #333333;\">2. 深度拆解：六要素逐一分析</p><p style=\"font-size: 16px; color: #333333;\">3. 总结提炼：商业模式的成与败</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f9f7f3"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_OPWpWgVc",
+          "type": "speech",
+          "text": "各位学员，欢迎来到九轩阁商业模式大课。我是本次课程的教授。在接下来的时间里，我们将不再停留在抽象的理论层面，而是深入一家真实企业的内部，去审视决定其生死的商业逻辑。"
+        },
+        {
+          "id": "action_hFSjmdyv",
+          "type": "spotlight",
+          "elementId": "text_nKosmWHc"
+        },
+        {
+          "id": "action_fltMOZ_P",
+          "type": "speech",
+          "text": "今天我们的切入口，是一家精品咖啡店。我们将剖析它的诞生、成长，以及支撑其运转的底层逻辑。这不仅仅是一个关于咖啡的故事，更是一个关于如何构建价值网络、实现持续增长的商业案例。"
+        },
+        {
+          "id": "action_qxixyUV2",
+          "type": "spotlight",
+          "elementId": "text_zLlf6SQl"
+        },
+        {
+          "id": "action_dJqOnEsa",
+          "type": "speech",
+          "text": "让我们先看看案例背景。一家坐落在城市角落的精品咖啡店，它没有选择喧嚣的闹市，而是从零开始，一步步建立品牌认知，稳定核心客群，随后拓展新渠道，并在激烈的竞争中寻找自己的差异化生存空间。这正是许多初创企业的典型路径。"
+        },
+        {
+          "id": "action_VpNzNv2r",
+          "type": "spotlight",
+          "elementId": "text_vI9ML5ag"
+        },
+        {
+          "id": "action_iUk6GTdp",
+          "type": "speech",
+          "text": "为了系统性地拆解这个案例，我们将引入一套核心分析工具——商业模式六要素。它们分别是：价值主张、客户细分、渠道通路、收入来源、核心资源与关键合作。这套框架将帮助我们穿透表象，看清楚这家咖啡店到底是如何创造价值、传递价值并最终获取价值的。"
+        },
+        {
+          "id": "action_jgBBwBn-",
+          "type": "spotlight",
+          "elementId": "text_2tg7_-WI"
+        },
+        {
+          "id": "action_ZWQVnFu1",
+          "type": "speech",
+          "text": "因此，本课程的学习目标非常明确：第一，深刻理解这六大要素的具体内涵；第二，能够熟练运用这个框架去分析一个真实的商业案例；第三，也是最重要的，透过咖啡店这个载体，洞察那些让生意得以成立并持续增长的关键成功因素。"
+        },
+        {
+          "id": "action_FADj7u48",
+          "type": "spotlight",
+          "elementId": "text_2xPfrLi-"
+        },
+        {
+          "id": "action_c58Rd1Ep",
+          "type": "speech",
+          "text": "我们的课程结构也将严格遵循从具象到抽象，再从抽象回归实践的认知路径。首先，我们从导入案例开始，去‘遇见’这家真实的咖啡店；接着，进入深度拆解环节，逐一分析六要素在其业务中的具体体现；最后，进行总结提炼，共同判断这个商业模式的成与败。好，让我们现在正式开始这场探索之旅。"
+        }
+      ],
+      "createdAt": 1785149433320,
+      "updatedAt": 1785149433320,
+      "outlineId": "scene_1"
+    },
+    {
+      "id": "m4KcCUlzx1RBHSG--t4VB",
+      "stageId": "jxg-bm-mainline-six-elements-coffee-v1",
+      "type": "interactive",
+      "title": "商业模式六要素画布",
+      "order": 2,
+      "content": {
+        "type": "interactive",
+        "url": "",
+        "html": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes, viewport-fit=cover\">\n  <title>商业模式六要素画布 · 交互图解</title>\n  <style>\n    * {\n      margin: 0;\n      padding: 0;\n      box-sizing: border-box;\n    }\n    body {\n      background: #0f172a;\n      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n      margin: 0;\n      padding: 20px;\n    }\n    .canvas-container {\n      width: 100%;\n      max-width: 1100px;\n      background: #1e293b;\n      border-radius: 2.5rem;\n      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);\n      padding: 1.5rem 1.8rem;\n      display: flex;\n      flex-direction: column;\n      gap: 1.2rem;\n    }\n    .diagram-wrapper {\n      position: relative;\n      width: 100%;\n      background: #0b1120;\n      border-radius: 2rem;\n      overflow: hidden;\n      box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);\n      aspect-ratio: 16 / 9;\n      min-height: 500px;\n    }\n    svg {\n      width: 100%;\n      height: 100%;\n      display: block;\n      user-select: none;\n    }\n    .node-group {\n      cursor: pointer;\n      transition: filter 0.2s ease;\n    }\n    .node-group:hover .node-bg {\n      filter: drop-shadow(0 8px 14px rgba(255,255,255,0.25));\n      stroke: #facc15;\n    }\n    .node-bg {\n      transition: stroke 0.2s, filter 0.2s;\n    }\n    .node-label {\n      font-weight: 600;\n      font-size: 14px;\n      fill: #0f172a;\n      text-anchor: middle;\n      dominant-baseline: middle;\n    }\n    .node-icon {\n      font-size: 24px;\n      text-anchor: middle;\n      dominant-baseline: middle;\n      fill: #1e293b;\n    }\n    .edge-line {\n      stroke: #94a3b8;\n      stroke-width: 2.5;\n      fill: none;\n      marker-end: url(#arrowhead);\n      opacity: 0.7;\n      transition: opacity 0.2s;\n    }\n    .edge-label-bg {\n      fill: #1e293b;\n      stroke: #475569;\n      stroke-width: 1px;\n      rx: 10px;\n      ry: 10px;\n    }\n    .edge-label-text {\n      fill: #e2e8f0;\n      font-size: 12px;\n      font-weight: 500;\n      text-anchor: middle;\n      dominant-baseline: middle;\n    }\n    .controls {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      flex-wrap: wrap;\n      gap: 1rem;\n    }\n    .step-buttons {\n      display: flex;\n      gap: 0.8rem;\n    }\n    .btn {\n      background: #334155;\n      border: none;\n      color: #f1f5f9;\n      font-weight: 600;\n      padding: 0.7rem 1.8rem;\n      border-radius: 3rem;\n      font-size: 0.95rem;\n      letter-spacing: 0.3px;\n      cursor: pointer;\n      backdrop-filter: blur(8px);\n      background: rgba(51, 65, 85, 0.8);\n      border: 1px solid rgba(255,255,255,0.1);\n      display: flex;\n      align-items: center;\n      gap: 0.4rem;\n      transition: all 0.2s;\n      box-shadow: 0 4px 10px rgba(0,0,0,0.4);\n    }\n    .btn:hover:not(:disabled) {\n      background: #475569;\n      border-color: rgba(255,255,255,0.25);\n      color: white;\n    }\n    .btn:disabled {\n      opacity: 0.4;\n      cursor: default;\n      background: #1e293b;\n    }\n    .detail-panel {\n      background: #0f172a;\n      border-radius: 1.8rem;\n      padding: 1.3rem 1.8rem;\n      border: 1px solid #334155;\n      box-shadow: 0 10px 20px rgba(0,0,0,0.5);\n      color: #e2e8f0;\n      display: flex;\n      align-items: flex-start;\n      gap: 1rem;\n      flex-wrap: wrap;\n      transition: all 0.2s;\n    }\n    .panel-icon {\n      font-size: 2.2rem;\n      background: #1e293b;\n      border-radius: 1rem;\n      padding: 0.5rem;\n      line-height: 1;\n    }\n    .panel-content {\n      flex: 1;\n    }\n    .panel-title {\n      font-size: 1.3rem;\n      font-weight: 700;\n      color: #facc15;\n      margin-bottom: 0.4rem;\n      display: flex;\n      align-items: center;\n      gap: 0.4rem;\n    }\n    .panel-desc {\n      font-size: 0.95rem;\n      color: #cbd5e1;\n      line-height: 1.5;\n      margin-bottom: 0.5rem;\n    }\n    .panel-case {\n      background: #1e293b;\n      border-radius: 1rem;\n      padding: 0.7rem 1rem;\n      font-size: 0.9rem;\n      color: #f8fafc;\n      border-left: 4px solid #facc15;\n    }\n    .case-label {\n      font-weight: 700;\n      color: #facc15;\n      margin-right: 0.3rem;\n    }\n    .progress-indicator {\n      font-size: 0.9rem;\n      color: #94a3b8;\n      margin-left: auto;\n    }\n    @media (max-width: 700px) {\n      .canvas-container {\n        padding: 1rem;\n        border-radius: 1.8rem;\n      }\n      .btn {\n        padding: 0.6rem 1.2rem;\n        font-size: 0.8rem;\n      }\n      .node-label {\n        font-size: 11px;\n      }\n      .detail-panel {\n        flex-direction: column;\n      }\n    }\n    .hidden-node {\n      opacity: 0;\n      pointer-events: none;\n      transition: opacity 0.25s ease;\n    }\n    .visible-node {\n      opacity: 1;\n      pointer-events: auto;\n    }\n  </style>\n\n<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css\">\n<script src=\"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js\"></script>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function() {\n    const katexOptions = {\n        delimiters: [\n            {left: '\\\\[', right: '\\\\]', display: true},\n            {left: '\\\\(', right: '\\\\)', display: false},\n            {left: '$$', right: '$$', display: true},\n            {left: '$', right: '$', display: false}\n        ],\n        throwOnError: false,\n        strict: false,\n        trust: true\n    };\n\n    let renderTimeout;\n    function safeRender() {\n        if (renderTimeout) clearTimeout(renderTimeout);\n        renderTimeout = setTimeout(() => {\n            renderMathInElement(document.body, katexOptions);\n        }, 100);\n    }\n\n    renderMathInElement(document.body, katexOptions);\n\n    const observer = new MutationObserver((mutations) => {\n        let shouldRender = false;\n        mutations.forEach((mutation) => {\n            if (mutation.target &&\n                mutation.target.className &&\n                typeof mutation.target.className === 'string' &&\n                mutation.target.className.includes('katex')) {\n                return;\n            }\n            shouldRender = true;\n        });\n\n        if (shouldRender) {\n            safeRender();\n        }\n    });\n\n    observer.observe(document.body, {\n        childList: true,\n        subtree: true,\n        characterData: true\n    });\n\n    setInterval(() => {\n        const text = document.body.innerText;\n        if (text.includes('\\\\(') || text.includes('$$')) {\n            safeRender();\n        }\n    }, 2000);\n});\n</script>\n</head>\n<body>\n<div class=\"canvas-container\">\n  <div class=\"diagram-wrapper\">\n    <svg viewBox=\"0 0 1000 580\" preserveAspectRatio=\"xMidYMid meet\">\n      <defs>\n        <marker id=\"arrowhead\" markerWidth=\"10\" markerHeight=\"7\" refX=\"9\" refY=\"3.5\" orient=\"auto\">\n          <polygon points=\"0 0, 10 3.5, 0 7\" fill=\"#94a3b8\" />\n        </marker>\n      </defs>\n      <g id=\"edges-layer\"></g>\n      <g id=\"nodes-layer\"></g>\n    </svg>\n  </div>\n\n  <div class=\"controls\">\n    <div class=\"step-buttons\">\n      <button id=\"prevBtn\" class=\"btn\" disabled>◀ 上一步</button>\n      <button id=\"nextBtn\" class=\"btn\">下一步 ▶</button>\n    </div>\n    <span id=\"progressText\" class=\"progress-indicator\"></span>\n  </div>\n\n  <div id=\"detailBox\" class=\"detail-panel\">\n    <span class=\"panel-icon\">🧭</span>\n    <div class=\"panel-content\">\n      <div class=\"panel-title\">商业模式六要素</div>\n      <div class=\"panel-desc\">点击画布中的节点或使用「下一步」逐步探索各模块。</div>\n      <div class=\"panel-case\"><span class=\"case-label\">☕ 咖啡店案例：</span>以精品咖啡馆为例，展示每个要素如何落地。</div>\n    </div>\n  </div>\n</div>\n\n<script type=\"application/json\" id=\"widget-config\">\n{\n  \"nodes\": [\n    { \"id\": \"n1\", \"label\": \"价值主张\", \"icon\": \"💎\", \"details\": \"企业为客户创造的核心价值，解决痛点或满足需求。明确差异化优势。\", \"case\": \"精品手冲咖啡、舒适第三空间、免费高速Wi-Fi，营造社区文化。\" },\n    { \"id\": \"n2\", \"label\": \"客户细分\", \"icon\": \"👥\", \"details\": \"定义目标客户群体，按需求、行为或特征划分。\", \"case\": \"远程工作者、大学生、文艺爱好者、周边商务人士。\" },\n    { \"id\": \"n3\", \"label\": \"渠道通路\", \"icon\": \"📡\", \"details\": \"如何触达客户并传递价值主张，包括传播、销售与售后。\", \"case\": \"线下门店、外卖平台（美团/饿了么）、小程序自提、社群运营。\" },\n    { \"id\": \"n4\", \"label\": \"客户关系\", \"icon\": \"🤝\", \"details\": \"企业与客户建立的互动类型，如个性化服务、自助服务、社区等。\", \"case\": \"会员积分制、咖啡师互动、定期咖啡品鉴活动、CRM系统管理。\" },\n    { \"id\": \"n5\", \"label\": \"核心资源\", \"icon\": \"⚙️\", \"details\": \"实现商业模式所需的关键资产，包括实物、知识、人力、金融。\", \"case\": \"资深烘焙师、独家豆源供应链、黄金地段店铺、品牌IP。\" },\n    { \"id\": \"n6\", \"label\": \"收入来源\", \"icon\": \"💰\", \"details\": \"企业从每个客户群体获得的现金流入，描述定价与盈利方式。\", \"case\": \"饮品销售、糕点搭配、咖啡豆零售、场地租赁、会员订阅费。\" }\n  ],\n  \"edges\": [\n    { \"from\": \"n1\", \"to\": \"n2\", \"label\": \"为谁创造\" },\n    { \"from\": \"n1\", \"to\": \"n3\", \"label\": \"传递方式\" },\n    { \"from\": \"n2\", \"to\": \"n4\", \"label\": \"建立关系\" },\n    { \"from\": \"n2\", \"to\": \"n5\", \"label\": \"所需资源\" },\n    { \"from\": \"n5\", \"to\": \"n3\", \"label\": \"支撑渠道\" },\n    { \"from\": \"n4\", \"to\": \"n6\", \"label\": \"付费意愿\" },\n    { \"from\": \"n6\", \"to\": \"n1\", \"label\": \"价值回报\" }\n  ],\n  \"revealOrder\": [\"n1\", \"n2\", \"n3\", \"n4\", \"n5\", \"n6\"]\n}\n</script>\n\n<script>\n  (function() {\n    // ----- 读取配置 -----\n    const configElement = document.getElementById('widget-config');\n    if (!configElement) return;\n    const config = JSON.parse(configElement.textContent);\n    const nodesData = config.nodes;\n    const edgesData = config.edges;\n    const revealOrder = config.revealOrder;\n\n    // ----- SVG 元素 -----\n    const svg = document.querySelector('svg');\n    const nodesLayer = document.getElementById('nodes-layer');\n    const edgesLayer = document.getElementById('edges-layer');\n\n    // ----- 节点尺寸常量 -----\n    const NODE_WIDTH = 180;\n    const NODE_HEIGHT = 70;\n    const ARROW_OFFSET = 12; \n\n    // ----- 节点布局坐标（手动美观布局）-----\n    const positions = {\n      n1: { x: 400, y: 80 },   // 价值主张 (中心偏上)\n      n2: { x: 200, y: 230 },  // 客户细分 (左下)\n      n3: { x: 700, y: 230 },  // 渠道通路 (右下)\n      n4: { x: 200, y: 400 },  // 客户关系 (左下下)\n      n5: { x: 700, y: 400 },  // 核心资源 (右下下)\n      n6: { x: 450, y: 520 }   // 收入来源 (底部中间)\n    };\n\n    // 存储节点DOM引用\n    const nodeElements = new Map();\n    let currentStep = 0;          // 当前展示索引 (0 ~ revealOrder.length-1)\n    const totalSteps = revealOrder.length;\n\n    // ----- 工具函数：计算边起点终点（考虑矩形边缘和箭头偏移）-----\n    function getEdgePath(fromPos, toPos) {\n      const dx = toPos.x - fromPos.x;\n      const dy = toPos.y - fromPos.y;\n      let sx, sy, ex, ey;\n\n      if (Math.abs(dy) > Math.abs(dx)) {\n        // 垂直方向为主\n        sx = fromPos.x;\n        sy = dy > 0 ? fromPos.y + NODE_HEIGHT/2 : fromPos.y - NODE_HEIGHT/2;\n        ex = toPos.x;\n        ey = dy > 0 ? toPos.y - NODE_HEIGHT/2 - ARROW_OFFSET : toPos.y + NODE_HEIGHT/2 + ARROW_OFFSET;\n      } else {\n        // 水平方向为主\n        sx = dx > 0 ? fromPos.x + NODE_WIDTH/2 : fromPos.x - NODE_WIDTH/2;\n        sy = fromPos.y;\n        ex = dx > 0 ? toPos.x - NODE_WIDTH/2 - ARROW_OFFSET : toPos.x + NODE_WIDTH/2 + ARROW_OFFSET;\n        ey = toPos.y;\n      }\n      return { sx, sy, ex, ey };\n    }\n\n    // ----- 绘制边（带标签）-----\n    function renderEdges() {\n      edgesLayer.innerHTML = '';\n      edgesData.forEach(edge => {\n        const fromPos = positions[edge.from];\n        const toPos = positions[edge.to];\n        if (!fromPos || !toPos) return;\n\n        const { sx, sy, ex, ey } = getEdgePath(fromPos, toPos);\n        \n        // 路径\n        const path = document.createElementNS(\"http://www.w3.org/2000/svg\", \"path\");\n        path.setAttribute(\"d\", `M ${sx} ${sy} L ${ex} ${ey}`);\n        path.setAttribute(\"class\", \"edge-line\");\n        path.setAttribute(\"marker-end\", \"url(#arrowhead)\");\n        edgesLayer.appendChild(path);\n\n        // 标签位置 (中点)\n        const midX = (sx + ex) / 2;\n        const midY = (sy + ey) / 2;\n\n        // 背景矩形\n        const labelBg = document.createElementNS(\"http://www.w3.org/2000/svg\", \"rect\");\n        labelBg.setAttribute(\"x\", midX - 32);\n        labelBg.setAttribute(\"y\", midY - 12);\n        labelBg.setAttribute(\"width\", 64);\n        labelBg.setAttribute(\"height\", 24);\n        labelBg.setAttribute(\"class\", \"edge-label-bg\");\n        edgesLayer.appendChild(labelBg);\n\n        // 文字\n        const labelText = document.createElementNS(\"http://www.w3.org/2000/svg\", \"text\");\n        labelText.setAttribute(\"x\", midX);\n        labelText.setAttribute(\"y\", midY);\n        labelText.setAttribute(\"class\", \"edge-label-text\");\n        labelText.textContent = edge.label || '';\n        edgesLayer.appendChild(labelText);\n      });\n    }\n\n    // ----- 创建节点组 -----\n    function createNodeElement(nodeData) {\n      const pos = positions[nodeData.id];\n      if (!pos) return null;\n\n      const g = document.createElementNS(\"http://www.w3.org/2000/svg\", \"g\");\n      g.setAttribute(\"class\", \"node-group\");\n      g.setAttribute(\"data-node-id\", nodeData.id);\n      g.setAttribute(\"transform\", `translate(${pos.x - NODE_WIDTH/2}, ${pos.y - NODE_HEIGHT/2})`);\n      \n      // 背景矩形\n      const rect = document.createElementNS(\"http://www.w3.org/2000/svg\", \"rect\");\n      rect.setAttribute(\"width\", NODE_WIDTH);\n      rect.setAttribute(\"height\", NODE_HEIGHT);\n      rect.setAttribute(\"rx\", \"16\");\n      rect.setAttribute(\"ry\", \"16\");\n      rect.setAttribute(\"fill\", \"#ffffff\");\n      rect.setAttribute(\"stroke\", \"#e2e8f0\");\n      rect.setAttribute(\"stroke-width\", \"2\");\n      rect.setAttribute(\"class\", \"node-bg\");\n      g.appendChild(rect);\n\n      // 图标\n      const iconText = document.createElementNS(\"http://www.w3.org/2000/svg\", \"text\");\n      iconText.setAttribute(\"x\", \"28\");\n      iconText.setAttribute(\"y\", NODE_HEIGHT/2);\n      iconText.setAttribute(\"class\", \"node-icon\");\n      iconText.textContent = nodeData.icon || '📌';\n      g.appendChild(iconText);\n\n      // 标签文字\n      const label = document.createElementNS(\"http://www.w3.org/2000/svg\", \"text\");\n      label.setAttribute(\"x\", \"105\");\n      label.setAttribute(\"y\", NODE_HEIGHT/2);\n      label.setAttribute(\"class\", \"node-label\");\n      label.textContent = nodeData.label;\n      g.appendChild(label);\n\n      // 点击事件\n      g.addEventListener('click', (e) => {\n        e.stopPropagation();\n        const nodeId = g.getAttribute('data-node-id');\n        const node = nodesData.find(n => n.id === nodeId);\n        if (node) {\n          updateDetailPanel(node);\n          // 同时将该节点设为当前激活步骤（如果已显示）\n          const stepIndex = revealOrder.indexOf(nodeId);\n          if (stepIndex !== -1 && isNodeVisible(nodeId)) {\n            setStep(stepIndex);\n          }\n        }\n      });\n\n      return g;\n    }\n\n    // ----- 渲染所有节点（初始隐藏由CSS类控制）-----\n    function renderNodes() {\n      nodesLayer.innerHTML = '';\n      nodeElements.clear();\n      nodesData.forEach(node => {\n        const el = createNodeElement(node);\n        if (el) {\n          el.classList.add('hidden-node'); // 默认隐藏\n          nodesLayer.appendChild(el);\n          nodeElements.set(node.id, el);\n        }\n      });\n    }\n\n    // ----- 判断节点是否可见 -----\n    function isNodeVisible(nodeId) {\n      const el = nodeElements.get(nodeId);\n      return el ? el.classList.contains('visible-node') : false;\n    }\n\n    // ----- 设置节点可见性（根据当前步骤）-----\n    function applyVisibilityByStep(step) {\n      // 显示 revealOrder[0] 到 revealOrder[step] 的节点\n      for (let i = 0; i <= step; i++) {\n        const nodeId = revealOrder[i];\n        const el = nodeElements.get(nodeId);\n        if (el) {\n          el.classList.remove('hidden-node');\n          el.classList.add('visible-node');\n        }\n      }\n      // 隐藏其余节点\n      for (let i = step + 1; i < totalSteps; i++) {\n        const nodeId = revealOrder[i];\n        const el = nodeElements.get(nodeId);\n        if (el) {\n          el.classList.add('hidden-node');\n          el.classList.remove('visible-node');\n        }\n      }\n    }\n\n    // ----- 更新详情面板 -----\n    function updateDetailPanel(node) {\n      const detailBox = document.getElementById('detailBox');\n      if (!detailBox || !node) return;\n      const iconSpan = detailBox.querySelector('.panel-icon');\n      const titleDiv = detailBox.querySelector('.panel-title');\n      const descDiv = detailBox.querySelector('.panel-desc');\n      const caseDiv = detailBox.querySelector('.panel-case');\n\n      if (iconSpan) iconSpan.textContent = node.icon || '🧩';\n      if (titleDiv) titleDiv.innerHTML = `${node.icon || ''} ${node.label}`;\n      if (descDiv) descDiv.textContent = node.details || '暂无详细描述。';\n      if (caseDiv) {\n        caseDiv.innerHTML = `<span class=\"case-label\">☕ 咖啡店案例：</span>${node.case || '示例待补充'}`;\n      }\n    }\n\n    // ----- 设置步骤并更新UI -----\n    function setStep(step) {\n      if (step < 0 || step >= totalSteps) return;\n      currentStep = step;\n      applyVisibilityByStep(step);\n\n      // 更新按钮状态\n      document.getElementById('prevBtn').disabled = (currentStep === 0);\n      document.getElementById('nextBtn').disabled = (currentStep === totalSteps - 1);\n      \n      // 更新进度文字\n      const progressText = document.getElementById('progressText');\n      if (progressText) {\n        progressText.textContent = `${currentStep + 1} / ${totalSteps} 模块`;\n      }\n\n      // 自动展示当前步骤最后一个节点的详情（或当前激活节点）\n      const activeNodeId = revealOrder[currentStep];\n      const activeNode = nodesData.find(n => n.id === activeNodeId);\n      if (activeNode) {\n        updateDetailPanel(activeNode);\n      }\n    }\n\n    // ----- 初始化与事件绑定 -----\n    function init() {\n      renderEdges();\n      renderNodes();\n      \n      // 初始步骤0：显示第一个节点\n      setStep(0);\n\n      // 按钮监听\n      document.getElementById('nextBtn').addEventListener('click', () => {\n        if (currentStep < totalSteps - 1) {\n          setStep(currentStep + 1);\n        }\n      });\n      document.getElementById('prevBtn').addEventListener('click', () => {\n        if (currentStep > 0) {\n          setStep(currentStep - 1);\n        }\n      });\n\n      // 键盘导航（左右箭头）\n      window.addEventListener('keydown', (e) => {\n        if (e.key === 'ArrowRight' && currentStep < totalSteps - 1) {\n          e.preventDefault();\n          setStep(currentStep + 1);\n        } else if (e.key === 'ArrowLeft' && currentStep > 0) {\n          e.preventDefault();\n          setStep(currentStep - 1);\n        }\n      });\n    }\n\n    // 启动一切\n    init();\n  })();\n</script>\n</body>\n</html>",
+        "widgetType": "diagram",
+        "widgetConfig": {
+          "nodes": [
+            {
+              "id": "n1",
+              "label": "价值主张",
+              "icon": "💎",
+              "details": "企业为客户创造的核心价值，解决痛点或满足需求。明确差异化优势。",
+              "case": "精品手冲咖啡、舒适第三空间、免费高速Wi-Fi，营造社区文化。"
+            },
+            {
+              "id": "n2",
+              "label": "客户细分",
+              "icon": "👥",
+              "details": "定义目标客户群体，按需求、行为或特征划分。",
+              "case": "远程工作者、大学生、文艺爱好者、周边商务人士。"
+            },
+            {
+              "id": "n3",
+              "label": "渠道通路",
+              "icon": "📡",
+              "details": "如何触达客户并传递价值主张，包括传播、销售与售后。",
+              "case": "线下门店、外卖平台（美团/饿了么）、小程序自提、社群运营。"
+            },
+            {
+              "id": "n4",
+              "label": "客户关系",
+              "icon": "🤝",
+              "details": "企业与客户建立的互动类型，如个性化服务、自助服务、社区等。",
+              "case": "会员积分制、咖啡师互动、定期咖啡品鉴活动、CRM系统管理。"
+            },
+            {
+              "id": "n5",
+              "label": "核心资源",
+              "icon": "⚙️",
+              "details": "实现商业模式所需的关键资产，包括实物、知识、人力、金融。",
+              "case": "资深烘焙师、独家豆源供应链、黄金地段店铺、品牌IP。"
+            },
+            {
+              "id": "n6",
+              "label": "收入来源",
+              "icon": "💰",
+              "details": "企业从每个客户群体获得的现金流入，描述定价与盈利方式。",
+              "case": "饮品销售、糕点搭配、咖啡豆零售、场地租赁、会员订阅费。"
+            }
+          ],
+          "edges": [
+            {
+              "from": "n1",
+              "to": "n2",
+              "label": "为谁创造"
+            },
+            {
+              "from": "n1",
+              "to": "n3",
+              "label": "传递方式"
+            },
+            {
+              "from": "n2",
+              "to": "n4",
+              "label": "建立关系"
+            },
+            {
+              "from": "n2",
+              "to": "n5",
+              "label": "所需资源"
+            },
+            {
+              "from": "n5",
+              "to": "n3",
+              "label": "支撑渠道"
+            },
+            {
+              "from": "n4",
+              "to": "n6",
+              "label": "付费意愿"
+            },
+            {
+              "from": "n6",
+              "to": "n1",
+              "label": "价值回报"
+            }
+          ],
+          "revealOrder": ["n1", "n2", "n3", "n4", "n5", "n6"]
+        }
+      },
+      "actions": [
+        {
+          "id": "action_caqGbZi1",
+          "type": "speech",
+          "text": "刚才我们走进了那家咖啡店，看到了它丰富的产品线和忙碌的顾客。要理解这些表象背后的商业逻辑，我们需要一个结构化的分析工具。这就是接下来要介绍的商业模式六要素画布，它能帮我们把一家企业的业务逻辑拆解清楚。"
+        },
+        {
+          "id": "action_weZdJMhl",
+          "type": "widget_highlight",
+          "target": "#nodes-layer",
+          "content": "这六个模块构成了商业模式的核心骨架，我们先从最中心的‘价值主张’开始看。"
+        },
+        {
+          "id": "action_eSxA5nmq",
+          "type": "speech",
+          "text": "在这个画布里，每一个模块都对应一个关键问题。比如，‘价值主张’问的是：我们到底为客户创造了什么独特的价值？是极致的性价比，还是一种全新的体验？"
+        },
+        {
+          "id": "action_Kp2NnFxy",
+          "type": "widget_annotation",
+          "target": "[data-node-id='n1']",
+          "content": "价值主张：精品咖啡与第三空间"
+        },
+        {
+          "id": "action_wOFhb7uA",
+          "type": "speech",
+          "text": "就像我们的咖啡店，它售卖的远不止一杯咖啡，更是一个适合工作和社交的‘第三空间’。你可以试着点击一下‘价值主张’这个模块，看看它的详细描述和我们案例的具体体现。"
+        },
+        {
+          "id": "action_6zTO1ely",
+          "type": "speech",
+          "text": "光有一个好的主张是不够的，我们还需要清楚的知道，这个价值是‘为谁’创造的，以及‘如何’传递给他们。这也就是‘客户细分’和‘渠道通路’要解决的问题。请继续点击其他几个模块，看看它们之间是如何通过箭头联系起来的。"
+        },
+        {
+          "id": "action_WljYYSn9",
+          "type": "widget_reveal",
+          "target": "#detailBox",
+          "content": "点击‘客户细分’模块，查看咖啡店的目标客群描述。"
+        }
+      ],
+      "createdAt": 1785149582714,
+      "updatedAt": 1785149582714,
+      "outlineId": "scene_2"
+    },
+    {
+      "id": "oX1ViDsOYpjpAeyNc1_5d",
+      "stageId": "jxg-bm-mainline-six-elements-coffee-v1",
+      "type": "slide",
+      "title": "价值主张：我们的咖啡与众不同",
+      "order": 3,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "YXDFIzxNkvx2OXrRiD7Xm",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_61b88BI6",
+              "type": "text",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 76,
+              "content": "<p style=\"font-size: 32px;\"><strong>价值主张：我们的咖啡与众不同</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1a1a1a",
+              "rotate": 0
+            },
+            {
+              "id": "shape_HVatDdfh",
+              "type": "shape",
+              "left": 60,
+              "top": 136,
+              "width": 880,
+              "height": 2,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#d4a373",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_yWSZqBGG",
+              "type": "text",
+              "left": 60,
+              "top": 160,
+              "width": 440,
+              "height": 58,
+              "content": "<p style=\"font-size: 24px;\"><strong>核心定义</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_3CHK0Hum",
+              "type": "text",
+              "left": 60,
+              "top": 230,
+              "width": 440,
+              "height": 118,
+              "content": "<p style=\"font-size: 18px;\">• 解决客户问题或满足其需求</p><p style=\"font-size: 18px;\">• 构成客户选择的核心理由</p><p style=\"font-size: 18px;\">• 区别于竞争者的独特卖点</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#555555",
+              "rotate": 0
+            },
+            {
+              "id": "text_s2M7E8d2",
+              "type": "text",
+              "left": 540,
+              "top": 160,
+              "width": 400,
+              "height": 58,
+              "content": "<p style=\"font-size: 24px;\"><strong>咖啡馆案例定位</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_VqPXSYQG",
+              "type": "text",
+              "left": 540,
+              "top": 230,
+              "width": 400,
+              "height": 118,
+              "content": "<p style=\"font-size: 18px;\"><strong>精选产地豆</strong> · 品质源头</p><p style=\"font-size: 18px;\"><strong>手冲工艺</strong> · 制作差异化</p><p style=\"font-size: 18px;\"><strong>第三空间</strong> · 体验增值</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#555555",
+              "rotate": 0
+            },
+            {
+              "id": "text_q_4_B1Kr",
+              "type": "text",
+              "left": 60,
+              "top": 380,
+              "width": 440,
+              "height": 58,
+              "content": "<p style=\"font-size: 24px;\"><strong>与竞争者差异点</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_T9NOvoGq",
+              "type": "text",
+              "left": 60,
+              "top": 450,
+              "width": 440,
+              "height": 76,
+              "content": "<p style=\"font-size: 18px;\">• 连锁品牌：标品 vs. 个性手冲</p><p style=\"font-size: 18px;\">• 便利店咖啡：便捷 vs. 空间体验</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#555555",
+              "rotate": 0
+            },
+            {
+              "id": "text_NCHuxs06",
+              "type": "text",
+              "left": 540,
+              "top": 380,
+              "width": 400,
+              "height": 58,
+              "content": "<p style=\"font-size: 24px;\"><strong>价值主张画布（模板）</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_iYMgEw1i",
+              "type": "shape",
+              "left": 540,
+              "top": 448,
+              "width": 400,
+              "height": 80,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f4f1ea",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_AhaaYbT1",
+              "type": "text",
+              "left": 560,
+              "top": 454,
+              "width": 360,
+              "height": 68,
+              "content": "<p style=\"font-size: 16px; color: #7a6e5d;\">待办任务 → 痛点 → 收益</p><p style=\"font-size: 16px; color: #7a6e5d;\">产品/服务 → 痛点缓解方案 → 收益创造方案</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#7a6e5d",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action__OH1HAPi",
+          "type": "spotlight",
+          "elementId": "text_3CHK0Hum"
+        },
+        {
+          "id": "action_C3uiDYwv",
+          "type": "speech",
+          "text": "在了解了商业模式画布的整体结构后，我们来深入探讨它的核心——价值主张。简单来说，价值主张就是你如何帮助客户解决问题或满足其关键需求。它构成了客户选择你而非其他选项的根本理由，是你区别于竞争者的独特卖点。"
+        },
+        {
+          "id": "action_szG0M0LJ",
+          "type": "spotlight",
+          "elementId": "text_VqPXSYQG"
+        },
+        {
+          "id": "action_Yz-OebqX",
+          "type": "speech",
+          "text": "让我们结合咖啡店的案例来理解。我们的价值主张非常清晰，可以归纳为三个层面：第一，产品源头的价值，我们坚持‘精选产地豆’，从源头上确保品质；第二，制作过程的差异化，‘手冲工艺’代表了专业与个性；第三，也是最关键的，我们创造的不仅仅是一杯咖啡，而是一个‘第三空间’的增值体验。"
+        },
+        {
+          "id": "action_zAUnDv_2",
+          "type": "spotlight",
+          "elementId": "text_T9NOvoGq"
+        },
+        {
+          "id": "action_tGzqfEac",
+          "type": "speech",
+          "text": "这个价值主张的独特性，在与现有竞争者的对比中会变得更加鲜明。大型连锁品牌通过标准化提供的是标品，而我们通过手冲提供的是个性。便利店咖啡解决的是便捷需求，而我们通过空间体验承载了社交与放松的更高层次需求。我们在每一个维度上都创造了不同的价值。"
+        },
+        {
+          "id": "action_Pqu4Um4d",
+          "type": "spotlight",
+          "elementId": "text_AhaaYbT1"
+        },
+        {
+          "id": "action_OCANUTmh",
+          "type": "speech",
+          "text": "如何系统性地设计这样一个价值主张呢？价值主张画布给我们提供了一个清晰的结构。它要求我们首先厘清客户的待办任务、在此过程中的痛点以及期望的收益，然后对应地设计我们的产品与服务如何缓解这些痛点、创造这份收益。这是一个从客户视角倒推价值创造的方法。",
+          "audioId": "tts_s3_action_OCANUTmh"
+        },
+        {
+          "id": "action_lYNbtb1R",
+          "type": "spotlight",
+          "elementId": "text_61b88BI6"
+        },
+        {
+          "id": "action_71tzSnEL",
+          "type": "speech",
+          "text": "所以，‘我们的咖啡与众不同’并非一句口号，而是一个由精确的客户价值创造逻辑支撑的商业设计。有了这个核心，下一步我们将探讨它到底是为‘谁’创造的。",
+          "audioId": "tts_s3_action_71tzSnEL"
+        }
+      ],
+      "createdAt": 1785149805778,
+      "updatedAt": 1785149805778,
+      "outlineId": "scene_3"
+    },
+    {
+      "id": "wfoM29bX9wxsf7k_kPuA0",
+      "stageId": "jxg-bm-mainline-six-elements-coffee-v1",
+      "type": "slide",
+      "title": "客户细分：瞄准年轻白领与咖啡爱好者",
+      "order": 4,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "B-mQ8iFV5Yj1zlwUv6uQZ",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_HvHUBJhx",
+              "type": "text",
+              "left": 80,
+              "top": 60,
+              "width": 840,
+              "height": 64,
+              "content": "<p style=\"font-size:28px;\"><strong>客户细分：年轻白领与咖啡爱好者</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#2c3e50",
+              "rotate": 0
+            },
+            {
+              "id": "shape_yscD-oKw",
+              "type": "shape",
+              "left": 80,
+              "top": 130,
+              "width": 100,
+              "height": 3,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_nwXSAXfB",
+              "type": "text",
+              "left": 80,
+              "top": 155,
+              "width": 840,
+              "height": 49,
+              "content": "<p style=\"font-size:18px;\">基于多维标准，聚焦核心客群画像与需求</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#7f8c8d",
+              "rotate": 0
+            },
+            {
+              "id": "shape_GQX3Hqk1",
+              "type": "shape",
+              "left": 60,
+              "top": 240,
+              "width": 280,
+              "height": 160,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#eaf2f8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_YDcCuDKM",
+              "type": "shape",
+              "left": 360,
+              "top": 240,
+              "width": 280,
+              "height": 160,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e8f8f5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_kjAcdhwZ",
+              "type": "shape",
+              "left": 660,
+              "top": 240,
+              "width": 280,
+              "height": 160,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#fef9e7",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_aL7KpOsP",
+              "type": "text",
+              "left": 80,
+              "top": 265,
+              "width": 240,
+              "height": 52,
+              "content": "<p style=\"font-size:20px; text-align:center;\"><strong>城市白领</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#2980b9",
+              "rotate": 0
+            },
+            {
+              "id": "text_-U4Humdk",
+              "type": "text",
+              "left": 85,
+              "top": 325,
+              "width": 230,
+              "height": 58,
+              "content": "<p style=\"font-size:14px; text-align:center;\">25-35岁，讲究效率</p><p style=\"font-size:14px; text-align:center;\">社交与品质兼顾</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#34495e",
+              "rotate": 0
+            },
+            {
+              "id": "text_mDKYINca",
+              "type": "text",
+              "left": 380,
+              "top": 265,
+              "width": 240,
+              "height": 52,
+              "content": "<p style=\"font-size:20px; text-align:center;\"><strong>学生群体</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1abc9c",
+              "rotate": 0
+            },
+            {
+              "id": "text_039XzgoB",
+              "type": "text",
+              "left": 385,
+              "top": 325,
+              "width": 230,
+              "height": 58,
+              "content": "<p style=\"font-size:14px; text-align:center;\">18-24岁，高性价比</p><p style=\"font-size:14px; text-align:center;\">学习社交空间</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#34495e",
+              "rotate": 0
+            },
+            {
+              "id": "text_ZgZ2J2R-",
+              "type": "text",
+              "left": 680,
+              "top": 265,
+              "width": 240,
+              "height": 52,
+              "content": "<p style=\"font-size:20px; text-align:center;\"><strong>自由职业者</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#f39c12",
+              "rotate": 0
+            },
+            {
+              "id": "text_yIrTzZ1t",
+              "type": "text",
+              "left": 685,
+              "top": 325,
+              "width": 230,
+              "height": 58,
+              "content": "<p style=\"font-size:14px; text-align:center;\">28-40岁，灵活办公</p><p style=\"font-size:14px; text-align:center;\">氛围与网络需求</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#34495e",
+              "rotate": 0
+            },
+            {
+              "id": "shape_Bt403ezr",
+              "type": "shape",
+              "left": 80,
+              "top": 440,
+              "width": 840,
+              "height": 1,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#bdc3c7",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_WkcEkccg",
+              "type": "text",
+              "left": 80,
+              "top": 460,
+              "width": 840,
+              "height": 46,
+              "content": "<p style=\"font-size:16px; color:#2c3e50;\">核心差异：<strong>消费场景、支付意愿与空间需求</strong>各不相同</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#2c3e50",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_k4HOerVP",
+          "type": "spotlight",
+          "elementId": "text_nwXSAXfB"
+        },
+        {
+          "id": "action_CWXd2W7P",
+          "type": "speech",
+          "text": "基于我们刚刚确立的价值主张，商业模式画布的第四个模块——客户细分，要回答一个根本问题：我们到底在为谁创造价值？"
+        },
+        {
+          "id": "action_BaFU576k",
+          "type": "spotlight",
+          "elementId": "text_HvHUBJhx"
+        },
+        {
+          "id": "action_kyHyfaVY",
+          "type": "speech",
+          "text": "对于我们的精品咖啡店项目，核心客群锁定为两大类：25岁到35岁的城市白领，以及追求高品质体验的咖啡爱好者。这不是凭感觉拍脑袋，而是通过多维细分标准筛选出来的。"
+        },
+        {
+          "id": "action_dS07GJ2z",
+          "type": "spotlight",
+          "elementId": "text_aL7KpOsP"
+        },
+        {
+          "id": "action_2YFrq8-D",
+          "type": "speech",
+          "text": "先看第一类，城市白领。他们处于职业上升期，讲究效率与社交的平衡。一杯好咖啡不仅是提神的工具，更是办公空间的延续和社交身份的标签。"
+        },
+        {
+          "id": "action_j_ViKsUg",
+          "type": "spotlight",
+          "elementId": "text_039XzgoB"
+        },
+        {
+          "id": "action_Ak0PKZBw",
+          "type": "speech",
+          "text": "第二类是学生群体。他们预算有限但消费频次高，需要一个性价比足够好、能兼顾学习和轻度社交的第三空间。需求与白领完全不同。"
+        },
+        {
+          "id": "action_urbeyrGz",
+          "type": "spotlight",
+          "elementId": "text_yIrTzZ1t"
+        },
+        {
+          "id": "action_MdKlo8Xe",
+          "type": "speech",
+          "text": "第三类是自由职业者。他们对空间的要求更具体——稳定的高速网络、舒适的桌椅、以及不会被驱赶的灵活办公氛围。这是典型的需求驱动型细分结果。"
+        },
+        {
+          "id": "action_emKiCju9",
+          "type": "spotlight",
+          "elementId": "text_WkcEkccg"
+        },
+        {
+          "id": "action_E2UFqyNd",
+          "type": "speech",
+          "text": "这三类客群的消费场景、支付意愿以及对空间的需求截然不同。这就提醒我们，单一的价值主张可能无法同时击中所有细分市场——后续我们在设计渠道和客户关系时，必须有所取舍。"
+        }
+      ],
+      "createdAt": 1785149964827,
+      "updatedAt": 1785149964827,
+      "outlineId": "scene_4"
+    },
+    {
+      "id": "_9rtD5Qqc7XaK_WgdgQNM",
+      "stageId": "jxg-bm-mainline-six-elements-coffee-v1",
+      "type": "slide",
+      "title": "渠道通路：线上线下触达",
+      "order": 5,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "k92iQs5rUSi5rIuNPafdE",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_uRw1t3KI",
+              "type": "text",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 64,
+              "content": "<p style=\"font-size:28px;\"><strong>渠道通路：线上线下触达</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e293b",
+              "rotate": 0
+            },
+            {
+              "id": "shape_efD1NtCb",
+              "type": "shape",
+              "left": 60,
+              "top": 124,
+              "width": 80,
+              "height": 4,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#3b82f6",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_mMkBgiKX",
+              "type": "text",
+              "left": 60,
+              "top": 140,
+              "width": 880,
+              "height": 46,
+              "content": "<p style=\"font-size:16px; color: #64748b;\">Channel Pathways: Delivering Value Proposition</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#64748b",
+              "rotate": 0
+            },
+            {
+              "id": "shape_ijhrWb06",
+              "type": "shape",
+              "left": 60,
+              "top": 210,
+              "width": 425,
+              "height": 300,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_pkDMzd7p",
+              "type": "shape",
+              "left": 60,
+              "top": 210,
+              "width": 6,
+              "height": 300,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#3b82f6",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_ZCh2DeAm",
+              "type": "text",
+              "left": 86,
+              "top": 230,
+              "width": 379,
+              "height": 52,
+              "content": "<p style=\"font-size:20px;\"><strong>渠道类型</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e293b",
+              "rotate": 0
+            },
+            {
+              "id": "text_ImDl8tJ2",
+              "type": "text",
+              "left": 86,
+              "top": 290,
+              "width": 379,
+              "height": 180,
+              "content": "<p style=\"font-size:16px; line-height: 1.6;\"><strong>自有渠道</strong></p><p style=\"font-size:15px; color: #475569; line-height: 1.5;\">• 线下门店：高体验，高固定成本</p><p style=\"font-size:15px; color: #475569; line-height: 1.5;\">• 微信小程序：低成本，高粘性</p><p style=\"font-size:16px; line-height: 1.6; margin-top: 10px;\"><strong>合作渠道</strong></p><p style=\"font-size:15px; color: #475569; line-height: 1.5;\">• 外卖平台：大流量，高抽成</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shape_9jZmd-Ts",
+              "type": "shape",
+              "left": 515,
+              "top": 210,
+              "width": 425,
+              "height": 300,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_194I6nin",
+              "type": "shape",
+              "left": 515,
+              "top": 210,
+              "width": 6,
+              "height": 300,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f59e0b",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_HiKsq-Zb",
+              "type": "text",
+              "left": 541,
+              "top": 230,
+              "width": 379,
+              "height": 52,
+              "content": "<p style=\"font-size:20px;\"><strong>成本与转化洞察</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e293b",
+              "rotate": 0
+            },
+            {
+              "id": "text_mG9HZpr0",
+              "type": "text",
+              "left": 541,
+              "top": 290,
+              "width": 379,
+              "height": 190,
+              "content": "<p style=\"font-size:15px; color: #475569; line-height: 1.5;\">• 门店：获客成本高，转化率 > 30%</p><p style=\"font-size:15px; color: #475569; line-height: 1.5;\">• 平台：获客成本低，转化率 < 10%</p><p style=\"font-size:15px; color: #475569; line-height: 1.5;\">• 小程序：成本极低，依赖私域运营</p><p style=\"font-size:16px; color: #1e293b; line-height: 1.6; margin-top: 10px;\"><strong>核心策略</strong></p><p style=\"font-size:15px; color: #475569; line-height: 1.5;\">线下引流，线上沉淀，多渠道触达</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shape_cRBaf-Lr",
+              "type": "shape",
+              "left": 60,
+              "top": 530,
+              "width": 880,
+              "height": 1,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e2e8f0",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_nbMbiiIU",
+              "type": "text",
+              "left": 60,
+              "top": 540,
+              "width": 880,
+              "height": 43,
+              "content": "<p style=\"font-size:14px; color: #94a3b8; text-align: right;\">九轩阁商业模式大课 | 渠道通路</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#94a3b8",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f8fafc"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_j2fcmR0r",
+          "type": "spotlight",
+          "elementId": "text_mMkBgiKX"
+        },
+        {
+          "id": "action_5IPLGTRa",
+          "type": "speech",
+          "text": "刚才我们提到，针对不同客群需要有所取舍。这个取舍，首先就体现在渠道通路的设计上。我们来看看，如何把价值主张高效地传递给客户。"
+        },
+        {
+          "id": "action_bFsdNkdd",
+          "type": "spotlight",
+          "elementId": "text_ZCh2DeAm"
+        },
+        {
+          "id": "action_X4zvz0TK",
+          "type": "speech",
+          "text": "渠道通常分为两大类：自有渠道和合作渠道。两者的核心区别在于，对渠道的控制力以及成本结构。"
+        },
+        {
+          "id": "action_lLc4kPVU",
+          "type": "spotlight",
+          "elementId": "text_ImDl8tJ2"
+        },
+        {
+          "id": "action_xO5aCQE5",
+          "type": "speech",
+          "text": "比如，线下门店是典型的自有渠道。它提供高体验，但与高固定成本直接挂钩。而微信小程序，同样是自有渠道，却是一种轻量化、高粘性的触达方式，成本极低。"
+        },
+        {
+          "id": "action_-va47NTD",
+          "type": "laser",
+          "elementId": "text_ImDl8tJ2"
+        },
+        {
+          "id": "action_1cexrtSX",
+          "type": "speech",
+          "text": "另一方面，像外卖平台这类合作渠道，能带来海量的流量，但你需要为此支付佣金，而且客户数据并不完全掌握在自己手里。"
+        },
+        {
+          "id": "action_h9TcpKqT",
+          "type": "spotlight",
+          "elementId": "text_HiKsq-Zb"
+        },
+        {
+          "id": "action_8EAdvLpN",
+          "type": "speech",
+          "text": "做渠道决策，我们最终看的是成本与转化效率。门店获客成本最高，但其转化率往往可以超过30%。平台获客成本相对低，但转化率是个瓶颈。"
+        },
+        {
+          "id": "action_RJlmHr6f",
+          "type": "spotlight",
+          "elementId": "text_mG9HZpr0"
+        },
+        {
+          "id": "action_OcWaXMnH",
+          "type": "speech",
+          "text": "而小程序，成本极低，但它强依赖你的私域运营能力。所以，没有绝对的好渠道，只有与你的客群和阶段最匹配的渠道组合。一个成熟的商业模式，追求的是一种兼顾体验、成本和规模的整合策略。"
+        }
+      ],
+      "createdAt": 1785149988158,
+      "updatedAt": 1785149988158,
+      "outlineId": "scene_5"
+    },
+    {
+      "id": "wI7qfmfV7eKdwN6UP1itY",
+      "stageId": "jxg-bm-mainline-six-elements-coffee-v1",
+      "type": "slide",
+      "title": "客户关系：会员制度与社区",
+      "order": 6,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "Pt3BZP2hwPD3nUwTtodYX",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "shape_ftNArd2q",
+              "type": "shape",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 60,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#1e3a5f",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_PM4WYIfg",
+              "type": "text",
+              "left": 60,
+              "top": 54,
+              "width": 880,
+              "height": 52,
+              "content": "<p style=\"font-size:24px;color:#ffffff;text-align:center;\"><strong>客户关系：会员制度与社区</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            },
+            {
+              "id": "text_hhJxMBMH",
+              "type": "text",
+              "left": 80,
+              "top": 130,
+              "width": 840,
+              "height": 46,
+              "content": "<p style=\"font-size:18px;color:#555555;\"><strong>建立、维系并深化客户关系，驱动长期价值增长</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#555555",
+              "rotate": 0
+            },
+            {
+              "id": "shape_gZuy-9s2",
+              "type": "shape",
+              "left": 80,
+              "top": 184,
+              "width": 840,
+              "height": 1,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#cccccc",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shape_zZB0ofwZ",
+              "type": "shape",
+              "left": 60,
+              "top": 205,
+              "width": 280,
+              "height": 200,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f0f4f8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_9hdkxKgy",
+              "type": "text",
+              "left": 80,
+              "top": 220,
+              "width": 240,
+              "height": 46,
+              "content": "<p style=\"font-size:18px;color:#1e3a5f;text-align:center;\"><strong>个人助理</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e3a5f",
+              "rotate": 0
+            },
+            {
+              "id": "text_P5xfKChK",
+              "type": "text",
+              "left": 80,
+              "top": 270,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;color:#333333;\">· 专属客户经理对接</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_JHYv1Euv",
+              "type": "text",
+              "left": 80,
+              "top": 310,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;color:#333333;\">· 深度了解个性化需求</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_PMWAGwJO",
+              "type": "text",
+              "left": 80,
+              "top": 350,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;color:#333333;\">· 高净值客户维系场景</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_bbA3bEbk",
+              "type": "shape",
+              "left": 360,
+              "top": 205,
+              "width": 280,
+              "height": 200,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f0f4f8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_h5eoJV3D",
+              "type": "text",
+              "left": 380,
+              "top": 220,
+              "width": 240,
+              "height": 46,
+              "content": "<p style=\"font-size:18px;color:#1e3a5f;text-align:center;\"><strong>自助服务</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e3a5f",
+              "rotate": 0
+            },
+            {
+              "id": "text_prfabyzb",
+              "type": "text",
+              "left": 380,
+              "top": 270,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;color:#333333;\">· 标准化在线服务入口</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_DqSiFE5h",
+              "type": "text",
+              "left": 380,
+              "top": 310,
+              "width": 240,
+              "height": "43",
+              "content": "<p style=\"font-size:14px;color:#333333;\">· 会员自助积分与兑换</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_Jjmu-CHU",
+              "type": "text",
+              "left": 380,
+              "top": 350,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;color:#333333;\">· 自动化降低成本结构</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_xShXo9HS",
+              "type": "shape",
+              "left": 660,
+              "top": 205,
+              "width": 280,
+              "height": 200,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f0f4f8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_BcQsgMpF",
+              "type": "text",
+              "left": 680,
+              "top": 220,
+              "width": 240,
+              "height": 46,
+              "content": "<p style=\"font-size:18px;color:#1e3a5f;text-align:center;\"><strong>社区</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e3a5f",
+              "rotate": 0
+            },
+            {
+              "id": "text_wY-yCXcl",
+              "type": "text",
+              "left": 680,
+              "top": 270,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;color:#333333;\">· 咖啡课堂等主题活动</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_7UQhAw5j",
+              "type": "text",
+              "left": 680,
+              "top": 310,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;color:#333333;\">· 用户间互动与UGC</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_h4meBAlP",
+              "type": "text",
+              "left": 680,
+              "top": 350,
+              "width": 240,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;color:#333333;\">· 品牌粘性与情感归属</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_JpcshhiE",
+              "type": "text",
+              "left": 80,
+              "top": 390,
+              "width": 240,
+              "height": 20,
+              "content": "<p style=\"font-size:12px;color:#888888;text-align:center;\">高投入 | 强信任 | 低频高额</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#888888",
+              "rotate": 0
+            },
+            {
+              "id": "text_pex1NZLO",
+              "type": "text",
+              "left": 380,
+              "top": 390,
+              "width": 240,
+              "height": 20,
+              "content": "<p style=\"font-size:12px;color:#888888;text-align:center;\">标准化 | 低成本 | 高频互动</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#888888",
+              "rotate": 0
+            },
+            {
+              "id": "text_nFCajV2q",
+              "type": "text",
+              "left": 680,
+              "top": 390,
+              "width": 240,
+              "height": 20,
+              "content": "<p style=\"font-size:12px;color:#888888;text-align:center;\">网络效应 | 强归属 | 自驱力</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#888888",
+              "rotate": 0
+            },
+            {
+              "id": "shape_PppfbDu0",
+              "type": "shape",
+              "left": 80,
+              "top": 435,
+              "width": 840,
+              "height": 1,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#cccccc",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_EvMqKSQL",
+              "type": "text",
+              "left": 80,
+              "top": 450,
+              "width": 200,
+              "height": 46,
+              "content": "<p style=\"font-size:18px;color:#1e3a5f;\"><strong>客户生命周期管理</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e3a5f",
+              "rotate": 0
+            },
+            {
+              "id": "text_5RCWh6R5",
+              "type": "text",
+              "left": 350,
+              "top": 450,
+              "width": 200,
+              "height": 46,
+              "content": "<p style=\"font-size:18px;color:#1e3a5f;\"><strong>关系维系关键指标</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e3a5f",
+              "rotate": 0
+            },
+            {
+              "id": "text_Dts6R0Ln",
+              "type": "text",
+              "left": 80,
+              "top": 500,
+              "width": 250,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;color:#333333;\">获客 → 激活 → 留存 → 变现 → 推荐</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_toBiIsKL",
+              "type": "text",
+              "left": 350,
+              "top": 500,
+              "width": 250,
+              "height": 43,
+              "content": "<p style=\"font-size:14px;color:#333333;\">NPS · 复购率 · LTV · CAC</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_2jlkFU56",
+              "type": "shape",
+              "left": 80,
+              "top": 558,
+              "width": 840,
+              "height": 1,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#cccccc",
+              "fixedRatio": false,
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_-zFMfyde",
+          "type": "spotlight",
+          "elementId": "text_PM4WYIfg"
+        },
+        {
+          "id": "action_tPUO1mK_",
+          "type": "speech",
+          "text": "明确了我们的目标客群之后，下一个关键的模块是：我们要与这群年轻白领和咖啡爱好者，建立并维持一种什么样的关系？"
+        },
+        {
+          "id": "action_o8mMfDum",
+          "type": "spotlight",
+          "elementId": "text_9hdkxKgy"
+        },
+        {
+          "id": "action_MiIlWB1i",
+          "type": "speech",
+          "text": "第一种是‘个人助理’模式。就像私人银行服务，为少数高净值客户提供一对一的专属服务。在我们的案例里，可能是针对企业客户或顶级会员，由专属的客户经理深度理解并满足其个性化的需求。"
+        },
+        {
+          "id": "action_ZML00Xt1",
+          "type": "spotlight",
+          "elementId": "text_h5eoJV3D"
+        },
+        {
+          "id": "action_sWbVgj_Y",
+          "type": "speech",
+          "text": "第二种是‘自助服务’。这是我们绝大多数会员会接触到的模式。通过标准化的App或小程序，用户可以自行完成积分查询、兑换优惠券等操作。这种模式的核心在于降低服务成本，支撑高频的互动。"
+        },
+        {
+          "id": "action_t1PYs23a",
+          "type": "spotlight",
+          "elementId": "text_BcQsgMpF"
+        },
+        {
+          "id": "action_9-bt_mWG",
+          "type": "speech",
+          "text": "最后一种，也是最具有粘性的，就是建立‘社区’。比如定期举办咖啡课堂、拉花比赛，鼓励用户之间产生互动，分享内容。这不仅是提供一杯咖啡，而是在构建一种品牌归属感和情感连接。"
+        },
+        {
+          "id": "action_qY3FB_9D",
+          "type": "spotlight",
+          "elementId": "text_EvMqKSQL"
+        },
+        {
+          "id": "action_F1WvbgWv",
+          "type": "speech",
+          "text": "将这些关系类型有效组合，目标就是实现“客户生命周期”的闭环管理：从获客、激活、留存，到最终实现变现和推荐。"
+        },
+        {
+          "id": "action_sv0ooSJf",
+          "type": "spotlight",
+          "elementId": "text_5RCWh6R5"
+        },
+        {
+          "id": "action_M7W624zj",
+          "type": "speech",
+          "text": "如何衡量我们关系维护的效果？请关注这几个关键指标：净推荐值NPS、复购率、用户生命周期价值LTV以及单个客户的获取成本CAC。它们会告诉我们关系的健康度。"
+        }
+      ],
+      "createdAt": 1785150017981,
+      "updatedAt": 1785150017981,
+      "outlineId": "scene_6"
+    },
+    {
+      "id": "Agy7c4dYwJvU4DfFFS2U2",
+      "stageId": "jxg-bm-mainline-six-elements-coffee-v1",
+      "type": "slide",
+      "title": "核心资源：优质豆源与品牌",
+      "order": 7,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "rDcUnpGWtPQiUL2HfLPLE",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "shape_zmVNt9Ov",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 6,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#1e3a8a",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_QxPWdW4x",
+              "type": "text",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 76,
+              "content": "<p style=\"font-size: 28px; text-align: left; font-weight: bold; color: #1e293b;\">核心资源：优质豆源与品牌</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e293b",
+              "rotate": 0
+            },
+            {
+              "id": "shape_jBcJX1oo",
+              "type": "shape",
+              "left": 60,
+              "top": 134,
+              "width": 100,
+              "height": 4,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#3b82f6",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_joG2zu1k",
+              "type": "text",
+              "left": 60,
+              "top": 170,
+              "width": 120,
+              "height": 49,
+              "content": "<p style=\"font-size: 20px; font-weight: bold; color: #1e3a8a;\">核心资源分类</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e3a8a",
+              "rotate": 0
+            },
+            {
+              "id": "shape_gisenKpJ",
+              "type": "shape",
+              "left": 60,
+              "top": 240,
+              "width": 205,
+              "height": 100,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#eff6ff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_cEvd9Smh",
+              "type": "text",
+              "left": 80,
+              "top": 258,
+              "width": 165,
+              "height": 64,
+              "content": "<p style=\"font-size: 16px; text-align: center; color: #334155;\"><strong style=\"color: #1e3a8a;\">物理</strong></p><p style=\"font-size: 14px; text-align: center; color: #64748b;\">供应链/设备</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#334155",
+              "rotate": 0
+            },
+            {
+              "id": "shape_s0FzUuyw",
+              "type": "shape",
+              "left": 285,
+              "top": 240,
+              "width": 205,
+              "height": 100,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f0fdf4",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_mv4QCuPl",
+              "type": "text",
+              "left": 305,
+              "top": 258,
+              "width": 165,
+              "height": 64,
+              "content": "<p style=\"font-size: 16px; text-align: center; color: #334155;\"><strong style=\"color: #166534;\">知识</strong></p><p style=\"font-size: 14px; text-align: center; color: #64748b;\">配方/技术</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#334155",
+              "rotate": 0
+            },
+            {
+              "id": "shape_sBPX_a79",
+              "type": "shape",
+              "left": 510,
+              "top": 240,
+              "width": 205,
+              "height": 100,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#fefce8",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_gS33HpdX",
+              "type": "text",
+              "left": 530,
+              "top": 258,
+              "width": 165,
+              "height": 64,
+              "content": "<p style=\"font-size: 16px; text-align: center; color: #334155;\"><strong style=\"color: #a16207;\">人力</strong></p><p style=\"font-size: 14px; text-align: center; color: #64748b;\">烘焙师团队</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#334155",
+              "rotate": 0
+            },
+            {
+              "id": "shape_vVuqADVo",
+              "type": "shape",
+              "left": 735,
+              "top": 240,
+              "width": 205,
+              "height": 100,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#fff7ed",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_WiNxpStP",
+              "type": "text",
+              "left": 755,
+              "top": 258,
+              "width": 165,
+              "height": 64,
+              "content": "<p style=\"font-size: 16px; text-align: center; color: #334155;\"><strong style=\"color: #9a3412;\">金融</strong></p><p style=\"font-size: 14px; text-align: center; color: #64748b;\">现金流/授信</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#334155",
+              "rotate": 0
+            },
+            {
+              "id": "shape_hysTGwqn",
+              "type": "shape",
+              "left": 80,
+              "top": 375,
+              "width": 840,
+              "height": 1,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e2e8f0",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_BKeUSs7N",
+              "type": "text",
+              "left": 60,
+              "top": 405,
+              "width": 200,
+              "height": 49,
+              "content": "<p style=\"font-size: 20px; font-weight: bold; color: #1e3a8a;\">案例：九轩阁咖啡</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e3a8a",
+              "rotate": 0
+            },
+            {
+              "id": "text_e0iVYBX5",
+              "type": "text",
+              "left": 60,
+              "top": 475,
+              "width": 880,
+              "height": 112,
+              "content": "<p style=\"font-size: 18px; color: #334155;\">• <strong style=\"color: #1e3a8a;\">独家豆源供应</strong>：云南普洱契约农场直采，稳定高品质阿拉比卡豆</p><p style=\"font-size: 18px; color: #334155;\">• <strong style=\"color: #1e3a8a;\">烘焙技术</strong>：自主研发三段式慢烘曲线，形成独特焦糖风味</p><p style=\"font-size: 18px; color: #334155;\">• <strong style=\"color: #1e3a8a;\">品牌商标</strong>：已注册“九轩阁”文字及图形商标，涵盖第30、43类</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#334155",
+              "rotate": 0
+            },
+            {
+              "id": "shape_VJct5oZU",
+              "type": "shape",
+              "left": 45,
+              "top": 485,
+              "width": 5,
+              "height": 90,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#3b82f6",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_9dFG20NM",
+              "type": "text",
+              "left": 60,
+              "top": 405,
+              "width": 200,
+              "height": 49,
+              "content": "<p style=\"font-size: 20px; font-weight: bold; color: #1e3a8a;\">核心资源分类</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#1e3a8a",
+              "opacity": 0,
+              "rotate": 0
+            },
+            {
+              "id": "shape_3xcabZkO",
+              "type": "shape",
+              "left": 60,
+              "top": 405,
+              "width": 425,
+              "height": 100,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f1f5f9",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_DoSigRcj",
+              "type": "text",
+              "left": 80,
+              "top": 415,
+              "width": 385,
+              "height": 80,
+              "content": "<p style=\"font-size: 18px; color: #334155;\"><strong style=\"color: #1e3a8a;\">资源壁垒构建</strong></p><p style=\"font-size: 16px; color: #64748b;\">稀缺性（契约农场） + 不可模仿性（技术曲线） + 法律保护（商标） → 持续竞争优势</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#334155",
+              "rotate": 0
+            },
+            {
+              "id": "shape_-c52usPN",
+              "type": "shape",
+              "left": 515,
+              "top": 405,
+              "width": 425,
+              "height": 100,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#f1f5f9",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_JavlxLCM",
+              "type": "text",
+              "left": 535,
+              "top": 415,
+              "width": 385,
+              "height": 80,
+              "content": "<p style=\"font-size: 18px; color: #334155;\"><strong style=\"color: #1e3a8a;\">资源与价值主张匹配</strong></p><p style=\"font-size: 16px; color: #64748b;\">高品质豆源 + 独特风味 → “精品国民咖啡”价值主张 → 支撑溢价与复购</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#334155",
+              "rotate": 0
+            },
+            {
+              "id": "text_2mk22ODw",
+              "type": "text",
+              "left": 60,
+              "top": 530,
+              "width": 880,
+              "height": 43,
+              "content": "<p style=\"font-size: 14px; color: #94a3b8; text-align: center;\">核心资源是商业模式运转的基石，需与价值主张、关键业务形成闭环</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#94a3b8",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f8fafc"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_Y1Zk86fO",
+          "type": "spotlight",
+          "elementId": "text_QxPWdW4x"
+        },
+        {
+          "id": "action_CLdM7FsJ",
+          "type": "speech",
+          "text": "在理清了客户关系和渠道通路之后，我们进入商业模式画布中非常关键的一环——核心资源。所谓核心资源，就是让商业模式运转起来的最重要的资产和能力。对于九轩阁而言，答案就锁定在这两个字上：豆源与品牌。"
+        },
+        {
+          "id": "action_KqoeU1Oq",
+          "type": "spotlight",
+          "elementId": "text_9dFG20NM"
+        },
+        {
+          "id": "action_EZAGvqm1",
+          "type": "speech",
+          "text": "通常，我们将核心资源分为四大类：物理资源、知识资源、人力资源和金融资源。大家可以对照屏幕，看看九轩阁在这几个维度上分别沉淀了什么。"
+        },
+        {
+          "id": "action_vSX54d1B",
+          "type": "spotlight",
+          "elementId": "text_cEvd9Smh"
+        },
+        {
+          "id": "action_N9ClI7yv",
+          "type": "speech",
+          "text": "物理资源方面，不仅仅是看得见的烘焙设备与供应链，更核心的是对上游优质产能的把控。"
+        },
+        {
+          "id": "action_qI4W8MHo",
+          "type": "spotlight",
+          "elementId": "text_e0iVYBX5"
+        },
+        {
+          "id": "action_EdArsyQA",
+          "type": "speech",
+          "text": "比如，九轩阁在云南普洱建立了契约农场，实现直采。这保证了它能长期稳定地拿到高品质的阿拉比卡豆。在知识资源上，我们自主研发了三段式慢烘曲线，这种技术配方构成了难以复制的味觉壁垒。"
+        },
+        {
+          "id": "action_gnDIFiH-",
+          "type": "spotlight",
+          "elementId": "text_DoSigRcj"
+        },
+        {
+          "id": "action_2npRW2_3",
+          "type": "speech",
+          "text": "分析了单项资源后，关键在于思考它们如何组合成壁垒。物理资源的稀缺性，叠加知识技术的不可模仿性，再配合品牌商标的法律保护，这三者共同作用，才能转化为企业持续的竞争优势。"
+        }
+      ],
+      "createdAt": 1785150051992,
+      "updatedAt": 1785150051992,
+      "outlineId": "scene_7"
+    },
+    {
+      "id": "av8cGlszocx-fMo_HYWPC",
+      "stageId": "jxg-bm-mainline-six-elements-coffee-v1",
+      "type": "slide",
+      "title": "收入来源：咖啡销售与周边",
+      "order": 8,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "UvcQjmbgZDmMmoZpW4Mbh",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#ffffff",
+            "themeColors": ["#5b9bd5", "#ed7d31", "#a5a5a5", "#ffc000", "#4472c4"],
+            "fontColor": "#333333",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#d14424",
+              "width": 2,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 10,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "id": "text_erRXCVlt",
+              "type": "text",
+              "left": 60,
+              "top": 50,
+              "width": 880,
+              "height": 76,
+              "content": "<p style=\"font-size:28px;\"><strong>收入来源：从产品到生态的盈利设计</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "shape_yCFSiUjt",
+              "type": "shape",
+              "left": 60,
+              "top": 136,
+              "width": 880,
+              "height": 1,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#eeeeee",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_bqww766d",
+              "type": "text",
+              "left": 60,
+              "top": 155,
+              "width": 880,
+              "height": 58,
+              "content": "<p style=\"font-size:24px;\">不止卖咖啡——构建多层次收入结构</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#5b9bd5",
+              "rotate": 0
+            },
+            {
+              "id": "text_L_g7Rn3u",
+              "type": "text",
+              "left": 60,
+              "top": 240,
+              "width": 200,
+              "height": 46,
+              "content": "<p style=\"font-size:18px;\"><strong>商业模式中的收入来源</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_1rAiymvw",
+              "type": "text",
+              "left": 60,
+              "top": 290,
+              "width": 400,
+              "height": 166,
+              "content": "<p style=\"font-size:16px;\">• <strong>产品销售</strong>：现磨咖啡、咖啡豆、挂耳包</p><p style=\"font-size:16px;\">• <strong>使用费</strong>：座位空间、会员场地使用</p><p style=\"font-size:16px;\">• <strong>衍生品收入</strong>：联名杯、手冲壶、周边服饰</p><p style=\"font-size:16px;\">• <strong>渠道与广告</strong>：线上商城、品牌合作推广</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#555555",
+              "rotate": 0
+            },
+            {
+              "id": "text_u822OwNO",
+              "type": "text",
+              "left": 520,
+              "top": 240,
+              "width": 200,
+              "height": 46,
+              "content": "<p style=\"font-size:18px;\"><strong>收入结构优化策略</strong></p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            },
+            {
+              "id": "text_dhrF5Aca",
+              "type": "text",
+              "left": 520,
+              "top": 290,
+              "width": 420,
+              "height": 184,
+              "content": "<p style=\"font-size:16px;\">• <strong>占比分析</strong>：核心产品占总收入50%以上</p><p style=\"font-size:16px;\">• <strong>高毛利组合</strong>：周边产品利润率达60%-70%</p><p style=\"font-size:16px;\">• <strong>定价锚点</strong>：以高频刚需品（咖啡）引流，</p><p style=\"font-size:16px;\">  用低频高毛利品（器具）提升客单价</p><p style=\"font-size:16px;\">• <strong>可持续性</strong>：降低单一产品依赖，增强用户粘性</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#555555",
+              "rotate": 0
+            },
+            {
+              "id": "shape_9-DhyYXD",
+              "type": "shape",
+              "left": 60,
+              "top": 485,
+              "width": 4,
+              "height": 38,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#5b9bd5",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "text_OBf3k6Xx",
+              "type": "text",
+              "left": 75,
+              "top": 485,
+              "width": 850,
+              "height": 46,
+              "content": "<p style=\"font-size:16px;\"><strong>收入结构设计的核心命题：</strong>判断每项收入流的稳定性、增长性与护城河。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#333333",
+              "rotate": 0
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#ffffff"
+          }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "action_F_uUXHJy",
+          "type": "spotlight",
+          "elementId": "text_L_g7Rn3u"
+        },
+        {
+          "id": "action_XXd08ZGr",
+          "type": "speech",
+          "text": "明确了核心资源和关键伙伴，接下来我们进入商业模式画布中直接回答\"钱从哪来\"的关键构件——收入来源。对于这家咖啡店，如果只停留在\"卖咖啡\"的粗放认知，就很难发现其盈利设计中的结构之美。"
+        },
+        {
+          "id": "action_Qg1ThwxC",
+          "type": "spotlight",
+          "elementId": "text_bqww766d"
+        },
+        {
+          "id": "action_a0xI7t7Z",
+          "type": "speech",
+          "text": "让我们拆解一下，它不止卖咖啡，而是在构建一个多层次的收入结构。这背后对应着三种典型的收入来源模式：产品销售、使用费以及衍生品收入。"
+        },
+        {
+          "id": "action_vO7URj7C",
+          "type": "spotlight",
+          "elementId": "text_1rAiymvw"
+        },
+        {
+          "id": "action_6rl0fgtH",
+          "type": "speech",
+          "text": "请看具体落地。产品销售是基本盘，包括现磨咖啡、咖啡豆和挂耳包，这是高频刚需的现金流。使用费则是对空间价值的变现，比如座位空间和会员场地使用。衍生品收入则是品牌溢价的延伸，例如联名杯和手冲壶，这部分虽然销量不如主业，但往往是利润和品牌调性的放大器。"
+        },
+        {
+          "id": "action_kTvhqGix",
+          "type": "spotlight",
+          "elementId": "text_u822OwNO"
+        },
+        {
+          "id": "action_cnbuF6zf",
+          "type": "speech",
+          "text": "有了多元的收入流还不够，关键在于结构优化。我们来看几个核心指标。"
+        },
+        {
+          "id": "action_AuHceqGZ",
+          "type": "laser",
+          "elementId": "text_dhrF5Aca"
+        },
+        {
+          "id": "action_cMkn0K4j",
+          "type": "speech",
+          "text": "第一，占比分析，核心产品需占总收入50%以上，确保业务底盘稳固。第二，高毛利组合，周边产品利润率可达60%-70%，这是提升整体盈利能力的关键杠杆。第三，善用定价锚点，通过设置合理的价格参照，引导客户的价值感知。"
+        },
+        {
+          "id": "action_mf4WtvH9",
+          "type": "spotlight",
+          "elementId": "text_OBf3k6Xx"
+        },
+        {
+          "id": "action_CbBNo93-",
+          "type": "speech",
+          "text": "所以，收入结构设计的核心命题，远不止是罗列赚钱的方式。大家需要建立一个判断框架：每一项收入流，它的稳定性、增长性以及护城河分别如何？只有能持续带来稳定现金流的收入组合，才算是一个健康的盈利设计。"
+        }
+      ],
+      "createdAt": 1785150073235,
+      "updatedAt": 1785150073235,
+      "outlineId": "scene_8"
+    },
+    {
+      "id": "ufWXfZgkTqdO6I7f0iaMq",
+      "stageId": "jxg-bm-mainline-six-elements-coffee-v1",
+      "type": "quiz",
+      "title": "综合评估：六要素应用",
+      "order": 9,
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "q1",
+            "type": "single",
+            "question": "某平价咖啡店主打‘极速出杯’和‘高性价比’，以下哪一项最能概括其价值主张？",
+            "options": [
+              {
+                "value": "A",
+                "label": "打造第三空间，提供社交与办公环境"
+              },
+              {
+                "value": "B",
+                "label": "以最低价格提供精品咖啡豆，强调产地风味"
+              },
+              {
+                "value": "C",
+                "label": "为追求效率的顾客提供快速且实惠的咖啡服务"
+              },
+              {
+                "value": "D",
+                "label": "提供独家专利的咖啡冲泡设备，创造技术壁垒"
+              }
+            ],
+            "answer": ["C"],
+            "analysis": "题干中的“极速出杯”对应“效率”，“高性价比”对应“实惠”，选项C完整地覆盖了这两个痛点。选项A更偏向星巴克等注重空间体验的商业模式；选项B强调的是产品品质而非速度和价格；选项D侧重于技术设备，与题干描述的价值主张无关。",
+            "points": 15,
+            "hasAnswer": true
+          },
+          {
+            "id": "q2",
+            "type": "multiple",
+            "question": "某咖啡店将客户细分为以下几类，并设计了相应的渠道通路，请选出匹配正确的组合（多选）：",
+            "options": [
+              {
+                "value": "A",
+                "label": "商务人士 —— 位于写字楼大堂的线下自提柜台"
+              },
+              {
+                "value": "B",
+                "label": "线上咖啡爱好者 —— 咖啡豆订阅与邮寄服务"
+              },
+              {
+                "value": "C",
+                "label": "社区老年群体 —— 微信小程序拼单外卖"
+              },
+              {
+                "value": "D",
+                "label": "学生党 —— 图书馆内的无人咖啡售卖机"
+              }
+            ],
+            "answer": ["A", "B", "D"],
+            "analysis": "商务人士常在写字楼活动，线下自提柜台具有极高便利性，匹配正确。线上爱好者习惯网络购物，订阅邮寄服务符合其消费习惯，匹配正确。图书馆是学生学习的高频场所，售卖机解决了空间和人工限制，匹配正确。选项C错误，因为社区老年群体通常对微信小程序等数字化工具的接受度和使用率较低，直接针对该群体的线下社区体验店或简易外送电话可能更有效，该匹配假设不成立。",
+            "points": 20,
+            "hasAnswer": true
+          },
+          {
+            "id": "q3",
+            "type": "short_answer",
+            "question": "某新锐咖啡品牌极度依赖其独家签约的冠军咖啡师作为声誉背书（核心资源）。请推断并简述：若这位咖啡师突然解约并加入竞争对手，该品牌可能在客户关系、收入来源及关键业务三个维度上面临怎样的连锁反应？",
+            "commentPrompt": "评分标准：（1）准确指出对客户关系的影响，如粉丝流失、品牌吸引力下降 - 30% （2）清晰分析对收入来源的冲击，如高端产品线滞销、客单价下跌 - 30% （3）合理论述对关键业务的破坏，如新品研发停滞、技术壁垒消失 - 20% （4）逻辑严谨，语言流畅，体现商业分析思维 - 20%",
+            "analysis": "此问题考察商业模式要素的动态关联。1. 客户关系：依靠个人魅力建立的品牌忠诚度较脆弱，粉丝型客户可能随咖啡师转移，导致核心社群活跃度骤降。2. 收入来源：由该咖啡师背书的限量款、高价课程或高端手冲服务将失去溢价能力，直接减少高毛利收入。3. 关键业务：若品牌研发和品控高度依赖此人的感官评定，其离开将导致新品开发停滞，甚至产品品质出现波动，动摇了品牌立足的根本。",
+            "points": 25,
+            "hasAnswer": false
+          },
+          {
+            "id": "q4",
+            "type": "single",
+            "question": "一家咖啡馆的理想收入来源组合希望能平衡‘高频刚需’与‘低频高利’。依据此原则，以下哪种组合最为合理？",
+            "options": [
+              {
+                "value": "A",
+                "label": "主力为午市商务套餐，辅以线上付费咖啡知识课程"
+              },
+              {
+                "value": "B",
+                "label": "主力为每日现磨咖啡，辅以高价的限量版周边手冲壶"
+              },
+              {
+                "value": "C",
+                "label": "主力为月度会员订阅费，辅以提供免费场地换取消费抽成"
+              },
+              {
+                "value": "D",
+                "label": "主力为咖啡设备租赁服务，辅以外卖意面"
+              }
+            ],
+            "answer": ["B"],
+            "analysis": "‘高频刚需’对应消费者的日常饮用习惯，如每日现磨咖啡；‘低频高利’则指非必需但利润空间大的商品，如限量版周边手冲壶。选项A中商务套餐的刚需性属于餐饮而非咖啡；选项C的会员订阅虽是刚需，但后半部分的盈利模式模糊且非高利；选项D的设备租赁频率较低，外卖意面又非高利，未满足题干要求的组合逻辑。",
+            "points": 15,
+            "hasAnswer": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "action_Vx-V2d20",
+          "type": "speech",
+          "text": "前面我们逐一拆解了商业模式六要素的每个模块，现在到了检验整体应用能力的环节。请静下心来独立完成这份综合评估，分析这个咖啡品牌在价值主张、客户细分、核心资源与收入来源等维度的设计逻辑。提交后，我会和你一起复盘，看看哪些判断框架已经内化，哪些地方还需要校准。"
+        }
+      ],
+      "createdAt": 1785150096240,
+      "updatedAt": 1785150096240,
+      "outlineId": "scene_9"
+    }
+  ],
+  "createdAt": "2026-07-27T11:41:19.847Z"
+}

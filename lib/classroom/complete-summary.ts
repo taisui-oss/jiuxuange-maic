@@ -31,3 +31,16 @@ export function summarizeScenes(scenes: Scene[], readAnswers: AnswerReader): Com
 
   return { countsByType, quiz };
 }
+
+export function findFirstIncompleteQuizSceneId(
+  scenes: Scene[],
+  readAnswers: AnswerReader,
+): string | null {
+  for (const scene of scenes) {
+    if (scene.type !== 'quiz') continue;
+    const questions = (scene.content as QuizContent).questions ?? [];
+    const results = gradeChoiceQuestions(questions, readAnswers(scene.id));
+    if (results.some((result) => result.correct !== true)) return scene.id;
+  }
+  return null;
+}

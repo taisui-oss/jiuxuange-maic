@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { summarizeScenes } from '@/lib/classroom/complete-summary';
+import { findFirstIncompleteQuizSceneId, summarizeScenes } from '@/lib/classroom/complete-summary';
 import type { Scene, QuizQuestion } from '@/lib/types/stage';
 
 function slide(id: string, order: number): Scene {
@@ -94,5 +94,19 @@ describe('summarizeScenes', () => {
     const scenes = [quizScene('q1', 0, [choiceQ('qa', ['a']), choiceQ('qb', ['b'])])];
     const result = summarizeScenes(scenes, () => ({}));
     expect(result.quiz).toEqual({ correct: 0, total: 2, pct: 0 });
+  });
+
+  it('finds the first objective quiz that still needs a correct retry', () => {
+    const scenes = [
+      slide('intro', 0),
+      quizScene('q1', 1, [choiceQ('qa', ['a'])]),
+      quizScene('q2', 2, [choiceQ('qb', ['b'])]),
+    ];
+    const answers: Record<string, Record<string, string | string[]>> = {
+      q1: { qa: 'a' },
+      q2: { qb: 'a' },
+    };
+
+    expect(findFirstIncompleteQuizSceneId(scenes, (sceneId) => answers[sceneId] ?? {})).toBe('q2');
   });
 });

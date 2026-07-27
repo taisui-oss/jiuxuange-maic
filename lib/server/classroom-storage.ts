@@ -5,6 +5,12 @@ import type { Scene, Stage } from '@/lib/types/stage';
 
 export const CLASSROOMS_DIR = path.join(process.cwd(), 'data', 'classrooms');
 export const CLASSROOM_JOBS_DIR = path.join(process.cwd(), 'data', 'classroom-jobs');
+export const PUBLISHED_CLASSROOMS_DIR = path.join(
+  process.cwd(),
+  'content',
+  'jiuxuange',
+  'classrooms',
+);
 
 async function ensureDir(dir: string) {
   await fs.mkdir(dir, { recursive: true });
@@ -38,6 +44,7 @@ export interface PersistedClassroomData {
   id: string;
   stage: Stage;
   scenes: Scene[];
+  generationComplete: boolean;
   createdAt: string;
 }
 
@@ -46,16 +53,18 @@ export function isValidClassroomId(id: string): boolean {
 }
 
 export async function readClassroom(id: string): Promise<PersistedClassroomData | null> {
-  const filePath = path.join(CLASSROOMS_DIR, `${id}.json`);
-  try {
-    const content = await fs.readFile(filePath, 'utf-8');
-    return JSON.parse(content) as PersistedClassroomData;
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      return null;
+  for (const directory of [CLASSROOMS_DIR, PUBLISHED_CLASSROOMS_DIR]) {
+    const filePath = path.join(directory, `${id}.json`);
+    try {
+      const content = await fs.readFile(filePath, 'utf-8');
+      return JSON.parse(content) as PersistedClassroomData;
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+        throw error;
+      }
     }
-    throw error;
   }
+  return null;
 }
 
 export async function persistClassroom(
@@ -63,6 +72,7 @@ export async function persistClassroom(
     id: string;
     stage: Stage;
     scenes: Scene[];
+    generationComplete?: boolean;
   },
   baseUrl: string,
 ): Promise<PersistedClassroomData & { url: string }> {
@@ -70,6 +80,7 @@ export async function persistClassroom(
     id: data.id,
     stage: data.stage,
     scenes: data.scenes,
+    generationComplete: data.generationComplete ?? true,
     createdAt: new Date().toISOString(),
   };
 

@@ -46,7 +46,7 @@ export default function ClassroomDetailPage() {
           if (res.ok) {
             const json = await res.json();
             if (json.success && json.classroom) {
-              const { stage, scenes } = json.classroom;
+              const { stage, scenes, generationComplete = true } = json.classroom;
               useStageStore.getState().setStage(stage);
               // Normalize legacy slide content (missing schemaVersion) on the
               // way in, same as the store's setScenes/loadFromStorage paths —
@@ -55,11 +55,23 @@ export default function ClassroomDetailPage() {
               useStageStore.setState({
                 scenes: migrated,
                 currentSceneId: migrated[0]?.id ?? null,
+                outlines: [],
+                generationComplete,
+                generatingOutlines: [],
                 // Match `loadFromStorage` semantics: mode is transient UI
                 // state, not persisted with the stage. Reset on every
                 // classroom load so SPA navigation doesn't carry Pro
                 // mode across.
                 mode: 'playback',
+              });
+              await useStageStore.getState().saveToStorage();
+              const { db } = await import('@/lib/utils/database');
+              await db.stageOutlines.put({
+                stageId: stage.id,
+                outlines: [],
+                generationComplete,
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
               });
               log.info('Loaded from server-side storage:', classroomId);
 
