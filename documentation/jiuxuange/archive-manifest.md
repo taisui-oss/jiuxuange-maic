@@ -20,10 +20,16 @@
 | `codex/archive-jiuxuange-phase1-20260713` | 第一阶段业务逻辑归档 |
 | `codex/checkpoint-jiuxuange-maic-v5.1-20260721` | 基本操作流程确认后的 V5.1 完整源代码与文档回退点 |
 | `release/jiuxuange-dual-entry-v1-20260727` | 双入口 V1、学习深度回放、DOCX 与本地语音的完整发布分支 |
+| `feat/jiuxuange-business-model-course-hub-v1-20260727` | 商业模式课程中心、六案例目录和麦客思草案项目卡预览的 V1 发布分支 |
+| `codex/jiuxuange-v6-formal-release` | 从课程中心 V1 标签创建的 V6 正式教学首发开发分支 |
 
 本次归档同时建立标签 `jiuxuange-maic-v5.1-confirmed-20260721`。回退分支、标签与私有仓库 `main` 指向同一提交。
 
 双入口 V1 建立标签 `jiuxuange-maic-dual-entry-v1-20260727`；该标签只表示 L0 可运行归档，不代表达到正式课程或正式测评发布条件。
+
+课程中心 V1 建立标签 `jiuxuange-business-model-course-hub-v1-20260727`，提交为 `df3107f63c6ae5d3abf988421b593442097fff75`。V6 从该干净标签创建，不改写 V1 发布分支。
+
+V6 Gate 0 计划建立标签 `jiuxuange-maic-v6-gate0-20260727`。该标签只冻结产品范围、生产架构和实施门禁，不代表 V6 功能或正式发布已经完成。
 
 ## 3. 功能开关
 
@@ -70,7 +76,10 @@
 - 真实可见对话回放：`documentation/jiuxuange/learning-loop-v5.1-transcript--9HjnSKv4w-20260722.md`
 - Agent 设计与运行审计：`documentation/jiuxuange/agent-design-runtime-audit-20260722.md`
 - 机器可复跑样本：`eval/jiuxuange-learning-partner/scenarios/learning-depth-replay.v1.json`
-- 当前新对话交接入口：`documentation/jiuxuange/conversation-handoff-dual-entry-20260726.md`
+- 当前新对话交接入口：`documentation/jiuxuange/conversation-handoff-v6-formal-release-20260727.md`
+- V6 产品范围：`documentation/jiuxuange/v6-product-scope-and-business-flow.md`
+- V6 生产架构：`documentation/jiuxuange/v6-production-architecture.md`
+- V6 开发计划：`documentation/jiuxuange/v6-delivery-plan.md`
 - 本地免费语音热修复：`documentation/jiuxuange/free-local-tts-hotfix-20260726.md`
 - 双入口 V1 GitHub 发布记录：`documentation/jiuxuange/release-dual-entry-v1-20260727.md`
 
