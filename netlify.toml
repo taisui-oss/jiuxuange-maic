@@ -1,3 +1,9 @@
 [build]
   command = "pnpm run build"
   publish = ".next"
+
+[build.environment]
+  NEXT_PUBLIC_C_CUBIC_BUSINESS_MODEL_MODE = "true"
+  NEXT_PUBLIC_C_CUBIC_UNIFIED_LEARNING = "true"
+  NEXT_PUBLIC_JIUXUANGE_DUAL_ENTRY_V1 = "true"
+  NEXT_PUBLIC_JIUXUANGE_COURSE_HUB_V1 = "true"
