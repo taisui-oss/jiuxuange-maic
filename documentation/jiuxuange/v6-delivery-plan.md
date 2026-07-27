@@ -54,17 +54,21 @@ test-and-release-baseline.md 更新
 → 非同组访问被拒绝并留审计
 ```
 
+[KNOWN, HIGH] 2026-07-27 已完成 Gate 1 现状审计、ADR 和 Schema/API 合同；尚未开始依赖安装、数据库 migration 或身份实现。
+
 实施任务：
 
-1. 冻结身份和数据库 ADR；
-2. 建立 PostgreSQL 迁移机制；
-3. 实现 User、IdentityBinding、Class、Group、Enrollment、Membership；
-4. 实现花名同步或导入 Adapter；
-5. 实现企业微信 OAuth Adapter；
-6. 替换演示请求头身份；
-7. 建立统一授权函数和审计日志；
-8. 建立最小生产配置与 Secret 管理；
-9. 用两个同组账号和一个外组账号完成 E2E。
+1. `DONE` 冻结身份、数据库、Worker 和对象存储 ADR；
+2. `NEXT` 完成 Drizzle、Better Auth、Fake OAuth 和 pg-boss 兼容性刺探；
+3. 建立 PostgreSQL 迁移机制；
+4. 实现 User、IdentityBinding、Class、Group、Enrollment、Membership；
+5. 实现花名同步或导入 Adapter；
+6. 实现企业微信 OAuth Adapter；
+7. 替换演示请求头身份；
+8. 建立统一授权函数和审计日志；
+9. 建立最小生产配置与 Secret 管理；
+10. 用两个同组账号、一个外组账号和一个失效账号完成 E2E；
+11. 使用真实花名和企业微信测试环境完成联调。
 
 Gate 1 硬条件：
 
@@ -80,6 +84,14 @@ Gate 1 硬条件：
 - 企业微信测试应用；
 - 三个真实测试身份；
 - 第一批班级和小组字段定义。
+
+Gate 1 当前状态：
+
+```text
+technical audit: COMPLETE
+implementation: NOT STARTED
+real integration: BLOCKED_BY_INPUTS
+```
 
 ## 4. Gate 2：主线与案例
 
@@ -256,24 +268,29 @@ jiuxuange-maic-v6.0.0
 
 ## 9. Codex 单任务启动指令
 
-Gate 0 完成后，下一次仅允许执行 Gate 1 的“仓库与技术决策审计”，不得一次开发完整 Gate 1：
+Gate 1 技术审计完成后，下一次仅允许执行 Task 1.1“依赖与兼容性刺探”，不得一次开发完整 Gate 1：
 
 ```text
 先读取：
 - AGENTS.md
 - documentation/jiuxuange/conversation-handoff-v6-formal-release-20260727.md
-- documentation/jiuxuange/v6-product-scope-and-business-flow.md
-- documentation/jiuxuange/v6-production-architecture.md
-- documentation/jiuxuange/v6-delivery-plan.md
+- documentation/jiuxuange/v6-gate1-current-system-audit.md
+- documentation/jiuxuange/v6-gate1-schema-and-api-contract.md
+- documentation/jiuxuange/adr/0001-postgresql-drizzle-and-migrations.md
+- documentation/jiuxuange/adr/0002-roster-wecom-auth-and-session.md
+- documentation/jiuxuange/adr/0003-pg-boss-worker-and-events.md
 
-本次只完成 Gate 1 技术审计与 ADR：
-1. 映射现有 identity、portal repository、session、provider 和 API 路径；
-2. 确认运行时 Node、部署方式和可用数据库环境；
-3. 比较 PostgreSQL 迁移工具、任务队列、Session 与对象存储方案；
-4. 设计花名系统与企业微信 Adapter，不虚构外部接口；
-5. 输出精确 schema、迁移、接口、测试和回退计划；
-6. 更新决策日志与状态，不实现业务页面；
-7. 独立提交后停止。
+本次只完成 Task 1.1：
+1. 安装并锁定 Drizzle、pg、Better Auth、Drizzle Adapter 和 pg-boss；
+2. 启动隔离测试 PostgreSQL；
+3. 验证 migration 从空库执行和重复执行；
+4. 用 Fake WeCom Provider 验证 state/PKCE/callback；
+5. 验证未在 Fake 花名中的人不能建立 Session；
+6. 验证数据库 Session 创建、读取、退出和吊销；
+7. 验证业务事务内创建 pg-boss Job，事务回滚时 Job 一并消失；
+8. 记录实际版本、文件、测试、失败和回退；
+9. 只提交兼容性刺探，不实现正式页面或真实接口；
+10. 提交后停止。
 ```
 
 ## 10. 停止条件

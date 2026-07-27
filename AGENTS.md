@@ -7,7 +7,9 @@
 3. `documentation/jiuxuange/v6-product-scope-and-business-flow.md`
 4. `documentation/jiuxuange/v6-production-architecture.md`
 5. `documentation/jiuxuange/v6-delivery-plan.md`
-6. `documentation/jiuxuange/README.md`
+6. `documentation/jiuxuange/v6-gate1-current-system-audit.md`
+7. `documentation/jiuxuange/v6-gate1-schema-and-api-contract.md`
+8. `documentation/jiuxuange/README.md`
 
 启动后先检查当前分支、未提交改动、最近提交、测试基线和本地服务构建来源。不得丢弃或覆盖未提交改动。
 

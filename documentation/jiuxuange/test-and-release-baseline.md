@@ -2,7 +2,7 @@
 
 ## 0. V6 正式发布目标（2026-07-27）
 
-[DECIDED, HIGH] V6.0.0 目标是支持首批 1000 名真实学员进入正式商业模式课程。当前只完成 Gate 0 产品与架构冻结候选，尚未达到任何生产发布门槛。
+[DECIDED, HIGH] V6.0.0 目标是支持首批 1000 名真实学员进入正式商业模式课程。当前已完成 Gate 0，并完成 Gate 1 技术审计、ADR 和实施合同；Gate 1 产品代码尚未开始，尚未达到任何生产发布门槛。
 
 当前版本边界：
 
@@ -46,6 +46,40 @@ Gate 5 前必须新增并通过：
 - 便利蜂、生鲜和正式项目卡的人工审核记录。
 
 [ASSUMPTION, MEDIUM] 在正式课表和同时在线人数未提供前，负载测试暂以 200 个并发活跃用户和 50 个并发 LLM Job 为起点。该数字不得对外描述为已确认业务容量。
+
+### V6 Gate 1 技术审计基线（2026-07-27）
+
+```text
+branch: codex/jiuxuange-v6-formal-release
+audit base: 25adb9141d8eb2f9484d6cd8bb5241c3ba798947
+```
+
+| 验证 | 结果 |
+|---|---|
+| 工作树 | 审计开始时干净 |
+| 本机 Node | v24.7.0 |
+| pnpm | 10.28.0 |
+| 当前身份 | 受信任请求头或 localhost fixture，不是正式认证 |
+| 当前九轩阁门户 | 单个 JSON 文件 + 进程内写队列 |
+| 当前课堂状态 | Dexie/IndexedDB 为主要本机状态 |
+| 当前课堂 Job | 本地 JSON + 进程内锁 |
+| 当前 LLM | 有服务端路由，但部分接口仍允许客户端模型参数 |
+| Gate 1 ADR | PostgreSQL/Drizzle、身份 Session、pg-boss、S3 已冻结 |
+| Gate 1 Schema/API | 已冻结 |
+| Gate 1 代码 | 未开始 |
+| 正式花名/企微联调 | 未开始，外部输入未提供 |
+
+[KNOWN, HIGH] 本次完成的是只读技术审计和实施合同，不是功能验收。没有新增产品代码，因此没有以既有全量测试冒充 Gate 1 通过。
+
+Task 1.1 必须新增：
+
+- PostgreSQL 空库 migration 测试；
+- Better Auth / Next.js 16 兼容性测试；
+- Fake WeCom state、PKCE 和 callback 测试；
+- 非花名人员拒绝测试；
+- 数据库 Session 吊销测试；
+- pg-boss 事务 Job 回滚测试；
+- 生产禁用 demo identity 测试。
 
 ## 1. 当前自动化基线
 

@@ -2,7 +2,7 @@
 
 版本：`6.0.0-rc`
 
-状态：Gate 0 架构冻结候选
+状态：Gate 0 已通过；Gate 1 技术决策已冻结，尚未实现
 
 ## 1. 架构结论
 
@@ -222,10 +222,10 @@ CriterionEvaluation
 ```text
 保存正式答案
 → 锁定提交次数
-→ 写入 outbox
+→ 事务内写入 pg-boss Job
 → 返回提交成功
 
-Worker 读取 outbox
+Worker 读取 Job
 → 生成 AI 评价
 → 校验结构化输出
 → 保存评价报告
@@ -237,11 +237,12 @@ PostgreSQL 是业务事实源，但不采用全量 Event Sourcing。
 
 ```text
 关系表 = 当前和历史业务事实
-append-only 事件 = 审计、投影和异步集成依据
-outbox = 业务事务与异步任务的一致性边界
+append-only 领域事件 = 审计和投影依据
+事务内 pg-boss Job = 内部异步任务一致性边界
+integration_outbox = 未来存在外部系统投递时才新增
 ```
 
-业务写入和 outbox 必须在同一事务中完成。
+[DECIDED, HIGH] 当前内部异步任务不同时维护 Job Outbox 和任务队列。pg-boss 通过 Drizzle Adapter 在现有业务事务中创建 Job，减少二次投递和双重幂等。
 
 示例：
 
@@ -249,7 +250,8 @@ outbox = 业务事务与异步任务的一致性边界
 BEGIN
   INSERT assessment_attempt
   UPDATE assessment_session
-  INSERT outbox_event
+  INSERT domain_event
+  INSERT pgboss.job
 COMMIT
 ```
 
@@ -401,20 +403,38 @@ V6 正式用户：创建全新服务端账户、课程会话和项目记录
 
 V6 开发期间使用独立功能开关和数据库 schema。发布前不得删除旧代码和旧标签。
 
-## 13. 尚未冻结的技术选择
+## 13. Gate 1 技术决策
 
-Gate 1 前必须通过 ADR 决定：
+[DECIDED, HIGH] Gate 1 技术审计已经冻结：
 
-1. PostgreSQL schema 与迁移工具；
-2. Worker 和任务队列实现；
-3. 对象存储 Provider；
-4. 企业微信 OAuth 接入模式；
-5. 花名系统同步或导入模式；
-6. Session、CSRF 和 Cookie 策略；
-7. 生产部署平台；
-8. 日志、指标和告警 Provider；
-9. LLM Provider、模型和预算；
-10. 数据保留、删除和导出策略。
+1. PostgreSQL 16 + node-postgres + Drizzle；
+2. 版本化 SQL migration，生产 pre-deploy 执行；
+3. Better Auth 稳定版 + Generic OAuth 候选，必须先通过兼容性刺探；
+4. 数据库 Session，业务关系不写入长期 Token；
+5. 花名与企业微信通过独立 Adapter 接入，不虚构外部接口；
+6. pg-boss + 独立 Node Worker；
+7. 私有 S3 兼容对象存储 + AWS SDK v3；
+8. 统一授权服务执行 RBAC + 关系 + 有效期 + 披露级别。
+
+详细合同：
+
+- `v6-gate1-current-system-audit.md`
+- `v6-gate1-schema-and-api-contract.md`
+- `adr/0001-postgresql-drizzle-and-migrations.md`
+- `adr/0002-roster-wecom-auth-and-session.md`
+- `adr/0003-pg-boss-worker-and-events.md`
+- `adr/0004-object-storage-and-disclosure.md`
+
+仍未冻结：
+
+1. 企业微信实际接口字段、主体模式和测试应用；
+2. 花名系统实际同步协议与确定性匹配键；
+3. 正式对象存储 Provider 和区域；
+4. 生产部署平台；
+5. 日志、指标和告警 Provider；
+6. LLM Provider、模型和预算；
+7. 数据保留、删除和导出策略；
+8. 正式 RPO、RTO 和峰值容量。
 
 不得因这些尚未确定而在业务模块中直接耦合某个供应商。
 

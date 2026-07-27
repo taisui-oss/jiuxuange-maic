@@ -46,6 +46,12 @@
 36. [V6 产品范围与业务流](./v6-product-scope-and-business-flow.md)：主线、案例、项目卡三入口、双档案和六题个人测试的完整业务合同。
 37. [V6 生产架构](./v6-production-architecture.md)：服务端身份、PostgreSQL、对象存储、异步任务、AI Gateway、权限和容量边界。
 38. [V6 开发与发布计划](./v6-delivery-plan.md)：Gate 0-5、外部输入、验收场景、停止条件与下一条 Codex 指令。
+39. [V6 Gate 1 现状审计](./v6-gate1-current-system-audit.md)：当前身份、JSON、IndexedDB、文件 Job、Provider 和部署边界的代码事实。
+40. [V6 Gate 1 Schema 与 API 合同](./v6-gate1-schema-and-api-contract.md)：正式用户、花名、企微、班级、小组、权限、审计、迁移和测试合同。
+41. [ADR 0001 PostgreSQL 与 Drizzle](./adr/0001-postgresql-drizzle-and-migrations.md)：数据库、迁移、事务和恢复选择。
+42. [ADR 0002 花名、企微与 Session](./adr/0002-roster-wecom-auth-and-session.md)：身份职责、数据库 Session、安全边界和外部输入。
+43. [ADR 0003 pg-boss Worker](./adr/0003-pg-boss-worker-and-events.md)：事务任务、重试、死信、幂等和领域事件。
+44. [ADR 0004 对象存储与披露](./adr/0004-object-storage-and-disclosure.md)：私有 S3、短时访问、材料状态和模型披露。
 
 ## 一句话结论
 
@@ -67,7 +73,7 @@
 
 [DECIDED, HIGH] V6 已冻结为面向首批 1000 名真实学员的正式教学首发目标：花名系统与企业微信登录、OpenMAIC 原生主线、案例逐级解锁、案主项目卡、个人研习、小组讨论、双档案、六题两次个人测试和异步 AI 评价。
 
-[KNOWN, HIGH] V6 当前只完成 Gate 0 设计与交接冻结，尚未完成任何生产身份、数据库、项目讨论、异步评价或正式部署代码。现有 V1 仍只证明代码、固定模拟学员和本机浏览器验收成立。
+[KNOWN, HIGH] V6 已完成 Gate 0，并完成 Gate 1 的只读技术审计、ADR 和 Schema/API 实施合同；Gate 1 代码尚未开始。现有 V1 仍只证明代码、固定模拟学员和本机浏览器验收成立。
 
 ## 当前发布判断
 

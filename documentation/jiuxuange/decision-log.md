@@ -42,6 +42,27 @@
 | 旧演示数据不迁移 | 当前尚无正式用户，避免把不可信本机状态升级为正式记录 | 已冻结 |
 | V6 逐 Gate 推进 | 防止产品转向被一次性大改和临时接口污染 | 已冻结 |
 
+## V6 Gate 1 技术决策（2026-07-27）
+
+| 决策 | 原因 | 状态 |
+|---|---|---|
+| PostgreSQL 16 + node-postgres + Drizzle | 与 TypeScript 单体匹配，同时保留 SQL、事务和 migration 审查能力 | 已冻结，未实现 |
+| 生产只使用 `generate + migrate` | 防止无版本的 schema push 和多实例启动竞争 | 已冻结 |
+| Better Auth 稳定版作为认证候选 | Generic OAuth 可适配非标准 Provider，提供 Session、Cookie、state/PKCE 和 CSRF 基础 | 已冻结；必须先通过兼容性刺探 |
+| 业务域只依赖 `IdentityService` | 避免业务对象被认证框架表结构绑定 | 已冻结 |
+| 花名是准入事实，企微是认证事实 | 两者不能互相替代 | 已冻结；真实接口待提供 |
+| 禁止按姓名、花名或手机号模糊绑定 | 防止同名串号和错误合并 | 已冻结 |
+| 使用数据库 Session | 支持退出成员和冻结账号即时失效 | 已冻结 |
+| 正式请求不信任客户端身份头 | 请求头和本机 fixture 只允许开发回归 | 已冻结 |
+| pg-boss + 独立 Worker | 复用 PostgreSQL，满足事务任务、重试、死信和幂等 | 已冻结，未实现 |
+| 内部任务不再重复建立 Job Outbox | pg-boss 可在业务事务中创建 Job，减少二次投递和对账 | 已冻结；修订 Gate 0 |
+| `domain_events` 与业务表并存 | 保留审计与投影依据，但不做全量 Event Sourcing | 已冻结 |
+| S3 兼容私有对象存储 + AWS SDK v3 | 供应商可替换，支持授权后短时访问 | 协议已冻结；Provider 待定 |
+| RBAC + 资源关系 + 有效期 + 披露级别 | 页面角色不足以表达换组、案主、教练和敏感材料权限 | 已冻结 |
+| Gate 1 先做兼容性刺探 | 当前仓库没有 DB/Auth/Queue 依赖，不能把文档选择当成已经可运行 | 下一动作 |
+
+[KNOWN, HIGH] Gate 1 现状审计、ADR 和 Schema/API 合同已经完成；PostgreSQL、认证、Worker 和真实接口代码均尚未开始。
+
 ## 已确认并继续沿用
 
 | 决策 | 原因 | 状态 |

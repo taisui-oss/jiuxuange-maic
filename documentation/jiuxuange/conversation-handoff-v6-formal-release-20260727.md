@@ -303,13 +303,45 @@ Gate 0 版本与架构冻结
 
 当前唯一下一动作：
 
-> 完成 Gate 0 文档、数据合同、发布门禁与实施计划；提交后停止，等待 Gate 1 的接口和技术决策审查。
+> 只执行 Gate 1 Task 1.1“依赖与兼容性刺探”：验证 PostgreSQL/Drizzle、Better Auth Generic OAuth Fake Provider、数据库 Session 和 pg-boss 事务任务能否在当前 Next.js 16 / Node 22+ 仓库稳定运行。通过后独立提交并停止，不继续实现完整身份和页面。
 
-## 9. 事实边界
+## 9. Gate 状态更新
+
+### Gate 0
+
+```text
+status: PASSED
+commit: 25adb9141d8eb2f9484d6cd8bb5241c3ba798947
+tag: jiuxuange-maic-v6-gate0-20260727
+```
+
+### Gate 1
+
+```text
+technical audit: COMPLETE
+ADR: COMPLETE
+schema/API contract: COMPLETE
+implementation: NOT STARTED
+real roster integration: BLOCKED_BY_INPUTS
+real WeCom integration: BLOCKED_BY_INPUTS
+```
+
+Gate 1 当前技术合同：
+
+- `v6-gate1-current-system-audit.md`
+- `v6-gate1-schema-and-api-contract.md`
+- `adr/0001-postgresql-drizzle-and-migrations.md`
+- `adr/0002-roster-wecom-auth-and-session.md`
+- `adr/0003-pg-boss-worker-and-events.md`
+- `adr/0004-object-storage-and-disclosure.md`
+
+[DECIDED, HIGH] 内部异步任务采用业务事务内 pg-boss Job，不再重复建立一套内部 Job Outbox。`domain_events` 继续保存不可变业务事件；只有未来向外部系统投递时才新增 `integration_outbox`。
+
+## 10. 事实边界
 
 - 已实现：课程中心、双入口 L0、六题两次提交合同、自由学习、本机课堂、麦客思草案卡。
 - 已验证：上述能力的定向测试、构建和本机浏览器路径。
-- 仅设计：V6 项目空间、双档案、正式项目卡、异步 AI 评价、案例独立课堂。
-- 尚未完成：花名企微登录、PostgreSQL、服务端课程状态、权限、生产部署、内容审核、真实 1000 人发布。
+- 仅设计：V6 PostgreSQL/身份/权限合同、项目空间、双档案、正式项目卡、异步 AI 评价、案例独立课堂。
+- 尚未完成：Gate 1 依赖刺探、花名企微登录、PostgreSQL 实现、服务端课程状态、权限、生产部署、内容审核、真实 1000 人发布。
 
 [RULES I BROKE]: 无
