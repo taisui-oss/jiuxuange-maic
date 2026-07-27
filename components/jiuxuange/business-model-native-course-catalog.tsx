@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Clock3, LockKeyhole, Route } from 'lucide-react';
 import {
+  BUSINESS_MODEL_CASE_ANALYSIS_PATH,
   BUSINESS_MODEL_CASE_LESSONS,
   BUSINESS_MODEL_LEVEL_LABELS,
   businessModelClassroomHref,
@@ -82,6 +83,25 @@ export function BusinessModelNativeCourseCatalog() {
             每个案例都是多轮 OpenMAIC 原生课堂；完成当前案例后，依次开放下一个案例。
           </p>
         </div>
+      </div>
+
+      <div className="mb-6 border-y border-border/70 py-4">
+        <div className="mb-3 text-xs font-medium text-muted-foreground">
+          每个案例都沿同一条分析路径推进
+        </div>
+        <ol className="grid gap-x-5 gap-y-3 sm:grid-cols-2 lg:grid-cols-4">
+          {BUSINESS_MODEL_CASE_ANALYSIS_PATH.map((step, index) => (
+            <li key={step.id} className="grid grid-cols-[24px_1fr] gap-2">
+              <span className="grid size-6 place-items-center rounded-full bg-cyan-500/10 text-xs font-semibold text-cyan-700 dark:text-cyan-300">
+                {index + 1}
+              </span>
+              <div>
+                <div className="text-xs font-semibold leading-5">{step.title}</div>
+                <p className="text-xs leading-5 text-muted-foreground">{step.prompt}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
 
       <div className="space-y-3">

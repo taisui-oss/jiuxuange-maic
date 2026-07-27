@@ -23,6 +23,20 @@ export interface BusinessModelProjectPractice {
   agentIds: Array<'senior' | 'mystery' | 'growth_feedback'>;
 }
 
+export interface BusinessModelCaseAnalysisStep {
+  id:
+    | 'transaction-map'
+    | 'positioning'
+    | 'business-system'
+    | 'key-resources-capabilities'
+    | 'profit-model'
+    | 'cash-flow-structure'
+    | 'enterprise-value'
+    | 'causal-map';
+  title: string;
+  prompt: string;
+}
+
 const BUSINESS_MODEL_COURSE_RETURN_TO = '/courses/business-model';
 
 export function businessModelClassroomHref(classroomId: string): string {
@@ -33,12 +47,56 @@ export function businessModelClassroomHref(classroomId: string): string {
   return `/classroom/${classroomId}?${query.toString()}`;
 }
 
+export const BUSINESS_MODEL_CASE_ANALYSIS_PATH: BusinessModelCaseAnalysisStep[] = [
+  {
+    id: 'transaction-map',
+    title: '谁和谁交易',
+    prompt: '识别购买者、使用者、决策者、供应者和合作方。',
+  },
+  {
+    id: 'positioning',
+    title: '服务谁、解决什么问题',
+    prompt: '明确目标客户、核心问题和价值主张。',
+  },
+  {
+    id: 'business-system',
+    title: '各主体如何协作',
+    prompt: '沿着产品、服务、信息和责任关系拆解业务系统。',
+  },
+  {
+    id: 'key-resources-capabilities',
+    title: '企业必须擅长什么',
+    prompt: '找出让交易结构成立且难以被替代的能力。',
+  },
+  {
+    id: 'profit-model',
+    title: '谁向谁付钱',
+    prompt: '识别收入来源、定价单位、成本承担和利益分配。',
+  },
+  {
+    id: 'cash-flow-structure',
+    title: '钱在什么时候流入和占用',
+    prompt: '观察预收、账期、库存、固定投入和扩张资金。',
+  },
+  {
+    id: 'enterprise-value',
+    title: '什么决定长期企业价值',
+    prompt: '判断可复制能力、自由现金流和增长风险。',
+  },
+  {
+    id: 'causal-map',
+    title: '汇总六要素因果图',
+    prompt: '把六要素连成可以被事实检验的因果链。',
+  },
+];
+
 export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
   {
-    id: 'coffee-six-elements-foundation',
-    title: '咖啡店：六要素概念与整体关系',
-    summary: '通过咖啡店公共案例理解商业模式要素之间的基本关系，并完成原生互动。',
-    classroomId: 'jxg-bm-mainline-six-elements-coffee-v1',
+    id: 'breakfast-chain-six-elements-foundation',
+    title: '社区早餐连锁：从一笔订单到六要素因果图',
+    summary:
+      '使用不对应具体企业的教学情境，沿交易主体、定位、协作、能力、盈利、现金流和企业价值完成第一轮因果拆解。',
+    classroomId: 'jxg-bm-case-breakfast-chain-six-elements-v1',
     releaseStatus: 'pilot',
     format: 'native_multi_round',
     sequence: 1,
@@ -53,13 +111,13 @@ export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
   },
   {
     id: 'convenience-bee',
-    title: '便利蜂：商业模式事实观察',
-    summary: '从中央决策、门店执行和数据关系切入，练习业务系统与关键资源能力判断。',
+    title: '便利蜂：六要素事实迁移',
+    summary: '沿同一八步路径观察便利蜂的定位、中央决策、门店执行、数据能力、盈利与企业价值。',
     format: 'native_multi_round',
     focus: ['business-system', 'key-resources-capabilities'],
     releaseStatus: 'pilot',
     classroomId: 'jxg-bm-case-convenience-bee-v1',
-    unlockAfterCaseId: 'coffee-six-elements-foundation',
+    unlockAfterCaseId: 'breakfast-chain-six-elements-foundation',
     sequence: 2,
   },
   {

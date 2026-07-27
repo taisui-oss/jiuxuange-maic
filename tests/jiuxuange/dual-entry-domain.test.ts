@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   createDemoPortalState,
@@ -24,7 +25,26 @@ describe('Jiuxuange dual-entry product contract', () => {
     expect(first.projectCardVersionId).toBe(second.projectCardVersionId);
     expect(first.questionVersion).toBe(second.questionVersion);
     expect(first.questions).toEqual(second.questions);
+    expect(first.questions).toHaveLength(6);
+    expect(new Set(first.questions.map((question) => question.questionType))).toEqual(
+      new Set([
+        'fact_diagnosis',
+        'hypothesis_evaluation',
+        'option_comparison',
+        'causal_reasoning',
+        'judgment_revision',
+      ]),
+    );
+    expect(first.questions.every((question) => question.required)).toBe(true);
     expect(first.questions.map((question) => question.prompt).join('')).toContain('麦客思');
+    expect(first.questions.map((question) => question.prompt).join('')).toContain('六要素因果图');
+    expect(projectCard.version).toBe('1.1.0-draft');
+    expect(
+      projectCard.facts.every(
+        (fact) => fact.sourceLabel === '麦客思项目卡草案 · 已按模型披露规则脱敏 · 待案主确认',
+      ),
+    ).toBe(true);
+    expect(projectCard.facts.map((fact) => fact.text).join('')).not.toContain('20.65%');
   });
 
   it('isolates personal drafts and attempts', () => {
@@ -33,7 +53,7 @@ describe('Jiuxuange dual-entry product contract', () => {
     const second = startAssessmentSession(state, 'demo-teammate', MCKESS_ASSESSMENT_ASSIGNMENT_ID);
 
     saveAssessmentDraft(state, 'demo-learner', first.id, {
-      'positioning-1': '我的私人草稿',
+      [first.questions[0].id]: '我的私人草稿',
     });
 
     expect(first.id).not.toBe(second.id);
@@ -97,6 +117,15 @@ describe('Jiuxuange dual-entry product contract', () => {
 
     expect(portal.courses[0].sessionStatus).toBe('not_started');
     expect(portal.assessments[0].status).toBe('available');
+  });
+
+  it('keeps the personal assessment independent from realtime agent assistance', () => {
+    const source = readFileSync('app/assessment/[assignmentId]/page.tsx', 'utf8');
+
+    expect(source).toContain('测评页不提供 Agent 实时帮助');
+    expect(source).not.toContain('<AgentBar');
+    expect(source).not.toContain('personalLearningSession');
+    expect(source).not.toContain('groupDiscussionSession');
   });
 
   it('counts only visible, recent-interaction heartbeat intervals', () => {

@@ -38,7 +38,7 @@ Gate 1 不实现：
 小组讨论
 个人笔记
 项目档案
-六题测试
+个人项目测评
 AI 评价
 正式对象存储上传页
 ```
@@ -965,6 +965,19 @@ criterion_evaluations
 ai_runs
 ```
 
+`question_set_versions` 必须约束：
+
+```text
+question_count between 3 and 6
+business_model_initial_assignment = 6
+question_type =
+  fact_diagnosis
+  hypothesis_evaluation
+  option_comparison
+  causal_reasoning
+  judgment_revision
+```
+
 Gate 4 的项目一致性合同：
 
 ```text
@@ -986,5 +999,9 @@ assessment_assignment.project_card_version_id
 ```
 
 项目标题相同不构成一致性证明。任一 ID 不一致时，禁止创建、保存或提交测评。
+
+项目卡七模块、题型元数据、评价输入与来源标记的完整合同见：
+
+- `v6-project-card-and-assessment-contract-20260728.md`
 
 [RULES I BROKE]: 无

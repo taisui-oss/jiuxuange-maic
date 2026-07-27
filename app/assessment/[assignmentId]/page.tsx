@@ -6,9 +6,18 @@ import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import type {
   AssessmentAttempt,
+  AssessmentQuestion,
   AssessmentSession,
   ProjectCardVersion,
 } from '@/lib/jiuxuange/portal/types';
+
+const QUESTION_TYPE_LABELS: Record<NonNullable<AssessmentQuestion['questionType']>, string> = {
+  fact_diagnosis: '事实判断',
+  hypothesis_evaluation: '假设互动',
+  option_comparison: '方案比较',
+  causal_reasoning: '因果推理',
+  judgment_revision: '判断修正',
+};
 
 interface AssessmentDetail {
   session: AssessmentSession;
@@ -172,15 +181,33 @@ export default function AssessmentPage() {
               {detail.projectCard?.title}
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
-              本次题目与项目卡版本共同冻结，不会调用其他项目资料。请独立形成判断；第一次提交获得方向性反馈，第二次用于检验判断修正。
+              本次 {detail.session.questions.length}
+              道开放场景题与项目卡版本共同冻结，不会调用其他项目资料。请独立形成判断；第一次提交获得方向性反馈，第二次用于检验判断修正。
+            </p>
+            <p className="mt-2 max-w-2xl text-xs leading-5 text-slate-500">
+              测评页不提供 Agent 实时帮助，也不会把个人研习或小组讨论内容带入答案。
             </p>
           </div>
 
           <div className="space-y-8">
             {detail.session.questions.map((question, index) => (
               <div key={question.id} className="border-t border-white/10 pt-6">
+                <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
+                  {question.questionType && (
+                    <span className="rounded bg-violet-400/10 px-2 py-1 font-medium text-violet-300">
+                      {QUESTION_TYPE_LABELS[question.questionType]}
+                    </span>
+                  )}
+                  {typeof question.minimumFactReferences === 'number' &&
+                    question.minimumFactReferences > 0 && (
+                      <span className="text-slate-400">
+                        至少引用 {question.minimumFactReferences} 条项目事实
+                      </span>
+                    )}
+                </div>
                 <label htmlFor={question.id} className="block text-base font-medium leading-7">
                   <span className="mr-2 text-violet-300">{index + 1}.</span>
+                  {question.title && <span className="mr-2">{question.title}：</span>}
                   {question.prompt}
                 </label>
                 <textarea

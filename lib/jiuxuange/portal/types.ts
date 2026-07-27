@@ -54,7 +54,28 @@ export interface ProjectCardVersion {
 
 export interface AssessmentQuestion {
   id: string;
+  title?: string;
+  questionType?:
+    | 'fact_diagnosis'
+    | 'hypothesis_evaluation'
+    | 'option_comparison'
+    | 'causal_reasoning'
+    | 'judgment_revision';
   prompt: string;
+  learningObjectiveIds?: string[];
+  courseConceptIds?: string[];
+  scenarioFactIds?: string[];
+  introducedHypothesis?: string;
+  introducedNewInformation?: string;
+  minimumFactReferences?: number;
+  rubricDimensionIds?: Array<
+    | 'concept_application'
+    | 'project_specificity'
+    | 'fact_hypothesis_distinction'
+    | 'causal_logic'
+    | 'options_tradeoffs'
+    | 'validation_awareness'
+  >;
   required: true;
 }
 

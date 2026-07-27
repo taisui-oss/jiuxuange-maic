@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { shouldUseJiuxuangeCourseHubV1 } from '@/lib/config/feature-flags';
 import {
+  BUSINESS_MODEL_CASE_ANALYSIS_PATH,
   BUSINESS_MODEL_CASE_LESSONS,
   BUSINESS_MODEL_PROJECT_PRACTICES,
   businessModelClassroomHref,
@@ -23,30 +24,30 @@ describe('Jiuxuange business-model course hub', () => {
     expect(shouldUseJiuxuangeCourseHubV1()).toBe(false);
   });
 
-  it('starts with a stable native coffee case and unlocks cases in sequence', () => {
-    const [coffee, convenienceBee, freshGrocery] = BUSINESS_MODEL_CASE_LESSONS;
-    expect(coffee).toEqual(
+  it('starts with a stable native breakfast-chain case and unlocks cases in sequence', () => {
+    const [breakfastChain, convenienceBee, freshGrocery] = BUSINESS_MODEL_CASE_LESSONS;
+    expect(breakfastChain).toEqual(
       expect.objectContaining({
-        id: 'coffee-six-elements-foundation',
-        classroomId: 'jxg-bm-mainline-six-elements-coffee-v1',
+        id: 'breakfast-chain-six-elements-foundation',
+        classroomId: 'jxg-bm-case-breakfast-chain-six-elements-v1',
         sequence: 1,
       }),
     );
-    expect(businessModelClassroomHref(coffee.classroomId!)).toBe(
-      '/classroom/jxg-bm-mainline-six-elements-coffee-v1?returnTo=%2Fcourses%2Fbusiness-model&completion=all-correct',
+    expect(businessModelClassroomHref(breakfastChain.classroomId!)).toBe(
+      '/classroom/jxg-bm-case-breakfast-chain-six-elements-v1?returnTo=%2Fcourses%2Fbusiness-model&completion=all-correct',
     );
-    expect(isBusinessModelCaseUnlocked(coffee, new Set())).toBe(true);
+    expect(isBusinessModelCaseUnlocked(breakfastChain, new Set())).toBe(true);
     expect(isBusinessModelCaseUnlocked(convenienceBee, new Set())).toBe(false);
     expect(
       isBusinessModelCaseUnlocked(
         convenienceBee,
-        new Set(['jxg-bm-mainline-six-elements-coffee-v1']),
+        new Set(['jxg-bm-case-breakfast-chain-six-elements-v1']),
       ),
     ).toBe(true);
     expect(
       isBusinessModelCaseUnlocked(
         freshGrocery,
-        new Set(['jxg-bm-mainline-six-elements-coffee-v1']),
+        new Set(['jxg-bm-case-breakfast-chain-six-elements-v1']),
       ),
     ).toBe(false);
     expect(
@@ -60,11 +61,11 @@ describe('Jiuxuange business-model course hub', () => {
       BUSINESS_MODEL_CASE_LESSONS.filter((lesson) => lesson.releaseStatus === 'pilot').map(
         (lesson) => lesson.id,
       ),
-    ).toEqual(['coffee-six-elements-foundation', 'convenience-bee']);
+    ).toEqual(['breakfast-chain-six-elements-foundation', 'convenience-bee']);
     expect(BUSINESS_MODEL_CASE_LESSONS[1]).toEqual(
       expect.objectContaining({
         classroomId: 'jxg-bm-case-convenience-bee-v1',
-        unlockAfterCaseId: 'coffee-six-elements-foundation',
+        unlockAfterCaseId: 'breakfast-chain-six-elements-foundation',
       }),
     );
     expect(BUSINESS_MODEL_CASE_LESSONS[2]).toEqual(
@@ -89,6 +90,19 @@ describe('Jiuxuange business-model course hub', () => {
         'enterprise-value',
       ]),
     );
+  });
+
+  it('uses the same eight-step Jiuxuange analysis path across cases and project work', () => {
+    expect(BUSINESS_MODEL_CASE_ANALYSIS_PATH.map((step) => step.title)).toEqual([
+      '谁和谁交易',
+      '服务谁、解决什么问题',
+      '各主体如何协作',
+      '企业必须擅长什么',
+      '谁向谁付钱',
+      '钱在什么时候流入和占用',
+      '什么决定长期企业价值',
+      '汇总六要素因果图',
+    ]);
   });
 
   it('keeps project practice separate from official teaching cases', () => {
@@ -132,12 +146,13 @@ describe('Jiuxuange business-model course hub', () => {
     expect(nativeCatalogSource).toContain('多轮原生课堂');
     expect(nativeCatalogSource).toContain('进入案例课堂');
     expect(nativeCatalogSource).toContain('完成上一案例后开放');
+    expect(nativeCatalogSource).toContain('BUSINESS_MODEL_CASE_ANALYSIS_PATH');
     expect(hubSource).toContain('项目练习');
   });
 
   it('ships both pilot classrooms as server-loadable native classroom assets', () => {
     for (const [id, expectedSceneCount] of [
-      ['jxg-bm-mainline-six-elements-coffee-v1', 9],
+      ['jxg-bm-case-breakfast-chain-six-elements-v1', 10],
       ['jxg-bm-case-convenience-bee-v1', 10],
     ] as const) {
       const classroom = JSON.parse(
@@ -157,21 +172,25 @@ describe('Jiuxuange business-model course hub', () => {
     }
   });
 
-  it('keeps the draft project-card detail page local-only by default', () => {
+  it('keeps draft project cards guarded and sanitizes the enabled public preview', () => {
     const source = readFileSync('app/courses/business-model/projects/mckess/page.tsx', 'utf8');
 
     expect(source).toContain('isLoopbackHost');
     expect(source).toContain('JIUXUANGE_ENABLE_DRAFT_PROJECT_CARDS');
     expect(source).toContain('notFound()');
+    expect(source).toContain('const publicPreview = !loopback');
+    expect(source).toContain("field.modelPolicy !== 'block'");
+    expect(source).toContain('{!publicPreview && (');
+    expect(source).toContain('当前为脱敏预览');
     expect(source).toContain('麦客思个人项目测评');
     expect(source).toContain('MCKESS_ASSESSMENT_ASSIGNMENT_ID');
-    expect(source).toContain('当前开放项目卡查看和同项目个人测评');
+    expect(source).toContain('当前开放项目卡配置预览和同项目个人测评');
   });
 
   it('freezes the visible course-hub contract as a versioned replay suite', () => {
     const fixture = JSON.parse(
       readFileSync(
-        'eval/jiuxuange-learning-partner/scenarios/business-model-course-hub.v2.json',
+        'eval/jiuxuange-learning-partner/scenarios/business-model-course-hub.v3.json',
         'utf8',
       ),
     ) as {
@@ -181,12 +200,12 @@ describe('Jiuxuange business-model course hub', () => {
     };
 
     expect(fixture.suiteId).toBe('jiuxuange-business-model-course-hub');
-    expect(fixture.version).toBe(2);
+    expect(fixture.version).toBe(3);
     expect(fixture.scenarios.map((scenario) => scenario.id)).toEqual([
       'course-hub-home-visibility-001',
-      'course-hub-sequential-case-path-002',
-      'course-hub-project-card-boundary-001',
-      'course-hub-project-assessment-binding-002',
+      'course-hub-eight-step-case-path-003',
+      'course-hub-project-card-seven-modules-002',
+      'course-hub-project-assessment-binding-003',
       'course-hub-rollback-001',
       'course-hub-standalone-assets-001',
     ]);

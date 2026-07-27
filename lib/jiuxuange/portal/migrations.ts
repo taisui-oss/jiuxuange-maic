@@ -22,11 +22,6 @@ export function migrateJiuxuangePortalState(state: JiuxuangePortalState): Jiuxua
         ?.projectId ?? 'unknown-project';
   }
 
-  const legacyDemoCard = state.projectCardVersions.find(
-    (card) => card.id === 'project-card-demo@1' && card.projectId === 'demo-project',
-  );
-  if (!legacyDemoCard) return state;
-
   const mckessCard = createMckessAssessmentProjectCardVersion();
   const mckessAssignment = createMckessAssessmentAssignment();
   if (!state.projectCardVersions.some((card) => card.id === mckessCard.id)) {
@@ -35,6 +30,21 @@ export function migrateJiuxuangePortalState(state: JiuxuangePortalState): Jiuxua
   if (!state.assessmentAssignments.some((assignment) => assignment.id === mckessAssignment.id)) {
     state.assessmentAssignments.push(mckessAssignment);
   }
+
+  for (const assignment of state.assessmentAssignments) {
+    if (
+      assignment.projectId === mckessCard.projectId &&
+      assignment.id !== mckessAssignment.id &&
+      assignment.status === 'published'
+    ) {
+      assignment.status = 'closed';
+    }
+  }
+
+  const legacyDemoCard = state.projectCardVersions.find(
+    (card) => card.id === 'project-card-demo@1' && card.projectId === 'demo-project',
+  );
+  if (!legacyDemoCard) return state;
 
   for (const assignment of state.assessmentAssignments) {
     if (assignment.id === 'bm-assessment-v1' && assignment.projectId === legacyDemoCard.projectId) {

@@ -23,6 +23,50 @@ export type JiuxuangeProjectCardEntryMethod = 'learner_form' | 'admin_import';
 
 export type JiuxuangeProjectCardOwnerConfirmationStatus = 'pending' | 'confirmed';
 
+export type JiuxuangeProjectCardModelPolicy = 'allow' | 'mask' | 'block';
+
+export type JiuxuangeProjectCardModuleId =
+  | 'identity_governance'
+  | 'business_profile'
+  | 'operating_snapshot'
+  | 'core_challenge'
+  | 'facts_hypotheses_unknowns'
+  | 'enterprise_assets'
+  | 'course_conclusions';
+
+export type JiuxuangeProjectCardFieldStatus = 'draft' | 'owner_confirmed' | 'unknown';
+
+export interface JiuxuangeProjectCardModuleField {
+  id: string;
+  label: string;
+  value: string;
+  status: JiuxuangeProjectCardFieldStatus;
+  modelPolicy: JiuxuangeProjectCardModelPolicy;
+  sourceStatementIds?: string[];
+}
+
+export interface JiuxuangeProjectCardModule {
+  id: JiuxuangeProjectCardModuleId;
+  title: string;
+  summary: string;
+  fields: JiuxuangeProjectCardModuleField[];
+}
+
+export interface JiuxuangeProjectCardAnalysisStep {
+  id:
+    | 'transaction_map'
+    | 'positioning'
+    | 'business_system'
+    | 'key_resources_capabilities'
+    | 'profit_model'
+    | 'cash_flow_structure'
+    | 'enterprise_value'
+    | 'causal_map';
+  title: string;
+  prompt: string;
+  topics: JiuxuangeProjectCardTopic[];
+}
+
 export interface JiuxuangeProjectCardSourceDocument {
   id: string;
   fileName: string;
@@ -67,7 +111,7 @@ export interface JiuxuangeProjectCardAgentPolicy {
 }
 
 export interface JiuxuangeProjectCard {
-  schemaVersion: 1;
+  schemaVersion: 2;
   kind: 'project_card';
   id: string;
   projectId: string;
@@ -79,7 +123,12 @@ export interface JiuxuangeProjectCard {
   ownerUserId?: string;
   ownerConfirmationStatus: JiuxuangeProjectCardOwnerConfirmationStatus;
   importRef?: string;
+  informationAsOf: string;
+  confidentiality: 'normal' | 'project_confidential' | 'strictly_confidential';
+  projectStatus: 'preparing' | 'learning' | 'reviewing' | 'archived';
   sourceDocument: JiuxuangeProjectCardSourceDocument;
+  modules: JiuxuangeProjectCardModule[];
+  analysisPath: JiuxuangeProjectCardAnalysisStep[];
   reportedFacts: JiuxuangeProjectCardStatement[];
   learnerClaims: JiuxuangeProjectCardStatement[];
   redesignProposals: JiuxuangeProjectCardStatement[];

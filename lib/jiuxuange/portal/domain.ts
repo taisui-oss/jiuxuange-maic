@@ -55,7 +55,9 @@ function assertCompleteAnswers(session: AssessmentSession, answers: AssessmentAn
     return typeof answer !== 'string' || answer.trim().length < 12;
   });
   if (missing.length > 0) {
-    throw new Error('All six questions require a complete original answer.');
+    throw new Error(
+      `All ${session.questions.length} configured questions require a complete original answer.`,
+    );
   }
 }
 

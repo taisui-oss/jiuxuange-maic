@@ -217,6 +217,19 @@ EvaluationReport
 CriterionEvaluation
 ```
 
+题目集约束：
+
+```text
+question_count: 3-6
+business_model_initial_question_count: 6
+question_type:
+  fact_diagnosis
+  hypothesis_evaluation
+  option_comparison
+  causal_reasoning
+  judgment_revision
+```
+
 提交和评价分成两个事务：
 
 ```text
@@ -230,6 +243,9 @@ Worker 读取 Job
 → 校验结构化输出
 → 保存评价报告
 ```
+
+评价输入只允许读取冻结题目、当前提交答案、冻结项目卡的模型可见上下文、
+当前课程概念和冻结量表。个人研习和小组讨论历史不得进入个人项目测评评价。
 
 ## 6. PostgreSQL 使用原则
 

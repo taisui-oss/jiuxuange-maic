@@ -1,0 +1,70 @@
+{
+  "suiteId": "jiuxuange-business-model-course-hub",
+  "version": 3,
+  "createdAt": "2026-07-28",
+  "owner": "Jiuxuange product",
+  "supersedes": "business-model-course-hub.v2.json",
+  "scenarios": [
+    {
+      "id": "course-hub-home-visibility-001",
+      "must": [
+        "assigned_course_visible_before_resume_finishes",
+        "course_entry_clickable_before_resume_finishes",
+        "free_learning_remains_separate"
+      ]
+    },
+    {
+      "id": "course-hub-eight-step-case-path-003",
+      "must": [
+        "first_case_is_native_breakfast_chain_classroom",
+        "first_case_is_explicitly_illustrative_not_a_real_company",
+        "every_case_uses_native_multi_round_classroom",
+        "analysis_path_starts_with_transaction_map",
+        "analysis_path_covers_all_six_business_model_elements",
+        "analysis_path_ends_with_six_element_causal_map",
+        "case_n_requires_case_n_minus_one_completion",
+        "review_case_has_no_runnable_link"
+      ]
+    },
+    {
+      "id": "course-hub-project-card-seven-modules-002",
+      "must": [
+        "project_practice_separate_from_teaching_cases",
+        "project_card_contains_exactly_seven_intake_modules",
+        "every_project_card_field_has_allow_mask_or_block_policy",
+        "facts_claims_proposals_and_forecasts_are_physically_separate",
+        "draft_source_status_and_pending_owner_confirmation_visible",
+        "project_card_uses_same_eight_step_analysis_path",
+        "personal_and_group_discussion_not_faked"
+      ]
+    },
+    {
+      "id": "course-hub-project-assessment-binding-003",
+      "must": [
+        "assessment_project_id_equals_project_card_project_id",
+        "assessment_session_freezes_project_card_version_id",
+        "assessment_contains_six_required_open_scenario_questions",
+        "assessment_covers_all_five_question_types",
+        "questions_distinguish_project_facts_and_new_hypotheses",
+        "assessment_allows_two_formal_submissions",
+        "assessment_provides_no_realtime_agent_answering",
+        "mismatched_project_binding_is_rejected"
+      ]
+    },
+    {
+      "id": "course-hub-rollback-001",
+      "must": [
+        "course_hub_flag_false_restores_direct_entry",
+        "existing_learning_session_not_deleted"
+      ]
+    },
+    {
+      "id": "course-hub-standalone-assets-001",
+      "must": [
+        "build_stages_next_static",
+        "build_stages_public_assets",
+        "homepage_javascript_chunks_return_200"
+      ]
+    }
+  ]
+}

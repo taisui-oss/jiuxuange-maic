@@ -75,10 +75,17 @@ describe('Jiuxuange portal demo migration', () => {
     });
     expect(migrated.assessmentSessions[0].projectId).toBe('demo-project');
     expect(newAssignment?.projectId).toBe('mckess-central-kitchen');
+    expect(newAssignment?.id).toBe('bm-assessment-mckess-v2');
+    expect(newAssignment?.questions).toHaveLength(6);
+    expect(newAssignment?.questionVersion).toBe('bm-mckess-six-open-scenarios@2');
     expect(
       migrated.projectCardVersions.find((card) => card.id === newAssignment?.projectCardVersionId)
         ?.projectId,
     ).toBe(newAssignment?.projectId);
+    expect(
+      migrated.projectCardVersions.find((card) => card.id === newAssignment?.projectCardVersionId)
+        ?.version,
+    ).toBe('1.1.0-draft');
     expect(
       migrated.groupMemberships.some(
         (membership) =>

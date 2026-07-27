@@ -1,0 +1,583 @@
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { format } from 'prettier';
+
+const CLASSROOM_ID = 'jxg-bm-case-breakfast-chain-six-elements-v1';
+const CREATED_AT = 1785206400000;
+const UPDATED_AT = '2026-07-28T00:00:00.000Z';
+const OUTPUT_PATH = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  '..',
+  'content',
+  'jiuxuange',
+  'classrooms',
+  `${CLASSROOM_ID}.json`,
+);
+
+const theme = {
+  backgroundColor: '#f8fafc',
+  themeColors: ['#0f766e', '#0e7490', '#4f46e5', '#d97706', '#0f172a'],
+  fontColor: '#172033',
+  fontName: 'Microsoft YaHei',
+  outline: {
+    color: '#0f766e',
+    width: 2,
+    style: 'solid',
+  },
+  shadow: {
+    h: 0,
+    v: 4,
+    blur: 12,
+    color: '#0f172a22',
+  },
+};
+
+function text(id, left, top, width, height, content, color = '#172033') {
+  return {
+    id,
+    type: 'text',
+    left,
+    top,
+    width,
+    height,
+    content,
+    defaultFontName: 'Microsoft YaHei',
+    defaultColor: color,
+    rotate: 0,
+  };
+}
+
+function shape(id, left, top, width, height, fill) {
+  return {
+    id,
+    type: 'shape',
+    left,
+    top,
+    width,
+    height,
+    path: 'M 0 0 L 1 0 L 1 1 L 0 1 Z',
+    viewBox: [1, 1],
+    fill,
+    fixedRatio: false,
+    rotate: 0,
+  };
+}
+
+function slideScene({ id, order, title, eyebrow, question, observations, takeaway, speeches }) {
+  const elements = [
+    shape(`${id}-accent`, 0, 0, 1000, 7, '#0f766e'),
+    text(
+      `${id}-eyebrow`,
+      64,
+      38,
+      872,
+      30,
+      `<p style="font-size:14px;font-weight:700;color:#0f766e;">${eyebrow}</p>`,
+      '#0f766e',
+    ),
+    text(
+      `${id}-title`,
+      64,
+      76,
+      872,
+      58,
+      `<p style="font-size:30px;font-weight:700;color:#172033;">${title}</p>`,
+    ),
+    shape(`${id}-question-bg`, 64, 146, 872, 76, '#e6f4f1'),
+    text(
+      `${id}-question`,
+      88,
+      162,
+      824,
+      48,
+      `<p style="font-size:18px;font-weight:700;color:#115e59;">${question}</p>`,
+      '#115e59',
+    ),
+  ];
+
+  observations.forEach((observation, index) => {
+    const left = 64 + index * 292;
+    elements.push(
+      shape(`${id}-observation-${index}-bg`, left, 252, 268, 174, '#ffffff'),
+      text(
+        `${id}-observation-${index}-number`,
+        left + 18,
+        270,
+        38,
+        36,
+        `<p style="font-size:18px;font-weight:700;color:#0e7490;">0${index + 1}</p>`,
+        '#0e7490',
+      ),
+      text(
+        `${id}-observation-${index}-title`,
+        left + 58,
+        270,
+        190,
+        42,
+        `<p style="font-size:17px;font-weight:700;color:#172033;">${observation.title}</p>`,
+      ),
+      text(
+        `${id}-observation-${index}-body`,
+        left + 18,
+        320,
+        230,
+        90,
+        `<p style="font-size:14px;line-height:1.65;color:#475569;">${observation.body}</p>`,
+        '#475569',
+      ),
+    );
+  });
+
+  elements.push(
+    shape(`${id}-takeaway-bg`, 64, 456, 872, 66, '#172033'),
+    text(
+      `${id}-takeaway`,
+      88,
+      471,
+      824,
+      40,
+      `<p style="font-size:16px;font-weight:700;color:#ffffff;">${takeaway}</p>`,
+      '#ffffff',
+    ),
+  );
+
+  return {
+    id,
+    stageId: CLASSROOM_ID,
+    type: 'slide',
+    title,
+    order,
+    content: {
+      type: 'slide',
+      canvas: {
+        id: `${id}-canvas`,
+        viewportSize: 1000,
+        viewportRatio: 0.5625,
+        theme,
+        elements,
+        background: {
+          type: 'solid',
+          color: '#f8fafc',
+        },
+      },
+      schemaVersion: 1,
+    },
+    actions: [
+      {
+        id: `${id}-speech-1`,
+        type: 'speech',
+        text: speeches[0],
+      },
+      {
+        id: `${id}-spotlight-question`,
+        type: 'spotlight',
+        elementId: `${id}-question`,
+      },
+      {
+        id: `${id}-speech-2`,
+        type: 'speech',
+        text: speeches[1],
+      },
+      {
+        id: `${id}-spotlight-takeaway`,
+        type: 'spotlight',
+        elementId: `${id}-takeaway`,
+      },
+      {
+        id: `${id}-speech-3`,
+        type: 'speech',
+        text: speeches[2],
+      },
+    ],
+    createdAt: CREATED_AT + order,
+    updatedAt: CREATED_AT + order,
+    outlineId: `scene_${order}`,
+  };
+}
+
+const scenes = [
+  slideScene({
+    id: 'breakfast-intro',
+    order: 1,
+    eyebrow: '教学情境案例 · 不对应具体企业',
+    title: '社区早餐连锁：从一笔订单理解商业模式',
+    question: '一家早餐连锁为什么不仅是“把早餐卖出去”，而是一套完整交易结构？',
+    observations: [
+      {
+        title: '经营场景',
+        body: '8 家直营网点位于社区、地铁口和写字楼周边，早高峰集中在 7:00—9:30。',
+      },
+      {
+        title: '交付方式',
+        body: '中央厨房完成标准化预制，门店负责复热、组合、销售与即时交付。',
+      },
+      {
+        title: '当前挑战',
+        body: '门店增加后收入增长，但库存损耗、选址投入和高峰履约压力同步上升。',
+      },
+    ],
+    takeaway: '本课不背六个定义，而是沿着一笔订单追踪六要素如何共同决定结果。',
+    speeches: [
+      '这是一家用于教学的社区早餐连锁，不对应某个真实企业。我们先从顾客的一笔早餐订单出发，避免一开始就把商业模式拆成互不相干的名词。',
+      '请留意三个事实：需求高度集中、中央厨房和门店分工明确、扩张同时放大收入与损耗。它们会贯穿后面的每一步判断。',
+      '接下来我们依次回答八个问题：谁和谁交易，服务谁，各主体如何协作，企业必须擅长什么，谁向谁付钱，资金何时流入和占用，什么决定长期价值，最后形成六要素因果图。',
+    ],
+  }),
+  slideScene({
+    id: 'breakfast-transaction-map',
+    order: 2,
+    eyebrow: '第 1 步 · 交易地图',
+    title: '谁和谁交易',
+    question: '先识别主体与交换物，再讨论企业应该做什么。',
+    observations: [
+      {
+        title: '顾客 ↔ 门店',
+        body: '顾客支付餐费并提供订单信息；门店交付早餐、速度和稳定体验。',
+      },
+      {
+        title: '门店 ↔ 中央厨房',
+        body: '门店提交预测与补货需求；中央厨房提供标准化产品、品控与配送。',
+      },
+      {
+        title: '企业 ↔ 供应商',
+        body: '供应商提供原料与账期；企业提供采购订单、结算和长期合作机会。',
+      },
+    ],
+    takeaway: '交易地图的单位不是“部门”，而是每个主体交换的价值、信息、责任与资金。',
+    speeches: [
+      '商业模式分析的起点不是产品清单，而是交易主体。早餐连锁至少连接顾客、门店、中央厨房和供应商。',
+      '同一主体之间往往不只交换商品。顾客还交出时间和信任，门店还承担履约责任，供应商还可能提供账期。',
+      '把交换物画清楚后，我们才能判断企业到底服务谁，以及哪一个关系最值得被重新设计。',
+    ],
+  }),
+  slideScene({
+    id: 'breakfast-positioning',
+    order: 3,
+    eyebrow: '第 2 步 · 定位',
+    title: '服务谁、解决什么问题',
+    question: '目标客户不是“所有吃早餐的人”，而是谁在什么场景下为什么选择你。',
+    observations: [
+      {
+        title: '目标客户',
+        body: '工作日通勤者与周边上班族，需要在固定时间窗口内完成早餐购买。',
+      },
+      {
+        title: '核心问题',
+        body: '时间紧、品质不稳定、选择成本高，且无法承受长时间排队。',
+      },
+      {
+        title: '价值主张',
+        body: '在高频路径上提供稳定、快速、价格可预期的早餐组合。',
+      },
+    ],
+    takeaway: '定位决定企业选择服务谁、解决什么问题，也决定哪些需求主动不做。',
+    speeches: [
+      '如果把客户定义为所有吃早餐的人，后面的选址、产品和运营就无法形成明确取舍。',
+      '这家连锁的核心场景是工作日通勤高峰。它解决的不是“没有食物”，而是在有限时间内获得稳定早餐的问题。',
+      '因此，定位会继续约束门店位置、SKU 数量、生产方式和价格结构。',
+    ],
+  }),
+  slideScene({
+    id: 'breakfast-business-system',
+    order: 4,
+    eyebrow: '第 3 步 · 业务系统',
+    title: '各主体如何协作',
+    question: '谁负责预测、生产、品控、销售和最后一公里，决定了这门生意如何运转。',
+    observations: [
+      {
+        title: '中央厨房',
+        body: '集中采购、标准配方、预制生产与质量控制，降低门店后场复杂度。',
+      },
+      {
+        title: '门店',
+        body: '负责选址覆盖、复热组合、现场销售、即时反馈和损耗记录。',
+      },
+      {
+        title: '数字系统',
+        body: '连接订单、天气、时段销量、补货和报损，形成第二天的生产计划。',
+      },
+    ],
+    takeaway: '业务系统不是组织架构图，而是主体之间持续协作并承担风险的方式。',
+    speeches: [
+      '同样是卖早餐，全部门店现做和中央厨房预制，会形成完全不同的业务系统。',
+      '中央厨房提高标准化，但也带来预测和配送要求；门店变轻，但更依赖数据和补货节奏。',
+      '业务系统设计的核心，是决定哪一个主体承担哪种责任、成本和失败风险。',
+    ],
+  }),
+  slideScene({
+    id: 'breakfast-capabilities',
+    order: 5,
+    eyebrow: '第 4 步 · 关键资源能力',
+    title: '企业必须擅长什么',
+    question: '资源很多，但只有支撑核心交易结构、且难以快速替代的能力才是关键。',
+    observations: [
+      {
+        title: '需求预测',
+        body: '按门店、天气和时段预测销量，减少缺货与报损同时发生。',
+      },
+      {
+        title: '标准化履约',
+        body: '让不同门店在早高峰稳定完成复热、组合和快速出杯出餐。',
+      },
+      {
+        title: '点位密度',
+        body: '在目标客群高频路径上形成足够密度，支撑配送效率和品牌记忆。',
+      },
+    ],
+    takeaway: '关键能力必须能够解释：没有它，当前定位和业务系统为什么不能成立。',
+    speeches: [
+      '门店、设备、员工和配方都是资源，但并非所有资源都能成为长期优势。',
+      '对这个案例而言，预测、标准化履约和点位密度互相依赖。单独拥有中央厨房，并不能自动形成竞争力。',
+      '判断关键资源能力时，要追问它具体支撑哪一段交易，又是否能被竞争者快速复制。',
+    ],
+  }),
+  slideScene({
+    id: 'breakfast-profit-model',
+    order: 6,
+    eyebrow: '第 5 步 · 盈利模式',
+    title: '谁向谁付钱',
+    question: '收入、成本和利益分配必须回到具体交易，而不是只看营业额。',
+    observations: [
+      {
+        title: '收入来源',
+        body: '顾客按单支付早餐组合；企业团餐按合同支付批量订单。',
+      },
+      {
+        title: '主要成本',
+        body: '原料、门店租金、人员、中央厨房、配送、损耗和平台渠道费用。',
+      },
+      {
+        title: '盈利杠杆',
+        body: '客单组合、复购、门店峰值产出、原料利用率与配送密度共同决定利润。',
+      },
+    ],
+    takeaway: '盈利模式回答的不只是“赚多少”，而是从谁获得什么收入、为此承担什么成本。',
+    speeches: [
+      '早餐销售额增长，并不等于盈利模式成立。门店越多，租金、人员和损耗也可能同步增加。',
+      '企业团餐提高订单可预测性，但可能带来账期和低价压力；零售现付现金快，但波动更大。',
+      '真正需要比较的是每种收入如何影响毛利、固定成本利用和各主体的利益。',
+    ],
+  }),
+  slideScene({
+    id: 'breakfast-cash-flow',
+    order: 7,
+    eyebrow: '第 6 步 · 现金流结构',
+    title: '钱在什么时候流入和占用',
+    question: '利润表相似的两种模式，可能因为收款、库存和扩张节奏产生完全不同的现金压力。',
+    observations: [
+      {
+        title: '现金流入',
+        body: '门店零售即时收款；团餐可能月结；会员储值形成提前流入但伴随履约责任。',
+      },
+      {
+        title: '现金占用',
+        body: '原料库存、房租押付、设备、中央厨房和新店筹备先于收入发生。',
+      },
+      {
+        title: '扩张节奏',
+        body: '开店过快会放大前期投入；密度不足又会降低配送效率和品牌触达。',
+      },
+    ],
+    takeaway: '现金流结构决定企业能否承受增长过程，而不仅是最终能否盈利。',
+    speeches: [
+      '门店零售今天卖出今天收钱，看起来现金很好，但房租、设备和备货往往先发生。',
+      '团餐订单可以提高产能利用率，却可能把现金流入推迟到月结。两类业务需要不同的资金安排。',
+      '因此，现金流结构会反过来限制开店速度、选址策略和业务组合。',
+    ],
+  }),
+  slideScene({
+    id: 'breakfast-enterprise-value',
+    order: 8,
+    eyebrow: '第 7 步 · 企业价值',
+    title: '什么决定长期企业价值',
+    question: '长期价值来自可复制、可持续的自由现金流能力，而不是门店数量本身。',
+    observations: [
+      {
+        title: '单店可复制',
+        body: '新店是否能在可控时间内达到稳定客流、损耗和现金回收。',
+      },
+      {
+        title: '系统可积累',
+        body: '销售与报损数据是否持续改善预测、产品组合和选址决策。',
+      },
+      {
+        title: '增长可承受',
+        body: '扩张是否产生正向自由现金流，而不是持续依赖外部融资补贴。',
+      },
+    ],
+    takeaway: '门店是结果；可复制单元、数据闭环和自由现金流才是长期企业价值的来源。',
+    speeches: [
+      '如果新开一家店都需要重新依赖某个能人，这种增长就很难形成可复制的企业价值。',
+      '相反，标准化、数据反馈和供应链密度能够让每次复制更快、更稳、更省现金。',
+      '企业价值最终要落到未来自由现金流的规模、持续性和风险，而不是只看收入增速。',
+    ],
+  }),
+  slideScene({
+    id: 'breakfast-causal-map',
+    order: 9,
+    eyebrow: '第 8 步 · 六要素汇总',
+    title: '汇总六要素因果图',
+    question: '每个要素都要能回答“它如何影响下一步”，而不是成为六个并列标签。',
+    observations: [
+      {
+        title: '前半链',
+        body: '通勤者的速度需求 → 中央厨房与轻门店协作 → 预测和标准化能力。',
+      },
+      {
+        title: '经营链',
+        body: '预测与履约 → 更低损耗和更高峰值产出 → 更稳定的门店利润与现金。',
+      },
+      {
+        title: '价值链',
+        body: '单店现金成立 + 系统持续学习 → 可复制扩张 → 更高且更稳的企业价值。',
+      },
+    ],
+    takeaway: '定位 → 业务系统 → 关键资源能力 → 盈利模式 → 现金流结构 → 企业价值。',
+    speeches: [
+      '现在把前面的判断连起来。定位决定要解决通勤者的速度与稳定问题，因此企业选择中央厨房和轻门店协作。',
+      '这个业务系统要求预测、标准化和点位密度；能力是否形成，又会影响损耗、产出、利润和现金回收。',
+      '只有这些连接被事实验证，企业价值才不是故事。之后学习便利蜂时，我们会用同一条因果链做真实案例迁移。',
+    ],
+  }),
+  {
+    id: 'breakfast-objective-check',
+    stageId: CLASSROOM_ID,
+    type: 'quiz',
+    title: '原生互动：六要素因果关系',
+    order: 10,
+    content: {
+      type: 'quiz',
+      questions: [
+        {
+          id: 'breakfast-q1',
+          type: 'single',
+          question: '该案例把工作日通勤者作为主要客户，最直接影响的是哪一项选择？',
+          options: [
+            { value: 'A', label: '门店必须覆盖通勤高频路径并强调快速稳定交付' },
+            { value: 'B', label: '企业必须建设最大面积的中央厨房' },
+            { value: 'C', label: '企业应把所有早餐品类全部自制' },
+            { value: 'D', label: '企业只能通过会员储值获得收入' },
+          ],
+          answer: ['A'],
+          analysis:
+            '定位首先约束交付场景与价值主张，不会自动推出最大产能、全品类自制或单一收入方式。',
+          points: 20,
+          hasAnswer: true,
+        },
+        {
+          id: 'breakfast-q2',
+          type: 'single',
+          question: '中央厨房与轻门店组合最需要哪一项能力来避免“缺货与报损同时发生”？',
+          options: [
+            { value: 'A', label: '门店装修能力' },
+            { value: 'B', label: '分门店、时段和天气的需求预测能力' },
+            { value: 'C', label: '增加总部会议次数' },
+            { value: 'D', label: '提高所有产品售价' },
+          ],
+          answer: ['B'],
+          analysis: '中央预制依赖更准确的需求预测，否则集中生产会同时放大缺货和报损。',
+          points: 20,
+          hasAnswer: true,
+        },
+        {
+          id: 'breakfast-q3',
+          type: 'single',
+          question: '为什么营业收入增长不能单独证明盈利模式成立？',
+          options: [
+            { value: 'A', label: '收入与利润没有任何关系' },
+            { value: 'B', label: '门店扩张可能同步增加租金、人员、配送和损耗' },
+            { value: 'C', label: '只有企业团餐才产生利润' },
+            { value: 'D', label: '零售顾客不会重复购买' },
+          ],
+          answer: ['B'],
+          analysis: '盈利模式需要同时观察收入、成本和利益分配，扩张可能让成本快于收入增长。',
+          points: 20,
+          hasAnswer: true,
+        },
+        {
+          id: 'breakfast-q4',
+          type: 'single',
+          question: '以下哪一项最能说明现金流结构，而不只是利润表现？',
+          options: [
+            { value: 'A', label: '团餐收入可能月结，而房租、备货和设备投入先发生' },
+            { value: 'B', label: '早餐产品口味受到顾客喜欢' },
+            { value: 'C', label: '品牌采用统一视觉设计' },
+            { value: 'D', label: '门店拥有三种早餐套餐' },
+          ],
+          answer: ['A'],
+          analysis: '现金流结构关注资金流入、流出和占用的时间差。',
+          points: 20,
+          hasAnswer: true,
+        },
+        {
+          id: 'breakfast-q5',
+          type: 'single',
+          question: '以下哪条因果链最符合本案例的六要素逻辑？',
+          options: [
+            {
+              value: 'A',
+              label: '门店越多 → 收入越高 → 企业价值必然越高',
+            },
+            {
+              value: 'B',
+              label: '通勤需求 → 轻门店与中央厨房 → 预测和标准化 → 单店现金成立 → 可复制价值',
+            },
+            {
+              value: 'C',
+              label: '产品越多 → 客户越多 → 现金流一定越好',
+            },
+            {
+              value: 'D',
+              label: '融资越多 → 开店越快 → 自由现金流越稳定',
+            },
+          ],
+          answer: ['B'],
+          analysis:
+            '正确因果链必须从定位出发，经过业务系统和能力，再落到盈利、现金流与可复制价值。',
+          points: 20,
+          hasAnswer: true,
+        },
+      ],
+    },
+    actions: [
+      {
+        id: 'breakfast-objective-check-speech',
+        type: 'speech',
+        text: '请完成五道原生互动题。每题答对后才算完成本案例，并解锁下一案例。答错可以使用 OpenMAIC 原生重试。',
+      },
+    ],
+    createdAt: CREATED_AT + 10,
+    updatedAt: CREATED_AT + 10,
+    outlineId: 'scene_10',
+  },
+];
+
+const classroom = {
+  id: CLASSROOM_ID,
+  generationComplete: true,
+  stage: {
+    id: CLASSROOM_ID,
+    name: '社区早餐连锁：六要素因果链',
+    description: '九轩阁商业模式大课第一案例内部试学课堂',
+    createdAt: CREATED_AT,
+    updatedAt: UPDATED_AT,
+    languageDirective:
+      '全程使用中文。采用魏朱商业模式六要素模型，明确区分定位、业务系统、关键资源能力、盈利模式、现金流结构和企业价值。每一步从交易主体和案例事实出发，不使用商业模式画布九宫格替代六要素因果关系。',
+    style: 'professional',
+    currentSceneId: scenes[0].id,
+    agentIds: ['default-1', 'default-2', 'default-3', 'default-4'],
+    videoManifest: {},
+    interactiveMode: false,
+    taskEngineMode: false,
+  },
+  scenes,
+};
+
+await mkdir(dirname(OUTPUT_PATH), { recursive: true });
+const serializedClassroom = await format(JSON.stringify(classroom), {
+  parser: 'json',
+  printWidth: 100,
+});
+await writeFile(OUTPUT_PATH, serializedClassroom, 'utf8');
+console.log(`Wrote ${OUTPUT_PATH}`);
