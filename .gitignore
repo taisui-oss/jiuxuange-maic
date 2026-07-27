@@ -57,6 +57,10 @@ server-providers-*.yml
 # vercel
 .vercel
 
+# netlify
+/.netlify/
+/deno.lock
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

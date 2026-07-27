@@ -8,6 +8,11 @@ const publicSource = resolve(root, 'public');
 const classroomSource = resolve(root, 'content/jiuxuange/classrooms');
 
 if (!existsSync(standaloneRoot) || !existsSync(staticSource)) {
+  if (process.env.NETLIFY || process.env.VERCEL) {
+    console.log('[standalone-assets] skipped for managed hosting build');
+    process.exit(0);
+  }
+
   throw new Error('Standalone output is incomplete. Run `next build` before staging assets.');
 }
 

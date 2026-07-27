@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: projectRoot,
   },
-  output: process.env.VERCEL ? undefined : 'standalone',
+  output: process.env.VERCEL || process.env.NETLIFY ? undefined : 'standalone',
   transpilePackages: ['mathml2omml', 'pptxgenjs', '@openmaic/importer'],
   // These agent packages do a runtime `import(specifier)` with a computed
   // specifier (to lazily load node:fs/os/path without breaking browser/Vite
