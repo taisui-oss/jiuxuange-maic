@@ -60,7 +60,7 @@ export function JiuxuangeLearningPortal({
             我的课程
           </h2>
           <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-            正式课程使用 OpenMAIC 原生课堂；完成主线单元后逐级解锁案例课。
+            正式课程使用 OpenMAIC 原生课堂；完成当前案例后依次开放下一个案例。
           </p>
         </div>
         {!portal && !error && (
@@ -86,7 +86,7 @@ export function JiuxuangeLearningPortal({
                 {assessment && (
                   <span className="inline-flex items-center gap-1 text-muted-foreground">
                     <Users className="size-3" />
-                    同组共享项目卡 v{assessment.projectCardVersion}
+                    绑定项目卡 v{assessment.projectCardVersion}
                   </span>
                 )}
               </div>
@@ -96,7 +96,7 @@ export function JiuxuangeLearningPortal({
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                 {error
                   ? '当前未取得可信学员身份，测评入口保持关闭。'
-                  : '六道必答题，个人独立作答；草稿不消耗机会，最多正式提交两次。'}
+                  : '题目、答案和反馈均绑定上方项目卡；六道必答题，最多正式提交两次。'}
               </p>
             </div>
           </div>

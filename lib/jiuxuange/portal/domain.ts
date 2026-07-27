@@ -7,6 +7,10 @@ import type {
   LearnerPortalView,
   PortalContext,
 } from './types';
+import {
+  createMckessAssessmentAssignment,
+  createMckessAssessmentProjectCardVersion,
+} from './mckess-assessment';
 
 export type AssessmentAnswers = Record<string, string>;
 
@@ -16,28 +20,32 @@ function nowIso() {
   return new Date().toISOString();
 }
 
-function requireMembership(
-  state: JiuxuangePortalState,
-  learnerId: string,
-  groupId: string,
-) {
+function requireMembership(state: JiuxuangePortalState, learnerId: string, groupId: string) {
   const membership = state.groupMemberships.find(
-    (item) =>
-      item.learnerId === learnerId && item.groupId === groupId && item.status === 'active',
+    (item) => item.learnerId === learnerId && item.groupId === groupId && item.status === 'active',
   );
   if (!membership) throw new Error('Learner is not assigned to this project group.');
   return membership;
 }
 
-function requireOwnedSession(
-  state: JiuxuangePortalState,
-  learnerId: string,
-  sessionId: string,
-) {
+function requireOwnedSession(state: JiuxuangePortalState, learnerId: string, sessionId: string) {
   const session = state.assessmentSessions.find(
     (item) => item.id === sessionId && item.learnerId === learnerId,
   );
   if (!session) throw new Error('Assessment session was not found for this learner.');
+  const assignment = state.assessmentAssignments.find((item) => item.id === session.assignmentId);
+  const projectCard = state.projectCardVersions.find(
+    (item) => item.id === session.projectCardVersionId,
+  );
+  if (
+    !assignment ||
+    !projectCard ||
+    assignment.projectId !== projectCard.projectId ||
+    session.projectId !== projectCard.projectId ||
+    assignment.projectCardVersionId !== session.projectCardVersionId
+  ) {
+    throw new Error('Assessment project does not match its frozen project card.');
+  }
   return session;
 }
 
@@ -52,14 +60,8 @@ function assertCompleteAnswers(session: AssessmentSession, answers: AssessmentAn
 }
 
 export function createDemoPortalState(): JiuxuangePortalState {
-  const questions = [
-    ['positioning-1', '基于项目卡事实，这个项目当前服务的核心交易对象是谁？请说明你的依据。'],
-    ['transaction-2', '项目当前真正完成的交易内容是什么？哪些需求仍未被满足？'],
-    ['system-3', '要让交易持续发生，最关键的业务角色与关系是什么？'],
-    ['resource-4', '现有资源能力中，哪一项最可能成为转型约束？请给出反证条件。'],
-    ['profit-5', '当前收入、成本与利益相关者分配之间存在哪个主要张力？'],
-    ['revision-6', '如果只能优先验证一个假设，你会选择什么，并如何用事实判断它？'],
-  ].map(([id, prompt]) => ({ id, prompt, required: true as const }));
+  const projectCard = createMckessAssessmentProjectCardVersion();
+  const assessmentAssignment = createMckessAssessmentAssignment();
 
   return {
     schemaVersion: 1,
@@ -95,59 +97,20 @@ export function createDemoPortalState(): JiuxuangePortalState {
       {
         id: 'membership-demo-learner',
         learnerId: 'demo-learner',
-        groupId: 'demo-group',
+        groupId: projectCard.groupId,
         classId: 'demo-class',
         status: 'active',
       },
       {
         id: 'membership-demo-teammate',
         learnerId: 'demo-teammate',
-        groupId: 'demo-group',
+        groupId: projectCard.groupId,
         classId: 'demo-class',
         status: 'active',
       },
     ],
-    projectCardVersions: [
-      {
-        id: 'project-card-demo@1',
-        groupId: 'demo-group',
-        projectId: 'demo-project',
-        version: '1',
-        title: '中草药泥膜项目',
-        frozenAt: NOW,
-        facts: [
-          {
-            id: 'fact-1',
-            text: '项目拥有中草药种植园和泥膜加工能力。',
-            sourceLabel: '项目卡：基础资源',
-          },
-          {
-            id: 'fact-2',
-            text: '过去主要向约 5000 家线下美容院供应面膜产品。',
-            sourceLabel: '项目卡：既有交易',
-          },
-          {
-            id: 'fact-3',
-            text: '近三年实体美容院渠道持续收缩，项目计划转型。',
-            sourceLabel: '项目卡：当前变化',
-          },
-        ],
-      },
-    ],
-    assessmentAssignments: [
-      {
-        id: 'bm-assessment-v1',
-        title: '商业模式个人项目测评',
-        groupId: 'demo-group',
-        projectCardVersionId: 'project-card-demo@1',
-        questionVersion: 'bm-six-open-questions@1',
-        questions,
-        promptVersion: 'directional-feedback@1',
-        rubricVersion: 'text-evidence-rubric@1',
-        status: 'published',
-        publishedAt: NOW,
-      },
-    ],
+    projectCardVersions: [projectCard],
+    assessmentAssignments: [assessmentAssignment],
     assessmentSessions: [],
     assessmentAttempts: [],
     activityEvents: [],
@@ -206,28 +169,39 @@ export function getLearnerPortal(
   );
   const assessments = state.assessmentAssignments
     .filter((item) => item.status === 'published' && groupIds.has(item.groupId))
-    .map((assignment) => {
+    .flatMap((assignment) => {
       const projectCard = state.projectCardVersions.find(
         (item) => item.id === assignment.projectCardVersionId,
       );
+      if (!projectCard || projectCard.projectId !== assignment.projectId) return [];
       const session = state.assessmentSessions.find(
         (item) => item.learnerId === learnerId && item.assignmentId === assignment.id,
       );
-      return {
-        assignmentId: assignment.id,
-        title: assignment.title,
-        projectTitle: projectCard?.title ?? '项目卡',
-        projectCardVersion: projectCard?.version ?? 'unknown',
-        status: session?.status === 'locked'
-          ? ('locked' as const)
-          : session
-            ? ('in_progress' as const)
-            : ('available' as const),
-        attemptsUsed: session?.attemptIds.length ?? 0,
-      };
+      return [
+        {
+          assignmentId: assignment.id,
+          title: assignment.title,
+          projectId: assignment.projectId,
+          projectCardVersionId: assignment.projectCardVersionId,
+          projectTitle: projectCard.title,
+          projectCardVersion: projectCard.version,
+          status:
+            session?.status === 'locked'
+              ? ('locked' as const)
+              : session
+                ? ('in_progress' as const)
+                : ('available' as const),
+          attemptsUsed: session?.attemptIds.length ?? 0,
+        },
+      ];
     });
 
-  return { learnerId, courses, assessments, activeSeconds: summarizeActiveSeconds(state, learnerId) };
+  return {
+    learnerId,
+    courses,
+    assessments,
+    activeSeconds: summarizeActiveSeconds(state, learnerId),
+  };
 }
 
 export function startAssessmentSession(
@@ -235,26 +209,37 @@ export function startAssessmentSession(
   learnerId: string,
   assignmentId: string,
 ): AssessmentSession {
-  const existing = state.assessmentSessions.find(
-    (item) => item.learnerId === learnerId && item.assignmentId === assignmentId,
-  );
-  if (existing) return existing;
-
   const assignment = state.assessmentAssignments.find((item) => item.id === assignmentId);
   if (!assignment || assignment.status !== 'published') {
     throw new Error('Assessment must be published before a learner can start it.');
   }
   requireMembership(state, learnerId, assignment.groupId);
   const projectCard = state.projectCardVersions.find(
-    (item) =>
-      item.id === assignment.projectCardVersionId && item.groupId === assignment.groupId,
+    (item) => item.id === assignment.projectCardVersionId && item.groupId === assignment.groupId,
   );
   if (!projectCard) throw new Error('The frozen project card is unavailable.');
+  if (assignment.projectId !== projectCard.projectId) {
+    throw new Error('Assessment project does not match its frozen project card.');
+  }
+
+  const existing = state.assessmentSessions.find(
+    (item) => item.learnerId === learnerId && item.assignmentId === assignmentId,
+  );
+  if (existing) {
+    if (
+      existing.projectId !== assignment.projectId ||
+      existing.projectCardVersionId !== assignment.projectCardVersionId
+    ) {
+      throw new Error('Assessment session does not match the assigned project card.');
+    }
+    return existing;
+  }
 
   const session: AssessmentSession = {
     id: `assessment-session-${nanoid(10)}`,
     learnerId,
     assignmentId,
+    projectId: assignment.projectId,
     projectCardVersionId: assignment.projectCardVersionId,
     questionVersion: assignment.questionVersion,
     questions: structuredClone(assignment.questions),
@@ -293,8 +278,7 @@ function buildFeedback(
   if (attemptNumber === 1) {
     return {
       kind: 'directional' as const,
-      body:
-        '你已经形成第一轮独立判断。下一轮请优先补足项目事实、因果连接和可能推翻判断的条件；系统不会在此阶段提供参考结论。',
+      body: '你已经形成第一轮独立判断。下一轮请优先补足项目事实、因果连接和可能推翻判断的条件；系统不会在此阶段提供参考结论。',
       changedQuestionIds: [],
       evidenceAnswerIds: Object.keys(answers),
     };

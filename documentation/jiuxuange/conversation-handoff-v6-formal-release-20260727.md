@@ -63,37 +63,38 @@ Jiuxuange MAIC 6.0.0
 
 ## 3. 已冻结的产品决策
 
-### 3.1 六要素学习主线
+### 3.1 案例学习主路径
 
-[DECIDED, HIGH] 正式主线不再继续扩展 V5.1 的固定节点、弱回答判定、补救教学和三态证据状态机。
+[DECIDED, HIGH] 商业模式大课对学员只呈现一条连续案例路径，不再把“六要素主线”和“正式案例”做成两套并列入口。第一个咖啡店案例承担六要素概念导入，后续案例负责迁移。
 
-正式主线采用：
+每个案例统一采用：
 
 ```text
-进入预生成 OpenMAIC 课堂
-→ 完成该单元全部必需场景
+进入独立预生成 OpenMAIC 课堂
+→ 完成该案例全部必需场景
 → 完成课程包中 required 的原生互动
 → 有标准答案的题目必须答对
 → 答错时使用 OpenMAIC 原生重试
-→ 标记单元完成
-→ 解锁对应案例
+→ 标记当前案例完成
+→ 解锁下一个案例
 ```
 
-[DECIDED, HIGH] 主线暂不强制提交个人反思，不增加自定义 AI 掌握判定。
+[DECIDED, HIGH] 案例完成暂不强制提交个人反思，不增加自定义 AI 掌握判定。
 
-[DECIDED, HIGH] 旧 `attempted / taught / demonstrated`、确定性补救和 `remediation_exhausted` 保留为冻结实验资产；新主线默认不调用，稳定发布前不删除。
+[DECIDED, HIGH] 旧 `attempted / taught / demonstrated`、确定性补救和 `remediation_exhausted` 保留为冻结实验资产；正式案例路径不调用，稳定发布前不删除。
 
-### 3.2 正式案例课
+### 3.2 顺序案例
 
-[DECIDED, HIGH] 案例按主线单元完成状态逐级解锁。点击案例后进入独立、预生成的 OpenMAIC 案例课堂，不再使用现有不完整的固定案例对话逻辑。
+[DECIDED, HIGH] 案例只按前一个案例的完成状态解锁。课程内容是否审校通过是第二道门；顺序满足但课程包未发布时仍不可进入。
 
-首轮映射：
+首轮顺序：
 
-| 主线单元完成 | 解锁案例 |
-|---|---|
-| 业务系统与关键资源能力 | 便利蜂 |
-| 定位与盈利模式 | 生鲜零售 |
-| 更深层迁移训练 | SHEIN、花西子等后续案例 |
+| 顺序 | 案例 | 解锁条件 |
+|---:|---|---|
+| 1 | 咖啡店：六要素概念与整体关系 | 初始开放 |
+| 2 | 便利蜂 | 完成咖啡店案例 |
+| 3 | 生鲜零售 | 完成便利蜂案例且内容审校通过 |
+| 4-7 | SHEIN、花西子、整车货运平台、智能汽车 | 依次完成上一案例且内容审校通过 |
 
 [DECIDED, HIGH] 便利蜂和生鲜零售只有在具名 SME 审核课程内容后才能进入正式发布。SHEIN、花西子、整车货运平台和智能汽车在审核完成前保持隐藏或审校中。
 
@@ -131,14 +132,16 @@ Jiuxuange MAIC 6.0.0
 - 六道开放题；
 - 最多两次正式提交；
 - 测试期间不提供实时 Agent 帮答；
-- 使用冻结后的项目卡、题目集和量表；
+- `assessment_assignment.project_id` 必须与项目卡 `project_id` 一致；
+- 使用冻结后的 `project_card_version_id`、题目集和量表；
+- 测评会话再次冻结相同的 `project_id + project_card_version_id`，不允许只靠标题关联；
 - AI 生成文字评价，不显示未经人工校准的数字总分；
 - 答案保存成功即视为提交成功，AI 评价异步执行；
 - AI 失败不得丢失答案或消耗额外提交次数。
 
 ### 3.4 项目卡
 
-[DECIDED, HIGH] 正式项目卡由案主填写、核验并发布。麦客思继续作为开发和演示用案例项目卡，不得自动升级为正式企业事实。
+[DECIDED, HIGH] 正式项目卡由案主学员在学员端填写并确认，再由授权审核人发布。首发可由教务后台统一导入草稿，但导入记录必须保持 `pending owner confirmation`；麦客思继续作为开发和演示用案例项目卡，不得自动升级为正式企业事实。
 
 首版项目卡最少包含：
 
@@ -299,7 +302,7 @@ V6.0.0 不得发布，除非全部成立：
 ```text
 Gate 0 版本与架构冻结
 → Gate 1 真实身份、PostgreSQL 与权限基础
-→ Gate 2 OpenMAIC 主线完成规则与案例解锁
+→ Gate 2 OpenMAIC 连续案例完成规则与顺序解锁
 → Gate 3 项目卡、个人研习、小组讨论与双档案
 → Gate 4 六题个人测试与异步 AI 评价
 → Gate 5 生产安全、负载、运维、内容审核与正式发布
@@ -333,7 +336,7 @@ real WeCom integration: BLOCKED_BY_INPUTS
 ### Gate 2 本机试学切片
 
 ```text
-native mainline entry: COMPLETE
+sequential native case entry: COMPLETE
 all-correct objective quiz gate: COMPLETE
 local case unlock: COMPLETE
 convenience-bee native classroom: COMPLETE / INTERNAL_PILOT
@@ -362,8 +365,8 @@ Gate 1 当前技术合同：
 
 ## 10. 事实边界
 
-- 已实现：课程中心、双入口 L0、六题两次提交合同、自由学习、本机课堂、麦客思草案卡、原生主线入口、本机客观题完成门、本机案例解锁、便利蜂独立多轮原生课堂。
-- 已验证：上述能力的定向测试、构建和本机浏览器路径；主线答错拦截、答对解锁、课堂 ID 切换已完成真实浏览器回归。
+- 已实现：课程中心、双入口 L0、六题两次提交合同、自由学习、本机课堂、麦客思草案卡、顺序案例目录、本机客观题完成门、便利蜂独立多轮原生课堂、麦客思项目卡与六题测评硬绑定。
+- 已验证：上述能力的定向测试、构建和本机浏览器路径；案例答错拦截、完成后解锁下一案例、课堂 ID 切换和项目不一致拒绝已完成回归。
 - 仅设计：V6 PostgreSQL/身份/权限合同、服务端课程进度与案例解锁、项目空间、双档案、正式项目卡、异步 AI 评价。
 - 尚未完成：Gate 1 依赖刺探、花名企微登录、PostgreSQL 实现、服务端课程状态、权限、生产部署、内容审核、真实 1000 人发布。
 
@@ -425,5 +428,62 @@ V6 formal release：NO-GO
 [DECIDED, HIGH] 下一正式开发动作不变：只执行 Gate 1 Task 1.1
 “依赖与兼容性刺探”，不得因为本轮生成成功而跳过身份、PostgreSQL、
 关系权限、服务端状态和生产发布 Gate。
+
+## 12. 2026-07-27 连续案例与项目一致性修订
+
+### 12.1 产品合同
+
+```text
+商业模式大课
+→ 第一个多轮 OpenMAIC 原生案例
+→ 完成当前案例
+→ 解锁下一个案例
+```
+
+- 不再向学员提供“六要素主线/正式案例”两个并列入口；
+- 咖啡店案例负责六要素概念导入；
+- 便利蜂是后续正式案例的多轮课堂标准；
+- 每个案例有独立课堂 ID、内容状态和前序案例依赖；
+- 内容处于 `in_review` 时不能因为前序完成而提前开放。
+
+### 12.2 项目卡与个人测评
+
+- 麦客思个人测评绑定 `project_id = mckess-central-kitchen`；
+- 测评会话冻结 `project_card_version_id = project-card-mckess@1.0.0-draft`；
+- assignment、session 和 project card 任一 ID 不一致时拒绝创建、保存和提交；
+- 旧泥膜演示草稿保留，旧 assignment 关闭，不作为当前入口；
+- 六题全部是麦客思项目情境题，不读取其他项目资料。
+
+### 12.3 项目卡录入责任
+
+```text
+主路径：案主学员在学员端填写和确认
+兜底：教务后台批量导入草稿
+```
+
+后台导入必须记录 `admin_import + import_ref`，并保持
+`draft + pending owner confirmation`。导入只替代录入动作，不替代案主确认。
+
+### 12.4 验证
+
+```text
+专项自动化：6 files / 28 tests passed
+全量首轮：299 files / 2273 tests passed，6 files / 9 tests 并发失败
+失败文件单 Worker 复跑：6 files / 31 tests passed
+最终受控全量自动化：306 files / 2284 tests passed
+TypeScript：passed
+ESLint：passed
+i18n key alignment：passed，8 locale files
+Production build：passed，47 个页面/路由
+桌面与 375px 移动端：无横向溢出
+```
+
+浏览器已验证课程目录、便利蜂原生课堂、麦客思项目卡、麦客思六题测评和接口
+项目 ID 一致性。模型不可用时，新问题会保留，学员端只显示通用重试提示，不再
+暴露 Provider、API Key、HTTP 500 或内部错误。
+
+[KNOWN, HIGH] 当前 standalone 实际加载 `0 LLM Provider`。因此预生成课堂可以
+浏览，实时 Agent 对话尚不可用。服务端模型配置、探测、脱敏、费用限制和调用审计
+全部通过前，当前版本只能保持本机 L0，正式 Gate 状态不得提升。
 
 [RULES I BROKE]: 无

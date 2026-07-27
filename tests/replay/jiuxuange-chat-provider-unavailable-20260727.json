@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "jiuxuange-chat-provider-unavailable-20260727",
+  "observedRoute": "/classroom/jxg-bm-case-convenience-bee-v1",
+  "rawError": "API error: 500 - {\"success\":false,\"errorCode\":\"INTERNAL_ERROR\",\"error\":\"API key required for provider: deepseek\"}",
+  "expectedLearnerMessage": "智能对话暂时不可用。你的问题已保留，请稍后重试或联系教务。",
+  "forbiddenLearnerSubstrings": ["API key", "provider", "deepseek", "INTERNAL_ERROR", "500"]
+}

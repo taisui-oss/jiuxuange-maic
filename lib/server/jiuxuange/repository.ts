@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { createDemoPortalState } from '@/lib/jiuxuange/portal/domain';
+import { migrateJiuxuangePortalState } from '@/lib/jiuxuange/portal/migrations';
 import type { JiuxuangePortalState } from '@/lib/jiuxuange/portal/types';
 import { writeJsonFileAtomic } from '@/lib/server/classroom-storage';
 
@@ -26,7 +27,7 @@ export async function readPortalState(): Promise<JiuxuangePortalState> {
     const content = await fs.readFile(dataFilePath(), 'utf8');
     const parsed = JSON.parse(content) as unknown;
     if (!isPortalState(parsed)) throw new Error('Unsupported Jiuxuange portal data schema.');
-    return parsed;
+    return migrateJiuxuangePortalState(parsed);
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
     return createDemoPortalState();

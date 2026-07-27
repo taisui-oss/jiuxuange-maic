@@ -19,6 +19,10 @@ export type JiuxuangeProjectCardVerificationStatus = 'draft' | 'verified' | 'rej
 
 export type JiuxuangeProjectCardAgentId = 'professor' | 'senior' | 'mystery' | 'growth_feedback';
 
+export type JiuxuangeProjectCardEntryMethod = 'learner_form' | 'admin_import';
+
+export type JiuxuangeProjectCardOwnerConfirmationStatus = 'pending' | 'confirmed';
+
 export interface JiuxuangeProjectCardSourceDocument {
   id: string;
   fileName: string;
@@ -71,6 +75,10 @@ export interface JiuxuangeProjectCard {
   version: string;
   title: string;
   status: 'draft' | 'published' | 'archived';
+  entryMethod: JiuxuangeProjectCardEntryMethod;
+  ownerUserId?: string;
+  ownerConfirmationStatus: JiuxuangeProjectCardOwnerConfirmationStatus;
+  importRef?: string;
   sourceDocument: JiuxuangeProjectCardSourceDocument;
   reportedFacts: JiuxuangeProjectCardStatement[];
   learnerClaims: JiuxuangeProjectCardStatement[];

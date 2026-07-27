@@ -4,14 +4,17 @@ import { notFound } from 'next/navigation';
 import {
   AlertTriangle,
   ArrowLeft,
+  ArrowRight,
   BookOpenCheck,
   CircleHelp,
+  ClipboardCheck,
   GraduationCap,
   ShieldCheck,
   Sparkles,
   Users,
 } from 'lucide-react';
 import { mckessProjectCardV1 } from '@/lib/jiuxuange/project-card';
+import { MCKESS_ASSESSMENT_ASSIGNMENT_ID } from '@/lib/jiuxuange/portal/mckess-assessment';
 
 function isLoopbackHost(host: string | null): boolean {
   const hostname = host?.split(':')[0]?.toLowerCase();
@@ -59,13 +62,37 @@ export default async function MckessProjectCardPage() {
           <div className="flex items-start gap-3">
             <AlertTriangle className="mt-0.5 size-5 shrink-0 text-amber-700 dark:text-amber-300" />
             <div>
-              <div className="text-sm font-semibold">模拟项目卡 · 尚未发布</div>
+              <div className="text-sm font-semibold">后台导入草案 · 待案主确认</div>
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                当前内容来自小组作业，全部保持草案状态。页面用于核对数据分层，不代表项目方已经确认，也不会进入正式评分。
+                当前内容来自小组作业并由后台导入。正式项目卡应由案主学员在学员端填写；后台代导入时，也必须由案主逐项确认后才能发布。
               </p>
             </div>
           </div>
         </div>
+
+        <section
+          aria-labelledby="project-assessment-title"
+          className="mt-6 flex flex-col gap-4 border-y border-violet-400/30 bg-violet-500/[0.035] py-5 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div className="flex min-w-0 items-start gap-3">
+            <ClipboardCheck className="mt-0.5 size-5 shrink-0 text-violet-700 dark:text-violet-300" />
+            <div>
+              <h2 id="project-assessment-title" className="text-base font-semibold">
+                麦客思个人项目测评
+              </h2>
+              <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                六道题固定使用本项目和项目卡 {card.version}；个人独立作答，最多正式提交两次。
+              </p>
+            </div>
+          </div>
+          <Link
+            href={`/assessment/${MCKESS_ASSESSMENT_ASSIGNMENT_ID}`}
+            className="inline-flex h-10 w-full shrink-0 items-center justify-center gap-2 rounded-md bg-violet-600 px-4 text-sm font-medium text-white transition-colors hover:bg-violet-500 sm:w-auto"
+          >
+            进入个人测评
+            <ArrowRight className="size-4" />
+          </Link>
+        </section>
 
         <section aria-labelledby="project-overview-title" className="mt-8">
           <div className="flex items-center gap-2">
@@ -156,7 +183,7 @@ export default async function MckessProjectCardPage() {
             ))}
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
-            当前只开放项目卡查看。待项目事实确认和运行时接线后，才开放正式互动与证据回放。
+            当前开放项目卡查看和同项目个人测评。个人研习、小组讨论与证据回放仍待项目事实确认和运行时接线。
           </p>
         </section>
       </div>

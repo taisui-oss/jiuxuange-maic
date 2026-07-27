@@ -62,6 +62,7 @@ export interface AssessmentAssignment {
   id: string;
   title: string;
   groupId: string;
+  projectId: string;
   projectCardVersionId: string;
   questionVersion: string;
   questions: AssessmentQuestion[];
@@ -92,6 +93,7 @@ export interface AssessmentSession {
   id: string;
   learnerId: string;
   assignmentId: string;
+  projectId: string;
   projectCardVersionId: string;
   questionVersion: string;
   questions: AssessmentQuestion[];
@@ -139,6 +141,8 @@ export interface LearnerPortalView {
   assessments: Array<{
     assignmentId: string;
     title: string;
+    projectId: string;
+    projectCardVersionId: string;
     projectTitle: string;
     projectCardVersion: string;
     status: 'available' | 'in_progress' | 'locked';

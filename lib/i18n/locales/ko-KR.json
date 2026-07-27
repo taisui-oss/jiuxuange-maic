@@ -81,7 +81,8 @@
     "endQA": "Q&A 종료",
     "error": {
       "emptyAgentResponses": "에이전트가 빈 응답을 반환하여 토론이 중단되었습니다. 다시 시도하거나 모델 설정을 확인하세요.",
-      "streamInterrupted": "스트림이 예기치 않게 종료되어 토론이 완료되지 않았습니다. 다시 시도해 주세요."
+      "streamInterrupted": "스트림이 예기치 않게 종료되어 토론이 완료되지 않았습니다. 다시 시도해 주세요.",
+      "temporarilyUnavailable": "AI 대화를 일시적으로 사용할 수 없습니다. 질문은 저장되었습니다. 나중에 다시 시도하거나 과정 지원팀에 문의해 주세요."
     },
     "tabs": {
       "lecture": "노트",

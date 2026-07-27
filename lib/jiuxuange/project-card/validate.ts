@@ -42,6 +42,18 @@ export function validateJiuxuangeProjectCard(card: JiuxuangeProjectCard): string
   const errors: string[] = [];
   if (card.kind !== 'project_card') errors.push('Project card kind must be project_card');
   if (!card.version.trim()) errors.push('Project card version is required');
+  if (card.entryMethod === 'learner_form' && !card.ownerUserId) {
+    errors.push('Learner-entered project cards must include ownerUserId');
+  }
+  if (card.entryMethod === 'admin_import' && !card.importRef?.trim()) {
+    errors.push('Admin-imported project cards must include importRef');
+  }
+  if (
+    card.status === 'published' &&
+    (!card.ownerUserId || card.ownerConfirmationStatus !== 'confirmed')
+  ) {
+    errors.push('Published project cards must be confirmed by their owner');
+  }
   if (!/^sha256:[a-f0-9]{64}$/.test(card.sourceDocument.contentHash)) {
     errors.push('Source document must include a valid sha256 content hash');
   }

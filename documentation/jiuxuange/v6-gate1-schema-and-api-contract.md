@@ -929,6 +929,28 @@ project_records
 project_record_versions
 ```
 
+Gate 3 的项目卡录入与确认合同：
+
+```text
+project_card_versions.entry_method
+  = learner_form | admin_import
+
+project_card_versions.owner_user_id
+project_card_versions.owner_confirmation_status
+  = pending | confirmed
+
+project_card_versions.import_ref
+```
+
+约束：
+
+- `learner_form` 必须记录案主 `owner_user_id`；
+- `admin_import` 必须记录可审计的 `import_ref`；
+- 后台导入只创建 `draft + pending`；
+- 未经案主确认的项目卡版本不得发布；
+- 只有项目关系中的 `target_owner` 可以在学员端确认；
+- 导入、确认、退回和发布分别写入审计日志。
+
 ### Gate 4
 
 ```text
@@ -942,5 +964,27 @@ evaluation_reports
 criterion_evaluations
 ai_runs
 ```
+
+Gate 4 的项目一致性合同：
+
+```text
+assessment_assignments.project_id
+assessment_assignments.project_card_version_id
+assessment_sessions.project_id
+assessment_sessions.project_card_version_id
+```
+
+创建和提交测评时必须同时满足：
+
+```text
+assessment_assignment.project_id
+= project_card_version.project_id
+= assessment_session.project_id
+
+assessment_assignment.project_card_version_id
+= assessment_session.project_card_version_id
+```
+
+项目标题相同不构成一致性证明。任一 ID 不一致时，禁止创建、保存或提交测评。
 
 [RULES I BROKE]: 无

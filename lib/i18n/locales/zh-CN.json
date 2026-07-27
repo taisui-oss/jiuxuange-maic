@@ -81,7 +81,8 @@
     "endQA": "结束问答",
     "error": {
       "emptyAgentResponses": "智能体连续无响应,讨论已停止。请重新尝试或检查模型配置。",
-      "streamInterrupted": "数据流意外中断,讨论未能完成。请重新尝试。"
+      "streamInterrupted": "数据流意外中断,讨论未能完成。请重新尝试。",
+      "temporarilyUnavailable": "智能对话暂时不可用。你的问题已保留，请稍后重试或联系教务。"
     },
     "tabs": {
       "lecture": "笔记",
@@ -991,7 +992,9 @@
       "default-1": "教授",
       "default-2": "学长",
       "default-3": "神秘角色",
-      "default-4": "成长反馈官"
+      "default-4": "成长反馈官",
+      "default-5": "课堂记录员",
+      "default-6": "深度思考者"
     },
     "agentRoles": {
       "teacher": "教师",
@@ -1002,7 +1005,9 @@
       "default-1": "讲清概念，校准商业模式框架",
       "default-2": "陪你推进任务，把概念带回项目",
       "default-3": "进入情境，提出挑战和反方视角",
-      "default-4": "沉淀学习反馈，看见成长证据"
+      "default-4": "沉淀学习反馈，看见成长证据",
+      "default-5": "认真记录并整理课堂笔记",
+      "default-6": "深入思考并探索问题本质"
     },
     "close": "关闭",
     "save": "保存",

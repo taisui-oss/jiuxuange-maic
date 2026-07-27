@@ -7,6 +7,7 @@ import { GET as getPortal } from '@/app/api/jiuxuange/portal/route';
 import { POST as startAssessment } from '@/app/api/jiuxuange/assessment/[assignmentId]/route';
 import { POST as updateAssessment } from '@/app/api/jiuxuange/assessment/session/[sessionId]/route';
 import { readPortalState, writePortalState } from '@/lib/server/jiuxuange/repository';
+import { MCKESS_ASSESSMENT_ASSIGNMENT_ID } from '@/lib/jiuxuange/portal/mckess-assessment';
 
 const originalDataDir = process.env.JIUXUANGE_PORTAL_DATA_DIR;
 const originalTrustHeaders = process.env.JIUXUANGE_TRUST_IDENTITY_HEADERS;
@@ -55,9 +56,7 @@ describe('Jiuxuange dual-entry APIs', () => {
 
   it('allows the demo identity only on loopback requests', async () => {
     delete process.env.JIUXUANGE_TRUST_IDENTITY_HEADERS;
-    const localResponse = await getPortal(
-      new NextRequest('http://127.0.0.1/api/jiuxuange/portal'),
-    );
+    const localResponse = await getPortal(new NextRequest('http://127.0.0.1/api/jiuxuange/portal'));
     const remoteResponse = await getPortal(
       new NextRequest('https://learning.example.com/api/jiuxuange/portal'),
     );
@@ -67,10 +66,12 @@ describe('Jiuxuange dual-entry APIs', () => {
   });
 
   it('keeps two group members on the same frozen assignment but separate sessions', async () => {
-    const context = { params: Promise.resolve({ assignmentId: 'bm-assessment-v1' }) };
+    const context = {
+      params: Promise.resolve({ assignmentId: MCKESS_ASSESSMENT_ASSIGNMENT_ID }),
+    };
     const firstResponse = await startAssessment(
       request(
-        'http://localhost/api/jiuxuange/assessment/bm-assessment-v1',
+        `http://localhost/api/jiuxuange/assessment/${MCKESS_ASSESSMENT_ASSIGNMENT_ID}`,
         'demo-learner',
         { method: 'POST' },
       ),
@@ -80,7 +81,7 @@ describe('Jiuxuange dual-entry APIs', () => {
 
     const secondResponse = await startAssessment(
       request(
-        'http://localhost/api/jiuxuange/assessment/bm-assessment-v1',
+        `http://localhost/api/jiuxuange/assessment/${MCKESS_ASSESSMENT_ASSIGNMENT_ID}`,
         'demo-teammate',
         { method: 'POST' },
       ),
@@ -92,6 +93,8 @@ describe('Jiuxuange dual-entry APIs', () => {
     expect(first.detail.session.projectCardVersionId).toBe(
       second.detail.session.projectCardVersionId,
     );
+    expect(first.detail.session.projectId).toBe(first.detail.projectCard.projectId);
+    expect(first.detail.projectCard.title).toContain('麦客思');
     expect(first.detail.session.questions).toEqual(second.detail.session.questions);
 
     await updateAssessment(
@@ -111,7 +114,7 @@ describe('Jiuxuange dual-entry APIs', () => {
 
     const teammateResume = await startAssessment(
       request(
-        'http://localhost/api/jiuxuange/assessment/bm-assessment-v1',
+        `http://localhost/api/jiuxuange/assessment/${MCKESS_ASSESSMENT_ASSIGNMENT_ID}`,
         'demo-teammate',
         { method: 'POST' },
       ),
@@ -128,11 +131,11 @@ describe('Jiuxuange dual-entry APIs', () => {
 
     const response = await startAssessment(
       request(
-        'http://localhost/api/jiuxuange/assessment/bm-assessment-v1',
+        `http://localhost/api/jiuxuange/assessment/${MCKESS_ASSESSMENT_ASSIGNMENT_ID}`,
         'demo-learner',
         { method: 'POST' },
       ),
-      { params: Promise.resolve({ assignmentId: 'bm-assessment-v1' }) },
+      { params: Promise.resolve({ assignmentId: MCKESS_ASSESSMENT_ASSIGNMENT_ID }) },
     );
     expect(response.status).toBe(409);
   });

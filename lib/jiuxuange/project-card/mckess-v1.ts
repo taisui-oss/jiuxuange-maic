@@ -44,6 +44,9 @@ export const mckessProjectCardV1: JiuxuangeProjectCard = {
   version: '1.0.0-draft',
   title: '麦客思中央厨房商业模式重构项目卡',
   status: 'draft',
+  entryMethod: 'admin_import',
+  ownerConfirmationStatus: 'pending',
+  importRef: 'mckess-v29-development-fixture',
   sourceDocument: {
     id: DOCUMENT_ID,
     fileName: '[V29终稿】沈阳班-拿捏了-商业模式作业-李当心.pdf',

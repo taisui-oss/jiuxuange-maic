@@ -85,14 +85,11 @@ export default function AssessmentPage() {
     setBusy(action === 'submit' ? 'submit' : 'save');
     setError(null);
     try {
-      const response = await fetch(
-        `/api/jiuxuange/assessment/session/${detail.session.id}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action, answers }),
-        },
-      );
+      const response = await fetch(`/api/jiuxuange/assessment/session/${detail.session.id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, answers }),
+      });
       const body = (await response.json()) as ApiResponse;
       if (!response.ok || !body.session) throw new Error(body.error ?? '保存失败');
       setDetail((current) =>
@@ -100,9 +97,7 @@ export default function AssessmentPage() {
           ? {
               ...current,
               session: body.session!,
-              attempts: body.attempt
-                ? [...current.attempts, body.attempt]
-                : current.attempts,
+              attempts: body.attempt ? [...current.attempts, body.attempt] : current.attempts,
             }
           : current,
       );
@@ -138,6 +133,10 @@ export default function AssessmentPage() {
   const locked = detail.session.status === 'locked';
   const attemptsUsed = detail.session.attemptIds.length;
   const latestFeedback = detail.attempts.at(-1)?.feedback;
+  const projectCardHref =
+    detail.session.projectId === 'mckess-central-kitchen'
+      ? '/courses/business-model/projects/mckess'
+      : '/';
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100">
@@ -145,14 +144,16 @@ export default function AssessmentPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
           <button
             type="button"
-            onClick={() => router.push('/')}
+            onClick={() => router.push(projectCardHref)}
             className="inline-flex items-center gap-2 text-sm text-slate-300 hover:text-white"
           >
             <ArrowLeft className="size-4" />
-            学习门户
+            返回项目卡
           </button>
           <div className="text-right">
-            <div className="text-sm font-medium">商业模式个人项目测评</div>
+            <div className="text-sm font-medium">
+              {detail.projectCard?.title ?? '商业模式个人项目测评'}
+            </div>
             <div className="text-xs text-slate-400">
               已正式提交 {attemptsUsed}/2 · 草稿不消耗机会
             </div>
@@ -171,7 +172,7 @@ export default function AssessmentPage() {
               {detail.projectCard?.title}
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
-              请独立形成判断。第一次提交只获得方向性反馈；第二次用于检验你的判断修正。
+              本次题目与项目卡版本共同冻结，不会调用其他项目资料。请独立形成判断；第一次提交获得方向性反馈，第二次用于检验判断修正。
             </p>
           </div>
 

@@ -81,7 +81,8 @@
     "endQA": "結束問答",
     "error": {
       "emptyAgentResponses": "智能體連續無回應,討論已停止。請重新嘗試或檢查模型設定。",
-      "streamInterrupted": "資料串流意外中斷,討論未能完成。請重新嘗試。"
+      "streamInterrupted": "資料串流意外中斷,討論未能完成。請重新嘗試。",
+      "temporarilyUnavailable": "智能對話暫時不可用。你的問題已保留，請稍後重試或聯絡教務。"
     },
     "tabs": {
       "lecture": "筆記",

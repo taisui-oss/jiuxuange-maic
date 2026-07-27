@@ -81,7 +81,8 @@
     "endQA": "Encerrar Perguntas",
     "error": {
       "emptyAgentResponses": "Os agentes retornaram respostas vazias; a discussão foi interrompida. Tente novamente ou verifique as configurações do modelo.",
-      "streamInterrupted": "O fluxo de dados terminou inesperadamente; a discussão não foi concluída. Por favor, tente novamente."
+      "streamInterrupted": "O fluxo de dados terminou inesperadamente; a discussão não foi concluída. Por favor, tente novamente.",
+      "temporarilyUnavailable": "A conversa inteligente está temporariamente indisponível. Sua pergunta foi salva; tente novamente mais tarde ou contate o suporte do curso."
     },
     "tabs": {
       "lecture": "Anotações",

@@ -81,7 +81,8 @@
     "endQA": "End Q&A",
     "error": {
       "emptyAgentResponses": "Agents returned empty responses; discussion stopped. Try again or check your model settings.",
-      "streamInterrupted": "Stream ended unexpectedly; discussion didn't complete. Please try again."
+      "streamInterrupted": "Stream ended unexpectedly; discussion didn't complete. Please try again.",
+      "temporarilyUnavailable": "Intelligent chat is temporarily unavailable. Your question was saved; try again later or contact course support."
     },
     "tabs": {
       "lecture": "Notes",

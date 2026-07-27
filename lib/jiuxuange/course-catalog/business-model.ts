@@ -2,15 +2,6 @@ import type { JiuxuangeVisibleLevelId } from '@/lib/c-cubic/course-package/types
 
 export type BusinessModelClassroomReleaseStatus = 'pilot' | 'published' | 'in_review';
 
-export interface BusinessModelMainlineUnit {
-  id: string;
-  title: string;
-  summary: string;
-  classroomId: string;
-  releaseStatus: BusinessModelClassroomReleaseStatus;
-  focus: JiuxuangeVisibleLevelId[];
-}
-
 export interface BusinessModelCaseLesson {
   id: string;
   title: string;
@@ -19,8 +10,8 @@ export interface BusinessModelCaseLesson {
   focus: JiuxuangeVisibleLevelId[];
   releaseStatus: BusinessModelClassroomReleaseStatus;
   classroomId?: string;
-  unlockAfterMainlineUnitId?: string;
-  sequence?: number;
+  unlockAfterCaseId?: string;
+  sequence: number;
 }
 
 export interface BusinessModelProjectPractice {
@@ -42,13 +33,15 @@ export function businessModelClassroomHref(classroomId: string): string {
   return `/classroom/${classroomId}?${query.toString()}`;
 }
 
-export const BUSINESS_MODEL_MAINLINE_UNITS: BusinessModelMainlineUnit[] = [
+export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
   {
-    id: 'six-elements-coffee-foundation',
-    title: '六要素概念与整体关系',
+    id: 'coffee-six-elements-foundation',
+    title: '咖啡店：六要素概念与整体关系',
     summary: '通过咖啡店公共案例理解商业模式要素之间的基本关系，并完成原生互动。',
     classroomId: 'jxg-bm-mainline-six-elements-coffee-v1',
     releaseStatus: 'pilot',
+    format: 'native_multi_round',
+    sequence: 1,
     focus: [
       'positioning',
       'business-system',
@@ -58,9 +51,6 @@ export const BUSINESS_MODEL_MAINLINE_UNITS: BusinessModelMainlineUnit[] = [
       'enterprise-value',
     ],
   },
-];
-
-export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
   {
     id: 'convenience-bee',
     title: '便利蜂：商业模式事实观察',
@@ -69,8 +59,8 @@ export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
     focus: ['business-system', 'key-resources-capabilities'],
     releaseStatus: 'pilot',
     classroomId: 'jxg-bm-case-convenience-bee-v1',
-    unlockAfterMainlineUnitId: 'six-elements-coffee-foundation',
-    sequence: 1,
+    unlockAfterCaseId: 'coffee-six-elements-foundation',
+    sequence: 2,
   },
   {
     id: 'fresh-grocery-comparison',
@@ -79,7 +69,8 @@ export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
     format: 'native_multi_round',
     focus: ['positioning', 'business-system', 'profit-model'],
     releaseStatus: 'in_review',
-    sequence: 2,
+    unlockAfterCaseId: 'convenience-bee',
+    sequence: 3,
   },
   {
     id: 'shein-system-capabilities',
@@ -88,6 +79,8 @@ export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
     format: 'native_multi_round',
     focus: ['business-system', 'key-resources-capabilities'],
     releaseStatus: 'in_review',
+    unlockAfterCaseId: 'fresh-grocery-comparison',
+    sequence: 4,
   },
   {
     id: 'florasis-business-model',
@@ -96,6 +89,8 @@ export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
     format: 'native_multi_round',
     focus: ['positioning', 'profit-model', 'cash-flow-structure'],
     releaseStatus: 'in_review',
+    unlockAfterCaseId: 'shein-system-capabilities',
+    sequence: 5,
   },
   {
     id: 'freight-platform-ecosystem',
@@ -104,6 +99,8 @@ export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
     format: 'native_multi_round',
     focus: ['business-system', 'profit-model', 'enterprise-value'],
     releaseStatus: 'in_review',
+    unlockAfterCaseId: 'florasis-business-model',
+    sequence: 6,
   },
   {
     id: 'smart-auto-comparison',
@@ -112,8 +109,21 @@ export const BUSINESS_MODEL_CASE_LESSONS: BusinessModelCaseLesson[] = [
     format: 'native_multi_round',
     focus: ['positioning', 'cash-flow-structure', 'enterprise-value'],
     releaseStatus: 'in_review',
+    unlockAfterCaseId: 'freight-platform-ecosystem',
+    sequence: 7,
   },
 ];
+
+export function isBusinessModelCaseUnlocked(
+  lesson: BusinessModelCaseLesson,
+  completedClassroomIds: ReadonlySet<string>,
+): boolean {
+  if (!lesson.unlockAfterCaseId) return true;
+  const prerequisite = BUSINESS_MODEL_CASE_LESSONS.find(
+    (candidate) => candidate.id === lesson.unlockAfterCaseId,
+  );
+  return Boolean(prerequisite?.classroomId && completedClassroomIds.has(prerequisite.classroomId));
+}
 
 export const BUSINESS_MODEL_PROJECT_PRACTICES: BusinessModelProjectPractice[] = [
   {

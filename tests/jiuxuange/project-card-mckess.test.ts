@@ -9,11 +9,23 @@ describe('Jiuxuange Mckess project card draft', () => {
   it('is a traceable project card rather than a teaching case', () => {
     expect(mckessProjectCardV1.kind).toBe('project_card');
     expect(mckessProjectCardV1.status).toBe('draft');
+    expect(mckessProjectCardV1.entryMethod).toBe('admin_import');
+    expect(mckessProjectCardV1.ownerConfirmationStatus).toBe('pending');
+    expect(mckessProjectCardV1.importRef).toBe('mckess-v29-development-fixture');
     expect(mckessProjectCardV1.sourceDocument.pageCount).toBe(37);
     expect(mckessProjectCardV1.sourceDocument.contentHash).toBe(
       'sha256:c6c9e6ce2fa77a3d23ac2b98669dd8262cb8de4784051c6ad9e258286c26d376',
     );
     expect(validateJiuxuangeProjectCard(mckessProjectCardV1)).toEqual([]);
+  });
+
+  it('does not allow an imported draft to become published before owner confirmation', () => {
+    const broken = structuredClone(mckessProjectCardV1);
+    broken.status = 'published';
+
+    expect(validateJiuxuangeProjectCard(broken)).toContain(
+      'Published project cards must be confirmed by their owner',
+    );
   });
 
   it('physically separates reported facts, learner claims, proposals, and forecasts', () => {

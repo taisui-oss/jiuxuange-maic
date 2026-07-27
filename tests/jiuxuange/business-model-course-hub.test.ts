@@ -3,9 +3,9 @@ import { readFileSync } from 'node:fs';
 import { shouldUseJiuxuangeCourseHubV1 } from '@/lib/config/feature-flags';
 import {
   BUSINESS_MODEL_CASE_LESSONS,
-  BUSINESS_MODEL_MAINLINE_UNITS,
   BUSINESS_MODEL_PROJECT_PRACTICES,
   businessModelClassroomHref,
+  isBusinessModelCaseUnlocked,
 } from '@/lib/jiuxuange/course-catalog/business-model';
 
 describe('Jiuxuange business-model course hub', () => {
@@ -23,35 +23,54 @@ describe('Jiuxuange business-model course hub', () => {
     expect(shouldUseJiuxuangeCourseHubV1()).toBe(false);
   });
 
-  it('routes the mainline through a stable native OpenMAIC classroom', () => {
-    expect(BUSINESS_MODEL_MAINLINE_UNITS).toEqual([
+  it('starts with a stable native coffee case and unlocks cases in sequence', () => {
+    const [coffee, convenienceBee, freshGrocery] = BUSINESS_MODEL_CASE_LESSONS;
+    expect(coffee).toEqual(
       expect.objectContaining({
-        id: 'six-elements-coffee-foundation',
+        id: 'coffee-six-elements-foundation',
         classroomId: 'jxg-bm-mainline-six-elements-coffee-v1',
-        releaseStatus: 'pilot',
+        sequence: 1,
       }),
-    ]);
-    expect(businessModelClassroomHref(BUSINESS_MODEL_MAINLINE_UNITS[0].classroomId)).toBe(
+    );
+    expect(businessModelClassroomHref(coffee.classroomId!)).toBe(
       '/classroom/jxg-bm-mainline-six-elements-coffee-v1?returnTo=%2Fcourses%2Fbusiness-model&completion=all-correct',
     );
+    expect(isBusinessModelCaseUnlocked(coffee, new Set())).toBe(true);
+    expect(isBusinessModelCaseUnlocked(convenienceBee, new Set())).toBe(false);
+    expect(
+      isBusinessModelCaseUnlocked(
+        convenienceBee,
+        new Set(['jxg-bm-mainline-six-elements-coffee-v1']),
+      ),
+    ).toBe(true);
+    expect(
+      isBusinessModelCaseUnlocked(
+        freshGrocery,
+        new Set(['jxg-bm-mainline-six-elements-coffee-v1']),
+      ),
+    ).toBe(false);
+    expect(
+      isBusinessModelCaseUnlocked(freshGrocery, new Set(['jxg-bm-case-convenience-bee-v1'])),
+    ).toBe(true);
   });
 
-  it('shows six official case candidates without pretending incomplete cases are published', () => {
-    expect(BUSINESS_MODEL_CASE_LESSONS).toHaveLength(6);
+  it('shows one seven-case path without pretending incomplete cases are published', () => {
+    expect(BUSINESS_MODEL_CASE_LESSONS).toHaveLength(7);
     expect(
       BUSINESS_MODEL_CASE_LESSONS.filter((lesson) => lesson.releaseStatus === 'pilot').map(
         (lesson) => lesson.id,
       ),
-    ).toEqual(['convenience-bee']);
-    expect(BUSINESS_MODEL_CASE_LESSONS[0]).toEqual(
-      expect.objectContaining({
-        classroomId: 'jxg-bm-case-convenience-bee-v1',
-        unlockAfterMainlineUnitId: 'six-elements-coffee-foundation',
-      }),
-    );
+    ).toEqual(['coffee-six-elements-foundation', 'convenience-bee']);
     expect(BUSINESS_MODEL_CASE_LESSONS[1]).toEqual(
       expect.objectContaining({
+        classroomId: 'jxg-bm-case-convenience-bee-v1',
+        unlockAfterCaseId: 'coffee-six-elements-foundation',
+      }),
+    );
+    expect(BUSINESS_MODEL_CASE_LESSONS[2]).toEqual(
+      expect.objectContaining({
         id: 'fresh-grocery-comparison',
+        unlockAfterCaseId: 'convenience-bee',
         releaseStatus: 'in_review',
       }),
     );
@@ -108,10 +127,11 @@ describe('Jiuxuange business-model course hub', () => {
     expect(entrySource).not.toContain('上次聊到');
     expect(hubSource).toContain('<BusinessModelNativeCourseCatalog');
     expect(hubSource).not.toContain('<BusinessModelCourseEntry');
-    expect(nativeCatalogSource).toContain('正式案例课');
+    expect(nativeCatalogSource).toContain('案例学习路径');
     expect(nativeCatalogSource).toContain('多轮 OpenMAIC 原生课堂');
     expect(nativeCatalogSource).toContain('多轮原生课堂');
     expect(nativeCatalogSource).toContain('进入案例课堂');
+    expect(nativeCatalogSource).toContain('完成上一案例后开放');
     expect(hubSource).toContain('项目练习');
   });
 
@@ -143,13 +163,15 @@ describe('Jiuxuange business-model course hub', () => {
     expect(source).toContain('isLoopbackHost');
     expect(source).toContain('JIUXUANGE_ENABLE_DRAFT_PROJECT_CARDS');
     expect(source).toContain('notFound()');
-    expect(source).toContain('当前只开放项目卡查看');
+    expect(source).toContain('麦客思个人项目测评');
+    expect(source).toContain('MCKESS_ASSESSMENT_ASSIGNMENT_ID');
+    expect(source).toContain('当前开放项目卡查看和同项目个人测评');
   });
 
   it('freezes the visible course-hub contract as a versioned replay suite', () => {
     const fixture = JSON.parse(
       readFileSync(
-        'eval/jiuxuange-learning-partner/scenarios/business-model-course-hub.v1.json',
+        'eval/jiuxuange-learning-partner/scenarios/business-model-course-hub.v2.json',
         'utf8',
       ),
     ) as {
@@ -159,11 +181,12 @@ describe('Jiuxuange business-model course hub', () => {
     };
 
     expect(fixture.suiteId).toBe('jiuxuange-business-model-course-hub');
-    expect(fixture.version).toBe(1);
+    expect(fixture.version).toBe(2);
     expect(fixture.scenarios.map((scenario) => scenario.id)).toEqual([
       'course-hub-home-visibility-001',
-      'course-hub-case-catalog-001',
+      'course-hub-sequential-case-path-002',
       'course-hub-project-card-boundary-001',
+      'course-hub-project-assessment-binding-002',
       'course-hub-rollback-001',
       'course-hub-standalone-assets-001',
     ]);

@@ -1,0 +1,57 @@
+{
+  "suiteId": "jiuxuange-business-model-course-hub",
+  "version": 2,
+  "createdAt": "2026-07-27",
+  "owner": "Jiuxuange product",
+  "scenarios": [
+    {
+      "id": "course-hub-home-visibility-001",
+      "must": [
+        "assigned_course_visible_before_resume_finishes",
+        "course_entry_clickable_before_resume_finishes",
+        "free_learning_remains_separate"
+      ]
+    },
+    {
+      "id": "course-hub-sequential-case-path-002",
+      "must": [
+        "first_case_open_without_prior_progress",
+        "case_n_requires_case_n_minus_one_completion",
+        "every_case_uses_native_multi_round_classroom",
+        "review_case_has_no_runnable_link"
+      ]
+    },
+    {
+      "id": "course-hub-project-card-boundary-001",
+      "must": [
+        "project_practice_separate_from_teaching_cases",
+        "draft_source_status_visible",
+        "personal_and_group_discussion_not_faked"
+      ]
+    },
+    {
+      "id": "course-hub-project-assessment-binding-002",
+      "must": [
+        "assessment_project_id_equals_project_card_project_id",
+        "assessment_session_freezes_project_card_version_id",
+        "project_card_links_to_its_own_assessment",
+        "mismatched_project_binding_is_rejected"
+      ]
+    },
+    {
+      "id": "course-hub-rollback-001",
+      "must": [
+        "course_hub_flag_false_restores_direct_entry",
+        "existing_learning_session_not_deleted"
+      ]
+    },
+    {
+      "id": "course-hub-standalone-assets-001",
+      "must": [
+        "build_stages_next_static",
+        "build_stages_public_assets",
+        "homepage_javascript_chunks_return_200"
+      ]
+    }
+  ]
+}

@@ -8,22 +8,29 @@ import {
   submitAssessmentAttempt,
   summarizeActiveSeconds,
 } from '@/lib/jiuxuange/portal/domain';
+import { MCKESS_ASSESSMENT_ASSIGNMENT_ID } from '@/lib/jiuxuange/portal/mckess-assessment';
 
 describe('Jiuxuange dual-entry product contract', () => {
-  it('gives group members the same frozen project card and questions', () => {
+  it('binds the assessment, session and frozen card to the same Mckess project', () => {
     const state = createDemoPortalState();
-    const first = startAssessmentSession(state, 'demo-learner', 'bm-assessment-v1');
-    const second = startAssessmentSession(state, 'demo-teammate', 'bm-assessment-v1');
+    const assignment = state.assessmentAssignments[0];
+    const projectCard = state.projectCardVersions[0];
+    const first = startAssessmentSession(state, 'demo-learner', MCKESS_ASSESSMENT_ASSIGNMENT_ID);
+    const second = startAssessmentSession(state, 'demo-teammate', MCKESS_ASSESSMENT_ASSIGNMENT_ID);
 
+    expect(assignment.projectId).toBe('mckess-central-kitchen');
+    expect(projectCard.projectId).toBe(assignment.projectId);
+    expect(first.projectId).toBe(assignment.projectId);
     expect(first.projectCardVersionId).toBe(second.projectCardVersionId);
     expect(first.questionVersion).toBe(second.questionVersion);
     expect(first.questions).toEqual(second.questions);
+    expect(first.questions.map((question) => question.prompt).join('')).toContain('麦客思');
   });
 
   it('isolates personal drafts and attempts', () => {
     const state = createDemoPortalState();
-    const first = startAssessmentSession(state, 'demo-learner', 'bm-assessment-v1');
-    const second = startAssessmentSession(state, 'demo-teammate', 'bm-assessment-v1');
+    const first = startAssessmentSession(state, 'demo-learner', MCKESS_ASSESSMENT_ASSIGNMENT_ID);
+    const second = startAssessmentSession(state, 'demo-teammate', MCKESS_ASSESSMENT_ASSIGNMENT_ID);
 
     saveAssessmentDraft(state, 'demo-learner', first.id, {
       'positioning-1': '我的私人草稿',
@@ -37,7 +44,7 @@ describe('Jiuxuange dual-entry product contract', () => {
 
   it('does not consume an attempt for drafts and locks after two formal submissions', () => {
     const state = createDemoPortalState();
-    const session = startAssessmentSession(state, 'demo-learner', 'bm-assessment-v1');
+    const session = startAssessmentSession(state, 'demo-learner', MCKESS_ASSESSMENT_ASSIGNMENT_ID);
     const answers = Object.fromEntries(
       session.questions.map((question, index) => [
         question.id,
@@ -61,9 +68,9 @@ describe('Jiuxuange dual-entry product contract', () => {
     expect(second.feedback.kind).toBe('final');
     expect(second.feedback.changedQuestionIds).toHaveLength(6);
     expect(session.status).toBe('locked');
-    expect(() =>
-      submitAssessmentAttempt(state, 'demo-learner', session.id, revised),
-    ).toThrow(/locked/i);
+    expect(() => submitAssessmentAttempt(state, 'demo-learner', session.id, revised)).toThrow(
+      /locked/i,
+    );
   });
 
   it('rejects unpublished assessments even when the URL id is known', () => {
@@ -71,8 +78,17 @@ describe('Jiuxuange dual-entry product contract', () => {
     state.assessmentAssignments[0].status = 'draft';
 
     expect(() =>
-      startAssessmentSession(state, 'demo-learner', 'bm-assessment-v1'),
+      startAssessmentSession(state, 'demo-learner', MCKESS_ASSESSMENT_ASSIGNMENT_ID),
     ).toThrow(/published/i);
+  });
+
+  it('rejects a published assignment whose project differs from its project card', () => {
+    const state = createDemoPortalState();
+    state.assessmentAssignments[0].projectId = 'another-project';
+
+    expect(() =>
+      startAssessmentSession(state, 'demo-learner', MCKESS_ASSESSMENT_ASSIGNMENT_ID),
+    ).toThrow(/does not match/i);
   });
 
   it('keeps assessment availability independent from course completion', () => {

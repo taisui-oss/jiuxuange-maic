@@ -23,6 +23,7 @@ import { USER_AVATAR } from '@/lib/types/roundtable';
 import { StreamBuffer } from '@/lib/buffer/stream-buffer';
 import type { AgentStartItem, ActionItem } from '@/lib/buffer/stream-buffer';
 import { runAgentLoop, type AgentLoopStoreState } from '@/lib/chat/agent-loop';
+import { redactChatFailureForLearner } from '@/lib/chat/user-facing-error';
 import { ActionEngine } from '@/lib/action/engine';
 import { readSubmittedState } from '@/lib/quiz/persistence';
 import { toast } from 'sonner';
@@ -965,7 +966,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         log.error('[ChatArea] Resume error:', error);
         clearLiveSessionAfterError(
           sessionId,
-          `Error: ${error instanceof Error ? error.message : String(error)}`,
+          redactChatFailureForLearner(error, t('chat.error.temporarilyUnavailable')),
         );
       } finally {
         if (abortControllerRef.current === controller) {
@@ -975,7 +976,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         }
       }
     },
-    [clearLiveSessionAfterError, runAgentLoopFn],
+    [clearLiveSessionAfterError, runAgentLoopFn, t],
   );
 
   /**
@@ -1181,7 +1182,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         log.error('[ChatArea] Error:', error);
         clearLiveSessionAfterError(
           sessionId!,
-          `Error: ${error instanceof Error ? error.message : String(error)}`,
+          redactChatFailureForLearner(error, t('chat.error.temporarilyUnavailable')),
         );
       } finally {
         // Only clean up if this is still the active controller (avoid race with interrupt)
@@ -1326,7 +1327,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         log.error('[ChatArea] Discussion error:', error);
         clearLiveSessionAfterError(
           sessionId,
-          `Error starting discussion: ${error instanceof Error ? error.message : String(error)}`,
+          redactChatFailureForLearner(error, t('chat.error.temporarilyUnavailable')),
         );
       } finally {
         // Only clean up if this is still the active controller (avoid race with interrupt)

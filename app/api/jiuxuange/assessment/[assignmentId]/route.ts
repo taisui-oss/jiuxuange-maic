@@ -17,6 +17,9 @@ export async function POST(
       const projectCard = state.projectCardVersions.find(
         (item) => item.id === session.projectCardVersionId,
       );
+      if (!projectCard || projectCard.projectId !== session.projectId) {
+        throw new Error('Assessment project does not match its frozen project card.');
+      }
       const attempts = session.attemptIds.flatMap((id) => {
         const attempt = state.assessmentAttempts.find((item) => item.id === id);
         return attempt ? [attempt] : [];
