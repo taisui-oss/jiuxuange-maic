@@ -54,6 +54,7 @@
 44. [ADR 0004 对象存储与披露](./adr/0004-object-storage-and-disclosure.md)：私有 S3、短时访问、材料状态和模型披露。
 45. [V6 多轮案例原生课堂试学切片](./v6-gate2-native-classroom-pilot-20260727.md)：连续案例路径、客观题完成门、案例顺序解锁、便利蜂多轮课堂、课堂切换修复及正式发布边界。
 46. [V6 项目卡与个人项目测评合同](./v6-project-card-and-assessment-contract-20260728.md)：七模块项目卡、3-6 题型配置、来源分层、披露规则、两次提交与六维非分数评价。
+47. [V6 案例与项目卡配置预览发布记录](./v6-case-project-config-preview-release-20260728.md)：八步六要素路径、七模块麦客思项目卡、六题测评、Netlify 路由修复、线上验收与正式使用边界。
 
 ## 一句话结论
 
