@@ -42,6 +42,32 @@ export interface ProjectFact {
   sourceLabel: string;
 }
 
+export interface ProjectCardContextField {
+  id: string;
+  label: string;
+  value: string;
+  status: 'draft' | 'owner_confirmed' | 'unknown';
+  disclosure: 'allow' | 'mask';
+}
+
+export interface ProjectCardContextSection {
+  id: string;
+  title: string;
+  summary: string;
+  fields: ProjectCardContextField[];
+}
+
+export interface ProjectCardMaterial {
+  id: string;
+  title: string;
+  materialType: 'project_assignment' | 'business_profile' | 'operating_data' | 'other';
+  pageCount?: number;
+  uploadedAt: string;
+  parseStatus: 'parsed' | 'pending' | 'failed';
+  disclosure: 'allow' | 'mask';
+  safeSummary: string;
+}
+
 export interface ProjectCardVersion {
   id: string;
   groupId: string;
@@ -49,6 +75,10 @@ export interface ProjectCardVersion {
   version: string;
   title: string;
   facts: ProjectFact[];
+  contextSections?: ProjectCardContextSection[];
+  materials?: ProjectCardMaterial[];
+  informationAsOf?: string;
+  ownerConfirmationStatus?: 'pending' | 'confirmed';
   frozenAt: string;
 }
 

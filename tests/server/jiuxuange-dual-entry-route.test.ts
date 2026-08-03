@@ -95,6 +95,9 @@ describe('Jiuxuange dual-entry APIs', () => {
     );
     expect(first.detail.session.projectId).toBe(first.detail.projectCard.projectId);
     expect(first.detail.projectCard.title).toContain('麦客思');
+    expect(first.detail.projectCard.materials).toHaveLength(1);
+    expect(first.detail.projectCard.materials[0].safeSummary).toContain('脱敏摘要');
+    expect(first.detail.projectCard.contextSections.length).toBeGreaterThan(0);
     expect(first.detail.session.questions).toEqual(second.detail.session.questions);
 
     await updateAssessment(

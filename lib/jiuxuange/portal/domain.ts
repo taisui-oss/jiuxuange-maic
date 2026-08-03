@@ -265,7 +265,8 @@ export function saveAssessmentDraft(
   const allowedIds = new Set(session.questions.map((question) => question.id));
   session.draftAnswers = Object.fromEntries(
     Object.entries(answers).filter(
-      ([questionId, answer]) => allowedIds.has(questionId) && typeof answer === 'string',
+      ([questionId, answer]) =>
+        allowedIds.has(questionId) && typeof answer === 'string' && answer.trim().length > 0,
     ),
   );
   session.updatedAt = nowIso();

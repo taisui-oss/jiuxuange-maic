@@ -38,7 +38,19 @@ describe('Jiuxuange dual-entry product contract', () => {
     expect(first.questions.every((question) => question.required)).toBe(true);
     expect(first.questions.map((question) => question.prompt).join('')).toContain('麦客思');
     expect(first.questions.map((question) => question.prompt).join('')).toContain('六要素因果图');
-    expect(projectCard.version).toBe('1.1.0-draft');
+    expect(projectCard.version).toBe('1.2.0-demo');
+    expect(projectCard.materials).toHaveLength(1);
+    expect(projectCard.materials?.[0]).toMatchObject({
+      pageCount: 37,
+      parseStatus: 'parsed',
+      disclosure: 'mask',
+    });
+    expect(projectCard.contextSections?.length).toBeGreaterThan(0);
+    expect(
+      projectCard.contextSections
+        ?.flatMap((section) => section.fields)
+        .every((field) => ['allow', 'mask'].includes(field.disclosure)),
+    ).toBe(true);
     expect(
       projectCard.facts.every(
         (fact) => fact.sourceLabel === '麦客思项目卡草案 · 已按模型披露规则脱敏 · 待案主确认',
@@ -56,7 +68,12 @@ describe('Jiuxuange dual-entry product contract', () => {
       [first.questions[0].id]: '我的私人草稿',
     });
 
+    saveAssessmentDraft(state, 'demo-learner', first.id, {
+      [first.questions[0].id]: '   ',
+    });
+
     expect(first.id).not.toBe(second.id);
+    expect(first.draftAnswers).toEqual({});
     expect(state.assessmentSessions.find((item) => item.id === second.id)?.draftAnswers).toEqual(
       {},
     );
@@ -123,6 +140,8 @@ describe('Jiuxuange dual-entry product contract', () => {
     const source = readFileSync('app/assessment/[assignmentId]/page.tsx', 'utf8');
 
     expect(source).toContain('测评页不提供 Agent 实时帮助');
+    expect(source).toContain('上传材料');
+    expect(source).toContain('从材料中提取的可见内容');
     expect(source).not.toContain('<AgentBar');
     expect(source).not.toContain('personalLearningSession');
     expect(source).not.toContain('groupDiscussionSession');

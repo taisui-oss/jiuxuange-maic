@@ -1,7 +1,11 @@
-import { mckessProjectCardV2 } from '@/lib/jiuxuange/project-card';
+import {
+  mckessProjectCardV2,
+  type JiuxuangeProjectCardModuleField,
+} from '@/lib/jiuxuange/project-card';
 import type { AssessmentAssignment, AssessmentQuestion, ProjectCardVersion } from './types';
 
-export const MCKESS_ASSESSMENT_ASSIGNMENT_ID = 'bm-assessment-mckess-v2';
+export const MCKESS_ASSESSMENT_ASSIGNMENT_ID = 'bm-assessment-mckess-v3';
+export const MCKESS_ASSESSMENT_PROJECT_CARD_VERSION_ID = 'project-card-mckess@1.2.0-demo';
 
 const ASSESSMENT_FACT_IDS = new Set([
   'fact-core-business',
@@ -31,6 +35,12 @@ const ASSESSMENT_SAFE_FACT_TEXT: Record<string, string> = {
     '项目卡草案显示，最近一个报告期收入较上一期下降，净利润为小幅正值；但作业其他部分仍存在“当前亏损”的判断。',
   'fact-margin-performance': '项目卡草案显示，最近一个报告期毛利率高于前两期，净利润率为小幅正值。',
 };
+
+function isAssessmentVisibleField(
+  field: JiuxuangeProjectCardModuleField,
+): field is JiuxuangeProjectCardModuleField & { modelPolicy: 'allow' | 'mask' } {
+  return field.modelPolicy !== 'block';
+}
 
 const MCKESS_ASSESSMENT_QUESTIONS: AssessmentQuestion[] = [
   {
@@ -165,13 +175,43 @@ export function createMckessAssessmentProjectCardVersion(): ProjectCardVersion {
     }));
 
   return {
-    id: mckessProjectCardV2.id,
+    id: MCKESS_ASSESSMENT_PROJECT_CARD_VERSION_ID,
     groupId: mckessProjectCardV2.groupId,
     projectId: mckessProjectCardV2.projectId,
-    version: mckessProjectCardV2.version,
+    version: '1.2.0-demo',
     title: mckessProjectCardV2.title,
     facts,
-    frozenAt: mckessProjectCardV2.sourceDocument.createdAt,
+    contextSections: mckessProjectCardV2.modules
+      .filter((module) => module.id !== 'enterprise_assets')
+      .map((module) => ({
+        id: module.id,
+        title: module.title,
+        summary: module.summary,
+        fields: module.fields.filter(isAssessmentVisibleField).map((field) => ({
+          id: field.id,
+          label: field.label,
+          value: field.value,
+          status: field.status,
+          disclosure: field.modelPolicy,
+        })),
+      }))
+      .filter((section) => section.fields.length > 0),
+    materials: [
+      {
+        id: mckessProjectCardV2.sourceDocument.id,
+        title: '麦客思商业模式作业（脱敏导入副本）',
+        materialType: 'project_assignment',
+        pageCount: mckessProjectCardV2.sourceDocument.pageCount,
+        uploadedAt: mckessProjectCardV2.sourceDocument.createdAt,
+        parseStatus: 'parsed',
+        disclosure: 'mask',
+        safeSummary:
+          '系统已从作业中提取企业基本信息、经营快照、客户与交易结构、关键资源能力、收支方式和待验证判断。测评只展示冻结后的脱敏摘要，不展示原始文件正文、人员姓名和禁止披露字段。',
+      },
+    ],
+    informationAsOf: mckessProjectCardV2.informationAsOf,
+    ownerConfirmationStatus: mckessProjectCardV2.ownerConfirmationStatus,
+    frozenAt: '2026-08-03T00:00:00.000+08:00',
   };
 }
 
@@ -181,12 +221,12 @@ export function createMckessAssessmentAssignment(): AssessmentAssignment {
     title: '麦客思商业模式个人项目测评',
     groupId: mckessProjectCardV2.groupId,
     projectId: mckessProjectCardV2.projectId,
-    projectCardVersionId: mckessProjectCardV2.id,
-    questionVersion: 'bm-mckess-six-open-scenarios@2',
+    projectCardVersionId: MCKESS_ASSESSMENT_PROJECT_CARD_VERSION_ID,
+    questionVersion: 'bm-mckess-six-open-scenarios@3',
     questions: structuredClone(MCKESS_ASSESSMENT_QUESTIONS),
-    promptVersion: 'directional-feedback@2',
-    rubricVersion: 'business-model-transfer-rubric@2',
+    promptVersion: 'directional-feedback@3',
+    rubricVersion: 'business-model-transfer-rubric@3',
     status: 'published',
-    publishedAt: '2026-07-27T00:00:00.000Z',
+    publishedAt: '2026-08-03T00:00:00.000+08:00',
   };
 }
