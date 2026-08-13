@@ -1,4 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import {
+  decideCaseOnlyRoute,
+  isCaseOnlyModeEnabled,
+} from '@/lib/jiuxuange/case-only/route-policy';
 
 /** Convert string to Uint8Array */
 function encode(str: string): Uint8Array {
@@ -42,6 +46,23 @@ async function verifyToken(token: string, accessCode: string): Promise<boolean> 
 }
 
 export async function middleware(request: NextRequest) {
+  if (isCaseOnlyModeEnabled()) {
+    const decision = decideCaseOnlyRoute(request.nextUrl.pathname);
+    if (decision.kind === 'block') {
+      return new NextResponse(null, {
+        status: decision.status,
+        headers: { 'x-jiuxuange-case-only': 'blocked' },
+      });
+    }
+    if (decision.kind === 'rewrite') {
+      const rewrittenUrl = request.nextUrl.clone();
+      rewrittenUrl.pathname = decision.pathname;
+      return NextResponse.rewrite(rewrittenUrl, {
+        headers: { 'x-jiuxuange-case-only': 'active' },
+      });
+    }
+  }
+
   const accessCode = process.env.ACCESS_CODE;
   if (!accessCode) {
     return NextResponse.next();

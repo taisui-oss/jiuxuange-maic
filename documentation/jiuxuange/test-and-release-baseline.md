@@ -515,6 +515,27 @@ V5 已补充“不知道不阻塞且不计为掌握”、可见事实序号引�
 小组作业导入草案，未获案主确认；正式身份、PostgreSQL、关系权限、服务端进度、
 异步 AI 评价和 1000 人发布门禁仍未完成。
 
+### Case-only V1 Gate 1 基线（2026-08-13）
+
+`eval_run_id`: `jgx-case-only-v1-gate1-20260813-01`
+
+| 验证项 | 结果 |
+|---|---|
+| 隔离基线 | 独立 worktree 与 `codex/jiuxuange-case-only-v1`，基于 `8fb3e52` |
+| 学员端收敛 | 仅顺序案例目录和轻量播放器 |
+| OpenMAIC 保留 | 原制作、Agent、完整课堂与生成源码未删除 |
+| 直链安全 | 关闭页面 404；关闭 API 403 |
+| 内容版本 | 课堂 JSON 原文 SHA-256 |
+| 专项测试 | 2 files / 6 tests passed |
+| ESLint | 变更范围 exit 0 |
+| Production build | Next.js 编译、TypeScript、48 路由均完成 |
+| 桌面浏览器 | 目录、播放、5 题互动、完成页通过 |
+| 手机浏览器 | 390 x 844，目录与播放器无页面横向溢出 |
+| 清除本地存储 | 路由与播放器仍可用；不得据此声称进度恢复 |
+
+[KNOWN, HIGH] Gate 1 未实现服务端权威进度、稳定 `user_id`、幂等提交、
+`progress_version`、跨设备恢复或服务端解锁。上述项目只能在 Gate 2 通过后转为已验证。
+
 ## 4. 发布层级
 
 ### L0：开发演示

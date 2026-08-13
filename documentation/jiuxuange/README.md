@@ -55,6 +55,8 @@
 45. [V6 多轮案例原生课堂试学切片](./v6-gate2-native-classroom-pilot-20260727.md)：连续案例路径、客观题完成门、案例顺序解锁、便利蜂多轮课堂、课堂切换修复及正式发布边界。
 46. [V6 项目卡与个人项目测评合同](./v6-project-card-and-assessment-contract-20260728.md)：七模块项目卡、3-6 题型配置、来源分层、披露规则、两次提交与六维非分数评价。
 47. [V6 案例与项目卡配置预览发布记录](./v6-case-project-config-preview-release-20260728.md)：八步六要素路径、七模块麦客思项目卡、六题测评、Netlify 路由修复、线上验收与正式使用边界。
+48. [Case-only V1 候选版交接](./case-only-v1/HANDOFF.md)：独立 worktree、学员端收敛、Gate 边界、回退和生产禁止。
+49. [Case-only V1 Gate 1 验收](./case-only-v1/gate-1/RESULTS.md)：轻量播放器、404/403 直链、桌面/手机浏览器截图与命令退出码。
 
 ## 一句话结论
 
