@@ -2,13 +2,13 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 describe('Jiuxuange Netlify release configuration', () => {
-  it('keeps the formal course portal visible on the deployed home page', () => {
+  it('deploys the isolated five-case preview with managed progress enabled', () => {
     const config = readFileSync(new URL('../../netlify.toml', import.meta.url), 'utf8');
 
-    expect(config).toContain('NEXT_PUBLIC_C_CUBIC_BUSINESS_MODEL_MODE = "true"');
-    expect(config).toContain('NEXT_PUBLIC_C_CUBIC_UNIFIED_LEARNING = "true"');
-    expect(config).toContain('NEXT_PUBLIC_JIUXUANGE_DUAL_ENTRY_V1 = "true"');
-    expect(config).toContain('NEXT_PUBLIC_JIUXUANGE_COURSE_HUB_V1 = "true"');
-    expect(config).toContain('JIUXUANGE_ENABLE_DRAFT_PROJECT_CARDS = "true"');
+    expect(config).toContain('command = "pnpm run build:case-only:netlify"');
+    expect(config).toContain('JIUXUANGE_CASE_ONLY = "true"');
+    expect(config).toContain('JIUXUANGE_CASE_ONLY_IDENTITY_MODE = "anonymous-preview"');
+    expect(config).toContain('JIUXUANGE_CASE_ONLY_ALLOW_ANONYMOUS_PREVIEW = "true"');
+    expect(config).not.toContain('JIUXUANGE_ENABLE_DRAFT_PROJECT_CARDS = "true"');
   });
 });

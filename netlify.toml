@@ -1,10 +1,9 @@
 [build]
-  command = "pnpm run build"
+  command = "pnpm run build:case-only:netlify"
   publish = ".next"
 
 [build.environment]
-  NEXT_PUBLIC_C_CUBIC_BUSINESS_MODEL_MODE = "true"
-  NEXT_PUBLIC_C_CUBIC_UNIFIED_LEARNING = "true"
-  NEXT_PUBLIC_JIUXUANGE_DUAL_ENTRY_V1 = "true"
-  NEXT_PUBLIC_JIUXUANGE_COURSE_HUB_V1 = "true"
-  JIUXUANGE_ENABLE_DRAFT_PROJECT_CARDS = "true"
+  JIUXUANGE_CASE_ONLY = "true"
+  JIUXUANGE_CASE_ONLY_IDENTITY_MODE = "anonymous-preview"
+  JIUXUANGE_CASE_ONLY_ALLOW_ANONYMOUS_PREVIEW = "true"
+  NEXT_TELEMETRY_DISABLED = "1"

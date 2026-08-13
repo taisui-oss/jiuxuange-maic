@@ -19,6 +19,9 @@ case-only runtime mode. They are not exposed to learners when `JIUXUANGE_CASE_ON
 - content and progress versions;
 - five complete business-model case packages and a coach-only answer key;
 - desktop and mobile acceptance evidence.
+- a browser-isolated anonymous preview identity for the authorized online display candidate;
+- Netlify-managed PostgreSQL connection support through `NETLIFY_DB_URL`;
+- product release metadata independent of the upstream `openmaic` package version.
 
 ### Excluded
 
@@ -28,7 +31,7 @@ case-only runtime mode. They are not exposed to learners when `JIUXUANGE_CASE_ON
 - project card editing;
 - AI grading;
 - course generation and OpenMAIC authoring changes;
-- production deployment.
+- formal production deployment or use by the planned 1,000 learners.
 
 ## Gate State
 
@@ -40,6 +43,7 @@ case-only runtime mode. They are not exposed to learners when `JIUXUANGE_CASE_ON
 - OSS entry decision: candidate may enter a separate OSS integration gate; see the
   [pre-integration acceptance report](./OSS_PREINTEGRATION_ACCEPTANCE.md).
 - Production: prohibited until a separate release decision.
+- Online display candidate: `6.1.0-rc.1`; authorized for preview validation only.
 
 All five case packages remain `pending_named_sme_review`. Gate 3 proves package completeness,
 answer separation, and server-authoritative progression; it does not constitute content approval
@@ -51,6 +55,11 @@ or production readiness.
 - `JIUXUANGE_DATABASE_URL` points to PostgreSQL; the application fails closed when it is absent.
 - `JIUXUANGE_CASE_ONLY_IDENTITY_MODE=fixed-candidate` and the two explicit fixed-identity
   variables are test-only candidate identity. They are not roster or WeCom authentication.
+- `JIUXUANGE_CASE_ONLY_IDENTITY_MODE=anonymous-preview` requires its own explicit allow flag. It
+  stores a random, HttpOnly browser identifier and keeps progress isolated per browser. It is not
+  a roster identity and does not provide cross-device resume.
+- `JIUXUANGE_DATABASE_URL` remains the explicit override; Netlify preview runtime can use the
+  platform-provided `NETLIFY_DB_URL`.
 - `content_version` is the SHA-256 hash of the exact published classroom JSON.
 - `progress_version` is a server-incremented optimistic concurrency counter.
 - The server, not the browser, derives the current scene and the next-case unlock state.
@@ -63,5 +72,6 @@ The online baseline remains at commit `8fb3e52d374053e52214bcd78d69edb958517e6d`
 branch/worktree. Removing `JIUXUANGE_CASE_ONLY=true` restores existing route behavior; no original
 product code or content was deleted.
 
-Gates 2 and 3 were developed only on `codex/jiuxuange-case-only-v1`. They were not merged, pushed
-to the online branch, deployed, or connected to production data.
+Gates 2 and 3 were developed only on `codex/jiuxuange-case-only-v1`. Version `6.1.0-rc.1` is the
+first candidate approved for an isolated online display deployment. It must not be described as
+the formal roster/WeCom production release and must not use real learner or enterprise data.

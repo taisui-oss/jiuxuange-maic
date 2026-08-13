@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, BookOpenCheck, CheckCircle2, LockKeyhole } from 'lucide-react';
 import { caseOnlyLessonHref, type CaseOnlyLesson } from '@/lib/jiuxuange/case-only/catalog';
+import { JIUXUANGE_CASE_ONLY_RELEASE } from '@/lib/jiuxuange/case-only/release';
 import type { CaseOnlyCourseProgress } from '@/lib/jiuxuange/case-only/types';
 
 export function CaseOnlyHome({
@@ -23,6 +24,9 @@ export function CaseOnlyHome({
             <div className="text-xs text-slate-500">九轩阁专业大课</div>
             <div className="text-base font-semibold">商业模式大课</div>
           </div>
+          <span className="ml-auto whitespace-nowrap rounded border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-slate-600">
+            v{JIUXUANGE_CASE_ONLY_RELEASE.version} 预览
+          </span>
         </div>
       </header>
 

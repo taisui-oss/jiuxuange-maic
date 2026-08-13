@@ -4,21 +4,29 @@ import * as schema from './schema';
 
 type CaseOnlyDatabase = NodePgDatabase<typeof schema>;
 
+interface CaseOnlyDatabaseEnvironment {
+  [key: string]: string | undefined;
+  JIUXUANGE_DATABASE_URL?: string;
+  NETLIFY_DB_URL?: string;
+}
+
 const globalDatabase = globalThis as typeof globalThis & {
   __jiuxuangeCaseOnlyPool?: Pool;
   __jiuxuangeCaseOnlyDb?: CaseOnlyDatabase;
 };
 
-function databaseUrl(): string {
-  const value = process.env.JIUXUANGE_DATABASE_URL?.trim();
-  if (!value) throw new Error('JIUXUANGE_DATABASE_URL is required for case-only Gate 2');
+export function resolveCaseOnlyDatabaseUrl(env: CaseOnlyDatabaseEnvironment = process.env): string {
+  const value = env.JIUXUANGE_DATABASE_URL?.trim() || env.NETLIFY_DB_URL?.trim();
+  if (!value) {
+    throw new Error('JIUXUANGE_DATABASE_URL or NETLIFY_DB_URL is required for case-only runtime');
+  }
   return value;
 }
 
 export function getCaseOnlyPool(): Pool {
   if (!globalDatabase.__jiuxuangeCaseOnlyPool) {
     globalDatabase.__jiuxuangeCaseOnlyPool = new Pool({
-      connectionString: databaseUrl(),
+      connectionString: resolveCaseOnlyDatabaseUrl(),
       application_name: 'jiuxuange-case-only-web',
       max: Number(process.env.JIUXUANGE_DATABASE_POOL_MAX ?? 10),
       connectionTimeoutMillis: 5_000,

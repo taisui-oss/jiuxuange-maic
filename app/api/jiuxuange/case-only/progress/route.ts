@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const actor = resolveCaseOnlyActor();
+    const actor = await resolveCaseOnlyActor();
     const progress = await getCaseOnlyCourseProgress(actor.userId);
     return NextResponse.json(
       { success: true, progress },

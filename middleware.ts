@@ -1,8 +1,63 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { decideCaseOnlyRoute, isCaseOnlyModeEnabled } from '@/lib/jiuxuange/case-only/route-policy';
 import {
-  decideCaseOnlyRoute,
-  isCaseOnlyModeEnabled,
-} from '@/lib/jiuxuange/case-only/route-policy';
+  CASE_ONLY_PREVIEW_COOKIE,
+  CASE_ONLY_PREVIEW_COOKIE_MAX_AGE,
+  CASE_ONLY_PREVIEW_HEADER,
+  resolvePreviewIdentity,
+} from '@/lib/jiuxuange/case-only/preview-identity';
+
+interface CaseOnlyRequestContext {
+  requestHeaders: Headers;
+  previewUserIdToPersist?: string;
+}
+
+function prepareCaseOnlyRequest(request: NextRequest): CaseOnlyRequestContext {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.delete(CASE_ONLY_PREVIEW_HEADER);
+
+  if (
+    process.env.JIUXUANGE_CASE_ONLY_IDENTITY_MODE !== 'anonymous-preview' ||
+    process.env.JIUXUANGE_CASE_ONLY_ALLOW_ANONYMOUS_PREVIEW !== 'true'
+  ) {
+    return { requestHeaders };
+  }
+
+  const identity = resolvePreviewIdentity(request.cookies.get(CASE_ONLY_PREVIEW_COOKIE)?.value);
+  requestHeaders.set(CASE_ONLY_PREVIEW_HEADER, identity.userId);
+  return {
+    requestHeaders,
+    previewUserIdToPersist: identity.shouldSetCookie ? identity.userId : undefined,
+  };
+}
+
+function attachCaseOnlyPreviewCookie(
+  response: NextResponse,
+  request: NextRequest,
+  context: CaseOnlyRequestContext | null,
+): NextResponse {
+  if (!context?.previewUserIdToPersist) return response;
+  response.cookies.set({
+    name: CASE_ONLY_PREVIEW_COOKIE,
+    value: context.previewUserIdToPersist,
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: request.nextUrl.protocol === 'https:',
+    path: '/',
+    maxAge: CASE_ONLY_PREVIEW_COOKIE_MAX_AGE,
+  });
+  return response;
+}
+
+function continueRequest(
+  request: NextRequest,
+  context: CaseOnlyRequestContext | null,
+): NextResponse {
+  const response = context
+    ? NextResponse.next({ request: { headers: context.requestHeaders } })
+    : NextResponse.next();
+  return attachCaseOnlyPreviewCookie(response, request, context);
+}
 
 /** Convert string to Uint8Array */
 function encode(str: string): Uint8Array {
@@ -46,6 +101,8 @@ async function verifyToken(token: string, accessCode: string): Promise<boolean> 
 }
 
 export async function middleware(request: NextRequest) {
+  let caseOnlyContext: CaseOnlyRequestContext | null = null;
+
   if (isCaseOnlyModeEnabled()) {
     const decision = decideCaseOnlyRoute(request.nextUrl.pathname);
     if (decision.kind === 'block') {
@@ -54,43 +111,48 @@ export async function middleware(request: NextRequest) {
         headers: { 'x-jiuxuange-case-only': 'blocked' },
       });
     }
+
+    caseOnlyContext = prepareCaseOnlyRequest(request);
     if (decision.kind === 'rewrite') {
       const rewrittenUrl = request.nextUrl.clone();
       rewrittenUrl.pathname = decision.pathname;
-      return NextResponse.rewrite(rewrittenUrl, {
-        headers: { 'x-jiuxuange-case-only': 'active' },
+      const response = NextResponse.rewrite(rewrittenUrl, {
+        request: { headers: caseOnlyContext.requestHeaders },
       });
+      response.headers.set('x-jiuxuange-case-only', 'active');
+      return attachCaseOnlyPreviewCookie(response, request, caseOnlyContext);
     }
   }
 
   const accessCode = process.env.ACCESS_CODE;
   if (!accessCode) {
-    return NextResponse.next();
+    return continueRequest(request, caseOnlyContext);
   }
 
   const { pathname } = request.nextUrl;
 
   // Whitelist: access-code endpoints, health check
   if (pathname.startsWith('/api/access-code/') || pathname === '/api/health') {
-    return NextResponse.next();
+    return continueRequest(request, caseOnlyContext);
   }
 
   // Check cookie — validate HMAC signature, not just existence
   const cookie = request.cookies.get('openmaic_access');
   if (cookie?.value && (await verifyToken(cookie.value, accessCode))) {
-    return NextResponse.next();
+    return continueRequest(request, caseOnlyContext);
   }
 
   // API requests without valid cookie → 401
   if (pathname.startsWith('/api/')) {
-    return NextResponse.json(
+    const response = NextResponse.json(
       { success: false, errorCode: 'INVALID_REQUEST', error: 'Access code required' },
       { status: 401 },
     );
+    return attachCaseOnlyPreviewCookie(response, request, caseOnlyContext);
   }
 
   // Page requests → let through, frontend shows modal
-  return NextResponse.next();
+  return continueRequest(request, caseOnlyContext);
 }
 
 export const config = {

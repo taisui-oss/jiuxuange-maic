@@ -105,6 +105,7 @@ async function completeCase(page: Page, definition: CaseDefinition): Promise<voi
   let testedWrongAnswer = false;
   while ((await page.getByText('案例学习完成').count()) === 0) {
     const player = page.getByRole('region', { name: '案例播放器' });
+    await expect(player).toHaveAttribute('data-scene-id', /.+/);
     const sceneId = await player.getAttribute('data-scene-id');
     if (!sceneId) throw new Error(`Missing scene id for ${definition.id}`);
     const quizAnswers = definition.quizAnswers[sceneId];
@@ -131,7 +132,14 @@ async function completeCase(page: Page, definition: CaseDefinition): Promise<voi
 
     const nextButton = page.getByRole('button', { name: /下一场景|完成案例/ });
     await expect(nextButton).toBeEnabled();
+    const completesCase = (await nextButton.getAttribute('aria-label')) === '完成案例';
     await nextButton.click();
+    if (completesCase) {
+      await expect(page.getByText('案例学习完成')).toBeVisible();
+      break;
+    }
+    await expect.poll(() => player.getAttribute('data-scene-id')).not.toBe(sceneId);
+    await expect(player).toHaveAttribute('data-scene-id', /.+/);
   }
   await expect(page.getByRole('heading', { name: definition.title, level: 2 })).toBeVisible();
 }

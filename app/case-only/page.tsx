@@ -6,7 +6,7 @@ import { getCaseOnlyCourseProgress } from '@/lib/server/jiuxuange-case-only/prog
 export const dynamic = 'force-dynamic';
 
 export default async function CaseOnlyHomePage() {
-  const actor = resolveCaseOnlyActor();
+  const actor = await resolveCaseOnlyActor();
   const progress = await getCaseOnlyCourseProgress(actor.userId);
   return <CaseOnlyHome lessons={listCaseOnlyLessons()} progress={progress} />;
 }

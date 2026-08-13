@@ -55,13 +55,19 @@ describe('Jiuxuange business-model course hub', () => {
     ).toBe(true);
   });
 
-  it('shows one seven-case path without pretending incomplete cases are published', () => {
+  it('shows one seven-case path with five complete pilot cases', () => {
     expect(BUSINESS_MODEL_CASE_LESSONS).toHaveLength(7);
     expect(
       BUSINESS_MODEL_CASE_LESSONS.filter((lesson) => lesson.releaseStatus === 'pilot').map(
         (lesson) => lesson.id,
       ),
-    ).toEqual(['breakfast-chain-six-elements-foundation', 'convenience-bee']);
+    ).toEqual([
+      'breakfast-chain-six-elements-foundation',
+      'convenience-bee',
+      'fresh-grocery-comparison',
+      'shein-system-capabilities',
+      'florasis-business-model',
+    ]);
     expect(BUSINESS_MODEL_CASE_LESSONS[1]).toEqual(
       expect.objectContaining({
         classroomId: 'jxg-bm-case-convenience-bee-v1',
@@ -72,7 +78,7 @@ describe('Jiuxuange business-model course hub', () => {
       expect.objectContaining({
         id: 'fresh-grocery-comparison',
         unlockAfterCaseId: 'convenience-bee',
-        releaseStatus: 'in_review',
+        releaseStatus: 'pilot',
       }),
     );
     expect(
@@ -150,10 +156,13 @@ describe('Jiuxuange business-model course hub', () => {
     expect(hubSource).toContain('项目练习');
   });
 
-  it('ships both pilot classrooms as server-loadable native classroom assets', () => {
+  it('ships all five pilot classrooms as server-loadable native classroom assets', () => {
     for (const [id, expectedSceneCount] of [
       ['jxg-bm-case-breakfast-chain-six-elements-v1', 10],
       ['jxg-bm-case-convenience-bee-v1', 10],
+      ['jxg-bm-case-fresh-grocery-comparison-v1', 10],
+      ['jxg-bm-case-shein-system-capabilities-v1', 10],
+      ['jxg-bm-case-florasis-business-model-v1', 10],
     ] as const) {
       const classroom = JSON.parse(
         readFileSync(`content/jiuxuange/classrooms/${id}.json`, 'utf8'),

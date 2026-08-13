@@ -20,7 +20,7 @@ const submitSchema = z
 
 export async function POST(request: NextRequest) {
   try {
-    const actor = resolveCaseOnlyActor();
+    const actor = await resolveCaseOnlyActor();
     const parsed = submitSchema.safeParse(await request.json());
     if (!parsed.success) {
       return NextResponse.json(

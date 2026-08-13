@@ -12,7 +12,7 @@ export default async function CaseOnlyPlayerPage({
   params: Promise<{ caseId: string }>;
 }) {
   const { caseId } = await params;
-  const actor = resolveCaseOnlyActor();
+  const actor = await resolveCaseOnlyActor();
   const access = await getAccessibleCaseOnlyContent(actor.userId, caseId);
   if (!access) notFound();
   return (

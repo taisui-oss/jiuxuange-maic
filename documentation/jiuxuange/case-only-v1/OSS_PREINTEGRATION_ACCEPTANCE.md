@@ -2,7 +2,8 @@
 
 ## Decision
 
-**READY TO ENTER AN OSS INTEGRATION GATE. NOT READY FOR PRODUCTION.**
+**READY TO ENTER AN OSS INTEGRATION GATE. READY FOR AN ISOLATED ONLINE PREVIEW. NOT READY FOR
+FORMAL PRODUCTION.**
 
 The candidate now has a stable content boundary: published case JSON is read by a repository,
 validated, ordered, and assigned a deterministic `content_version`. Replacing the repository file
@@ -59,7 +60,8 @@ adapter with an OSS adapter can therefore be isolated from learner progress logi
 
 - Online baseline remains `8fb3e52d374053e52214bcd78d69edb958517e6d` in its original
   branch/worktree.
-- Candidate work is isolated on `codex/jiuxuange-case-only-v1`.
+- Candidate work remains isolated on `codex/jiuxuange-case-only-v1`; the online display can point
+  to this branch without merging or overwriting the former branch.
 - OSS is not connected in this Gate and no production environment was modified.
 - OpenMAIC authoring and generation capabilities remain in source and become visible again when
   case-only mode is disabled.
