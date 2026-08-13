@@ -33,7 +33,9 @@ export default function RootLayout({
     return (
       <html lang="zh-CN" className={inter.variable}>
         <body className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>
-          {children}
+          <ThemeProvider>
+            <I18nProvider>{children}</I18nProvider>
+          </ThemeProvider>
         </body>
       </html>
     );
