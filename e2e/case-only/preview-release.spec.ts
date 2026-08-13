@@ -9,6 +9,14 @@ test('preview identity is server-authoritative, browser-local, and versioned', a
 }) => {
   const firstBrowser = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const firstPage = await firstBrowser.newPage();
+  const closedClientRequests: string[] = [];
+  firstPage.on('request', (request) => {
+    if (
+      /\/api\/(server-providers|chat|classroom|generate-classroom)(?:\/|\?|$)/.test(request.url())
+    ) {
+      closedClientRequests.push(request.url());
+    }
+  });
   await firstPage.goto('/', { waitUntil: 'domcontentloaded' });
 
   await expect(firstPage.getByRole('heading', { name: '按顺序完成案例' })).toBeVisible();
@@ -35,6 +43,7 @@ test('preview identity is server-authoritative, browser-local, and versioned', a
   await expect(firstPage.getByRole('region', { name: '案例播放器' })).toHaveAttribute(
     'data-client-ready',
     'true',
+    { timeout: 30_000 },
   );
   await firstPage.getByRole('button', { name: '下一场景' }).click();
   await expect(firstPage.getByText('2 / 10')).toBeVisible();
@@ -69,6 +78,7 @@ test('preview identity is server-authoritative, browser-local, and versioned', a
   expect(
     previewCookies.find((cookie) => cookie.name === 'jiuxuange_case_preview_id'),
   ).toMatchObject({ httpOnly: true, sameSite: 'Lax' });
+  expect(closedClientRequests).toEqual([]);
 
   await secondBrowser.close();
   await firstBrowser.close();

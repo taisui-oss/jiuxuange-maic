@@ -11,6 +11,7 @@ import { I18nProvider } from '@/lib/hooks/use-i18n';
 import { Toaster } from '@/components/ui/sonner';
 import { ServerProvidersInit } from '@/components/server-providers-init';
 import { AccessCodeGuard } from '@/components/access-code-guard';
+import { isCaseOnlyModeEnabled } from '@/lib/jiuxuange/case-only/route-policy';
 
 const inter = localFont({
   src: '../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
@@ -28,6 +29,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (isCaseOnlyModeEnabled()) {
+    return (
+      <html lang="zh-CN" className={inter.variable}>
+        <body className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>
+          {children}
+        </body>
+      </html>
+    );
+  }
+
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body
