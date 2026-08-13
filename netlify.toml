@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm run build:case-only:netlify"
+  command = "pnpm run build:case-only"
   publish = ".next"
 
 [build.environment]
