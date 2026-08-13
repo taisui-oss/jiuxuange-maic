@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, RotateCcw } from 'lucide-react';
 import { SlideCanvas } from '@openmaic/renderer';
@@ -201,6 +201,7 @@ export function LightweightCasePlayer({
   const [completed, setCompleted] = useState(initialProgress.status === 'completed');
   const [submitting, setSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const playerRef = useRef<HTMLElement>(null);
   const scene = scenes[sceneIndex];
   const isQuiz = scene?.type === 'quiz' && scene.content.type === 'quiz';
   const sceneRecorded = sceneIndex < progress.nextSceneIndex || progress.status === 'completed';
@@ -209,6 +210,10 @@ export function LightweightCasePlayer({
     () => Math.round((progress.nextSceneIndex / scenes.length) * 100),
     [progress.nextSceneIndex, scenes.length],
   );
+
+  useEffect(() => {
+    playerRef.current?.setAttribute('data-client-ready', 'true');
+  }, []);
 
   const submitCurrentScene = async (answers?: CaseOnlyAnswers): Promise<CaseOnlySubmitBody> => {
     if (sceneRecorded) {
@@ -307,9 +312,11 @@ export function LightweightCasePlayer({
       </header>
 
       <section
+        ref={playerRef}
         className="flex min-h-0 flex-1 flex-col"
         aria-label="案例播放器"
         data-scene-id={completed ? undefined : scene.id}
+        data-client-ready="false"
       >
         {completed ? (
           <div className="flex flex-1 items-center justify-center px-5 py-12">
