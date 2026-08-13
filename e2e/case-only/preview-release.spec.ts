@@ -29,10 +29,14 @@ test('preview identity is server-authoritative, browser-local, and versioned', a
 
   const releaseResponse = await firstBrowser.request.get('/api/jiuxuange/case-only/release');
   expect(releaseResponse.status()).toBe(200);
-  await expect(releaseResponse.json()).resolves.toMatchObject({
+  const releaseBody = await releaseResponse.json();
+  expect(releaseBody).toMatchObject({
     success: true,
     release: { version: '6.1.0-rc.1', usage: 'preview-only' },
   });
+  if (process.env.JIUXUANGE_PREVIEW_BASE_URL?.startsWith('https://')) {
+    expect(releaseBody.release.commitRef).toMatch(/^[0-9a-f]{40}$/);
+  }
 
   const firstProgressResponse = await firstBrowser.request.get('/api/jiuxuange/case-only/progress');
   const firstProgress = await firstProgressResponse.json();

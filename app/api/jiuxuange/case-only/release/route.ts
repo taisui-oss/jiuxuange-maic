@@ -9,7 +9,7 @@ export async function GET() {
       success: true,
       release: {
         ...JIUXUANGE_CASE_ONLY_RELEASE,
-        commitRef: process.env.COMMIT_REF ?? null,
+        commitRef: process.env.JIUXUANGE_BUILD_COMMIT_REF || null,
       },
     },
     { headers: { 'Cache-Control': 'no-store' } },

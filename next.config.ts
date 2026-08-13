@@ -8,12 +8,14 @@ const caseOnlyAliases: Record<string, string> = caseOnlyMode
   ? {
       '@/components/openmaic-app-providers':
         './components/jiuxuange/case-only/noop-app-providers.tsx',
-      '@/components/openmaic-home-page':
-        './components/jiuxuange/case-only/noop-openmaic-home.tsx',
+      '@/components/openmaic-home-page': './components/jiuxuange/case-only/noop-openmaic-home.tsx',
     }
   : {};
 
 const nextConfig: NextConfig = {
+  env: {
+    JIUXUANGE_BUILD_COMMIT_REF: process.env.COMMIT_REF ?? '',
+  },
   turbopack: {
     root: projectRoot,
     resolveAlias: caseOnlyAliases,
