@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, RotateCcw } from 'lucide-react';
-import { SlideCanvas } from '@openmaic/renderer';
 import type { QuizQuestion } from '@/lib/types/stage';
+import { LightweightSlide } from './lightweight-slide';
 import type {
   CaseOnlyAnswers,
   CaseOnlyContentPackage,
@@ -345,7 +345,7 @@ export function LightweightCasePlayer({
                 {scene.type === 'slide' && scene.content.type === 'slide' ? (
                   <div className="flex h-full min-h-[320px] items-center justify-center bg-slate-100 p-2 sm:p-5">
                     <div className="aspect-video w-full max-w-[1200px] overflow-hidden bg-white shadow-sm">
-                      <SlideCanvas slide={scene.content.canvas} chrome={false} />
+                      <LightweightSlide slide={scene.content.canvas} />
                     </div>
                   </div>
                 ) : scene.type === 'quiz' && scene.content.type === 'quiz' ? (

@@ -3,10 +3,20 @@ import { fileURLToPath } from 'node:url';
 import type { NextConfig } from 'next';
 
 const projectRoot = dirname(fileURLToPath(import.meta.url));
+const caseOnlyMode = process.env.JIUXUANGE_CASE_ONLY === 'true';
+const caseOnlyAliases: Record<string, string> = caseOnlyMode
+  ? {
+      '@/components/openmaic-app-providers':
+        './components/jiuxuange/case-only/noop-app-providers.tsx',
+      '@/components/openmaic-home-page':
+        './components/jiuxuange/case-only/noop-openmaic-home.tsx',
+    }
+  : {};
 
 const nextConfig: NextConfig = {
   turbopack: {
     root: projectRoot,
+    resolveAlias: caseOnlyAliases,
   },
   output: process.env.VERCEL || process.env.NETLIFY ? undefined : 'standalone',
   transpilePackages: ['mathml2omml', 'pptxgenjs', '@openmaic/importer'],

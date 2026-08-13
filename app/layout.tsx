@@ -6,11 +6,6 @@ import './globals.css';
 import '@openmaic/renderer/fonts.css';
 import 'animate.css';
 import 'katex/dist/katex.min.css';
-import { ThemeProvider } from '@/lib/hooks/use-theme';
-import { I18nProvider } from '@/lib/hooks/use-i18n';
-import { Toaster } from '@/components/ui/sonner';
-import { ServerProvidersInit } from '@/components/server-providers-init';
-import { AccessCodeGuard } from '@/components/access-code-guard';
 import { isCaseOnlyModeEnabled } from '@/lib/jiuxuange/case-only/route-policy';
 
 const inter = localFont({
@@ -24,7 +19,7 @@ export const metadata: Metadata = {
   description: 'Jiuxuange MAIC is an intelligent learning companion for the six core courses.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -33,13 +28,13 @@ export default function RootLayout({
     return (
       <html lang="zh-CN" className={inter.variable}>
         <body className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>
-          <ThemeProvider>
-            <I18nProvider>{children}</I18nProvider>
-          </ThemeProvider>
+          {children}
         </body>
       </html>
     );
   }
+
+  const { OpenMaicAppProviders } = await import('@/components/openmaic-app-providers');
 
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
@@ -47,13 +42,7 @@ export default function RootLayout({
         className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider>
-          <I18nProvider>
-            <ServerProvidersInit />
-            <AccessCodeGuard>{children}</AccessCodeGuard>
-            <Toaster position="top-center" />
-          </I18nProvider>
-        </ThemeProvider>
+        <OpenMaicAppProviders>{children}</OpenMaicAppProviders>
       </body>
     </html>
   );
