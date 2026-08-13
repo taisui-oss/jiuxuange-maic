@@ -10,6 +10,8 @@ export function CaseOnlyHome({
   lessons: CaseOnlyLesson[];
   progress: CaseOnlyCourseProgress;
 }) {
+  const completedCount = progress.cases.filter((item) => item.status === 'completed').length;
+
   return (
     <main className="min-h-screen bg-[#f7f9fc] text-slate-950">
       <header className="border-b border-slate-200 bg-white">
@@ -32,6 +34,9 @@ export function CaseOnlyHome({
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
             每个案例由多个场景和必需互动组成。完成当前案例后，系统开放下一案例。
+          </p>
+          <p className="mt-3 text-sm font-medium tabular-nums text-slate-700">
+            {completedCount} / {lessons.length} 已完成
           </p>
         </section>
 

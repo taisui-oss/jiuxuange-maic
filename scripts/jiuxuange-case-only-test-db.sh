@@ -18,13 +18,23 @@ require_binary() {
 }
 
 server_running() {
-  "${PG_BIN}/pg_ctl" -D "${PG_DATA}" status >/dev/null 2>&1
+  if "${PG_BIN}/pg_ctl" -D "${PG_DATA}" status >/dev/null 2>&1; then
+    return 0
+  fi
+
+  local active_data_directory
+  active_data_directory="$(
+    "${PG_BIN}/psql" -h 127.0.0.1 -p "${PG_PORT}" -d postgres \
+      -Atqc "show data_directory" 2>/dev/null || true
+  )"
+  [[ "${active_data_directory}" == "${PG_DATA}" ]]
 }
 
 start_server() {
   require_binary initdb
   require_binary pg_ctl
   require_binary createdb
+  require_binary psql
   if [[ ! -f "${PG_DATA}/PG_VERSION" ]]; then
     "${PG_BIN}/initdb" -D "${PG_DATA}" -A trust --no-locale --encoding=UTF8 >/dev/null
   fi

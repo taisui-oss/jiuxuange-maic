@@ -1,0 +1,2470 @@
+{
+  "id": "jxg-bm-case-shein-system-capabilities-v1",
+  "generationComplete": true,
+  "stage": {
+    "id": "jxg-bm-case-shein-system-capabilities-v1",
+    "name": "SHEIN：业务系统与关键资源能力",
+    "description": "从小单快反拆解 SHEIN 的交易、系统、能力与现金逻辑",
+    "createdAt": 1786579200400,
+    "updatedAt": "2026-08-13T00:00:00.000Z",
+    "languageDirective": "全程使用中文。采用魏朱商业模式六要素模型，沿交易地图、定位、业务系统、关键资源能力、盈利模式、现金流结构和企业价值形成可检验的因果链。明确区分课程材料事实、分析判断和待验证假设，不把历史案例数字表述为企业当前实时事实。",
+    "style": "professional",
+    "currentSceneId": "shein-intro",
+    "agentIds": ["default-1", "default-2", "default-3", "default-4"],
+    "videoManifest": {},
+    "interactiveMode": false,
+    "taskEngineMode": false
+  },
+  "scenes": [
+    {
+      "id": "shein-intro",
+      "stageId": "jxg-bm-case-shein-system-capabilities-v1",
+      "type": "slide",
+      "title": "SHEIN：快时尚增长不是“上新快”一个动作",
+      "order": 1,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "shein-intro-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "shein-intro-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">课程历史案例 · 机制学习</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">SHEIN：快时尚增长不是“上新快”一个动作</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">低价、多款与快速变化如何在同一套业务系统中同时成立？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">目标场景</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">课程材料聚焦海外年轻、价格敏感且追逐趋势的女性消费者。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">商品承诺</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">更多款式、更快上新与可负担价格共同构成消费选择。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">核心难题</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">款式越多越容易形成库存，速度越快越考验供应链与数据协同。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-intro-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">真正的问题不是如何多上新，而是如何用更小试错成本持续识别需求。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "shein-intro-speech-1",
+          "type": "speech",
+          "text": "本案例按课程材料中的历史机制讲授，不把其中数字当成企业当前实时经营状态。"
+        },
+        {
+          "id": "shein-intro-spotlight-question",
+          "type": "spotlight",
+          "elementId": "shein-intro-question"
+        },
+        {
+          "id": "shein-intro-speech-2",
+          "type": "speech",
+          "text": "低价、多款和快速变化看似互相冲突，因为传统大批量生产容易带来库存风险。"
+        },
+        {
+          "id": "shein-intro-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "shein-intro-takeaway"
+        },
+        {
+          "id": "shein-intro-speech-3",
+          "type": "speech",
+          "text": "我们要追踪的是 SHEIN 如何把需求数据、设计、供应商和履约连接成小单快反系统。"
+        }
+      ],
+      "createdAt": 1786579200401,
+      "updatedAt": 1786579200401,
+      "outlineId": "scene_1"
+    },
+    {
+      "id": "shein-transaction-map",
+      "stageId": "jxg-bm-case-shein-system-capabilities-v1",
+      "type": "slide",
+      "title": "谁和谁交易",
+      "order": 2,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "shein-transaction-map-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "shein-transaction-map-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 1 步 · 交易地图</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">谁和谁交易</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">消费者、平台、设计与供应商之间除了商品和资金，还交换哪些信息？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">消费者 ↔ 平台</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">消费者购买商品并留下浏览、点击、购买与反馈等需求信号。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">平台 ↔ 设计</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">趋势和用户数据转化为选款、设计、测试与上新决策。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">平台 ↔ 供应商</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">平台分配小批量订单和数字化指令，供应商完成打样、生产与补单。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-transaction-map-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">数据不是附属记录，而是连接消费需求与生产决策的关键交换物。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "shein-transaction-map-speech-1",
+          "type": "speech",
+          "text": "SHEIN 的交易地图不仅包含消费者和供应商，还包括平台、设计与数字系统。"
+        },
+        {
+          "id": "shein-transaction-map-spotlight-question",
+          "type": "spotlight",
+          "elementId": "shein-transaction-map-question"
+        },
+        {
+          "id": "shein-transaction-map-speech-2",
+          "type": "speech",
+          "text": "消费者行为形成需求信号，设计和选款把信号转成商品实验，供应商再根据订单快速生产。"
+        },
+        {
+          "id": "shein-transaction-map-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "shein-transaction-map-takeaway"
+        },
+        {
+          "id": "shein-transaction-map-speech-3",
+          "type": "speech",
+          "text": "如果只看到商品流，就会忽略这套模式真正依赖的信息流和决策流。"
+        }
+      ],
+      "createdAt": 1786579200402,
+      "updatedAt": 1786579200402,
+      "outlineId": "scene_2"
+    },
+    {
+      "id": "shein-positioning",
+      "stageId": "jxg-bm-case-shein-system-capabilities-v1",
+      "type": "slide",
+      "title": "服务谁、解决什么问题",
+      "order": 3,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "shein-positioning-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "shein-positioning-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 2 步 · 定位</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">服务谁、解决什么问题</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">消费者购买的不只是低价服装，而是低成本跟上快速变化的趋势。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">目标客户</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">年轻、价格敏感并高度使用线上渠道的海外消费者。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">核心需求</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">希望持续获得新款与趋势选择，同时降低单次购买门槛。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">价值主张</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">用多款、快上新和可负担价格提高选择频率与新鲜感。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-positioning-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">定位决定了企业必须同时解决趋势识别、试错速度和成本控制。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "shein-positioning-speech-1",
+          "type": "speech",
+          "text": "把定位只写成低价会漏掉多款和趋势速度，而只写成时尚又会漏掉价格门槛。"
+        },
+        {
+          "id": "shein-positioning-spotlight-question",
+          "type": "spotlight",
+          "elementId": "shein-positioning-question"
+        },
+        {
+          "id": "shein-positioning-speech-2",
+          "type": "speech",
+          "text": "这三个要求共同迫使企业缩短从需求信号到商品上架的周期。"
+        },
+        {
+          "id": "shein-positioning-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "shein-positioning-takeaway"
+        },
+        {
+          "id": "shein-positioning-speech-3",
+          "type": "speech",
+          "text": "定位因此直接约束后面的业务系统：必须小批量测试，并能对有效款快速补单。"
+        }
+      ],
+      "createdAt": 1786579200403,
+      "updatedAt": 1786579200403,
+      "outlineId": "scene_3"
+    },
+    {
+      "id": "shein-business-system",
+      "stageId": "jxg-bm-case-shein-system-capabilities-v1",
+      "type": "slide",
+      "title": "各主体如何协作",
+      "order": 4,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "shein-business-system-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "shein-business-system-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 3 步 · 业务系统</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">各主体如何协作</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">小单快反不是压缩工厂交期，而是一套需求测试与订单分配系统。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">小批量首单</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">课程材料描述首批约百件，用较小投入测试真实需求。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">数据反馈</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">上架后的浏览、销售与反馈决定是否追单、调整或停止。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">供应商协同</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">数字工具、准时结算和订单分配把多个供应商接入同一节奏。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-business-system-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">系统的核心是“先小单验证，再快速追单”，而不是一次猜中大单。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "shein-business-system-speech-1",
+          "type": "speech",
+          "text": "课程材料中的百件首单是机制线索：先用小样本获得真实市场反馈。"
+        },
+        {
+          "id": "shein-business-system-spotlight-question",
+          "type": "spotlight",
+          "elementId": "shein-business-system-question"
+        },
+        {
+          "id": "shein-business-system-speech-2",
+          "type": "speech",
+          "text": "畅销款快速补单，弱款停止追加，从而把一次性预测改造成连续实验。"
+        },
+        {
+          "id": "shein-business-system-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "shein-business-system-takeaway"
+        },
+        {
+          "id": "shein-business-system-speech-3",
+          "type": "speech",
+          "text": "这要求平台与供应商共享数字化流程，并通过结算和订单机制维持合作意愿。"
+        }
+      ],
+      "createdAt": 1786579200404,
+      "updatedAt": 1786579200404,
+      "outlineId": "scene_4"
+    },
+    {
+      "id": "shein-check-1",
+      "stageId": "jxg-bm-case-shein-system-capabilities-v1",
+      "type": "quiz",
+      "title": "第一轮互动：定位与系统",
+      "order": 5,
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "shein-q1",
+            "type": "single",
+            "question": "课程材料中的小批量首单，首要目的是什么？",
+            "options": [
+              { "value": "A", "label": "一次性获得最低采购价" },
+              { "value": "B", "label": "用较小库存测试真实需求并决定是否追单" },
+              { "value": "C", "label": "把所有风险转给供应商" },
+              { "value": "D", "label": "减少商品款式" }
+            ],
+            "answer": ["B"],
+            "analysis": "小批量首单的核心是低成本验证需求，再依据真实反馈追加，而不是保证最低价格或转移全部风险。",
+            "points": 20,
+            "hasAnswer": true
+          },
+          {
+            "id": "shein-q2",
+            "type": "single",
+            "question": "哪一项最能描述平台与供应商之间的系统关系？",
+            "options": [
+              { "value": "A", "label": "只靠临时口头催单" },
+              { "value": "B", "label": "数字化订单分配、流程协同与稳定结算共同支撑快反" },
+              { "value": "C", "label": "供应商自行决定所有款式" },
+              { "value": "D", "label": "平台不参与需求判断" }
+            ],
+            "answer": ["B"],
+            "analysis": "快反需要数字化订单和流程协同，也需要结算与激励维持供应商长期合作。",
+            "points": 20,
+            "hasAnswer": true
+          },
+          {
+            "id": "shein-q3",
+            "type": "single",
+            "question": "“多款、快上新、可负担价格”最直接要求什么业务系统？",
+            "options": [
+              { "value": "A", "label": "每款一次性大批量生产" },
+              { "value": "B", "label": "小单测试、数据反馈和快速追单" },
+              { "value": "C", "label": "只增加广告预算" },
+              { "value": "D", "label": "只减少供应商数量" }
+            ],
+            "answer": ["B"],
+            "analysis": "多款与低价并存会放大库存风险，因此需要小单测试、反馈和追单来控制试错成本。",
+            "points": 20,
+            "hasAnswer": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "shein-check-1-speech",
+          "type": "speech",
+          "text": "请完成本轮原生互动。客观题全部答对后才能继续，答错可查看解释并重新作答。"
+        }
+      ],
+      "createdAt": 1786579200405,
+      "updatedAt": 1786579200405,
+      "outlineId": "scene_5"
+    },
+    {
+      "id": "shein-capabilities",
+      "stageId": "jxg-bm-case-shein-system-capabilities-v1",
+      "type": "slide",
+      "title": "企业必须擅长什么",
+      "order": 6,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "shein-capabilities-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "shein-capabilities-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 4 步 · 关键资源能力</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">企业必须擅长什么</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">数据很多并不等于能力形成，关键是能否把数据变成跨主体动作。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">趋势与选款</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">持续识别趋势、形成设计并管理大量商品实验。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">供应链整合</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">让多个供应商按小批量、短周期和统一数字流程协作。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">用户与推荐</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">把流量、行为与推荐连接到转化、复购和商品决策。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-capabilities-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">关键能力是数据驱动的跨链条决策，不是单独拥有某个软件或工厂。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "shein-capabilities-speech-1",
+          "type": "speech",
+          "text": "课程材料归纳了趋势与设计、柔性供应链、用户获取与推荐、全链路数字化等能力。"
+        },
+        {
+          "id": "shein-capabilities-spotlight-question",
+          "type": "spotlight",
+          "elementId": "shein-capabilities-question"
+        },
+        {
+          "id": "shein-capabilities-speech-2",
+          "type": "speech",
+          "text": "这些能力必须连起来：趋势识别产生商品实验，供应链完成快反，用户反馈又进入下一轮决策。"
+        },
+        {
+          "id": "shein-capabilities-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "shein-capabilities-takeaway"
+        },
+        {
+          "id": "shein-capabilities-speech-3",
+          "type": "speech",
+          "text": "如果各环节数据无法共同驱动动作，拥有系统也不等于形成关键能力。"
+        }
+      ],
+      "createdAt": 1786579200406,
+      "updatedAt": 1786579200406,
+      "outlineId": "scene_6"
+    },
+    {
+      "id": "shein-profit-model",
+      "stageId": "jxg-bm-case-shein-system-capabilities-v1",
+      "type": "slide",
+      "title": "谁向谁付钱",
+      "order": 7,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "shein-profit-model-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "shein-profit-model-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 5 步 · 盈利模式</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">谁向谁付钱</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">商品销售收入如何覆盖获客、设计、生产、物流和退货成本？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">收入来源</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">消费者在线购买自有品牌商品，收入由款式、转化、客单和复购共同决定。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">主要成本</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">商品开发与生产、流量获取、平台技术、跨境物流和退货共同消耗毛利。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">效率来源</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">小单降低弱款初始损失，快速追单放大有效款，推荐提高需求匹配。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-profit-model-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">盈利不是“低价加销量”自动成立，而是试错、转化与履约效率共同成立。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "shein-profit-model-speech-1",
+          "type": "speech",
+          "text": "商品销售是主要收入，但收入增长不能掩盖获客、退货、物流和库存成本。"
+        },
+        {
+          "id": "shein-profit-model-spotlight-question",
+          "type": "spotlight",
+          "elementId": "shein-profit-model-question"
+        },
+        {
+          "id": "shein-profit-model-speech-2",
+          "type": "speech",
+          "text": "小单快反的经济价值，在于减少弱款的初始库存并更快放大强款。"
+        },
+        {
+          "id": "shein-profit-model-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "shein-profit-model-takeaway"
+        },
+        {
+          "id": "shein-profit-model-speech-3",
+          "type": "speech",
+          "text": "因此要验证的不是上新数量，而是测试命中率、售罄、追单速度、复购和完整履约成本。"
+        }
+      ],
+      "createdAt": 1786579200407,
+      "updatedAt": 1786579200407,
+      "outlineId": "scene_7"
+    },
+    {
+      "id": "shein-cash-flow",
+      "stageId": "jxg-bm-case-shein-system-capabilities-v1",
+      "type": "slide",
+      "title": "钱在什么时候流入和占用",
+      "order": 8,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "shein-cash-flow-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "shein-cash-flow-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 6 步 · 现金流结构</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">钱在什么时候流入和占用</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">小单能降低初始库存，却不等于增长不占用现金。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">降低首单占用</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">每款先小批量测试，减少错误预测带来的初始库存现金。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">追单仍需现金</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">畅销款放量会形成生产、物流、在途库存与退货准备。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">合作边界</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">课程材料强调准时结算，模式不能建立在无限占用供应商资金上。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-cash-flow-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">现金优势来自更快验证和周转，而不是把所有库存与账期风险转嫁给伙伴。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "shein-cash-flow-speech-1",
+          "type": "speech",
+          "text": "小单快反可以降低首次押注，但增长后的追单、跨境物流和退货仍会占用现金。"
+        },
+        {
+          "id": "shein-cash-flow-spotlight-question",
+          "type": "spotlight",
+          "elementId": "shein-cash-flow-question"
+        },
+        {
+          "id": "shein-cash-flow-speech-2",
+          "type": "speech",
+          "text": "课程材料还强调对供应商准时付款，这说明供应链合作不能只靠压账期。"
+        },
+        {
+          "id": "shein-cash-flow-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "shein-cash-flow-takeaway"
+        },
+        {
+          "id": "shein-cash-flow-speech-3",
+          "type": "speech",
+          "text": "真正需要跟踪的是从首单、追单、入仓、销售到退货的完整现金转换周期。"
+        }
+      ],
+      "createdAt": 1786579200408,
+      "updatedAt": 1786579200408,
+      "outlineId": "scene_8"
+    },
+    {
+      "id": "shein-value-map",
+      "stageId": "jxg-bm-case-shein-system-capabilities-v1",
+      "type": "slide",
+      "title": "可复制价值来自更快、更准、更低成本地学习",
+      "order": 9,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "shein-value-map-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "shein-value-map-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 7—8 步 · 企业价值与因果图</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">可复制价值来自更快、更准、更低成本地学习</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">如何把消费者需求、供应链动作和自由现金流连成因果链？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">需求链</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">趋势与用户数据 → 设计选款 → 小批量真实测试。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">履约链</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">销售反馈 → 数字化追单 → 柔性供应与更快上新。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">价值链</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">更低试错损失 + 更快周转 + 稳定复购 → 可复制现金与企业价值。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "shein-value-map-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">SHEIN 的长期价值假设必须由命中率、周转、复购、退货和现金结果共同验证。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "shein-value-map-speech-1",
+          "type": "speech",
+          "text": "企业价值不是因为使用了算法，而是系统是否持续提高需求判断和周转效率。"
+        },
+        {
+          "id": "shein-value-map-spotlight-question",
+          "type": "spotlight",
+          "elementId": "shein-value-map-question"
+        },
+        {
+          "id": "shein-value-map-speech-2",
+          "type": "speech",
+          "text": "正确因果链从用户需求信号开始，经由小单测试和供应链追单，最后落到库存、复购与现金。"
+        },
+        {
+          "id": "shein-value-map-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "shein-value-map-takeaway"
+        },
+        {
+          "id": "shein-value-map-speech-3",
+          "type": "speech",
+          "text": "任何一个环节失效，例如获客过贵、退货过高或供应商不稳定，都会削弱长期价值。"
+        }
+      ],
+      "createdAt": 1786579200409,
+      "updatedAt": 1786579200409,
+      "outlineId": "scene_9"
+    },
+    {
+      "id": "shein-check-2",
+      "stageId": "jxg-bm-case-shein-system-capabilities-v1",
+      "type": "quiz",
+      "title": "第二轮互动：现金与价值",
+      "order": 10,
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "shein-q4",
+            "type": "single",
+            "question": "仅知道“首单批量小”，还不能证明现金流更好。最需要继续核对什么？",
+            "options": [
+              { "value": "A", "label": "办公地点数量" },
+              { "value": "B", "label": "售罄、追单周期、退货、物流和供应商付款" },
+              { "value": "C", "label": "品牌字体" },
+              { "value": "D", "label": "创始人公开演讲次数" }
+            ],
+            "answer": ["B"],
+            "analysis": "小首单只覆盖初始试错，完整现金结构还取决于售罄、追单、退货、物流与付款周期。",
+            "points": 20,
+            "hasAnswer": true
+          },
+          {
+            "id": "shein-q5",
+            "type": "single",
+            "question": "哪条因果链最符合本案例？",
+            "options": [
+              { "value": "A", "label": "上新越多 → 利润必然越高" },
+              {
+                "value": "B",
+                "label": "需求数据 → 小单测试 → 快速追单 → 周转和复购 → 可复制现金价值"
+              },
+              { "value": "C", "label": "供应商越多 → 库存一定越少" },
+              { "value": "D", "label": "广告越多 → 退货率一定越低" }
+            ],
+            "answer": ["B"],
+            "analysis": "案例的核心是用数据和小单快反提高学习与周转效率，最终仍需由复购和现金结果验证。",
+            "points": 20,
+            "hasAnswer": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "shein-check-2-speech",
+          "type": "speech",
+          "text": "请完成本轮原生互动。客观题全部答对后才能继续，答错可查看解释并重新作答。"
+        }
+      ],
+      "createdAt": 1786579200410,
+      "updatedAt": 1786579200410,
+      "outlineId": "scene_10"
+    }
+  ]
+}

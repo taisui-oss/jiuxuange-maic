@@ -17,6 +17,7 @@ case-only runtime mode. They are not exposed to learners when `JIUXUANGE_CASE_ON
 - stable user id at the case-progress boundary;
 - PostgreSQL progress, idempotency, and optimistic concurrency;
 - content and progress versions;
+- five complete business-model case packages and a coach-only answer key;
 - desktop and mobile acceptance evidence.
 
 ### Excluded
@@ -33,9 +34,16 @@ case-only runtime mode. They are not exposed to learners when `JIUXUANGE_CASE_ON
 
 - Gate 1: passed; see [Gate 1 results](./gate-1/RESULTS.md).
 - Gate 2: passed; see [Gate 2 results](./gate-2/RESULTS.md).
+- Gate 3: five-case content and sequential challenge path passed; see
+  [Gate 3 results](./gate-3/RESULTS.md).
+- Coach answer key: internal only; see [CASE_ANSWER_KEY.md](./coach/CASE_ANSWER_KEY.md).
 - OSS entry decision: candidate may enter a separate OSS integration gate; see the
   [pre-integration acceptance report](./OSS_PREINTEGRATION_ACCEPTANCE.md).
 - Production: prohibited until a separate release decision.
+
+All five case packages remain `pending_named_sme_review`. Gate 3 proves package completeness,
+answer separation, and server-authoritative progression; it does not constitute content approval
+or production readiness.
 
 ## Gate 2 Runtime Contract
 
@@ -55,5 +63,5 @@ The online baseline remains at commit `8fb3e52d374053e52214bcd78d69edb958517e6d`
 branch/worktree. Removing `JIUXUANGE_CASE_ONLY=true` restores existing route behavior; no original
 product code or content was deleted.
 
-Gate 2 was developed only on `codex/jiuxuange-case-only-v1`. It was not merged, pushed to the
-online branch, deployed, or connected to production data.
+Gates 2 and 3 were developed only on `codex/jiuxuange-case-only-v1`. They were not merged, pushed
+to the online branch, deployed, or connected to production data.

@@ -15,6 +15,7 @@ import type {
 interface QuizViewResult {
   passed: boolean;
   incorrectQuestionIds: string[];
+  incorrectQuestionFeedback?: Record<string, string>;
   error?: string;
 }
 
@@ -64,6 +65,7 @@ function LightweightQuiz({
     setResult({
       passed: false,
       incorrectQuestionIds: response.incorrectQuestionIds ?? [],
+      incorrectQuestionFeedback: response.incorrectQuestionFeedback,
       error: response.error,
     });
   };
@@ -96,6 +98,7 @@ function LightweightQuiz({
               {question.type === 'short_answer' ? (
                 <textarea
                   aria-label={`第 ${index + 1} 题回答`}
+                  data-question-id={question.id}
                   value={(answers[question.id] as string | undefined) ?? ''}
                   onChange={(event) => setSingleAnswer(question.id, event.target.value)}
                   className="mt-3 min-h-28 w-full resize-y rounded-md border border-slate-300 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-cyan-600 focus:ring-2 focus:ring-cyan-100"
@@ -139,9 +142,9 @@ function LightweightQuiz({
                   })}
                 </div>
               )}
-              {result && result.incorrectQuestionIds.includes(question.id) && question.analysis && (
+              {result?.incorrectQuestionFeedback?.[question.id] && (
                 <p className="mt-3 border-l-2 border-amber-400 pl-3 text-sm leading-6 text-slate-600">
-                  {question.analysis}
+                  {result.incorrectQuestionFeedback[question.id]}
                 </p>
               )}
             </fieldset>

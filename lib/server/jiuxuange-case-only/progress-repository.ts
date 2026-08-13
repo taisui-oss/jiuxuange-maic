@@ -296,12 +296,24 @@ export async function submitCaseOnlyScene(input: {
     if (scene.type === 'quiz' && scene.content.type === 'quiz') {
       const grade = gradeCaseOnlyQuiz(scene.content.questions, request.answers ?? {});
       if (!grade.passed) {
+        const incorrectQuestionFeedback = Object.fromEntries(
+          scene.content.questions
+            .filter((question) => grade.incorrectQuestionIds.includes(question.id))
+            .map((question) => [
+              question.id,
+              question.analysis ?? '请回到本轮案例事实与六要素因果关系重新判断。',
+            ]),
+        );
         return finalize(
           422,
           failure(
             'INTERACTION_INCOMPLETE',
             'Required interaction is incomplete or contains incorrect answers',
-            { progress: currentProgress, incorrectQuestionIds: grade.incorrectQuestionIds },
+            {
+              progress: currentProgress,
+              incorrectQuestionIds: grade.incorrectQuestionIds,
+              incorrectQuestionFeedback,
+            },
           ),
         );
       }

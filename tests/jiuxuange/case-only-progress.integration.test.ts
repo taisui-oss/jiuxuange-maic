@@ -4,6 +4,7 @@ import {
   closeCaseOnlyDatabaseForTests,
   getCaseOnlyDatabase,
 } from '@/lib/server/jiuxuange-case-only/db/client';
+import { listCaseOnlyLessons } from '@/lib/jiuxuange/case-only/catalog';
 import { readCaseOnlyContent } from '@/lib/server/jiuxuange-case-only/content-repository';
 import {
   getCaseOnlyCourseProgress,
@@ -42,10 +43,10 @@ describe('case-only PostgreSQL progress', () => {
   beforeEach(resetTables);
   afterAll(closeCaseOnlyDatabaseForTests);
 
-  it('creates stable versioned progress and keeps the second case locked', async () => {
+  it('creates stable versioned progress and keeps later cases locked', async () => {
     const progress = await getCaseOnlyCourseProgress(USER_ID);
     expect(progress.userId).toBe(USER_ID);
-    expect(progress.cases).toHaveLength(2);
+    expect(progress.cases).toHaveLength(5);
     expect(progress.cases[0]).toMatchObject({
       unlocked: true,
       progressVersion: 0,
@@ -53,7 +54,10 @@ describe('case-only PostgreSQL progress', () => {
       status: 'not_started',
     });
     expect(progress.cases[0].contentVersion).toMatch(/^sha256:[0-9a-f]{64}$/);
-    expect(progress.cases[1]).toMatchObject({ unlocked: false, status: 'not_started' });
+    expect(progress.cases.slice(1)).toEqual(
+      expect.arrayContaining([expect.objectContaining({ unlocked: false, status: 'not_started' })]),
+    );
+    expect(progress.cases.slice(1).every((item) => !item.unlocked)).toBe(true);
   });
 
   it('replays one concurrent idempotent submission without advancing twice', async () => {
@@ -103,56 +107,79 @@ describe('case-only PostgreSQL progress', () => {
     expect(progress.cases[0]).toMatchObject({ progressVersion: 1, nextSceneIndex: 1 });
   });
 
-  it('unlocks the next case only after every server scene is completed', async () => {
-    const content = await readCaseOnlyContent(FIRST_CASE_ID);
-    let current: CaseOnlyProgressItem = (await getCaseOnlyCourseProgress(USER_ID)).cases[0];
+  it('enforces every interaction and unlocks all five cases sequentially', async () => {
+    const lessons = listCaseOnlyLessons();
 
-    for (const scene of content!.classroom.scenes) {
-      if (scene.type === 'quiz' && scene.content.type === 'quiz') {
-        const rejected = await submitCaseOnlyScene({
+    for (const [caseIndex, lesson] of lessons.entries()) {
+      const before = await getCaseOnlyCourseProgress(USER_ID);
+      expect(before.cases[caseIndex].unlocked, lesson.id).toBe(true);
+      if (caseIndex + 1 < lessons.length) {
+        expect(before.cases[caseIndex + 1].unlocked, lessons[caseIndex + 1].id).toBe(false);
+      }
+
+      const content = await readCaseOnlyContent(lesson.id);
+      let current: CaseOnlyProgressItem = before.cases[caseIndex];
+      for (const scene of content!.classroom.scenes) {
+        if (scene.type === 'quiz' && scene.content.type === 'quiz') {
+          const rejected = await submitCaseOnlyScene({
+            userId: USER_ID,
+            idempotencyKey: `wrong-${lesson.id}-${scene.id}`,
+            request: {
+              caseId: lesson.id,
+              contentVersion: content!.contentVersion,
+              progressVersion: current.progressVersion,
+              sceneId: scene.id,
+              answers: Object.fromEntries(
+                scene.content.questions.map((question) => [question.id, 'invalid-answer']),
+              ),
+            },
+          });
+          expect(rejected.status, `${lesson.id}/${scene.id}`).toBe(422);
+          expect(rejected.body).toMatchObject({
+            success: false,
+            errorCode: 'INTERACTION_INCOMPLETE',
+            progress: { progressVersion: current.progressVersion },
+          });
+          if (!rejected.body.success) {
+            expect(
+              Object.keys(rejected.body.incorrectQuestionFeedback ?? {}).length,
+            ).toBeGreaterThan(0);
+          }
+        }
+
+        const result = await submitCaseOnlyScene({
           userId: USER_ID,
-          idempotencyKey: `wrong-${scene.id}`,
+          idempotencyKey: `complete-${lesson.id}-${scene.id}`,
           request: {
-            caseId: FIRST_CASE_ID,
+            caseId: lesson.id,
             contentVersion: content!.contentVersion,
             progressVersion: current.progressVersion,
             sceneId: scene.id,
-            answers: Object.fromEntries(
-              scene.content.questions.map((question) => [question.id, 'invalid-answer']),
-            ),
+            answers: answersForScene(scene),
           },
         });
-        expect(rejected.status).toBe(422);
-        expect(rejected.body).toMatchObject({
-          success: false,
-          errorCode: 'INTERACTION_INCOMPLETE',
-          progress: { progressVersion: current.progressVersion },
+        expect(result.status, `${lesson.id}/${scene.id}`).toBe(200);
+        expect(result.body.success, `${lesson.id}/${scene.id}`).toBe(true);
+        if (result.body.success) current = result.body.progress;
+      }
+
+      expect(current).toMatchObject({
+        status: 'completed',
+        nextSceneIndex: content!.classroom.scenes.length,
+        progressVersion: content!.classroom.scenes.length,
+      });
+      const after = await getCaseOnlyCourseProgress(USER_ID);
+      expect(after.cases[caseIndex].status, lesson.id).toBe('completed');
+      if (caseIndex + 1 < lessons.length) {
+        expect(after.cases[caseIndex + 1]).toMatchObject({
+          unlocked: true,
+          progressVersion: 0,
         });
       }
-      const result = await submitCaseOnlyScene({
-        userId: USER_ID,
-        idempotencyKey: `complete-${scene.id}`,
-        request: {
-          caseId: FIRST_CASE_ID,
-          contentVersion: content!.contentVersion,
-          progressVersion: current.progressVersion,
-          sceneId: scene.id,
-          answers: answersForScene(scene),
-        },
-      });
-      expect(result.status, scene.id).toBe(200);
-      expect(result.body.success, scene.id).toBe(true);
-      if (result.body.success) current = result.body.progress;
     }
 
-    expect(current).toMatchObject({
-      status: 'completed',
-      nextSceneIndex: content!.classroom.scenes.length,
-      progressVersion: content!.classroom.scenes.length,
-    });
-    const course = await getCaseOnlyCourseProgress(USER_ID);
-    expect(course.cases[0].status).toBe('completed');
-    expect(course.cases[1].unlocked).toBe(true);
-    expect(course.cases[1].progressVersion).toBe(0);
-  });
+    const final = await getCaseOnlyCourseProgress(USER_ID);
+    expect(final.cases).toHaveLength(5);
+    expect(final.cases.every((item) => item.status === 'completed')).toBe(true);
+  }, 30_000);
 });

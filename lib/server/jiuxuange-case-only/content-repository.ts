@@ -67,3 +67,31 @@ export async function readAllCaseOnlyContent(): Promise<CaseOnlyContentPackage[]
   );
   return packages.filter((item): item is CaseOnlyContentPackage => item !== null);
 }
+
+export function toLearnerCaseOnlyContent(content: CaseOnlyContentPackage): CaseOnlyContentPackage {
+  return {
+    ...content,
+    classroom: {
+      ...content.classroom,
+      scenes: content.classroom.scenes.map((scene) => {
+        if (scene.type !== 'quiz' || scene.content.type !== 'quiz') return scene;
+        return {
+          ...scene,
+          content: {
+            ...scene.content,
+            questions: scene.content.questions.map((question) => {
+              const {
+                answer: _answer,
+                analysis: _analysis,
+                commentPrompt: _commentPrompt,
+                hasAnswer: _hasAnswer,
+                ...learnerQuestion
+              } = question;
+              return learnerQuestion;
+            }),
+          },
+        };
+      }),
+    },
+  };
+}

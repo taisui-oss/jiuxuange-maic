@@ -1,0 +1,2470 @@
+{
+  "id": "jxg-bm-case-fresh-grocery-comparison-v1",
+  "generationComplete": true,
+  "stage": {
+    "id": "jxg-bm-case-fresh-grocery-comparison-v1",
+    "name": "生鲜零售：模式比较与迁移",
+    "description": "比较钱大妈、叮咚买菜与美团优选的六要素关系",
+    "createdAt": 1786579200300,
+    "updatedAt": "2026-08-13T00:00:00.000Z",
+    "languageDirective": "全程使用中文。采用魏朱商业模式六要素模型，沿交易地图、定位、业务系统、关键资源能力、盈利模式、现金流结构和企业价值形成可检验的因果链。明确区分课程材料事实、分析判断和待验证假设，不把历史案例数字表述为企业当前实时事实。",
+    "style": "professional",
+    "currentSceneId": "fresh-intro",
+    "agentIds": ["default-1", "default-2", "default-3", "default-4"],
+    "videoManifest": {},
+    "interactiveMode": false,
+    "taskEngineMode": false
+  },
+  "scenes": [
+    {
+      "id": "fresh-intro",
+      "stageId": "jxg-bm-case-fresh-grocery-comparison-v1",
+      "type": "slide",
+      "title": "生鲜零售：同一品类为什么会长出不同模式",
+      "order": 1,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "fresh-intro-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "fresh-intro-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">课程历史案例 · 三种模式比较</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">生鲜零售：同一品类为什么会长出不同模式</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">卖的都是生鲜，为什么门店自提、前置仓到家和社区团购不能用同一套经营逻辑？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">钱大妈</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">社区门店、到店自提与日清机制，强调离消费者近和门店周转。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">叮咚买菜</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">前置仓、自营供应与骑手到家，强调即时便利与履约体验。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">美团优选</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">预售、中心仓与团长自提，强调价格、计划性和更轻的末端履约。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-intro-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">模式差异不是页面形式，而是客户场景、履约责任、库存风险和资金结构的组合。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "fresh-intro-speech-1",
+          "type": "speech",
+          "text": "本案例使用课程材料中的历史样本，不代表企业当前实时经营状态。我们比较钱大妈、叮咚买菜和美团优选三种模式。"
+        },
+        {
+          "id": "fresh-intro-spotlight-question",
+          "type": "spotlight",
+          "elementId": "fresh-intro-question"
+        },
+        {
+          "id": "fresh-intro-speech-2",
+          "type": "speech",
+          "text": "请不要先问哪一种模式最好。先观察它们分别服务谁、如何履约、谁承担库存与最后一公里。"
+        },
+        {
+          "id": "fresh-intro-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "fresh-intro-takeaway"
+        },
+        {
+          "id": "fresh-intro-speech-3",
+          "type": "speech",
+          "text": "同一品类之所以出现不同模式，是因为定位和交易结构不同，后面的能力、盈利和现金流也会随之改变。"
+        }
+      ],
+      "createdAt": 1786579200301,
+      "updatedAt": 1786579200301,
+      "outlineId": "scene_1"
+    },
+    {
+      "id": "fresh-transaction-map",
+      "stageId": "jxg-bm-case-fresh-grocery-comparison-v1",
+      "type": "slide",
+      "title": "谁和谁交易",
+      "order": 2,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "fresh-transaction-map-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "fresh-transaction-map-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 1 步 · 交易地图</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">谁和谁交易</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">消费者、供应商、门店或前置仓、骑手与团长分别交换什么？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">门店模式</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">消费者到店购买；门店连接供应、陈列、销售与损耗管理。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">到家模式</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">消费者线上下单；平台、前置仓和骑手共同承担拣货与即时交付。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">团购模式</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">消费者预先下单；平台汇总需求，仓配与团长完成次日自提。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-transaction-map-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">先画清商品、订单、责任与资金流，才能判断模式真正把风险留给了谁。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "fresh-transaction-map-speech-1",
+          "type": "speech",
+          "text": "三种模式都连接消费者和供应商，但中间承担交易责任的主体不同。"
+        },
+        {
+          "id": "fresh-transaction-map-spotlight-question",
+          "type": "spotlight",
+          "elementId": "fresh-transaction-map-question"
+        },
+        {
+          "id": "fresh-transaction-map-speech-2",
+          "type": "speech",
+          "text": "门店模式把库存和交付聚在门店；前置仓增加即时配送；社区团购通过预售与自提降低末端不确定性。"
+        },
+        {
+          "id": "fresh-transaction-map-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "fresh-transaction-map-takeaway"
+        },
+        {
+          "id": "fresh-transaction-map-speech-3",
+          "type": "speech",
+          "text": "交易地图的重点不是列主体，而是标出谁接单、谁备货、谁承担损耗、谁完成最后交付。"
+        }
+      ],
+      "createdAt": 1786579200302,
+      "updatedAt": 1786579200302,
+      "outlineId": "scene_2"
+    },
+    {
+      "id": "fresh-positioning",
+      "stageId": "jxg-bm-case-fresh-grocery-comparison-v1",
+      "type": "slide",
+      "title": "服务谁、解决什么问题",
+      "order": 3,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "fresh-positioning-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "fresh-positioning-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 2 步 · 定位</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">服务谁、解决什么问题</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">便利、鲜度和价格三种需求，分别会推导出什么交付承诺？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">社区鲜度</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">钱大妈以社区客群和日清机制回应高频、就近与新鲜感知。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">即时便利</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">叮咚买菜以线上下单和快速到家回应高线城市的时间成本。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">计划性价比</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">美团优选以预售与次日自提回应更强价格敏感和计划性采购。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-positioning-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">定位一旦不同，客单、配送时效、库存和服务成本就不能用同一标准比较。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "fresh-positioning-speech-1",
+          "type": "speech",
+          "text": "课程材料把三种模式放在不同需求场景中比较：社区鲜度、即时便利和计划性价比。"
+        },
+        {
+          "id": "fresh-positioning-spotlight-question",
+          "type": "spotlight",
+          "elementId": "fresh-positioning-question"
+        },
+        {
+          "id": "fresh-positioning-speech-2",
+          "type": "speech",
+          "text": "定位不是宣传语，而是交付承诺。即时到家意味着更高履约成本，次日自提则用时间换取更低不确定性。"
+        },
+        {
+          "id": "fresh-positioning-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "fresh-positioning-takeaway"
+        },
+        {
+          "id": "fresh-positioning-speech-3",
+          "type": "speech",
+          "text": "只有先固定客户和场景，后面的业务系统与单位经济才有可比性。"
+        }
+      ],
+      "createdAt": 1786579200303,
+      "updatedAt": 1786579200303,
+      "outlineId": "scene_3"
+    },
+    {
+      "id": "fresh-business-system",
+      "stageId": "jxg-bm-case-fresh-grocery-comparison-v1",
+      "type": "slide",
+      "title": "各主体如何协作",
+      "order": 4,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "fresh-business-system-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "fresh-business-system-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 3 步 · 业务系统</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">各主体如何协作</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">谁拥有库存、谁负责最后一公里，是三种模式最关键的系统差异。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">钱大妈</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">供应链、门店或加盟商与 ERP 协同，门店完成销售和顾客自提。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">叮咚买菜</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">自营供应链、前置仓、拣货与骑手形成完整即时履约链。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">美团优选</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">平台预售聚单，中心仓组织履约，团长承担社区交付节点。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-business-system-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">系统边界决定企业要建设哪些资产，也决定库存、履约和服务风险由谁承担。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "fresh-business-system-speech-1",
+          "type": "speech",
+          "text": "业务系统关注利益相关者及其交易结构，不只是企业内部流程。"
+        },
+        {
+          "id": "fresh-business-system-spotlight-question",
+          "type": "spotlight",
+          "elementId": "fresh-business-system-question"
+        },
+        {
+          "id": "fresh-business-system-speech-2",
+          "type": "speech",
+          "text": "叮咚把更多链条纳入自营，因此控制力更强、资产与履约压力也更高；团购则通过预售和团长减少即时配送。"
+        },
+        {
+          "id": "fresh-business-system-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "fresh-business-system-takeaway"
+        },
+        {
+          "id": "fresh-business-system-speech-3",
+          "type": "speech",
+          "text": "比较模式时，先问库存所有权和最后一公里责任，而不是只看前端页面。"
+        }
+      ],
+      "createdAt": 1786579200304,
+      "updatedAt": 1786579200304,
+      "outlineId": "scene_4"
+    },
+    {
+      "id": "fresh-check-1",
+      "stageId": "jxg-bm-case-fresh-grocery-comparison-v1",
+      "type": "quiz",
+      "title": "第一轮互动：定位与系统",
+      "order": 5,
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "fresh-q1",
+            "type": "single",
+            "question": "哪一种模式最符合“预售聚单、次日到团、社区自提”？",
+            "options": [
+              { "value": "A", "label": "钱大妈社区门店" },
+              { "value": "B", "label": "叮咚买菜前置仓" },
+              { "value": "C", "label": "美团优选社区团购" },
+              { "value": "D", "label": "传统菜市场" }
+            ],
+            "answer": ["C"],
+            "analysis": "课程材料中的美团优选采用预售聚单和团长自提，以计划性换取更低履约不确定性。",
+            "points": 20,
+            "hasAnswer": true
+          },
+          {
+            "id": "fresh-q2",
+            "type": "single",
+            "question": "哪一种模式最依赖较高客单价来摊薄骑手即时配送成本？",
+            "options": [
+              { "value": "A", "label": "叮咚买菜前置仓到家" },
+              { "value": "B", "label": "美团优选次日自提" },
+              { "value": "C", "label": "钱大妈到店自提" },
+              { "value": "D", "label": "农贸市场摊位" }
+            ],
+            "answer": ["A"],
+            "analysis": "前置仓即时到家需要仓内拣货和骑手配送，客单价与订单密度直接影响履约成本占比。",
+            "points": 20,
+            "hasAnswer": true
+          },
+          {
+            "id": "fresh-q3",
+            "type": "single",
+            "question": "比较三种生鲜模式的业务系统时，最应优先核对哪组问题？",
+            "options": [
+              { "value": "A", "label": "页面颜色与品牌口号" },
+              { "value": "B", "label": "库存由谁持有、最后一公里由谁完成" },
+              { "value": "C", "label": "创始人采访数量" },
+              { "value": "D", "label": "门店面积是否完全一致" }
+            ],
+            "answer": ["B"],
+            "analysis": "库存与履约责任决定资产、损耗、服务和现金压力，是业务系统比较的关键。",
+            "points": 20,
+            "hasAnswer": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "fresh-check-1-speech",
+          "type": "speech",
+          "text": "请完成本轮原生互动。客观题全部答对后才能继续，答错可查看解释并重新作答。"
+        }
+      ],
+      "createdAt": 1786579200305,
+      "updatedAt": 1786579200305,
+      "outlineId": "scene_5"
+    },
+    {
+      "id": "fresh-capabilities",
+      "stageId": "jxg-bm-case-fresh-grocery-comparison-v1",
+      "type": "slide",
+      "title": "企业必须擅长什么",
+      "order": 6,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "fresh-capabilities-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "fresh-capabilities-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 4 步 · 关键资源能力</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">企业必须擅长什么</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">同样采购蔬果，三种模式真正需要沉淀的能力为什么不同？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">门店周转</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">钱大妈需要采购、日清、加盟协同与门店数字化管理能力。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">即时履约</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">叮咚需要供应链、前置仓运营、需求预测与骑手调度能力。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">平台聚单</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">美团优选需要需求聚合、仓配网络、团长运营与平台流量能力。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-capabilities-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">关键能力必须与定位和系统相配；复制别人的动作，不等于复制别人的能力。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "fresh-capabilities-speech-1",
+          "type": "speech",
+          "text": "关键资源能力不是企业拥有的一切，而是让特定交易结构持续成立的少数能力。"
+        },
+        {
+          "id": "fresh-capabilities-spotlight-question",
+          "type": "spotlight",
+          "elementId": "fresh-capabilities-question"
+        },
+        {
+          "id": "fresh-capabilities-speech-2",
+          "type": "speech",
+          "text": "门店、前置仓和团购分别要求门店周转、即时履约和平台聚单，能力组合并不相同。"
+        },
+        {
+          "id": "fresh-capabilities-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "fresh-capabilities-takeaway"
+        },
+        {
+          "id": "fresh-capabilities-speech-3",
+          "type": "speech",
+          "text": "因此，看到别人增长就照搬前置仓或团长体系，往往会忽略自己是否具备对应能力。"
+        }
+      ],
+      "createdAt": 1786579200306,
+      "updatedAt": 1786579200306,
+      "outlineId": "scene_6"
+    },
+    {
+      "id": "fresh-profit-model",
+      "stageId": "jxg-bm-case-fresh-grocery-comparison-v1",
+      "type": "slide",
+      "title": "谁向谁付钱",
+      "order": 7,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "fresh-profit-model-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "fresh-profit-model-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 5 步 · 盈利模式</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">谁向谁付钱</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">收入都来自卖菜，但利润逻辑为什么仍然不同？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">门店利润</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">商品毛利需覆盖门店租金、人员、损耗，并处理直营网点与加盟关系。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">到家利润</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">商品毛利需进一步覆盖前置仓、拣货和即时配送成本。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">团购利润</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">预售与自提降低部分履约成本，但仍需覆盖仓配、团长与平台运营。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-profit-model-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">盈利模式要把收入、成本和利益分配放在同一笔订单中核算。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "fresh-profit-model-speech-1",
+          "type": "speech",
+          "text": "三种模式都可以获得商品销售收入，但它们承担的成本和分配对象不同。"
+        },
+        {
+          "id": "fresh-profit-model-spotlight-question",
+          "type": "spotlight",
+          "elementId": "fresh-profit-model-question"
+        },
+        {
+          "id": "fresh-profit-model-speech-2",
+          "type": "speech",
+          "text": "前置仓增加即时履约成本，社区团购需要分配团长和仓配收益，门店模式则承担固定门店成本和损耗。"
+        },
+        {
+          "id": "fresh-profit-model-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "fresh-profit-model-takeaway"
+        },
+        {
+          "id": "fresh-profit-model-speech-3",
+          "type": "speech",
+          "text": "只比较毛利率会漏掉履约和利益分配，必须回到每笔订单的完整单位经济。"
+        }
+      ],
+      "createdAt": 1786579200307,
+      "updatedAt": 1786579200307,
+      "outlineId": "scene_7"
+    },
+    {
+      "id": "fresh-cash-flow",
+      "stageId": "jxg-bm-case-fresh-grocery-comparison-v1",
+      "type": "slide",
+      "title": "钱在什么时候流入和占用",
+      "order": 8,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "fresh-cash-flow-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "fresh-cash-flow-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 6 步 · 现金流结构</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">钱在什么时候流入和占用</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">预售、自营库存与即时配送如何改变资金占用？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">历史客单样本</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">课程材料样本约为团购 15 元、门店 22 元、前置仓 61.7 元，仅用于机制比较。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">履约成本样本</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">材料估算社区团购约 15%—20%，前置仓约 30%—40%，不是当前经营数据。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">现金压力</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">自营库存、仓网和骑手会先占用资金；预售可降低部分需求与库存不确定性。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-cash-flow-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">高收入不等于好现金流；客单、周转、履约成本与扩张投入必须一起看。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "fresh-cash-flow-speech-1",
+          "type": "speech",
+          "text": "课程材料提供了历史样本用于说明：前置仓往往需要更高客单来摊薄更高履约成本。"
+        },
+        {
+          "id": "fresh-cash-flow-spotlight-question",
+          "type": "spotlight",
+          "elementId": "fresh-cash-flow-question"
+        },
+        {
+          "id": "fresh-cash-flow-speech-2",
+          "type": "speech",
+          "text": "这些数字不是企业当前事实，但能帮助我们理解为什么自营即时到家对订单密度和周转要求更高。"
+        },
+        {
+          "id": "fresh-cash-flow-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "fresh-cash-flow-takeaway"
+        },
+        {
+          "id": "fresh-cash-flow-speech-3",
+          "type": "speech",
+          "text": "现金流比较要同时看顾客付款时间、库存占用、仓网投入和末端履约，而不是只看 GMV。"
+        }
+      ],
+      "createdAt": 1786579200308,
+      "updatedAt": 1786579200308,
+      "outlineId": "scene_8"
+    },
+    {
+      "id": "fresh-value-map",
+      "stageId": "jxg-bm-case-fresh-grocery-comparison-v1",
+      "type": "slide",
+      "title": "没有万能模式，只有成立条件",
+      "order": 9,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "fresh-value-map-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "fresh-value-map-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 7—8 步 · 企业价值与因果图</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">没有万能模式，只有成立条件</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">什么因果链能把定位、履约、单位经济和长期价值连起来？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">即时便利链</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">时间敏感需求 → 前置仓到家 → 高密度履约 → 单位经济与现金成立。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">计划性价比链</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">价格敏感需求 → 预售自提 → 降低不确定性 → 更轻履约与复制。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">社区鲜度链</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">高频邻里需求 → 门店日清 → 周转与信任 → 稳定单店现金。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "fresh-value-map-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">长期价值来自模式在特定场景下持续成立，而不是某一种前端形态天然更先进。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "fresh-value-map-speech-1",
+          "type": "speech",
+          "text": "企业价值不能从门店数或订单数直接推出，必须验证定位到现金流的完整因果链。"
+        },
+        {
+          "id": "fresh-value-map-spotlight-question",
+          "type": "spotlight",
+          "elementId": "fresh-value-map-question"
+        },
+        {
+          "id": "fresh-value-map-speech-2",
+          "type": "speech",
+          "text": "即时便利需要密度，计划性价比需要稳定聚单，社区鲜度需要周转和信任。每条链的成立条件不同。"
+        },
+        {
+          "id": "fresh-value-map-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "fresh-value-map-takeaway"
+        },
+        {
+          "id": "fresh-value-map-speech-3",
+          "type": "speech",
+          "text": "因此最重要的迁移不是选择一个赢家，而是判断自己的客户场景与能力是否支持相应模式。"
+        }
+      ],
+      "createdAt": 1786579200309,
+      "updatedAt": 1786579200309,
+      "outlineId": "scene_9"
+    },
+    {
+      "id": "fresh-check-2",
+      "stageId": "jxg-bm-case-fresh-grocery-comparison-v1",
+      "type": "quiz",
+      "title": "第二轮互动：现金与价值",
+      "order": 10,
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "fresh-q4",
+            "type": "single",
+            "question": "相比前置仓即时到家，预售加社区自提最直接改变了什么？",
+            "options": [
+              { "value": "A", "label": "把所有库存风险都消除" },
+              { "value": "B", "label": "降低需求不确定性和最后一公里即时配送压力" },
+              { "value": "C", "label": "保证每个订单都盈利" },
+              { "value": "D", "label": "不再需要仓配系统" }
+            ],
+            "answer": ["B"],
+            "analysis": "预售和自提可以降低部分需求与末端履约压力，但不会消除库存、仓配或盈利风险。",
+            "points": 20,
+            "hasAnswer": true
+          },
+          {
+            "id": "fresh-q5",
+            "type": "single",
+            "question": "哪条因果链最符合本案例的六要素逻辑？",
+            "options": [
+              { "value": "A", "label": "订单越多 → 企业价值必然越高" },
+              {
+                "value": "B",
+                "label": "客户场景 → 履约系统 → 专属能力 → 单位经济与现金 → 可复制价值"
+              },
+              { "value": "C", "label": "补贴越多 → 现金流越稳定" },
+              { "value": "D", "label": "仓库越多 → 定位越准确" }
+            ],
+            "answer": ["B"],
+            "analysis": "正确链条从客户场景出发，经过业务系统和能力，再落到单位经济、现金与可复制价值。",
+            "points": 20,
+            "hasAnswer": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "fresh-check-2-speech",
+          "type": "speech",
+          "text": "请完成本轮原生互动。客观题全部答对后才能继续，答错可查看解释并重新作答。"
+        }
+      ],
+      "createdAt": 1786579200310,
+      "updatedAt": 1786579200310,
+      "outlineId": "scene_10"
+    }
+  ]
+}

@@ -57,6 +57,7 @@ export interface CaseOnlySubmitFailure {
   error: string;
   progress?: CaseOnlyProgressItem;
   incorrectQuestionIds?: string[];
+  incorrectQuestionFeedback?: Record<string, string>;
 }
 
 export type CaseOnlySubmitBody = CaseOnlySubmitSuccess | CaseOnlySubmitFailure;

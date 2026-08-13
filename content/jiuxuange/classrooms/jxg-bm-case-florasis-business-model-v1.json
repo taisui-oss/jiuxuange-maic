@@ -1,0 +1,2470 @@
+{
+  "id": "jxg-bm-case-florasis-business-model-v1",
+  "generationComplete": true,
+  "stage": {
+    "id": "jxg-bm-case-florasis-business-model-v1",
+    "name": "花西子：定位与盈利模式",
+    "description": "从东方彩妆定位拆解花西子的业务系统、能力、盈利与现金证据",
+    "createdAt": 1786579200500,
+    "updatedAt": "2026-08-13T00:00:00.000Z",
+    "languageDirective": "全程使用中文。采用魏朱商业模式六要素模型，沿交易地图、定位、业务系统、关键资源能力、盈利模式、现金流结构和企业价值形成可检验的因果链。明确区分课程材料事实、分析判断和待验证假设，不把历史案例数字表述为企业当前实时事实。",
+    "style": "professional",
+    "currentSceneId": "florasis-intro",
+    "agentIds": ["default-1", "default-2", "default-3", "default-4"],
+    "videoManifest": {},
+    "interactiveMode": false,
+    "taskEngineMode": false
+  },
+  "scenes": [
+    {
+      "id": "florasis-intro",
+      "stageId": "jxg-bm-case-florasis-business-model-v1",
+      "type": "slide",
+      "title": "花西子：品牌定位如何进入完整交易系统",
+      "order": 1,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "florasis-intro-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "florasis-intro-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">课程历史案例 · 品牌机制学习</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">花西子：品牌定位如何进入完整交易系统</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">“东方彩妆”为什么不能只停留在一句传播口号？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">历史样本</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">课程材料记录品牌 2017 年创立，并聚焦国风彩妆与大众价格带。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">产品表达</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">产品、包装、命名、设计与传播共同表达东方美学。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">经营问题</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">强传播能带来销售，但长期价值仍需产品、复购和现金结果支持。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-intro-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">定位只有进入产品、伙伴、渠道和经营结果，才成为商业模式的一部分。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "florasis-intro-speech-1",
+          "type": "speech",
+          "text": "本案例按课程材料中的历史阶段讲授，不把 GMV、SKU 等数字当成当前实时事实。"
+        },
+        {
+          "id": "florasis-intro-spotlight-question",
+          "type": "spotlight",
+          "elementId": "florasis-intro-question"
+        },
+        {
+          "id": "florasis-intro-speech-2",
+          "type": "speech",
+          "text": "花西子最容易被看到的是东方美学传播，但我们要继续追踪产品、设计、代工、内容平台和消费者之间的关系。"
+        },
+        {
+          "id": "florasis-intro-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "florasis-intro-takeaway"
+        },
+        {
+          "id": "florasis-intro-speech-3",
+          "type": "speech",
+          "text": "分析目标不是评价营销好坏，而是判断定位如何通过系统、能力、盈利与现金形成闭环。"
+        }
+      ],
+      "createdAt": 1786579200501,
+      "updatedAt": 1786579200501,
+      "outlineId": "scene_1"
+    },
+    {
+      "id": "florasis-transaction-map",
+      "stageId": "jxg-bm-case-florasis-business-model-v1",
+      "type": "slide",
+      "title": "谁和谁交易",
+      "order": 2,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "florasis-transaction-map-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "florasis-transaction-map-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 1 步 · 交易地图</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">谁和谁交易</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">品牌、消费者、代工厂、设计伙伴、内容平台与物流分别承担什么？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">消费者 ↔ 品牌</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">消费者支付货款并提供使用与反馈数据；品牌交付产品与文化体验。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">品牌 ↔ 伙伴</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">OEM/ODM、外部设计与文化资源共同参与研发、生产和表达。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">品牌 ↔ 平台</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">内容与电商平台提供触达和交易场景，品牌投入内容、运营与平台成本。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-transaction-map-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">品牌不是独自完成价值，而是组织多个伙伴共同兑现同一定位承诺。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "florasis-transaction-map-speech-1",
+          "type": "speech",
+          "text": "花西子的产品、内容和交易由多个主体协同完成，品牌本身承担组织与一致性责任。"
+        },
+        {
+          "id": "florasis-transaction-map-spotlight-question",
+          "type": "spotlight",
+          "elementId": "florasis-transaction-map-question"
+        },
+        {
+          "id": "florasis-transaction-map-speech-2",
+          "type": "speech",
+          "text": "代工和设计伙伴提供专业能力，内容平台连接消费者，电商和物流完成交易与交付。"
+        },
+        {
+          "id": "florasis-transaction-map-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "florasis-transaction-map-takeaway"
+        },
+        {
+          "id": "florasis-transaction-map-speech-3",
+          "type": "speech",
+          "text": "交易地图需要同时标出产品、内容、数据和资金，避免把品牌模式简化为投放。"
+        }
+      ],
+      "createdAt": 1786579200502,
+      "updatedAt": 1786579200502,
+      "outlineId": "scene_2"
+    },
+    {
+      "id": "florasis-positioning",
+      "stageId": "jxg-bm-case-florasis-business-model-v1",
+      "type": "slide",
+      "title": "服务谁、解决什么问题",
+      "order": 3,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "florasis-positioning-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "florasis-positioning-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 2 步 · 定位</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">服务谁、解决什么问题</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">“东方彩妆，以花养妆”如何约束产品与体验选择？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">目标客户</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">希望获得东方审美表达，同时关注可负担价格与产品体验的彩妆消费者。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">价值主张</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">把东方文化、美学设计与彩妆产品体验组合成可识别的品牌选择。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">一致性要求</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">包装、产品、内容、合作角色与渠道表达需要共同支持同一认知。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-positioning-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">定位不是一句话，而是一组必须彼此一致的经营选择。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "florasis-positioning-speech-1",
+          "type": "speech",
+          "text": "课程材料用东方彩妆和以花养妆描述品牌定位，并展示产品、包装与传播的协同。"
+        },
+        {
+          "id": "florasis-positioning-spotlight-question",
+          "type": "spotlight",
+          "elementId": "florasis-positioning-question"
+        },
+        {
+          "id": "florasis-positioning-speech-2",
+          "type": "speech",
+          "text": "如果产品体验、价格或合作内容与定位不一致，短期曝光不能自动形成稳定认知。"
+        },
+        {
+          "id": "florasis-positioning-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "florasis-positioning-takeaway"
+        },
+        {
+          "id": "florasis-positioning-speech-3",
+          "type": "speech",
+          "text": "因此，定位需要被翻译为后续系统中可以执行和检验的具体选择。"
+        }
+      ],
+      "createdAt": 1786579200503,
+      "updatedAt": 1786579200503,
+      "outlineId": "scene_3"
+    },
+    {
+      "id": "florasis-business-system",
+      "stageId": "jxg-bm-case-florasis-business-model-v1",
+      "type": "slide",
+      "title": "各主体如何协作",
+      "order": 4,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "florasis-business-system-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "florasis-business-system-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 3 步 · 业务系统</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">各主体如何协作</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">外部代工、设计资源与内容平台如何被品牌组织成同一套反馈闭环？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">产品形成</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">品牌联合 OEM/ODM、设计与文化资源完成开发、打样和生产。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">小规模测试</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">课程材料描述先小范围测试，再依据市场反馈快速迭代和集中爆款。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">直接反馈</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">线上直营与内容平台把消费者行为反馈带回产品与运营决策。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-business-system-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">业务系统的价值在于把外部资源和消费者反馈变成可重复的产品迭代。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "florasis-business-system-speech-1",
+          "type": "speech",
+          "text": "外部代工不等于企业没有能力，关键是品牌能否定义产品、组织伙伴并控制质量与节奏。"
+        },
+        {
+          "id": "florasis-business-system-spotlight-question",
+          "type": "spotlight",
+          "elementId": "florasis-business-system-question"
+        },
+        {
+          "id": "florasis-business-system-speech-2",
+          "type": "speech",
+          "text": "课程材料展示了小范围测试、快速迭代和爆款集中的路径。"
+        },
+        {
+          "id": "florasis-business-system-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "florasis-business-system-takeaway"
+        },
+        {
+          "id": "florasis-business-system-speech-3",
+          "type": "speech",
+          "text": "线上交易和内容平台形成更直接的反馈，但品牌仍要判断哪些信号值得进入产品决策。"
+        }
+      ],
+      "createdAt": 1786579200504,
+      "updatedAt": 1786579200504,
+      "outlineId": "scene_4"
+    },
+    {
+      "id": "florasis-check-1",
+      "stageId": "jxg-bm-case-florasis-business-model-v1",
+      "type": "quiz",
+      "title": "第一轮互动：定位与系统",
+      "order": 5,
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "florasis-q1",
+            "type": "single",
+            "question": "什么最能证明“东方彩妆”已经进入经营定位，而不只是口号？",
+            "options": [
+              { "value": "A", "label": "只在广告中出现一次" },
+              { "value": "B", "label": "产品、包装、设计、内容和渠道表达保持一致" },
+              { "value": "C", "label": "所有产品都提高价格" },
+              { "value": "D", "label": "停止使用外部伙伴" }
+            ],
+            "answer": ["B"],
+            "analysis": "定位需要进入产品与交易系统，由多个触点共同兑现，而不是只在传播中出现。",
+            "points": 20,
+            "hasAnswer": true
+          },
+          {
+            "id": "florasis-q2",
+            "type": "single",
+            "question": "哪一项最符合花西子课程案例中的业务系统？",
+            "options": [
+              { "value": "A", "label": "品牌独立完成所有生产与传播" },
+              { "value": "B", "label": "品牌组织代工、设计、内容平台和消费者反馈共同迭代" },
+              { "value": "C", "label": "只依赖线下经销商反馈" },
+              { "value": "D", "label": "供应商决定全部定位" }
+            ],
+            "answer": ["B"],
+            "analysis": "课程材料显示品牌通过外部生产和设计资源、内容平台与线上反馈形成协同系统。",
+            "points": 20,
+            "hasAnswer": true
+          },
+          {
+            "id": "florasis-q3",
+            "type": "single",
+            "question": "课程材料记录 SKU 较多且头部产品贡献集中，这更支持哪一判断？",
+            "options": [
+              { "value": "A", "label": "所有产品平均贡献收入" },
+              { "value": "B", "label": "企业通过测试迭代并把资源集中到有效产品" },
+              { "value": "C", "label": "SKU 越多现金流必然越好" },
+              { "value": "D", "label": "品牌不需要产品能力" }
+            ],
+            "answer": ["B"],
+            "analysis": "SKU 和头部集中更适合用来观察测试、筛选与资源集中，不能推出每个产品都成功或现金必然更好。",
+            "points": 20,
+            "hasAnswer": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "florasis-check-1-speech",
+          "type": "speech",
+          "text": "请完成本轮原生互动。客观题全部答对后才能继续，答错可查看解释并重新作答。"
+        }
+      ],
+      "createdAt": 1786579200505,
+      "updatedAt": 1786579200505,
+      "outlineId": "scene_5"
+    },
+    {
+      "id": "florasis-capabilities",
+      "stageId": "jxg-bm-case-florasis-business-model-v1",
+      "type": "slide",
+      "title": "企业必须擅长什么",
+      "order": 6,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "florasis-capabilities-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "florasis-capabilities-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 4 步 · 关键资源能力</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">企业必须擅长什么</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">当生产和设计部分外部化时，品牌内部最不可替代的能力是什么？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">品牌与文化设计</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">把东方文化转化为产品定义、视觉与连续内容，而不是一次性符号。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">资源整合</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">选择并协调代工、设计、文化和平台伙伴，控制质量、成本与节奏。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">精细化运营</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">连接内容、流量、转化、产品反馈和多平台经营数据。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-capabilities-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">外部资源越多，企业越需要清晰的产品定义、伙伴治理和数据反馈能力。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "florasis-capabilities-speech-1",
+          "type": "speech",
+          "text": "课程材料归纳了营销运营、设计与文化创意、资源整合和多平台转化能力。"
+        },
+        {
+          "id": "florasis-capabilities-spotlight-question",
+          "type": "spotlight",
+          "elementId": "florasis-capabilities-question"
+        },
+        {
+          "id": "florasis-capabilities-speech-2",
+          "type": "speech",
+          "text": "这些能力的共同点，是把分散在外部伙伴和平台中的资源组织成一致体验。"
+        },
+        {
+          "id": "florasis-capabilities-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "florasis-capabilities-takeaway"
+        },
+        {
+          "id": "florasis-capabilities-speech-3",
+          "type": "speech",
+          "text": "如果品牌只能购买流量，却不能定义产品和吸收反馈，能力就没有沉淀。"
+        }
+      ],
+      "createdAt": 1786579200506,
+      "updatedAt": 1786579200506,
+      "outlineId": "scene_6"
+    },
+    {
+      "id": "florasis-profit-model",
+      "stageId": "jxg-bm-case-florasis-business-model-v1",
+      "type": "slide",
+      "title": "谁向谁付钱",
+      "order": 7,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "florasis-profit-model-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "florasis-profit-model-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 5 步 · 盈利模式</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">谁向谁付钱</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">产品销售收入需要覆盖哪些被“品牌故事”遮住的经营成本？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">收入来源</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">消费者购买彩妆产品，收入由产品组合、价格、转化和复购共同决定。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">成本结构</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">研发与代工、设计、内容与达人、平台、物流及退货共同消耗毛利。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">集中效应</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">头部产品可放大供应与传播效率，也会形成对少数爆款的依赖风险。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-profit-model-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">品牌溢价只有覆盖完整成本并带来持续复购，才转化为盈利模式。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "florasis-profit-model-speech-1",
+          "type": "speech",
+          "text": "GMV 只是交易规模，不能直接说明利润。需要扣除产品、内容、平台、物流和退货等完整成本。"
+        },
+        {
+          "id": "florasis-profit-model-spotlight-question",
+          "type": "spotlight",
+          "elementId": "florasis-profit-model-question"
+        },
+        {
+          "id": "florasis-profit-model-speech-2",
+          "type": "speech",
+          "text": "爆款集中可以提高资源效率，但也可能让收入依赖少数产品和流量节点。"
+        },
+        {
+          "id": "florasis-profit-model-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "florasis-profit-model-takeaway"
+        },
+        {
+          "id": "florasis-profit-model-speech-3",
+          "type": "speech",
+          "text": "因此评价盈利模式时，要同时看单品贡献、获客回收、复购与利益分配。"
+        }
+      ],
+      "createdAt": 1786579200507,
+      "updatedAt": 1786579200507,
+      "outlineId": "scene_7"
+    },
+    {
+      "id": "florasis-cash-flow",
+      "stageId": "jxg-bm-case-florasis-business-model-v1",
+      "type": "slide",
+      "title": "证据不足时，不替企业编现金流故事",
+      "order": 8,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "florasis-cash-flow-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "florasis-cash-flow-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 6 步 · 现金流结构</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">证据不足时，不替企业编现金流故事</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">课程材料没有完整结算数据，哪些信息必须由案主或财务继续补充？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">库存与代工</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">核对最小起订量、生产付款、备货周期、滞销与库存归属。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">平台与内容</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">核对平台结算、达人与内容付款时间、投放回收周期和退款。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">销售与退货</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">核对销售回款、退货率、复购与爆款追单对资金的实际影响。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-cash-flow-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">没有付款、库存、结算和退货证据，就不能从 GMV 推断自由现金流。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "florasis-cash-flow-speech-1",
+          "type": "speech",
+          "text": "课程材料足以分析定位、系统和能力，但没有提供完整的现金结算与库存数据。"
+        },
+        {
+          "id": "florasis-cash-flow-spotlight-question",
+          "type": "spotlight",
+          "elementId": "florasis-cash-flow-question"
+        },
+        {
+          "id": "florasis-cash-flow-speech-2",
+          "type": "speech",
+          "text": "此时正确做法不是补一个漂亮结论，而是列出必须核对的证据：代工付款、库存、平台结算、内容投入和退货。"
+        },
+        {
+          "id": "florasis-cash-flow-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "florasis-cash-flow-takeaway"
+        },
+        {
+          "id": "florasis-cash-flow-speech-3",
+          "type": "speech",
+          "text": "这也是项目学习的重要能力：知道何时可以判断，以及何时必须继续取证。"
+        }
+      ],
+      "createdAt": 1786579200508,
+      "updatedAt": 1786579200508,
+      "outlineId": "scene_8"
+    },
+    {
+      "id": "florasis-value-map",
+      "stageId": "jxg-bm-case-florasis-business-model-v1",
+      "type": "slide",
+      "title": "从文化认知到可持续企业价值",
+      "order": 9,
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "florasis-value-map-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f8fafc",
+            "themeColors": ["#0f766e", "#0e7490", "#4f46e5", "#d97706", "#0f172a"],
+            "fontColor": "#172033",
+            "fontName": "Microsoft YaHei",
+            "outline": { "color": "#0f766e", "width": 2, "style": "solid" },
+            "shadow": { "h": 0, "v": 4, "blur": 12, "color": "#0f172a22" }
+          },
+          "elements": [
+            {
+              "id": "florasis-value-map-accent",
+              "type": "shape",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 7,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#0f766e",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-eyebrow",
+              "type": "text",
+              "left": 64,
+              "top": 38,
+              "width": 872,
+              "height": 30,
+              "content": "<p style=\"font-size:14px;font-weight:700;color:#0f766e;\">第 7—8 步 · 企业价值与因果图</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0f766e",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-title",
+              "type": "text",
+              "left": 64,
+              "top": 76,
+              "width": 872,
+              "height": 58,
+              "content": "<p style=\"font-size:30px;font-weight:700;color:#172033;\">从文化认知到可持续企业价值</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-question-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 146,
+              "width": 872,
+              "height": 76,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#e6f4f1",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-question",
+              "type": "text",
+              "left": 88,
+              "top": 162,
+              "width": 824,
+              "height": 48,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#115e59;\">什么链条能把东方彩妆认知转化为长期现金结果？</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#115e59",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-0-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-0-number",
+              "type": "text",
+              "left": 82,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">01</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-0-title",
+              "type": "text",
+              "left": 122,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">认知链</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-0-body",
+              "type": "text",
+              "left": 82,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">东方彩妆定位 → 产品与内容一致 → 清晰品牌认知与首次购买。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-1-bg",
+              "type": "shape",
+              "left": 356,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-1-number",
+              "type": "text",
+              "left": 374,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">02</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-1-title",
+              "type": "text",
+              "left": 414,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">经营链</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-1-body",
+              "type": "text",
+              "left": 374,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">消费者反馈 → 小规模测试与迭代 → 有效产品与更高转化。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-2-bg",
+              "type": "shape",
+              "left": 648,
+              "top": 252,
+              "width": 268,
+              "height": 174,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#ffffff",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-2-number",
+              "type": "text",
+              "left": 666,
+              "top": 270,
+              "width": 38,
+              "height": 36,
+              "content": "<p style=\"font-size:18px;font-weight:700;color:#0e7490;\">03</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#0e7490",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-2-title",
+              "type": "text",
+              "left": 706,
+              "top": 270,
+              "width": 190,
+              "height": 42,
+              "content": "<p style=\"font-size:17px;font-weight:700;color:#172033;\">价值链</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#172033",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-observation-2-body",
+              "type": "text",
+              "left": 666,
+              "top": 320,
+              "width": 230,
+              "height": 90,
+              "content": "<p style=\"font-size:14px;line-height:1.65;color:#475569;\">产品体验与复购 → 获客回收和稳定现金 → 可持续品牌价值。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#475569",
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-takeaway-bg",
+              "type": "shape",
+              "left": 64,
+              "top": 456,
+              "width": 872,
+              "height": 66,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [1, 1],
+              "fill": "#172033",
+              "fixedRatio": false,
+              "rotate": 0
+            },
+            {
+              "id": "florasis-value-map-takeaway",
+              "type": "text",
+              "left": 88,
+              "top": 471,
+              "width": 824,
+              "height": 40,
+              "content": "<p style=\"font-size:16px;font-weight:700;color:#ffffff;\">企业价值必须由产品复购和现金验证，不能只由内容声量或历史 GMV 证明。</p>",
+              "defaultFontName": "Microsoft YaHei",
+              "defaultColor": "#ffffff",
+              "rotate": 0
+            }
+          ],
+          "background": { "type": "solid", "color": "#f8fafc" }
+        },
+        "schemaVersion": 1
+      },
+      "actions": [
+        {
+          "id": "florasis-value-map-speech-1",
+          "type": "speech",
+          "text": "花西子的案例因果链从东方彩妆定位开始，但不会停在传播声量。"
+        },
+        {
+          "id": "florasis-value-map-spotlight-question",
+          "type": "spotlight",
+          "elementId": "florasis-value-map-question"
+        },
+        {
+          "id": "florasis-value-map-speech-2",
+          "type": "speech",
+          "text": "定位要进入产品与内容，通过反馈和迭代提升转化，最终仍需由复购、获客回收和现金验证。"
+        },
+        {
+          "id": "florasis-value-map-spotlight-takeaway",
+          "type": "spotlight",
+          "elementId": "florasis-value-map-takeaway"
+        },
+        {
+          "id": "florasis-value-map-speech-3",
+          "type": "speech",
+          "text": "如果产品体验、平台成本或爆款依赖使现金不稳定，品牌认知也不能自动等于长期企业价值。"
+        }
+      ],
+      "createdAt": 1786579200509,
+      "updatedAt": 1786579200509,
+      "outlineId": "scene_9"
+    },
+    {
+      "id": "florasis-check-2",
+      "stageId": "jxg-bm-case-florasis-business-model-v1",
+      "type": "quiz",
+      "title": "第二轮互动：现金与价值",
+      "order": 10,
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "florasis-q4",
+            "type": "single",
+            "question": "为什么不能从课程材料中的历史 GMV 直接判断自由现金流？",
+            "options": [
+              { "value": "A", "label": "GMV 与交易无关" },
+              { "value": "B", "label": "还缺库存、代工付款、平台结算、内容投入和退货证据" },
+              { "value": "C", "label": "品牌企业都没有现金流" },
+              { "value": "D", "label": "只有线下销售才产生现金" }
+            ],
+            "answer": ["B"],
+            "analysis": "GMV 是交易规模，现金结果还取决于成本、付款与结算时点、库存和退货。",
+            "points": 20,
+            "hasAnswer": true
+          },
+          {
+            "id": "florasis-q5",
+            "type": "single",
+            "question": "哪条因果链最符合本案例？",
+            "options": [
+              { "value": "A", "label": "内容声量 → 企业价值必然提高" },
+              {
+                "value": "B",
+                "label": "定位一致 → 产品与内容协同 → 反馈迭代 → 复购与现金 → 品牌价值"
+              },
+              { "value": "C", "label": "SKU 越多 → 现金越稳定" },
+              { "value": "D", "label": "达人越多 → 退货越少" }
+            ],
+            "answer": ["B"],
+            "analysis": "长期价值需要定位通过系统和能力进入产品结果，并最终由复购和现金验证。",
+            "points": 20,
+            "hasAnswer": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "florasis-check-2-speech",
+          "type": "speech",
+          "text": "请完成本轮原生互动。客观题全部答对后才能继续，答错可查看解释并重新作答。"
+        }
+      ],
+      "createdAt": 1786579200510,
+      "updatedAt": 1786579200510,
+      "outlineId": "scene_10"
+    }
+  ]
+}
