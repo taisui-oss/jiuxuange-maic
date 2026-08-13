@@ -1,0 +1,426 @@
+{
+  "id": "a9c6ff55-afbc-4a54-b74b-70bbad3cbd18",
+  "prevId": "3c3e477c-a45f-45a6-91c8-d882117079d2",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "jiuxuange_case_only.users": {
+      "name": "users",
+      "schema": "jiuxuange_case_only",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'active'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "users_status_check": {
+          "name": "users_status_check",
+          "value": "\"jiuxuange_case_only\".\"users\".\"status\" in ('active', 'disabled')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "jiuxuange_case_only.case_progress": {
+      "name": "case_progress",
+      "schema": "jiuxuange_case_only",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "case_id": {
+          "name": "case_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content_version": {
+          "name": "content_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "next_scene_index": {
+          "name": "next_scene_index",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "total_scenes": {
+          "name": "total_scenes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "progress_version": {
+          "name": "progress_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'not_started'"
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "case_progress_user_course_idx": {
+          "name": "case_progress_user_course_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "course_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "case_progress_user_id_users_id_fk": {
+          "name": "case_progress_user_id_users_id_fk",
+          "tableFrom": "case_progress",
+          "tableTo": "users",
+          "schemaTo": "jiuxuange_case_only",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "case_progress_pk": {
+          "name": "case_progress_pk",
+          "columns": [
+            "user_id",
+            "course_id",
+            "case_id",
+            "content_version"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "case_progress_scene_index_check": {
+          "name": "case_progress_scene_index_check",
+          "value": "\"jiuxuange_case_only\".\"case_progress\".\"next_scene_index\" >= 0"
+        },
+        "case_progress_total_scenes_check": {
+          "name": "case_progress_total_scenes_check",
+          "value": "\"jiuxuange_case_only\".\"case_progress\".\"total_scenes\" > 0"
+        },
+        "case_progress_version_check": {
+          "name": "case_progress_version_check",
+          "value": "\"jiuxuange_case_only\".\"case_progress\".\"progress_version\" >= 0"
+        },
+        "case_progress_index_bounds_check": {
+          "name": "case_progress_index_bounds_check",
+          "value": "\"jiuxuange_case_only\".\"case_progress\".\"next_scene_index\" <= \"jiuxuange_case_only\".\"case_progress\".\"total_scenes\""
+        },
+        "case_progress_status_check": {
+          "name": "case_progress_status_check",
+          "value": "\"jiuxuange_case_only\".\"case_progress\".\"status\" in ('not_started', 'in_progress', 'completed')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "jiuxuange_case_only.progress_submissions": {
+      "name": "progress_submissions",
+      "schema": "jiuxuange_case_only",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "case_id": {
+          "name": "case_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content_version": {
+          "name": "content_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "idempotency_key": {
+          "name": "idempotency_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "request_hash": {
+          "name": "request_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expected_progress_version": {
+          "name": "expected_progress_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "scene_id": {
+          "name": "scene_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "response_status": {
+          "name": "response_status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "response_body": {
+          "name": "response_body",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "progress_submissions_scope_key_idx": {
+          "name": "progress_submissions_scope_key_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "course_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "idempotency_key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "progress_submissions_lookup_idx": {
+          "name": "progress_submissions_lookup_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "course_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "case_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "progress_submissions_user_id_users_id_fk": {
+          "name": "progress_submissions_user_id_users_id_fk",
+          "tableFrom": "progress_submissions",
+          "tableTo": "users",
+          "schemaTo": "jiuxuange_case_only",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "progress_submissions_progress_fk": {
+          "name": "progress_submissions_progress_fk",
+          "tableFrom": "progress_submissions",
+          "tableTo": "case_progress",
+          "schemaTo": "jiuxuange_case_only",
+          "columnsFrom": [
+            "user_id",
+            "course_id",
+            "case_id",
+            "content_version"
+          ],
+          "columnsTo": [
+            "user_id",
+            "course_id",
+            "case_id",
+            "content_version"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "progress_submissions_pk": {
+          "name": "progress_submissions_pk",
+          "columns": [
+            "user_id",
+            "course_id",
+            "case_id",
+            "content_version",
+            "idempotency_key"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "progress_submissions_version_check": {
+          "name": "progress_submissions_version_check",
+          "value": "\"jiuxuange_case_only\".\"progress_submissions\".\"expected_progress_version\" >= 0"
+        },
+        "progress_submissions_response_check": {
+          "name": "progress_submissions_response_check",
+          "value": "(\"jiuxuange_case_only\".\"progress_submissions\".\"response_status\" is null and \"jiuxuange_case_only\".\"progress_submissions\".\"response_body\" is null and \"jiuxuange_case_only\".\"progress_submissions\".\"completed_at\" is null)\n      or (\"jiuxuange_case_only\".\"progress_submissions\".\"response_status\" is not null and \"jiuxuange_case_only\".\"progress_submissions\".\"response_body\" is not null and \"jiuxuange_case_only\".\"progress_submissions\".\"completed_at\" is not null)"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "jiuxuange_case_only": "jiuxuange_case_only"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

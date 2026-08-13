@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation';
 import { LightweightCasePlayer } from '@/components/jiuxuange/case-only/lightweight-case-player';
-import { isGateOneLessonAvailable } from '@/lib/jiuxuange/case-only/catalog';
-import { readCaseOnlyContent } from '@/lib/server/jiuxuange-case-only/content-repository';
+import { resolveCaseOnlyActor } from '@/lib/server/jiuxuange-case-only/identity';
+import { getAccessibleCaseOnlyContent } from '@/lib/server/jiuxuange-case-only/progress-repository';
+
+export const dynamic = 'force-dynamic';
 
 export default async function CaseOnlyPlayerPage({
   params,
@@ -9,7 +11,8 @@ export default async function CaseOnlyPlayerPage({
   params: Promise<{ caseId: string }>;
 }) {
   const { caseId } = await params;
-  const content = await readCaseOnlyContent(caseId);
-  if (!content || !isGateOneLessonAvailable(content.lesson)) notFound();
-  return <LightweightCasePlayer content={content} />;
+  const actor = resolveCaseOnlyActor();
+  const access = await getAccessibleCaseOnlyContent(actor.userId, caseId);
+  if (!access) notFound();
+  return <LightweightCasePlayer content={access.content} initialProgress={access.progress} />;
 }

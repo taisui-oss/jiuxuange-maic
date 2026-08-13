@@ -1,0 +1,1 @@
+ALTER TABLE "jiuxuange_case_only"."progress_submissions" ADD CONSTRAINT "progress_submissions_progress_fk" FOREIGN KEY ("user_id","course_id","case_id","content_version") REFERENCES "jiuxuange_case_only"."case_progress"("user_id","course_id","case_id","content_version") ON DELETE restrict ON UPDATE no action;

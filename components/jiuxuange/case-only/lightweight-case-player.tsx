@@ -5,43 +5,33 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, RotateCcw } from 'lucide-react';
 import { SlideCanvas } from '@openmaic/renderer';
 import type { QuizQuestion } from '@/lib/types/stage';
-import type { CaseOnlyContentPackage } from '@/lib/server/jiuxuange-case-only/content-repository';
-import { arraysEqual, toArray } from '@/lib/quiz/grading';
+import type {
+  CaseOnlyAnswers,
+  CaseOnlyContentPackage,
+  CaseOnlyProgressItem,
+  CaseOnlySubmitBody,
+} from '@/lib/jiuxuange/case-only/types';
 
-type QuizAnswers = Record<string, string | string[]>;
-
-interface LocalQuizResult {
+interface QuizViewResult {
   passed: boolean;
-  correctQuestionIds: string[];
-}
-
-function evaluateLocalQuiz(questions: QuizQuestion[], answers: QuizAnswers): LocalQuizResult {
-  const objectiveQuestions = questions.filter((question) => question.type !== 'short_answer');
-  const openQuestions = questions.filter((question) => question.type === 'short_answer');
-  const correctQuestionIds = objectiveQuestions
-    .filter((question) => arraysEqual(toArray(answers[question.id]), toArray(question.answer)))
-    .map((question) => question.id);
-  const allOpenSubmitted = openQuestions.every((question) => {
-    const answer = answers[question.id];
-    return typeof answer === 'string' && answer.trim().length > 0;
-  });
-  return {
-    passed: correctQuestionIds.length === objectiveQuestions.length && allOpenSubmitted,
-    correctQuestionIds,
-  };
+  incorrectQuestionIds: string[];
+  error?: string;
 }
 
 function LightweightQuiz({
   sceneId,
   questions,
-  onPassed,
+  alreadyCompleted,
+  onSubmit,
 }: {
   sceneId: string;
   questions: QuizQuestion[];
-  onPassed: () => void;
+  alreadyCompleted: boolean;
+  onSubmit: (answers: CaseOnlyAnswers) => Promise<CaseOnlySubmitBody>;
 }) {
-  const [answers, setAnswers] = useState<QuizAnswers>({});
-  const [result, setResult] = useState<LocalQuizResult | null>(null);
+  const [answers, setAnswers] = useState<CaseOnlyAnswers>({});
+  const [result, setResult] = useState<QuizViewResult | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const allAnswered = questions.every((question) => {
     const answer = answers[question.id];
@@ -63,10 +53,19 @@ function LightweightQuiz({
     });
   };
 
-  const submit = () => {
-    const next = evaluateLocalQuiz(questions, answers);
-    setResult(next);
-    if (next.passed) onPassed();
+  const submit = async () => {
+    setSubmitting(true);
+    const response = await onSubmit(answers);
+    setSubmitting(false);
+    if (response.success) {
+      setResult({ passed: true, incorrectQuestionIds: [] });
+      return;
+    }
+    setResult({
+      passed: false,
+      incorrectQuestionIds: response.incorrectQuestionIds ?? [],
+      error: response.error,
+    });
   };
 
   const retry = () => {
@@ -75,7 +74,10 @@ function LightweightQuiz({
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-white px-4 py-5 sm:px-8 sm:py-8" data-scene-id={sceneId}>
+    <div
+      className="h-full overflow-y-auto bg-white px-4 py-5 sm:px-8 sm:py-8"
+      data-scene-id={sceneId}
+    >
       <div className="mx-auto max-w-3xl">
         <div className="mb-6 border-b border-slate-200 pb-4">
           <p className="text-xs font-medium text-cyan-700">必需互动</p>
@@ -137,7 +139,7 @@ function LightweightQuiz({
                   })}
                 </div>
               )}
-              {result && !result.correctQuestionIds.includes(question.id) && question.analysis && (
+              {result && result.incorrectQuestionIds.includes(question.id) && question.analysis && (
                 <p className="mt-3 border-l-2 border-amber-400 pl-3 text-sm leading-6 text-slate-600">
                   {question.analysis}
                 </p>
@@ -148,17 +150,15 @@ function LightweightQuiz({
 
         <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
           <div aria-live="polite" className="text-sm">
-            {result?.passed && (
+            {(alreadyCompleted || result?.passed) && (
               <span className="inline-flex items-center gap-2 font-medium text-emerald-700">
                 <CheckCircle2 className="size-4" />
                 本轮互动已完成
               </span>
             )}
-            {result && !result.passed && (
-              <span className="text-amber-700">还有答案需要修正，请查看解释后重试。</span>
-            )}
+            {result && !result.passed && <span className="text-amber-700">{result.error}</span>}
           </div>
-          {result && !result.passed ? (
+          {result && !result.passed && result.incorrectQuestionIds.length > 0 ? (
             <button
               type="button"
               onClick={retry}
@@ -167,14 +167,14 @@ function LightweightQuiz({
               <RotateCcw className="size-4" />
               重新作答
             </button>
-          ) : (
+          ) : alreadyCompleted || result?.passed ? null : (
             <button
               type="button"
-              disabled={!allAnswered || result?.passed}
+              disabled={!allAnswered || submitting}
               onClick={submit}
               className="inline-flex h-10 items-center justify-center rounded-md bg-slate-950 px-5 text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300"
             >
-              提交答案
+              {submitting ? '正在提交' : '提交答案'}
             </button>
           )}
         </div>
@@ -183,21 +183,82 @@ function LightweightQuiz({
   );
 }
 
-export function LightweightCasePlayer({ content }: { content: CaseOnlyContentPackage }) {
+export function LightweightCasePlayer({
+  content,
+  initialProgress,
+}: {
+  content: CaseOnlyContentPackage;
+  initialProgress: CaseOnlyProgressItem;
+}) {
   const scenes = content.classroom.scenes;
-  const [sceneIndex, setSceneIndex] = useState(0);
-  const [passedQuizSceneIds, setPassedQuizSceneIds] = useState<Set<string>>(() => new Set());
-  const [completed, setCompleted] = useState(false);
+  const [progress, setProgress] = useState(initialProgress);
+  const [sceneIndex, setSceneIndex] = useState(
+    Math.min(initialProgress.nextSceneIndex, scenes.length - 1),
+  );
+  const [completed, setCompleted] = useState(initialProgress.status === 'completed');
+  const [submitting, setSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const scene = scenes[sceneIndex];
   const isQuiz = scene?.type === 'quiz' && scene.content.type === 'quiz';
-  const quizPassed = isQuiz ? passedQuizSceneIds.has(scene.id) : true;
+  const sceneRecorded = sceneIndex < progress.nextSceneIndex || progress.status === 'completed';
+  const quizPassed = !isQuiz || sceneRecorded;
   const progressPercent = useMemo(
-    () => Math.round(((completed ? scenes.length : sceneIndex) / scenes.length) * 100),
-    [completed, sceneIndex, scenes.length],
+    () => Math.round((progress.nextSceneIndex / scenes.length) * 100),
+    [progress.nextSceneIndex, scenes.length],
   );
 
-  const goNext = () => {
-    if (!quizPassed) return;
+  const submitCurrentScene = async (answers?: CaseOnlyAnswers): Promise<CaseOnlySubmitBody> => {
+    if (sceneRecorded) {
+      return { success: true, replayed: true, progress };
+    }
+    setSubmitting(true);
+    setSubmissionError(null);
+    const idempotencyKey = crypto.randomUUID();
+    const payload = {
+      caseId: content.lesson.id,
+      contentVersion: content.contentVersion,
+      progressVersion: progress.progressVersion,
+      sceneId: scene.id,
+      ...(answers ? { answers } : {}),
+    };
+
+    let lastError = '无法连接进度服务，请重试。';
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        const response = await fetch('/api/jiuxuange/case-only/progress/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Idempotency-Key': idempotencyKey,
+          },
+          body: JSON.stringify(payload),
+        });
+        const body = (await response.json()) as CaseOnlySubmitBody;
+        if (body.success) {
+          setProgress(body.progress);
+          setSubmitting(false);
+          return body;
+        }
+        if (body.progress) setProgress(body.progress);
+        lastError = body.error;
+        setSubmissionError(lastError);
+        setSubmitting(false);
+        return body;
+      } catch {
+        if (attempt === 1) break;
+      }
+    }
+    setSubmitting(false);
+    setSubmissionError(lastError);
+    return { success: false, errorCode: 'INVALID_REQUEST', error: lastError };
+  };
+
+  const goNext = async () => {
+    if (isQuiz && !quizPassed) return;
+    if (!sceneRecorded) {
+      const result = await submitCurrentScene();
+      if (!result.success) return;
+    }
     if (sceneIndex === scenes.length - 1) {
       setCompleted(true);
       return;
@@ -242,7 +303,11 @@ export function LightweightCasePlayer({ content }: { content: CaseOnlyContentPac
         </div>
       </header>
 
-      <section className="flex min-h-0 flex-1 flex-col" aria-label="案例播放器">
+      <section
+        className="flex min-h-0 flex-1 flex-col"
+        aria-label="案例播放器"
+        data-scene-id={completed ? undefined : scene.id}
+      >
         {completed ? (
           <div className="flex flex-1 items-center justify-center px-5 py-12">
             <div className="w-full max-w-xl text-center">
@@ -278,9 +343,8 @@ export function LightweightCasePlayer({ content }: { content: CaseOnlyContentPac
                     key={scene.id}
                     sceneId={scene.id}
                     questions={scene.content.questions}
-                    onPassed={() =>
-                      setPassedQuizSceneIds((current) => new Set(current).add(scene.id))
-                    }
+                    alreadyCompleted={sceneRecorded}
+                    onSubmit={submitCurrentScene}
                   />
                 ) : (
                   <div className="grid h-full place-items-center p-8 text-sm text-slate-600">
@@ -307,12 +371,17 @@ export function LightweightCasePlayer({ content }: { content: CaseOnlyContentPac
                   {isQuiz && !quizPassed && (
                     <div className="mt-0.5 text-xs text-amber-700">完成本轮互动后继续</div>
                   )}
+                  {submissionError && !isQuiz && (
+                    <div className="mt-0.5 truncate text-xs text-rose-700" role="alert">
+                      {submissionError}
+                    </div>
+                  )}
                 </div>
                 <button
                   type="button"
                   title={sceneIndex === scenes.length - 1 ? '完成案例' : '下一场景'}
                   aria-label={sceneIndex === scenes.length - 1 ? '完成案例' : '下一场景'}
-                  disabled={!quizPassed}
+                  disabled={!quizPassed || submitting}
                   onClick={goNext}
                   className="grid size-10 place-items-center rounded-md bg-slate-950 text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300"
                 >
@@ -329,6 +398,9 @@ export function LightweightCasePlayer({ content }: { content: CaseOnlyContentPac
       </section>
       <span className="sr-only" data-content-version={content.contentVersion}>
         内容版本 {content.contentVersion}
+      </span>
+      <span className="sr-only" data-progress-version={progress.progressVersion}>
+        进度版本 {progress.progressVersion}
       </span>
     </main>
   );

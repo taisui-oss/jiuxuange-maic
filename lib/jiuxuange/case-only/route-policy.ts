@@ -11,13 +11,12 @@ const ALLOWED_API_PREFIXES = [
 
 function isAllowedApi(pathname: string): boolean {
   return ALLOWED_API_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(prefix.endsWith('/') ? prefix : `${prefix}/`),
+    (prefix) =>
+      pathname === prefix || pathname.startsWith(prefix.endsWith('/') ? prefix : `${prefix}/`),
   );
 }
 
-export function isCaseOnlyModeEnabled(
-  env?: { JIUXUANGE_CASE_ONLY?: string },
-): boolean {
+export function isCaseOnlyModeEnabled(env?: { JIUXUANGE_CASE_ONLY?: string }): boolean {
   const source = env ?? (process.env as unknown as { JIUXUANGE_CASE_ONLY?: string });
   return source.JIUXUANGE_CASE_ONLY === 'true';
 }

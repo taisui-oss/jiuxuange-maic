@@ -3,14 +3,13 @@ import 'server-only';
 import { createHash } from 'crypto';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { getCaseOnlyLesson, type CaseOnlyLesson } from '@/lib/jiuxuange/case-only/catalog';
+import {
+  getCaseOnlyLesson,
+  listCaseOnlyLessons,
+  type CaseOnlyLesson,
+} from '@/lib/jiuxuange/case-only/catalog';
 import type { PersistedClassroomData } from '@/lib/server/classroom-storage';
-
-export interface CaseOnlyContentPackage {
-  lesson: CaseOnlyLesson;
-  contentVersion: string;
-  classroom: PersistedClassroomData;
-}
+import type { CaseOnlyContentPackage } from '@/lib/jiuxuange/case-only/types';
 
 const PUBLISHED_CLASSROOMS_DIRECTORY = path.join(
   process.cwd(),
@@ -60,4 +59,11 @@ export async function readCaseOnlyContent(caseId: string): Promise<CaseOnlyConte
       scenes: [...classroom.scenes].sort((left, right) => left.order - right.order),
     },
   };
+}
+
+export async function readAllCaseOnlyContent(): Promise<CaseOnlyContentPackage[]> {
+  const packages = await Promise.all(
+    listCaseOnlyLessons().map((lesson) => readCaseOnlyContent(lesson.id)),
+  );
+  return packages.filter((item): item is CaseOnlyContentPackage => item !== null);
 }

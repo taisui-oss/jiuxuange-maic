@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import { ArrowRight, BookOpenCheck, CheckCircle2, LockKeyhole } from 'lucide-react';
-import {
-  caseOnlyLessonHref,
-  isGateOneLessonAvailable,
-  type CaseOnlyLesson,
-} from '@/lib/jiuxuange/case-only/catalog';
+import { caseOnlyLessonHref, type CaseOnlyLesson } from '@/lib/jiuxuange/case-only/catalog';
+import type { CaseOnlyCourseProgress } from '@/lib/jiuxuange/case-only/types';
 
-export function CaseOnlyHome({ lessons }: { lessons: CaseOnlyLesson[] }) {
+export function CaseOnlyHome({
+  lessons,
+  progress,
+}: {
+  lessons: CaseOnlyLesson[];
+  progress: CaseOnlyCourseProgress;
+}) {
   return (
     <main className="min-h-screen bg-[#f7f9fc] text-slate-950">
       <header className="border-b border-slate-200 bg-white">
@@ -34,7 +37,10 @@ export function CaseOnlyHome({ lessons }: { lessons: CaseOnlyLesson[] }) {
 
         <ol className="mt-8 divide-y divide-slate-200 border-y border-slate-200 bg-white">
           {lessons.map((lesson) => {
-            const available = isGateOneLessonAvailable(lesson);
+            const caseProgress = progress.cases.find((item) => item.caseId === lesson.id);
+            const available = caseProgress?.unlocked === true;
+            const completed = caseProgress?.status === 'completed';
+            const inProgress = caseProgress?.status === 'in_progress';
             return (
               <li
                 key={lesson.id}
@@ -53,7 +59,7 @@ export function CaseOnlyHome({ lessons }: { lessons: CaseOnlyLesson[] }) {
                     {available ? (
                       <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700">
                         <CheckCircle2 className="size-3.5" />
-                        可学习
+                        {completed ? '已完成' : inProgress ? '进行中' : '可学习'}
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 text-xs text-slate-500">
@@ -69,7 +75,7 @@ export function CaseOnlyHome({ lessons }: { lessons: CaseOnlyLesson[] }) {
                     href={caseOnlyLessonHref(lesson.id)}
                     className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-slate-950 px-4 text-sm font-medium text-white hover:bg-slate-800 sm:w-auto"
                   >
-                    进入案例
+                    {completed ? '回看案例' : inProgress ? '继续案例' : '进入案例'}
                     <ArrowRight className="size-4" />
                   </Link>
                 ) : (
