@@ -29,7 +29,9 @@ Player routes and middleware
 The browser receives an answer-free classroom and redacted Agent descriptors. The server
 keeps the grading source and Agent personas. The Agent Gateway reconstructs the request
 from the private package and ignores browser-supplied provider, model, key, base URL,
-stage, scene, and unauthorized Agent IDs.
+stage, scene, output budget, and unauthorized Agent IDs. It enforces input size, a
+provider-side `maxOutputTokens`, and a per-user in-flight request limit before calling
+the model.
 
 ## Trust boundaries
 
@@ -59,6 +61,11 @@ player_ai_runs
 `progress_submissions` is the idempotency ledger. `case_progress.progress_version` is the
 optimistic concurrency token. A duplicate idempotency key with the same request replays
 the original response; a distinct write from an old version returns `409`.
+
+`player_ai_runs` records the package, user, Trace ID, primary and selected model,
+fallback, Prompt/content version, learner-controlled input characters, configured output
+Token cap, status, error, and timestamps. Provider billing remains the source for final
+billable token reconciliation.
 
 ## Authorization sequence
 

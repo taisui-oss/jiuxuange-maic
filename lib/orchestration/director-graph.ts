@@ -55,6 +55,7 @@ const OrchestratorState = Annotation.Root({
   availableAgentIds: Annotation<string[]>,
   languageModel: Annotation<LanguageModel>,
   thinkingConfig: Annotation<ThinkingConfig | null>,
+  maxOutputTokens: Annotation<number | null>,
   discussionContext: Annotation<{ topic: string; prompt?: string } | null>,
   triggerAgentId: Annotation<string | null>,
   userProfile: Annotation<{ nickname?: string; bio?: string } | null>,
@@ -173,7 +174,11 @@ async function directorNode(
     state.storeState.whiteboardOpen,
   );
 
-  const adapter = new AISdkLangGraphAdapter(state.languageModel, state.thinkingConfig ?? undefined);
+  const adapter = new AISdkLangGraphAdapter(
+    state.languageModel,
+    state.thinkingConfig ?? undefined,
+    state.maxOutputTokens ?? undefined,
+  );
 
   try {
     const result = await adapter._generate(
@@ -285,7 +290,11 @@ async function runAgentGeneration(
     state.agentResponses,
   );
   const openaiMessages = convertMessagesToOpenAI(state.messages, agentId);
-  const adapter = new AISdkLangGraphAdapter(state.languageModel, state.thinkingConfig ?? undefined);
+  const adapter = new AISdkLangGraphAdapter(
+    state.languageModel,
+    state.thinkingConfig ?? undefined,
+    state.maxOutputTokens ?? undefined,
+  );
 
   const lcMessages = [
     new SystemMessage(systemPrompt),
@@ -534,6 +543,7 @@ export function buildInitialState(
     availableAgentIds: request.config.agentIds,
     languageModel,
     thinkingConfig: thinkingConfig ?? null,
+    maxOutputTokens: request.maxOutputTokens ?? null,
     discussionContext,
     triggerAgentId: request.config.triggerAgentId || null,
     userProfile: request.userProfile || null,

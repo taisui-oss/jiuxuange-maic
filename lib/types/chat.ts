@@ -305,6 +305,8 @@ export interface StatelessChatRequest {
   thinking?: ThinkingConfig;
   /** UI-selected per-model thinking config. Takes precedence over `thinking`. */
   thinkingConfig?: ThinkingConfig;
+  /** Server-enforced response budget. Player overrides any client value. */
+  maxOutputTokens?: number;
 }
 
 /**

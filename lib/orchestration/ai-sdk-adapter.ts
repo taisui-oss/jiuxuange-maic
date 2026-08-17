@@ -43,11 +43,13 @@ export type StreamChunk =
 export class AISdkLangGraphAdapter extends BaseChatModel {
   private languageModel: LanguageModel;
   private thinking?: ThinkingConfig;
+  private maxOutputTokens?: number;
 
-  constructor(languageModel: LanguageModel, thinking?: ThinkingConfig) {
+  constructor(languageModel: LanguageModel, thinking?: ThinkingConfig, maxOutputTokens?: number) {
     super({});
     this.languageModel = languageModel;
     this.thinking = thinking;
+    this.maxOutputTokens = maxOutputTokens;
   }
 
   _llmType(): string {
@@ -89,6 +91,7 @@ export class AISdkLangGraphAdapter extends BaseChatModel {
         {
           model: this.languageModel,
           messages: aiMessages,
+          maxOutputTokens: this.maxOutputTokens,
         },
         'chat-adapter',
         undefined,
@@ -136,6 +139,7 @@ export class AISdkLangGraphAdapter extends BaseChatModel {
         model: this.languageModel,
         messages: aiMessages,
         abortSignal: options?.signal,
+        maxOutputTokens: this.maxOutputTokens,
       },
       'chat-adapter-stream',
       this.thinking,

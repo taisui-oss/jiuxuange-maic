@@ -13,6 +13,7 @@ migration, domain TLS, load test, and rollback rehearsal are signed off.
 - a least-privilege database user;
 - independent launch and preview-admin secrets;
 - a server-only `server-providers.yml` containing Qwen and DeepSeek credentials;
+- approved input, output Token, and per-user concurrency limits;
 - the main-site backend change that requests a one-time launch ticket;
 - monitoring and alert destinations.
 
@@ -58,6 +59,14 @@ requiredPackageCount=5
 
 Then point the Caddy service at the Player and create the DNS record. Confirm HTTPS and
 HSTS before issuing a real launch ticket.
+
+Confirm these production values before Agent testing:
+
+```text
+JIUXUANGE_PLAYER_MAX_INPUT_CHARS
+JIUXUANGE_PLAYER_MAX_OUTPUT_TOKENS
+JIUXUANGE_PLAYER_MAX_CONCURRENT_AI
+```
 
 ## Security checks
 

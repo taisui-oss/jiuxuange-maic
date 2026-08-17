@@ -195,6 +195,9 @@ export const playerAiRuns = caseOnlySchema.table(
     traceId: text('trace_id').notNull(),
     primaryModel: text('primary_model').notNull(),
     selectedModel: text('selected_model').notNull(),
+    promptVersion: text('prompt_version').notNull().default('unknown'),
+    inputChars: integer('input_chars').notNull().default(0),
+    maxOutputTokens: integer('max_output_tokens').notNull().default(1200),
     fallbackUsed: integer('fallback_used').notNull().default(0),
     status: text('status').notNull().default('running'),
     errorCode: text('error_code'),
@@ -204,6 +207,8 @@ export const playerAiRuns = caseOnlySchema.table(
   (table) => [
     uniqueIndex('player_ai_runs_trace_idx').on(table.traceId),
     index('player_ai_runs_package_idx').on(table.packageId, table.startedAt),
+    check('player_ai_runs_input_chars_check', sql`${table.inputChars} >= 0`),
+    check('player_ai_runs_output_tokens_check', sql`${table.maxOutputTokens} > 0`),
     check('player_ai_runs_fallback_check', sql`${table.fallbackUsed} in (0, 1)`),
     check(
       'player_ai_runs_status_check',

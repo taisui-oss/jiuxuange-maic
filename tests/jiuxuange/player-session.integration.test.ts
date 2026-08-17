@@ -84,6 +84,9 @@ describe('Jiuxuange Player sessions', () => {
       packageId: PACKAGE_ID,
       traceId: 'trace-player-ai-001',
       primaryModel: 'qwen/primary',
+      promptVersion: 'sha256:prompt-v1',
+      inputChars: 800,
+      maxOutputTokens: 1200,
     });
     await updatePlayerAiRun(runId, {
       selectedModel: 'deepseek/fallback',
@@ -95,6 +98,9 @@ describe('Jiuxuange Player sessions', () => {
         selectedModel: playerAiRuns.selectedModel,
         fallbackUsed: playerAiRuns.fallbackUsed,
         status: playerAiRuns.status,
+        promptVersion: playerAiRuns.promptVersion,
+        inputChars: playerAiRuns.inputChars,
+        maxOutputTokens: playerAiRuns.maxOutputTokens,
       })
       .from(playerAiRuns)
       .where(eq(playerAiRuns.id, runId));
@@ -102,6 +108,9 @@ describe('Jiuxuange Player sessions', () => {
       selectedModel: 'deepseek/fallback',
       fallbackUsed: 1,
       status: 'succeeded',
+      promptVersion: 'sha256:prompt-v1',
+      inputChars: 800,
+      maxOutputTokens: 1200,
     });
   });
 });

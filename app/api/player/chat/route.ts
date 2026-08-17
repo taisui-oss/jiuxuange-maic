@@ -5,6 +5,11 @@ import { canAccessPlayerPackage, resolvePlayerActor } from '@/lib/server/jiuxuan
 import { readPlayerPackage } from '@/lib/server/jiuxuange-player/package-repository';
 import { buildPlayerChatRequest } from '@/lib/server/jiuxuange-player/chat-policy';
 import { startPlayerAiRun, updatePlayerAiRun } from '@/lib/server/jiuxuange-player/ai-audit';
+import {
+  acquirePlayerAiSlot,
+  playerChatInputChars,
+  resolvePlayerAiLimits,
+} from '@/lib/server/jiuxuange-player/ai-policy';
 
 export const maxDuration = 60;
 
@@ -17,12 +22,17 @@ function forwardedRequest(request: NextRequest, body: StatelessChatRequest): Nex
   });
 }
 
-function withAudit(response: Response, runId: string, traceId: string): Response {
+function withAudit(
+  response: Response,
+  runId: string,
+  traceId: string,
+  onSettled: () => void,
+): Response {
   if (!response.body) {
     void updatePlayerAiRun(runId, {
       status: response.ok ? 'succeeded' : 'failed',
       errorCode: response.ok ? undefined : `HTTP_${response.status}`,
-    });
+    }).finally(onSettled);
     return response;
   }
   const decoder = new TextDecoder();
@@ -39,7 +49,7 @@ function withAudit(response: Response, runId: string, traceId: string): Response
         void updatePlayerAiRun(runId, {
           status: sawErrorEvent ? 'failed' : 'succeeded',
           errorCode: sawErrorEvent ? 'SSE_ERROR' : undefined,
-        });
+        }).finally(onSettled);
       },
     }),
   );
@@ -62,6 +72,18 @@ export async function POST(request: NextRequest) {
   if (!loaded) return new NextResponse(null, { status: 404 });
 
   const body = (await request.json()) as StatelessChatRequest;
+  const limits = resolvePlayerAiLimits();
+  const inputChars = playerChatInputChars(body);
+  if (inputChars > limits.maxInputChars) {
+    return NextResponse.json(
+      {
+        success: false,
+        errorCode: 'INPUT_LIMIT_EXCEEDED',
+        error: 'Player chat input exceeds the configured limit',
+      },
+      { status: 413 },
+    );
+  }
   const primaryModel = process.env.JIUXUANGE_PLAYER_PRIMARY_MODEL?.trim();
   const fallbackModel = process.env.JIUXUANGE_PLAYER_FALLBACK_MODEL?.trim();
   if (!primaryModel) {
@@ -72,7 +94,7 @@ export async function POST(request: NextRequest) {
   }
   let sanitized: StatelessChatRequest;
   try {
-    sanitized = buildPlayerChatRequest(body, loaded, primaryModel);
+    sanitized = buildPlayerChatRequest(body, loaded, primaryModel, limits.maxOutputTokens);
   } catch (error) {
     return NextResponse.json(
       {
@@ -84,21 +106,53 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const traceId = crypto.randomUUID();
-  const runId = await startPlayerAiRun({
-    userId: actor.userId,
-    packageId,
-    traceId,
-    primaryModel,
-  });
-  let response = await openMaicChat(forwardedRequest(request, sanitized));
-  if (!response.ok && fallbackModel && fallbackModel !== primaryModel) {
-    const fallbackRequest = buildPlayerChatRequest(body, loaded, fallbackModel);
-    response = await openMaicChat(forwardedRequest(request, fallbackRequest));
-    await updatePlayerAiRun(runId, {
-      selectedModel: fallbackModel,
-      fallbackUsed: true,
-    });
+  const releaseSlot = acquirePlayerAiSlot(actor.userId, limits.maxConcurrentPerUser);
+  if (!releaseSlot) {
+    return NextResponse.json(
+      {
+        success: false,
+        errorCode: 'AI_CONCURRENCY_LIMIT',
+        error: 'Another Player Agent request is still running',
+      },
+      { status: 429 },
+    );
   }
-  return withAudit(response, runId, traceId);
+  let settled = false;
+  const settle = () => {
+    if (settled) return;
+    settled = true;
+    releaseSlot();
+  };
+  request.signal.addEventListener('abort', settle, { once: true });
+
+  const traceId = crypto.randomUUID();
+  try {
+    const runId = await startPlayerAiRun({
+      userId: actor.userId,
+      packageId,
+      traceId,
+      primaryModel,
+      promptVersion: loaded.manifest.contentVersion,
+      inputChars,
+      maxOutputTokens: limits.maxOutputTokens,
+    });
+    let response = await openMaicChat(forwardedRequest(request, sanitized));
+    if (!response.ok && fallbackModel && fallbackModel !== primaryModel) {
+      const fallbackRequest = buildPlayerChatRequest(
+        body,
+        loaded,
+        fallbackModel,
+        limits.maxOutputTokens,
+      );
+      response = await openMaicChat(forwardedRequest(request, fallbackRequest));
+      await updatePlayerAiRun(runId, {
+        selectedModel: fallbackModel,
+        fallbackUsed: true,
+      });
+    }
+    return withAudit(response, runId, traceId, settle);
+  } catch (error) {
+    settle();
+    throw error;
+  }
 }

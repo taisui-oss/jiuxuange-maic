@@ -50,6 +50,9 @@ completed learner / fifth case -> 200
 - private Agent markers absent from `.next/static` and standalone static chunks;
 - learner packages contain no answer, analysis, or grading-prompt keys;
 - five packages contain no external runtime URL.
+- Player overrides the browser output budget, defaults to 1200 output Tokens, limits
+  learner-controlled context to 24000 characters, and permits one in-flight Agent request
+  per user; the applied limits and Prompt/content version are persisted with each AI Run.
 
 ## Local load result
 
@@ -100,8 +103,8 @@ operations approvers.
 
 ```text
 pnpm test
-  319 test files passed
-  2325 tests passed
+  320 test files passed
+  2328 tests passed
   exit code 0
 
 targeted ESLint for Player routes, runtime, server modules, registry, and tests

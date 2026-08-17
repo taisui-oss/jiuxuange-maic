@@ -23,11 +23,12 @@ describe('Jiuxuange Player chat policy', () => {
       model: 'client/model',
     } satisfies StatelessChatRequest;
 
-    const sanitized = buildPlayerChatRequest(body, loaded, 'server/primary-model');
+    const sanitized = buildPlayerChatRequest(body, loaded, 'server/primary-model', 1200);
     expect(sanitized.apiKey).toBe('');
     expect(sanitized.baseUrl).toBeUndefined();
     expect(sanitized.providerType).toBeUndefined();
     expect(sanitized.model).toBe('server/primary-model');
+    expect(sanitized.maxOutputTokens).toBe(1200);
     expect(sanitized.config.agentIds).toEqual(['default-1']);
     expect(sanitized.storeState.stage?.name).toBe(loaded.classroom.stage.name);
     expect(sanitized.storeState.scenes).toHaveLength(10);
@@ -48,7 +49,7 @@ describe('Jiuxuange Player chat policy', () => {
       config: { agentIds: ['unauthorized-agent'] },
       apiKey: 'ignored',
     } satisfies StatelessChatRequest;
-    expect(() => buildPlayerChatRequest(body, loaded, 'server/primary-model')).toThrow(
+    expect(() => buildPlayerChatRequest(body, loaded, 'server/primary-model', 1200)).toThrow(
       /authorized player Agent/,
     );
   });

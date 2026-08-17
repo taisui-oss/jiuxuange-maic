@@ -5,6 +5,7 @@ export function buildPlayerChatRequest(
   body: StatelessChatRequest,
   loaded: LoadedPlayerPackage,
   model: string,
+  maxOutputTokens: number,
 ): StatelessChatRequest {
   const allowedAgentIds = new Set(loaded.manifest.agents.map((agent) => agent.id));
   const agentIds = (body.config?.agentIds ?? []).filter((agentId) => allowedAgentIds.has(agentId));
@@ -16,6 +17,7 @@ export function buildPlayerChatRequest(
     baseUrl: undefined,
     providerType: undefined,
     model,
+    maxOutputTokens,
     storeState: {
       ...body.storeState,
       stage: loaded.classroom.stage,

@@ -9,6 +9,9 @@ export async function startPlayerAiRun(input: {
   packageId: string;
   traceId: string;
   primaryModel: string;
+  promptVersion: string;
+  inputChars: number;
+  maxOutputTokens: number;
 }): Promise<string> {
   const [row] = await getCaseOnlyDatabase()
     .insert(playerAiRuns)
@@ -18,6 +21,9 @@ export async function startPlayerAiRun(input: {
       traceId: input.traceId,
       primaryModel: input.primaryModel,
       selectedModel: input.primaryModel,
+      promptVersion: input.promptVersion,
+      inputChars: input.inputChars,
+      maxOutputTokens: input.maxOutputTokens,
     })
     .returning({ id: playerAiRuns.id });
   return row.id;
