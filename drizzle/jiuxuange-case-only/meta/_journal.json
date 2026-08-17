@@ -15,6 +15,13 @@
       "when": 1786590426155,
       "tag": "0001_material_lord_tyger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786978569904,
+      "tag": "0002_silly_rocket_raccoon",
+      "breakpoints": true
     }
   ]
 }

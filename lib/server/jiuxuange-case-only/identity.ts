@@ -12,9 +12,13 @@ export { CaseOnlyIdentityError };
 export type { CaseOnlyActor };
 
 export async function resolveCaseOnlyActor(): Promise<CaseOnlyActor> {
+  const anonymousPreview =
+    process.env.JIUXUANGE_CASE_ONLY_IDENTITY_MODE === 'anonymous-preview' ||
+    process.env.JIUXUANGE_PLAYER_IDENTITY_MODE === 'anonymous-preview';
   const previewUserId =
-    process.env.JIUXUANGE_CASE_ONLY_IDENTITY_MODE === 'anonymous-preview'
-      ? (await headers()).get(CASE_ONLY_PREVIEW_HEADER)
-      : null;
-  return resolveCaseOnlyActorFromContext(process.env, previewUserId);
+    anonymousPreview ? (await headers()).get(CASE_ONLY_PREVIEW_HEADER) : null;
+  const identityEnv = anonymousPreview
+    ? { ...process.env, JIUXUANGE_CASE_ONLY_IDENTITY_MODE: 'anonymous-preview' }
+    : process.env;
+  return resolveCaseOnlyActorFromContext(identityEnv, previewUserId);
 }

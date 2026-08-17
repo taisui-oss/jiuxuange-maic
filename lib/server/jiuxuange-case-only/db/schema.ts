@@ -120,3 +120,66 @@ export const progressSubmissions = caseOnlySchema.table(
     ),
   ],
 );
+
+export const playerLaunchTickets = caseOnlySchema.table(
+  'player_launch_tickets',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tokenHash: text('token_hash').notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => caseOnlyUsers.id, { onDelete: 'restrict' }),
+    packageId: text('package_id').notNull(),
+    returnTo: text('return_to'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    consumedAt: timestamp('consumed_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('player_launch_tickets_token_hash_idx').on(table.tokenHash),
+    index('player_launch_tickets_expiry_idx').on(table.expiresAt),
+  ],
+);
+
+export const playerSessions = caseOnlySchema.table(
+  'player_sessions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tokenHash: text('token_hash').notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => caseOnlyUsers.id, { onDelete: 'restrict' }),
+    packageId: text('package_id'),
+    preview: integer('preview').notNull().default(0),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    lastSeenAt: timestamp('last_seen_at', { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('player_sessions_token_hash_idx').on(table.tokenHash),
+    index('player_sessions_user_idx').on(table.userId, table.expiresAt),
+    check('player_sessions_preview_check', sql`${table.preview} in (0, 1)`),
+  ],
+);
+
+export const playerPreviewLinks = caseOnlySchema.table(
+  'player_preview_links',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tokenHash: text('token_hash').notNull(),
+    packageId: text('package_id').notNull(),
+    createdBy: text('created_by').notNull(),
+    maxUses: integer('max_uses').notNull().default(10),
+    useCount: integer('use_count').notNull().default(0),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('player_preview_links_token_hash_idx').on(table.tokenHash),
+    index('player_preview_links_expiry_idx').on(table.expiresAt),
+    check('player_preview_links_max_uses_check', sql`${table.maxUses} > 0`),
+    check('player_preview_links_use_count_check', sql`${table.useCount} >= 0`),
+  ],
+);
