@@ -4,11 +4,18 @@ import type { NextConfig } from 'next';
 
 const projectRoot = dirname(fileURLToPath(import.meta.url));
 const caseOnlyMode = process.env.JIUXUANGE_CASE_ONLY === 'true';
+const playerMode = process.env.JIUXUANGE_PLAYER === 'true';
 const caseOnlyAliases: Record<string, string> = caseOnlyMode
   ? {
       '@/components/openmaic-app-providers':
         './components/jiuxuange/case-only/noop-app-providers.tsx',
       '@/components/openmaic-home-page': './components/jiuxuange/case-only/noop-openmaic-home.tsx',
+    }
+  : {};
+const playerAliases: Record<string, string> = playerMode
+  ? {
+      '@/lib/orchestration/registry/default-agent-personas':
+        './lib/jiuxuange/player/redacted-agent-personas.ts',
     }
   : {};
 
@@ -19,7 +26,7 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     root: projectRoot,
-    resolveAlias: caseOnlyAliases,
+    resolveAlias: { ...caseOnlyAliases, ...playerAliases },
   },
   output: process.env.VERCEL || process.env.NETLIFY ? undefined : 'standalone',
   transpilePackages: ['mathml2omml', 'pptxgenjs', '@openmaic/importer'],

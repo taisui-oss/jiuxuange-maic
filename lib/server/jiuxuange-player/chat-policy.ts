@@ -24,20 +24,18 @@ export function buildPlayerChatRequest(
     config: {
       ...body.config,
       agentIds,
-      agentConfigs: loaded.manifest.agents
-        .filter((agent) => !agent.id.startsWith('default-'))
-        .map((agent) => ({
-          id: agent.id,
-          name: agent.name,
-          role: agent.role,
-          persona: agent.persona,
-          avatar: agent.avatar ?? '',
-          color: agent.color ?? '#64748b',
-          allowedActions: [],
-          priority: agent.priority ?? 1,
-          isGenerated: true,
-          boundStageId: loaded.classroom.id,
-        })),
+      agentConfigs: loaded.manifest.agents.map((agent) => ({
+        id: agent.id,
+        name: agent.name,
+        role: agent.role,
+        persona: agent.persona,
+        avatar: agent.avatar ?? '',
+        color: agent.color ?? '#64748b',
+        allowedActions: [],
+        priority: agent.priority ?? 1,
+        isGenerated: true,
+        boundStageId: loaded.classroom.id,
+      })),
     },
   };
 }

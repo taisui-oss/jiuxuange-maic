@@ -6,6 +6,7 @@ const standaloneRoot = resolve(root, '.next/standalone');
 const staticSource = resolve(root, '.next/static');
 const publicSource = resolve(root, 'public');
 const classroomSource = resolve(root, 'content/jiuxuange/classrooms');
+const playerPackageSource = resolve(root, 'content/jiuxuange/player-packages');
 
 if (!existsSync(standaloneRoot) || !existsSync(staticSource)) {
   if (process.env.NETLIFY || process.env.VERCEL) {
@@ -32,4 +33,11 @@ if (existsSync(classroomSource)) {
   replaceDirectory(classroomSource, resolve(standaloneRoot, 'content/jiuxuange/classrooms'));
 }
 
-console.log('[standalone-assets] staged .next/static, public, and classroom assets');
+if (existsSync(playerPackageSource)) {
+  replaceDirectory(
+    playerPackageSource,
+    resolve(standaloneRoot, 'content/jiuxuange/player-packages'),
+  );
+}
+
+console.log('[standalone-assets] staged .next/static, public, classrooms, and player packages');

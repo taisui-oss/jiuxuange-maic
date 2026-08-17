@@ -66,7 +66,7 @@ function HydratedPlayer({
         failedOutlines: [],
       });
     };
-  }, [loaded, progress.nextSceneIndex]);
+  }, [loaded, progress.nextSceneIndex, progress.status]);
 
   if (!ready) {
     return <div className="grid h-dvh place-items-center text-sm text-slate-500">课堂加载中…</div>;

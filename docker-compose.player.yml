@@ -1,0 +1,36 @@
+services:
+  player:
+    build:
+      context: .
+      dockerfile: Dockerfile.player
+    env_file:
+      - deploy/player/player.env
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./server-providers.yml:/app/server-providers.yml:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2.9-alpine
+    depends_on:
+      player:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      PLAYER_HOSTNAME: player.jxg.cccube.cn
+      PLAYER_UPSTREAM: player:3000
+    volumes:
+      - ./deploy/player/Caddyfile:/etc/caddy/Caddyfile:ro
+      - player-caddy-data:/data
+      - player-caddy-config:/config
+    restart: unless-stopped
+
+volumes:
+  player-caddy-data:
+  player-caddy-config:

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { StatelessChatRequest } from '@/lib/types/chat';
 import { POST as openMaicChat } from '@/app/api/chat/route';
-import { resolvePlayerActor } from '@/lib/server/jiuxuange-player/identity';
-import { getAccessiblePlayerContent } from '@/lib/server/jiuxuange-player/access';
+import { canAccessPlayerPackage, resolvePlayerActor } from '@/lib/server/jiuxuange-player/identity';
 import { readPlayerPackage } from '@/lib/server/jiuxuange-player/package-repository';
 import { buildPlayerChatRequest } from '@/lib/server/jiuxuange-player/chat-policy';
 import { startPlayerAiRun, updatePlayerAiRun } from '@/lib/server/jiuxuange-player/ai-audit';
@@ -58,11 +57,9 @@ export async function POST(request: NextRequest) {
     );
   }
   const actor = await resolvePlayerActor();
-  const [access, loaded] = await Promise.all([
-    getAccessiblePlayerContent(actor, packageId),
-    readPlayerPackage(packageId),
-  ]);
-  if (!access || !loaded) return new NextResponse(null, { status: 404 });
+  if (!canAccessPlayerPackage(actor, packageId)) return new NextResponse(null, { status: 404 });
+  const loaded = await readPlayerPackage(packageId);
+  if (!loaded) return new NextResponse(null, { status: 404 });
 
   const body = (await request.json()) as StatelessChatRequest;
   const primaryModel = process.env.JIUXUANGE_PLAYER_PRIMARY_MODEL?.trim();

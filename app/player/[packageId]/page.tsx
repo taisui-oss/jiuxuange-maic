@@ -4,6 +4,7 @@ import { PlayerProviders } from '@/components/jiuxuange/player/player-providers'
 import { resolvePlayerActor } from '@/lib/server/jiuxuange-player/identity';
 import { getAccessiblePlayerContent } from '@/lib/server/jiuxuange-player/access';
 import { readPlayerPackage } from '@/lib/server/jiuxuange-player/package-repository';
+import { toPublicPlayerPackage } from '@/lib/server/jiuxuange-player/public-package';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,7 +26,7 @@ export default async function PlayerPackagePage({
 
   return (
     <PlayerProviders>
-      <NativePlayerRuntime loaded={loaded} progress={access.progress} />
+      <NativePlayerRuntime loaded={toPublicPlayerPackage(loaded)} progress={access.progress} />
     </PlayerProviders>
   );
 }
