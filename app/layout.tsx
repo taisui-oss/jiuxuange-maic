@@ -7,6 +7,7 @@ import '@openmaic/renderer/fonts.css';
 import 'animate.css';
 import 'katex/dist/katex.min.css';
 import { isCaseOnlyModeEnabled } from '@/lib/jiuxuange/case-only/route-policy';
+import { isPlayerModeEnabled } from '@/lib/jiuxuange/player/route-policy';
 
 const inter = localFont({
   src: '../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
@@ -24,7 +25,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  if (isCaseOnlyModeEnabled()) {
+  if (isCaseOnlyModeEnabled() || isPlayerModeEnabled()) {
     return (
       <html lang="zh-CN" className={inter.variable}>
         <body className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>

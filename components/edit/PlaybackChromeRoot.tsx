@@ -41,6 +41,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { AlertTriangle } from 'lucide-react';
 import { VisuallyHidden } from 'radix-ui';
+import { useOptionalPlayerRuntime } from '@/lib/jiuxuange/player/runtime-context';
 
 /**
  * Imperative handle exposed via `ref` so the parent (`Stage`) can tear
@@ -72,6 +73,7 @@ interface PlaybackChromeRootProps {
 export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackChromeRootProps>(
   function PlaybackChromeRoot({ onRetryOutline, canEnterProMode, onEnterProMode }, ref) {
     const { t } = useI18n();
+    const playerRuntime = useOptionalPlayerRuntime();
     const {
       mode,
       getCurrentScene,
@@ -747,26 +749,39 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
      * Returns true if the switch was immediate, false if gated (dialog shown).
      */
     const gatedSceneSwitch = useCallback(
-      (targetSceneId: string): boolean => {
+      async (targetSceneId: string): Promise<boolean> => {
         if (targetSceneId === currentSceneId) return false;
         if (isTopicActive) {
           setPendingSceneId(targetSceneId);
           return false;
         }
+        if (
+          playerRuntime &&
+          !(await playerRuntime.requestSceneChange(currentSceneId, targetSceneId))
+        ) {
+          return false;
+        }
         setCurrentSceneId(targetSceneId);
         return true;
       },
-      [currentSceneId, isTopicActive, setCurrentSceneId],
+      [currentSceneId, isTopicActive, playerRuntime, setCurrentSceneId],
     );
 
     /** User confirmed scene switch via AlertDialog */
-    const confirmSceneSwitch = useCallback(() => {
+    const confirmSceneSwitch = useCallback(async () => {
       if (!pendingSceneId) return;
       chatAreaRef.current?.endActiveSession();
       doSessionCleanup();
+      if (
+        playerRuntime &&
+        !(await playerRuntime.requestSceneChange(currentSceneId, pendingSceneId))
+      ) {
+        setPendingSceneId(null);
+        return;
+      }
       setCurrentSceneId(pendingSceneId);
       setPendingSceneId(null);
-    }, [pendingSceneId, setCurrentSceneId, doSessionCleanup]);
+    }, [currentSceneId, pendingSceneId, playerRuntime, setCurrentSceneId, doSessionCleanup]);
 
     /** User cancelled scene switch via AlertDialog */
     const cancelSceneSwitch = useCallback(() => {
@@ -1058,6 +1073,9 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
               mode={mode}
               canEdit={!!canEnterProMode}
               onToggleEditMode={onEnterProMode}
+              backHref={playerRuntime?.backHref}
+              showExport={!playerRuntime}
+              showSettings={!playerRuntime}
             />
           )}
 

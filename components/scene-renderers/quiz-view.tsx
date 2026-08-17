@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { getCurrentModelConfig } from '@/lib/utils/model-config';
 import { createLogger } from '@/lib/logger';
+import { useOptionalPlayerRuntime } from '@/lib/jiuxuange/player/runtime-context';
 
 const log = createLogger('QuizView');
 import type { QuizQuestion } from '@/lib/types/stage';
@@ -688,9 +689,12 @@ function ScoreBanner({
 
 export function QuizView({ questions, sceneId }: QuizViewProps) {
   const { t, locale } = useI18n();
+  const playerRuntime = useOptionalPlayerRuntime();
 
   // Rehydrate submitted state from localStorage on first mount. Runs once.
-  const [initialSubmitted] = useState<SubmittedState>(() => readSubmittedState(sceneId));
+  const [initialSubmitted] = useState<SubmittedState>(() =>
+    playerRuntime ? null : readSubmittedState(sceneId),
+  );
 
   const [phase, setPhase] = useState<Phase>(() => {
     if (initialSubmitted?.kind === 'reviewing') return 'reviewing';
@@ -702,6 +706,17 @@ export function QuizView({ questions, sceneId }: QuizViewProps) {
   );
   const [results, setResults] = useState<QuestionResult[]>(() =>
     initialSubmitted?.kind === 'reviewing' ? initialSubmitted.results : [],
+  );
+  const [revealedAnswers, setRevealedAnswers] = useState<Record<string, string[]>>({});
+
+  const displayQuestions = useMemo(
+    () =>
+      questions.map((question) =>
+        revealedAnswers[question.id]
+          ? { ...question, answer: revealedAnswers[question.id] }
+          : question,
+      ),
+    [questions, revealedAnswers],
   );
 
   // Draft cache for quiz answers, keyed by sceneId to isolate across classrooms
@@ -756,8 +771,8 @@ export function QuizView({ questions, sceneId }: QuizViewProps) {
   const handleSubmit = useCallback(() => {
     setPhase('grading');
     clearAnswersCache();
-    writeSubmittedAnswers(sceneId, answers);
-  }, [clearAnswersCache, answers, sceneId]);
+    if (!playerRuntime) writeSubmittedAnswers(sceneId, answers);
+  }, [clearAnswersCache, answers, playerRuntime, sceneId]);
 
   // When entering grading phase, grade choice questions locally + call API for short-answer
   useEffect(() => {
@@ -765,6 +780,15 @@ export function QuizView({ questions, sceneId }: QuizViewProps) {
     let cancelled = false;
 
     (async () => {
+      if (playerRuntime) {
+        const remote = await playerRuntime.gradeQuiz(sceneId, questions, answers);
+        if (cancelled) return;
+        setRevealedAnswers(remote.revealedAnswers);
+        setResults(remote.results);
+        setPhase('reviewing');
+        return;
+      }
+
       // 1. Grade choice questions locally (instant)
       const choiceResults = gradeChoiceQuestions(questions, answers);
 
@@ -793,15 +817,16 @@ export function QuizView({ questions, sceneId }: QuizViewProps) {
     return () => {
       cancelled = true;
     };
-  }, [phase, questions, answers, locale, sceneId]);
+  }, [phase, questions, answers, locale, playerRuntime, sceneId]);
 
   const handleRetry = useCallback(() => {
     setPhase('not_started');
     setAnswers({});
     setResults([]);
+    setRevealedAnswers({});
     clearAnswersCache();
-    clearSubmitted(sceneId);
-  }, [clearAnswersCache, sceneId]);
+    if (!playerRuntime) clearSubmitted(sceneId);
+  }, [clearAnswersCache, playerRuntime, sceneId]);
 
   const earnedScore = useMemo(() => results.reduce((sum, r) => sum + r.earned, 0), [results]);
 
@@ -874,7 +899,7 @@ export function QuizView({ questions, sceneId }: QuizViewProps) {
 
             {/* Questions */}
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
-              {questions.map((q, i) => {
+              {displayQuestions.map((q, i) => {
                 if (q.type === 'single') {
                   return (
                     <SingleChoiceQuestion

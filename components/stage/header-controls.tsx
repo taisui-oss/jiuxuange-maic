@@ -41,6 +41,8 @@ interface HeaderControlsProps {
    * off ring weight / blur to keep the CommandBar quiet).
    */
   readonly variant?: 'default' | 'compact';
+  readonly showExport?: boolean;
+  readonly showSettings?: boolean;
 }
 
 /**
@@ -61,6 +63,8 @@ export function HeaderControls({
   canEdit,
   onToggleEditMode,
   variant = 'default',
+  showExport = true,
+  showSettings = true,
 }: HeaderControlsProps) {
   const { t } = useI18n();
   const { theme, setTheme } = useTheme();
@@ -174,13 +178,15 @@ export function HeaderControls({
         </DropdownMenu>
 
         {/* Settings */}
-        <button
-          onClick={() => setSettingsOpen(true)}
-          className="p-2 rounded-full text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm transition-all group"
-          aria-label={t('settings.title')}
-        >
-          <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
-        </button>
+        {showSettings && (
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="p-2 rounded-full text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm transition-all group"
+            aria-label={t('settings.title')}
+          >
+            <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
+          </button>
+        )}
       </div>
 
       {/* Pro Switch — toggle property: on/off both clickable, not a
@@ -237,7 +243,7 @@ export function HeaderControls({
           Not a settings function so it does not belong inside the
           settings pill; kept as a separate sibling sitting between the
           Pro Switch and the right edge of the chrome. */}
-      <div className="relative" ref={exportRef}>
+      {showExport && <div className="relative" ref={exportRef}>
         <button
           onClick={() => {
             if (canExport && !isExporting && !isExportingZip) {
@@ -311,9 +317,9 @@ export function HeaderControls({
             </button>
           </div>
         )}
-      </div>
+      </div>}
 
-      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
+      {showSettings && <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />}
     </div>
   );
 }

@@ -11,9 +11,20 @@ interface HeaderProps {
   readonly mode?: StageMode;
   readonly canEdit?: boolean;
   readonly onToggleEditMode?: () => void;
+  readonly backHref?: string;
+  readonly showExport?: boolean;
+  readonly showSettings?: boolean;
 }
 
-export function Header({ currentSceneTitle, mode, canEdit, onToggleEditMode }: HeaderProps) {
+export function Header({
+  currentSceneTitle,
+  mode,
+  canEdit,
+  onToggleEditMode,
+  backHref = '/',
+  showExport = true,
+  showSettings = true,
+}: HeaderProps) {
   const { t } = useI18n();
   const router = useRouter();
 
@@ -22,7 +33,7 @@ export function Header({ currentSceneTitle, mode, canEdit, onToggleEditMode }: H
       <header className="h-20 px-8 flex items-center justify-between z-10 bg-transparent gap-4">
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push(backHref)}
             className="shrink-0 p-2 rounded-lg text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
             title={t('generation.backToHome')}
           >
@@ -52,7 +63,13 @@ export function Header({ currentSceneTitle, mode, canEdit, onToggleEditMode }: H
           )}
         </div>
 
-        <HeaderControls mode={mode} canEdit={canEdit} onToggleEditMode={onToggleEditMode} />
+        <HeaderControls
+          mode={mode}
+          canEdit={canEdit}
+          onToggleEditMode={onToggleEditMode}
+          showExport={showExport}
+          showSettings={showSettings}
+        />
       </header>
     </>
   );

@@ -6,6 +6,7 @@ import {
   CASE_ONLY_PREVIEW_HEADER,
   resolvePreviewIdentity,
 } from '@/lib/jiuxuange/case-only/preview-identity';
+import { decidePlayerRoute, isPlayerModeEnabled } from '@/lib/jiuxuange/player/route-policy';
 
 interface CaseOnlyRequestContext {
   requestHeaders: Headers;
@@ -16,10 +17,13 @@ function prepareCaseOnlyRequest(request: NextRequest): CaseOnlyRequestContext {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.delete(CASE_ONLY_PREVIEW_HEADER);
 
-  if (
-    process.env.JIUXUANGE_CASE_ONLY_IDENTITY_MODE !== 'anonymous-preview' ||
-    process.env.JIUXUANGE_CASE_ONLY_ALLOW_ANONYMOUS_PREVIEW !== 'true'
-  ) {
+  const caseOnlyPreview =
+    process.env.JIUXUANGE_CASE_ONLY_IDENTITY_MODE === 'anonymous-preview' &&
+    process.env.JIUXUANGE_CASE_ONLY_ALLOW_ANONYMOUS_PREVIEW === 'true';
+  const playerPreview =
+    process.env.JIUXUANGE_PLAYER_IDENTITY_MODE === 'anonymous-preview' &&
+    process.env.JIUXUANGE_PLAYER_ALLOW_ANONYMOUS_PREVIEW === 'true';
+  if (!caseOnlyPreview && !playerPreview) {
     return { requestHeaders };
   }
 
@@ -102,6 +106,27 @@ async function verifyToken(token: string, accessCode: string): Promise<boolean> 
 
 export async function middleware(request: NextRequest) {
   let caseOnlyContext: CaseOnlyRequestContext | null = null;
+
+  if (isPlayerModeEnabled()) {
+    const decision = decidePlayerRoute(request.nextUrl.pathname);
+    if (decision.kind === 'block') {
+      return new NextResponse(null, {
+        status: decision.status,
+        headers: { 'x-jiuxuange-player': 'blocked' },
+      });
+    }
+    caseOnlyContext = prepareCaseOnlyRequest(request);
+    if (decision.kind === 'rewrite') {
+      const rewrittenUrl = request.nextUrl.clone();
+      rewrittenUrl.pathname = decision.pathname;
+      const response = NextResponse.rewrite(rewrittenUrl, {
+        request: { headers: caseOnlyContext.requestHeaders },
+      });
+      response.headers.set('x-jiuxuange-player', 'active');
+      return attachCaseOnlyPreviewCookie(response, request, caseOnlyContext);
+    }
+    return continueRequest(request, caseOnlyContext);
+  }
 
   if (isCaseOnlyModeEnabled()) {
     const decision = decideCaseOnlyRoute(request.nextUrl.pathname);

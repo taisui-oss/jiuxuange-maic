@@ -28,6 +28,7 @@ import { ActionEngine } from '@/lib/action/engine';
 import { readSubmittedState } from '@/lib/quiz/persistence';
 import { toast } from 'sonner';
 import { createLogger } from '@/lib/logger';
+import { useOptionalPlayerRuntime } from '@/lib/jiuxuange/player/runtime-context';
 
 const log = createLogger('ChatSessions');
 
@@ -86,6 +87,7 @@ interface UseChatSessionsOptions {
 }
 
 export function useChatSessions(options: UseChatSessionsOptions = {}) {
+  const playerRuntime = useOptionalPlayerRuntime();
   const onLiveSpeechRef = useRef(options.onLiveSpeech);
   const onSpeechProgressRef = useRef(options.onSpeechProgress);
   const onThinkingRef = useRef(options.onThinking);
@@ -543,9 +545,12 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
           },
 
           fetchChat: (body, signal) =>
-            fetch('/api/chat', {
+            fetch(playerRuntime?.chatEndpoint ?? '/api/chat', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                ...(playerRuntime ? { 'X-Player-Package-Id': playerRuntime.packageId } : {}),
+              },
               body: JSON.stringify(body),
               signal,
             }),
@@ -675,7 +680,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         }
       }
     },
-    [createBufferForSession, clearLiveSessionAfterError, t],
+    [createBufferForSession, clearLiveSessionAfterError, playerRuntime, t],
   );
 
   /**
