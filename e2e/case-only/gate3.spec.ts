@@ -26,10 +26,14 @@ const cases: CaseDefinition[] = [
     id: 'convenience-bee',
     title: '便利蜂：六要素事实迁移',
     quizAnswers: {
-      wnAzwdJ3YJhHfqi24v0I2: { q1: 'B', q2: ['A', 'C', 'D'], q3: 'B' },
-      FBVfq7Qz10Af0nmd6gDCq: {
-        q1: 'B',
-        q2: '算法与数据驱动选品、订货和定价，提高周转效率并降低对单店经验的依赖。',
+      'convenience-check-1': {
+        'convenience-q1': 'B',
+        'convenience-q2': 'B',
+        'convenience-q3': 'B',
+      },
+      'convenience-check-2': {
+        'convenience-q4': 'B',
+        'convenience-q5': 'B',
       },
     },
   },

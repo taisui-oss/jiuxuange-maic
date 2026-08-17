@@ -67,7 +67,7 @@ describe('C Cubic unified learning flag', () => {
   });
 
   it('renders one course entry instead of the seven-module map behind the flag', () => {
-    const source = readFileSync('app/page.tsx', 'utf8');
+    const source = readFileSync('components/openmaic-home-page.tsx', 'utf8');
     expect(source).toContain('shouldUseCubicUnifiedLearning');
     expect(source).toContain('shouldUseCubicBusinessModelMode');
     expect(source).toContain('<BusinessModelCourseEntry');
@@ -89,14 +89,14 @@ describe('C Cubic unified learning flag', () => {
   });
 
   it('routes the guided V2 homepage through one orientation component', () => {
-    const source = readFileSync('app/page.tsx', 'utf8');
+    const source = readFileSync('components/openmaic-home-page.tsx', 'utf8');
     expect(source).toContain('shouldUseCubicGuidedCourseV2');
     expect(source).toContain('<HomeOrientationEntry');
     expect(source).toContain('!dualEntryV1 && (guidedCourseV2 || sixLevelJourney) ?');
   });
 
   it('keeps the dual-entry portal behind an independent rollback flag', () => {
-    const source = readFileSync('app/page.tsx', 'utf8');
+    const source = readFileSync('components/openmaic-home-page.tsx', 'utf8');
     const flags = readFileSync('lib/config/feature-flags.ts', 'utf8');
 
     expect(source).toContain('shouldUseJiuxuangeDualEntryV1');

@@ -76,6 +76,15 @@ describe('case-only content repository', () => {
     for (const title of ['社区早餐连锁', '便利蜂', '生鲜零售', 'SHEIN', '花西子']) {
       expect(answerKey).toContain(`## ${title}`);
     }
+    for (const lesson of listCaseOnlyLessons()) {
+      const content = await readCaseOnlyContent(lesson.id);
+      const questions = content!.classroom.scenes
+        .filter((scene) => scene.type === 'quiz' && scene.content.type === 'quiz')
+        .flatMap((scene) => (scene.content.type === 'quiz' ? scene.content.questions : []));
+      for (const question of questions) {
+        expect(answerKey, `${lesson.id}: ${question.id}`).toContain(question.question);
+      }
+    }
     expect(answerKey).toContain('pending_named_sme_review');
   });
 });

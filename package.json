@@ -13,6 +13,7 @@
     "dev:case-only": "JIUXUANGE_CASE_ONLY=true next dev",
     "build": "node scripts/assert-vendor-maic-importer.mjs && next build && node scripts/prepare-standalone-assets.mjs",
     "build:case-only": "JIUXUANGE_CASE_ONLY=true node scripts/assert-vendor-maic-importer.mjs && JIUXUANGE_CASE_ONLY=true next build && node scripts/prepare-standalone-assets.mjs",
+    "generate:jiuxuange-cases": "node scripts/build-jiuxuange-case-only-library-v1.mjs",
     "db:case-only:generate": "drizzle-kit generate --config drizzle.case-only.config.ts",
     "db:case-only:migrate": "tsx scripts/jiuxuange-case-only-migrate.ts",
     "db:case-only:test:start": "bash scripts/jiuxuange-case-only-test-db.sh start",

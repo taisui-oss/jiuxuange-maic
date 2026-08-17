@@ -125,7 +125,7 @@ describe('Jiuxuange business-model course hub', () => {
   });
 
   it('routes the formal course through the native catalog while preserving the old entry only as rollback', () => {
-    const homeSource = readFileSync('app/page.tsx', 'utf8');
+    const homeSource = readFileSync('components/openmaic-home-page.tsx', 'utf8');
     const portalSource = readFileSync('components/jiuxuange/learning-portal.tsx', 'utf8');
     const entrySource = readFileSync(
       'components/jiuxuange/business-model-course-hub-entry.tsx',

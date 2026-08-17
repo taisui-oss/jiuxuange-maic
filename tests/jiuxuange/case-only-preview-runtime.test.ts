@@ -17,7 +17,7 @@ const PREVIEW_USER_ID = '20000000-0000-4000-8000-000000000020';
 describe('case-only preview runtime', () => {
   it('publishes a product release without changing the upstream package version', () => {
     expect(JIUXUANGE_CASE_ONLY_RELEASE).toMatchObject({
-      version: '6.1.0-rc.1',
+      version: '6.1.0-rc.2',
       channel: 'preview-candidate',
       usage: 'preview-only',
     });
