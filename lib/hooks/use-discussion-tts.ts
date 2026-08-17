@@ -15,6 +15,7 @@ import type { AgentConfig } from '@/lib/orchestration/registry/types';
 import type { TTSProviderId } from '@/lib/audio/types';
 import type { AudioIndicatorState } from '@/components/roundtable/audio-indicator';
 import { useI18n } from '@/lib/hooks/use-i18n';
+import { useOptionalPlayerRuntime } from '@/lib/jiuxuange/player/runtime-context';
 
 interface DiscussionTTSOptions {
   enabled: boolean;
@@ -34,6 +35,7 @@ interface QueueItem {
 
 export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: DiscussionTTSOptions) {
   const { locale } = useI18n();
+  const playerRuntime = useOptionalPlayerRuntime();
   const ttsProvidersConfig = useSettingsStore((s) => s.ttsProvidersConfig);
   const ttsSpeed = useSettingsStore((s) => s.ttsSpeed);
   const ttsMuted = useSettingsStore((s) => s.ttsMuted);
@@ -189,9 +191,12 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
         voiceId: item.voiceId,
         language: locale,
       });
-      const res = await fetch('/api/generate/tts', {
+      const res = await fetch(playerRuntime?.ttsEndpoint ?? '/api/generate/tts', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(playerRuntime ? { 'X-Player-Package-Id': playerRuntime.packageId } : {}),
+        },
         body: JSON.stringify({
           text: item.text,
           audioId: item.partId,
@@ -258,7 +263,17 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
         queueMicrotask(() => processQueueRef.current());
       }
     }
-  }, [agents, enabled, locale, ttsMuted, ttsVolume, ttsProvidersConfig, ttsSpeed, playbackSpeed]);
+  }, [
+    agents,
+    enabled,
+    locale,
+    playerRuntime,
+    ttsMuted,
+    ttsVolume,
+    ttsProvidersConfig,
+    ttsSpeed,
+    playbackSpeed,
+  ]);
 
   processQueueRef.current = processQueue;
 

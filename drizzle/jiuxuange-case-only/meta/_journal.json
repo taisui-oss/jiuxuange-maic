@@ -22,6 +22,13 @@
       "when": 1786978569904,
       "tag": "0002_silly_rocket_raccoon",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786980217489,
+      "tag": "0003_mature_nightshade",
+      "breakpoints": true
     }
   ]
 }

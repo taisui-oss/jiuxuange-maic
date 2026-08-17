@@ -183,3 +183,31 @@ export const playerPreviewLinks = caseOnlySchema.table(
     check('player_preview_links_use_count_check', sql`${table.useCount} >= 0`),
   ],
 );
+
+export const playerAiRuns = caseOnlySchema.table(
+  'player_ai_runs',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => caseOnlyUsers.id, { onDelete: 'restrict' }),
+    packageId: text('package_id').notNull(),
+    traceId: text('trace_id').notNull(),
+    primaryModel: text('primary_model').notNull(),
+    selectedModel: text('selected_model').notNull(),
+    fallbackUsed: integer('fallback_used').notNull().default(0),
+    status: text('status').notNull().default('running'),
+    errorCode: text('error_code'),
+    startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+    completedAt: timestamp('completed_at', { withTimezone: true }),
+  },
+  (table) => [
+    uniqueIndex('player_ai_runs_trace_idx').on(table.traceId),
+    index('player_ai_runs_package_idx').on(table.packageId, table.startedAt),
+    check('player_ai_runs_fallback_check', sql`${table.fallbackUsed} in (0, 1)`),
+    check(
+      'player_ai_runs_status_check',
+      sql`${table.status} in ('running', 'succeeded', 'failed')`,
+    ),
+  ],
+);

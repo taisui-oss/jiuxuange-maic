@@ -1,5 +1,5 @@
 import { afterAll, beforeEach, describe, expect, test } from 'vitest';
-import { sql } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import {
   closeCaseOnlyDatabaseForTests,
   getCaseOnlyDatabase,
@@ -12,6 +12,8 @@ import {
   resolvePlayerSession,
   revokePlayerPreviewLink,
 } from '@/lib/server/jiuxuange-player/session-repository';
+import { startPlayerAiRun, updatePlayerAiRun } from '@/lib/server/jiuxuange-player/ai-audit';
+import { playerAiRuns } from '@/lib/server/jiuxuange-case-only/db/schema';
 
 const USER_ID = '20000000-0000-4000-8000-000000000001';
 const PREVIEW_USER_ID = '20000000-0000-4000-8000-000000000002';
@@ -21,6 +23,7 @@ async function resetTables() {
   await getCaseOnlyDatabase().execute(sql`
     truncate table
       jiuxuange_case_only.player_sessions,
+      jiuxuange_case_only.player_ai_runs,
       jiuxuange_case_only.player_launch_tickets,
       jiuxuange_case_only.player_preview_links,
       jiuxuange_case_only.progress_submissions,
@@ -69,5 +72,36 @@ describe('Jiuxuange Player sessions', () => {
     await expect(consumePlayerPreviewLink(revocable.token, PREVIEW_USER_ID)).rejects.toThrow(
       /revoked/,
     );
+  });
+
+  test('records the selected model and fallback outcome for an Agent run', async () => {
+    await getCaseOnlyDatabase().execute(sql`
+      insert into jiuxuange_case_only.users (id) values (${USER_ID})
+      on conflict do nothing
+    `);
+    const runId = await startPlayerAiRun({
+      userId: USER_ID,
+      packageId: PACKAGE_ID,
+      traceId: 'trace-player-ai-001',
+      primaryModel: 'qwen/primary',
+    });
+    await updatePlayerAiRun(runId, {
+      selectedModel: 'deepseek/fallback',
+      fallbackUsed: true,
+      status: 'succeeded',
+    });
+    const rows = await getCaseOnlyDatabase()
+      .select({
+        selectedModel: playerAiRuns.selectedModel,
+        fallbackUsed: playerAiRuns.fallbackUsed,
+        status: playerAiRuns.status,
+      })
+      .from(playerAiRuns)
+      .where(eq(playerAiRuns.id, runId));
+    expect(rows[0]).toMatchObject({
+      selectedModel: 'deepseek/fallback',
+      fallbackUsed: 1,
+      status: 'succeeded',
+    });
   });
 });

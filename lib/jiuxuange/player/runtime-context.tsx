@@ -26,6 +26,7 @@ interface PlayerRuntimeContextValue {
   progress: CaseOnlyProgressItem;
   backHref: string;
   chatEndpoint: string;
+  ttsEndpoint: string;
   requestSceneChange: (currentSceneId: string | null, targetSceneId: string) => Promise<boolean>;
   gradeQuiz: (
     sceneId: string,
@@ -159,6 +160,7 @@ export function PlayerRuntimeProvider({
       progress,
       backHref,
       chatEndpoint: '/api/player/chat',
+      ttsEndpoint: '/api/player/tts',
       requestSceneChange,
       gradeQuiz,
     }),
