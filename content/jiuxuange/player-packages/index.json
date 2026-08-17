@@ -1,0 +1,40 @@
+{
+  "formatVersion": 2,
+  "packages": [
+    {
+      "packageId": "breakfast-chain-six-elements-foundation",
+      "file": "breakfast-chain-six-elements-foundation.maic-course.zip",
+      "contentVersion": "sha256:6d863e6778edbcfdbb4fc7132574223d2d503e3c31fa440e95c8f3e3cc91a669",
+      "sourceVersion": "sha256:0994ff23584c6cc501a717ade7fc70e36bae7168a32d2ad203ac8dca773d7a4f",
+      "scenes": 10
+    },
+    {
+      "packageId": "convenience-bee",
+      "file": "convenience-bee.maic-course.zip",
+      "contentVersion": "sha256:042f80867d3f79ace575c92225ef95124e80d3df9d2211ca8e4ae5f61dc2fb2a",
+      "sourceVersion": "sha256:38fc7e1d8eb39a4a98795ee2867709d7c355c08ae15889bd1c992714f10898fa",
+      "scenes": 10
+    },
+    {
+      "packageId": "fresh-grocery-comparison",
+      "file": "fresh-grocery-comparison.maic-course.zip",
+      "contentVersion": "sha256:c5211a9b1536c29d633a2636f65ffe8e5653508b68fda231e6845b70955d3867",
+      "sourceVersion": "sha256:58243c7b1bd56d091286ac0295c5312b5aad100ef5d40eef544951c013f80b1d",
+      "scenes": 10
+    },
+    {
+      "packageId": "shein-system-capabilities",
+      "file": "shein-system-capabilities.maic-course.zip",
+      "contentVersion": "sha256:1cc3ef7b0f6a2676cb098aa5809ef41e94906f39e7feea0d24b88e4e35282934",
+      "sourceVersion": "sha256:474ce373c1d376576422248a2db281ae77fa454dbcaaaac1429d196da79d192e",
+      "scenes": 10
+    },
+    {
+      "packageId": "florasis-business-model",
+      "file": "florasis-business-model.maic-course.zip",
+      "contentVersion": "sha256:746a217094b7ea5fd82fd4e4f645f6ce5db8acd0153d4ccc47921e2453202858",
+      "sourceVersion": "sha256:ac09a154f25c5d7a8a6aa46ea5750c63ada8bf13408edda8943f7aafa36814fa",
+      "scenes": 10
+    }
+  ]
+}
