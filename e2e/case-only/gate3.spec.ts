@@ -151,8 +151,8 @@ async function completeCase(page: Page, definition: CaseDefinition): Promise<voi
 test('five complete cases unlock sequentially with server-authoritative gates', async ({
   browser,
   page,
-  request,
 }) => {
+  const pageRequest = page.context().request;
   await page.goto('/');
   await expect(page.getByRole('heading', { name: '按顺序完成案例' })).toBeVisible();
   await expect(page.locator('main ol > li')).toHaveCount(5);
@@ -165,7 +165,7 @@ test('five complete cases unlock sequentially with server-authoritative gates', 
 
   for (const [caseIndex, definition] of cases.entries()) {
     if (caseIndex + 1 < cases.length) {
-      expect((await request.get(casePath(cases[caseIndex + 1].id))).status()).toBe(404);
+      expect((await pageRequest.get(casePath(cases[caseIndex + 1].id))).status()).toBe(404);
     }
     await page.locator(`a[href="${casePath(definition.id)}"]`).click();
     await expect(page).toHaveURL(casePath(definition.id));
@@ -175,7 +175,7 @@ test('five complete cases unlock sequentially with server-authoritative gates', 
     });
 
     if (caseIndex === 0) {
-      const initialHtml = await (await request.get(casePath(definition.id))).text();
+      const initialHtml = await (await pageRequest.get(casePath(definition.id))).text();
       expect(initialHtml).not.toContain('\\"answer\\":');
       expect(initialHtml).not.toContain('\\"hasAnswer\\":');
       expect(initialHtml).not.toContain('\\"commentPrompt\\":');
@@ -197,6 +197,9 @@ test('five complete cases unlock sequentially with server-authoritative gates', 
 
     if (caseIndex === 2) {
       const secondDevice = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      if (process.env.JIUXUANGE_PREVIEW_BASE_URL) {
+        await secondDevice.addCookies(await page.context().cookies());
+      }
       const mobilePage = await secondDevice.newPage();
       await mobilePage.goto('/');
       await expect(mobilePage.getByText('3 / 5 已完成')).toBeVisible();
@@ -227,7 +230,7 @@ test('five complete cases unlock sequentially with server-authoritative gates', 
     fullPage: true,
   });
 
-  const progressResponse = await request.get('/api/jiuxuange/case-only/progress');
+  const progressResponse = await pageRequest.get('/api/jiuxuange/case-only/progress');
   expect(progressResponse.status()).toBe(200);
   const progressBody = await progressResponse.json();
   expect(progressBody.progress.cases).toHaveLength(5);
@@ -235,6 +238,8 @@ test('five complete cases unlock sequentially with server-authoritative gates', 
     progressBody.progress.cases.every((item: { status: string }) => item.status === 'completed'),
   ).toBe(true);
   expect(
-    (await request.get('/documentation/jiuxuange/case-only-v1/coach/CASE_ANSWER_KEY.md')).status(),
+    (
+      await pageRequest.get('/documentation/jiuxuange/case-only-v1/coach/CASE_ANSWER_KEY.md')
+    ).status(),
   ).toBe(404);
 });

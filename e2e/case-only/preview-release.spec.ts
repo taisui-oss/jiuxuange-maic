@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const FIRST_CASE_PATH = '/courses/business-model/cases/breakfast-chain-six-elements-foundation';
 const SCREENSHOT_DIRECTORY =
-  'documentation/jiuxuange/case-only-v1/releases/screenshots/v6.1.0-rc.1';
+  'documentation/jiuxuange/case-only-v1/releases/screenshots/v6.1.0-rc.2';
 
 test('preview identity is server-authoritative, browser-local, and versioned', async ({
   browser,
@@ -20,7 +20,7 @@ test('preview identity is server-authoritative, browser-local, and versioned', a
   await firstPage.goto('/', { waitUntil: 'domcontentloaded' });
 
   await expect(firstPage.getByRole('heading', { name: '按顺序完成案例' })).toBeVisible();
-  await expect(firstPage.getByText('v6.1.0-rc.1 预览')).toBeVisible();
+  await expect(firstPage.getByText('v6.1.0-rc.2 预览')).toBeVisible();
   await expect(firstPage.getByText('0 / 5 已完成')).toBeVisible();
   await firstPage.screenshot({
     path: `${SCREENSHOT_DIRECTORY}/desktop-home.png`,
@@ -32,7 +32,7 @@ test('preview identity is server-authoritative, browser-local, and versioned', a
   const releaseBody = await releaseResponse.json();
   expect(releaseBody).toMatchObject({
     success: true,
-    release: { version: '6.1.0-rc.1', usage: 'preview-only' },
+    release: { version: '6.1.0-rc.2', usage: 'preview-only' },
   });
   if (process.env.JIUXUANGE_PREVIEW_BASE_URL?.startsWith('https://')) {
     expect(releaseBody.release.commitRef).toMatch(/^[0-9a-f]{40}$/);
