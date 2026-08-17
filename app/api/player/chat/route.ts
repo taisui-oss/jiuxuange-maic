@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { StatelessChatRequest } from '@/lib/types/chat';
 import { POST as openMaicChat } from '@/app/api/chat/route';
-import { canAccessPlayerPackage, resolvePlayerActor } from '@/lib/server/jiuxuange-player/identity';
-import { getAccessibleCaseOnlyContent } from '@/lib/server/jiuxuange-case-only/progress-repository';
+import { resolvePlayerActor } from '@/lib/server/jiuxuange-player/identity';
+import { getAccessiblePlayerContent } from '@/lib/server/jiuxuange-player/access';
 import { readPlayerPackage } from '@/lib/server/jiuxuange-player/package-repository';
 import { buildPlayerChatRequest } from '@/lib/server/jiuxuange-player/chat-policy';
 import { startPlayerAiRun, updatePlayerAiRun } from '@/lib/server/jiuxuange-player/ai-audit';
@@ -58,9 +58,8 @@ export async function POST(request: NextRequest) {
     );
   }
   const actor = await resolvePlayerActor();
-  if (!canAccessPlayerPackage(actor, packageId)) return new NextResponse(null, { status: 404 });
   const [access, loaded] = await Promise.all([
-    getAccessibleCaseOnlyContent(actor.userId, packageId),
+    getAccessiblePlayerContent(actor, packageId),
     readPlayerPackage(packageId),
   ]);
   if (!access || !loaded) return new NextResponse(null, { status: 404 });

@@ -47,6 +47,9 @@ describe('MAIC Course Package V2', () => {
       'default-3',
       'default-4',
     ]);
+    expect(loaded.classroom.scenes.map((scene) => scene.actions)).toEqual(
+      input.classroom.scenes.map((scene) => scene.actions),
+    );
     const learnerJson = JSON.stringify(loaded.classroom);
     expect(learnerJson).not.toMatch(/"answer"\s*:/);
     expect(learnerJson).not.toMatch(/"commentPrompt"\s*:/);

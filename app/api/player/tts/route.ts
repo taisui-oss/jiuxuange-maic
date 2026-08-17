@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { POST as openMaicTts } from '@/app/api/generate/tts/route';
-import { canAccessPlayerPackage, resolvePlayerActor } from '@/lib/server/jiuxuange-player/identity';
+import { resolvePlayerActor } from '@/lib/server/jiuxuange-player/identity';
 import { readPlayerPackage } from '@/lib/server/jiuxuange-player/package-repository';
+import { getAccessiblePlayerContent } from '@/lib/server/jiuxuange-player/access';
 
 export const maxDuration = 30;
 
@@ -11,7 +12,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'Player package is required' }, { status: 400 });
   }
   const actor = await resolvePlayerActor();
-  if (!canAccessPlayerPackage(actor, packageId) || !(await readPlayerPackage(packageId))) {
+  const [access, loaded] = await Promise.all([
+    getAccessiblePlayerContent(actor, packageId),
+    readPlayerPackage(packageId),
+  ]);
+  if (!access || !loaded) {
     return new NextResponse(null, { status: 404 });
   }
   const providerId = process.env.JIUXUANGE_PLAYER_TTS_PROVIDER?.trim();

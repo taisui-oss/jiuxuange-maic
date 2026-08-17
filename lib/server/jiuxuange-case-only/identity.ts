@@ -18,7 +18,11 @@ export async function resolveCaseOnlyActor(): Promise<CaseOnlyActor> {
   const previewUserId =
     anonymousPreview ? (await headers()).get(CASE_ONLY_PREVIEW_HEADER) : null;
   const identityEnv = anonymousPreview
-    ? { ...process.env, JIUXUANGE_CASE_ONLY_IDENTITY_MODE: 'anonymous-preview' }
+    ? {
+        ...process.env,
+        JIUXUANGE_CASE_ONLY_IDENTITY_MODE: 'anonymous-preview',
+        JIUXUANGE_CASE_ONLY_ALLOW_ANONYMOUS_PREVIEW: 'true',
+      }
     : process.env;
   return resolveCaseOnlyActorFromContext(identityEnv, previewUserId);
 }

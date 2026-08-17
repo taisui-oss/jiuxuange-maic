@@ -13,6 +13,7 @@ const caseOnlyAliases: Record<string, string> = caseOnlyMode
   : {};
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NEXT_DIST_DIR?.trim() || '.next',
   env: {
     JIUXUANGE_BUILD_COMMIT_REF: process.env.COMMIT_REF ?? '',
   },

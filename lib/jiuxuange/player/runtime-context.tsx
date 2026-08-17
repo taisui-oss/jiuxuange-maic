@@ -12,6 +12,7 @@ import { PENDING_SCENE_ID, useStageStore } from '@/lib/store/stage';
 import type { QuizQuestion } from '@/lib/types/stage';
 import type { QuestionResult } from '@/lib/quiz/grading';
 import type { CaseOnlyAnswers, CaseOnlyProgressItem } from '@/lib/jiuxuange/case-only/types';
+import { mapPlayerQuizGrade } from '@/lib/jiuxuange/player/quiz-grade';
 
 export interface PlayerQuizGradeResult {
   passed: boolean;
@@ -127,27 +128,10 @@ export function PlayerRuntimeProvider({
       );
       const body = await readJson(response);
       if (body.progress) setProgress(body.progress as CaseOnlyProgressItem);
-      const incorrect = new Set(
-        Array.isArray(body.incorrectQuestionIds)
-          ? (body.incorrectQuestionIds as string[])
-          : [],
-      );
-      const feedback = (body.incorrectQuestionFeedback ?? {}) as Record<string, string>;
-      const results: QuestionResult[] = questions.map((question) => {
-        const correct = !incorrect.has(question.id) && response.ok;
-        return {
-          questionId: question.id,
-          correct,
-          status: correct ? 'correct' : 'incorrect',
-          earned: correct ? (question.points ?? 1) : 0,
-          aiComment: feedback[question.id],
-        };
-      });
+      const grade = mapPlayerQuizGrade(questions, response.ok, body);
       return {
-        passed: response.ok && body.success === true,
-        results,
-        revealedAnswers: (body.revealedAnswers ?? {}) as Record<string, string[]>,
-        error: typeof body.error === 'string' ? body.error : undefined,
+        ...grade,
+        revealedAnswers: {},
       };
     },
     [contentVersion, packageId, progress.progressVersion],

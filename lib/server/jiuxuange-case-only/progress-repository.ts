@@ -125,6 +125,17 @@ export async function getAccessibleCaseOnlyContent(
   return content ? { content, progress } : null;
 }
 
+export async function getDirectCaseOnlyContent(
+  userId: string,
+  caseId: string,
+): Promise<{ content: CaseOnlyContentPackage; progress: CaseOnlyProgressItem } | null> {
+  const content = await readCaseOnlyContent(caseId);
+  if (!content) return null;
+  await ensureActiveUser(userId);
+  const row = await ensureProgressRow(userId, content);
+  return { content, progress: toProgressItem(content, row, true) };
+}
+
 function canonicalJson(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
   if (value && typeof value === 'object') {
@@ -152,13 +163,16 @@ export async function submitCaseOnlyScene(input: {
   userId: string;
   idempotencyKey: string;
   request: CaseOnlySubmitRequest;
+  bypassUnlock?: boolean;
 }): Promise<CaseOnlySubmitHttpResult> {
   const { userId, idempotencyKey, request } = input;
   if (!idempotencyKey || idempotencyKey.length > 128) {
     return { status: 400, body: failure('INVALID_REQUEST', 'A valid Idempotency-Key is required') };
   }
 
-  const access = await getAccessibleCaseOnlyContent(userId, request.caseId);
+  const access = input.bypassUnlock
+    ? await getDirectCaseOnlyContent(userId, request.caseId)
+    : await getAccessibleCaseOnlyContent(userId, request.caseId);
   if (!access) {
     return { status: 403, body: failure('CASE_LOCKED', 'Complete the previous case first') };
   }

@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
 import { canAccessPlayerPackage, resolvePlayerActor } from '@/lib/server/jiuxuange-player/identity';
-import {
-  getAccessibleCaseOnlyContent,
-  submitCaseOnlyScene,
-} from '@/lib/server/jiuxuange-case-only/progress-repository';
+import { submitCaseOnlyScene } from '@/lib/server/jiuxuange-case-only/progress-repository';
+import { getAccessiblePlayerContent } from '@/lib/server/jiuxuange-player/access';
 
 export async function POST(
   request: Request,
@@ -33,7 +31,7 @@ export async function POST(
   if (!canAccessPlayerPackage(actor, body.packageId)) {
     return new NextResponse(null, { status: 404 });
   }
-  const access = await getAccessibleCaseOnlyContent(actor.userId, body.packageId);
+  const access = await getAccessiblePlayerContent(actor, body.packageId);
   if (!access) return new NextResponse(null, { status: 404 });
   const sourceScene = access.content.classroom.scenes.find((scene) => scene.id === interactionId);
   if (!sourceScene || sourceScene.type !== 'quiz' || sourceScene.content.type !== 'quiz') {
@@ -46,6 +44,7 @@ export async function POST(
   const result = await submitCaseOnlyScene({
     userId: actor.userId,
     idempotencyKey,
+    bypassUnlock: actor.preview,
     request: {
       caseId: body.packageId,
       contentVersion: body.contentVersion,
@@ -54,11 +53,9 @@ export async function POST(
       answers: body.answers,
     },
   });
-  const revealedAnswers = Object.fromEntries(
-    sourceScene.content.questions.map((question) => [question.id, question.answer ?? []]),
-  );
-  return NextResponse.json(
-    { ...result.body, revealedAnswers },
-    { status: result.status },
-  );
+  const responseBody =
+    result.status === 200 && result.body.success
+      ? { ...result.body, incorrectQuestionIds: [] }
+      : result.body;
+  return NextResponse.json(responseBody, { status: result.status });
 }

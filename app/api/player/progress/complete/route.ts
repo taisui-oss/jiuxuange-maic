@@ -28,6 +28,7 @@ export async function POST(request: Request) {
   const result = await submitCaseOnlyScene({
     userId: actor.userId,
     idempotencyKey,
+    bypassUnlock: actor.preview,
     request: {
       caseId: body.packageId,
       contentVersion: body.contentVersion,

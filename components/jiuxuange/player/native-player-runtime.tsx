@@ -7,6 +7,7 @@ import { useStageStore } from '@/lib/store/stage';
 import { useSettingsStore } from '@/lib/store/settings';
 import { migrateScene } from '@/lib/edit/slide-schema';
 import { PlayerRuntimeProvider } from '@/lib/jiuxuange/player/runtime-context';
+import { resolvePlayerInitialSceneId } from '@/lib/jiuxuange/player/initial-scene';
 import type { LoadedPlayerPackage } from '@/lib/jiuxuange/player/types';
 import type { CaseOnlyProgressItem } from '@/lib/jiuxuange/case-only/types';
 
@@ -21,16 +22,18 @@ function HydratedPlayer({
 
   useEffect(() => {
     const scenes = loaded.classroom.scenes.map(migrateScene);
-    const currentSceneId =
-      progress.nextSceneIndex >= scenes.length
-        ? scenes[scenes.length - 1]?.id ?? null
-        : scenes[Math.max(0, progress.nextSceneIndex)]?.id ?? scenes[0]?.id ?? null;
+    const compact = window.matchMedia('(max-width: 640px)').matches;
+    const currentSceneId = resolvePlayerInitialSceneId(
+      scenes.map((scene) => scene.id),
+      progress.nextSceneIndex,
+      progress.status,
+    );
     useStageStore.setState({
       stage: loaded.classroom.stage,
       scenes,
       currentSceneId,
       chats: [],
-      mode: 'playback',
+      mode: compact ? 'autonomous' : 'playback',
       generatingOutlines: [],
       outlines: [],
       generationComplete: true,
@@ -39,6 +42,8 @@ function HydratedPlayer({
     });
     const settings = useSettingsStore.getState();
     settings.setAutoPlayLecture(false);
+    settings.setSidebarCollapsed(true);
+    settings.setChatAreaCollapsed(true);
     settings.setAgentMode('preset');
     settings.setSelectedAgentIds(
       loaded.manifest.agents.map((agent) => agent.id).length > 0
