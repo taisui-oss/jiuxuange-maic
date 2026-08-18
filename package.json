@@ -29,6 +29,7 @@
     "check": "prettier . --check",
     "format": "prettier . --write",
     "test": "vitest run",
+    "test:player-release": "vitest run --config vitest.player-release.config.ts",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "eval:pbl-v2-planner": "tsx eval/pbl-v2-planner/runner.ts",
